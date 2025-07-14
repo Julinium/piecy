@@ -28,17 +28,8 @@ DEBUG       = os.getenv('DEBUG') == 'True'
 # DB_PORT     = os.getenv('DB_PORT')
 
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = 'django-insecure-y+e@@+8uiqu!fwui_1^49_3kc1e_#prxuu#oxh#un_h6$gclje'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
-
-ALLOWED_HOSTS = ["192.168.10.216", "127.0.0.1"]
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
+SECRET_KEY  = os.getenv('SECRET_KEY')
 
 
 # Application definition
