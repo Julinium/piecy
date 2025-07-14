@@ -12,7 +12,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from django.conf import locale
 from dotenv import load_dotenv
+
+from django.utils.translation import gettext_lazy as _
+
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(dotenv_path=BASE_DIR/'.env')
@@ -20,12 +25,12 @@ load_dotenv(dotenv_path=BASE_DIR/'.env')
 SECRET_KEY  = os.getenv('SECRET_KEY')
 DEBUG       = os.getenv('DEBUG') == 'True'
 
-# DB_ENGINE   = os.getenv('DB_ENGINE')
-# DB_NAME     = os.getenv('DB_NAME')
-# DB_USER     = os.getenv('DB_USER')
-# DB_PASSWORD = os.getenv('DB_PASSWORD')
-# DB_HOST     = os.getenv('DB_HOST')
-# DB_PORT     = os.getenv('DB_PORT')
+DB_ENGINE   = os.getenv('DB_ENGINE')
+DB_NAME     = os.getenv('DB_NAME')
+DB_USER     = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST     = os.getenv('DB_HOST')
+DB_PORT     = os.getenv('DB_PORT')
 
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
@@ -53,6 +58,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'piecy.urls'
@@ -79,22 +86,16 @@ WSGI_APPLICATION = 'piecy.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE":   DB_ENGINE,
+        "HOST":     DB_HOST,
+        "PORT":     DB_PORT,
+        "NAME":     DB_NAME,
+        "USER":     DB_USER,
+        "PASSWORD": DB_PASSWORD,
     }
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE":   DB_ENGINE,
-#         "HOST":     DB_HOST,
-#         "PORT":     DB_PORT,
-#         "NAME":     DB_NAME,
-#         "USER":     DB_USER,
-#         "PASSWORD": DB_PASSWORD,
-#     }
-# }
 
 
 # Password validation
@@ -119,13 +120,25 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
 USE_TZ = True
+
+
+LANGUAGES = [
+    ("fr", _("French")),
+    ("ar", _("Arabic")),
+    ("en", _("English")),
+    # ("zg", _("Amazigh")),
+    # ("es", _("Spanish")),
+    # ("de", _("German")),
+    ]
+    
+LOCALE_PATHS = [BASE_DIR / "locale", ]
 
 
 STATIC_URL = '/static/'
