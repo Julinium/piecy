@@ -5,7 +5,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="12"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="2,-180" last-zoom="0.75" scene-rect="0,-240.5,1672.31,1096.8"
+	 last-position="235,-80" last-zoom="0.75" scene-rect="0,-240.5,1672.31,1096.8"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -141,7 +141,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
+<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="1160" y="280"/>
@@ -152,13 +152,40 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="character varying" length="128"/>
 	</column>
 	<column name="forme">
-		<type name="character varying" length="0"/>
+		<type name="character varying" length="16"/>
 	</column>
-	<column name="ice" not-null="true">
-		<type name="character varying" length="0"/>
+	<column name="ice">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="ville">
-		<type name="character varying" length="0"/>
+	<column name="city">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="state">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="country" default-value="MA">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="manager">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="date_est">
+		<type name="date" length="64"/>
+	</column>
+	<column name="sector">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="phone">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="fax">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="website">
+		<type name="character varying" length="64"/>
 	</column>
 	<constraint name="societe_pk" type="pk-constr" table="public.societe">
 		<columns names="id" ref-type="src-columns"/>
