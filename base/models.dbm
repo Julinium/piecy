@@ -3,9 +3,9 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="8"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="12"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="-9,-110" last-zoom="1" scene-rect="-8.52623,-110,1579.33,1186.8"
+	 last-position="2,-180" last-zoom="0.75" scene-rect="0,-240.5,1672.31,1096.8"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -17,13 +17,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<tablespace name="pg_default"/>
 </database>
 
-<schema name="public" layers="0" rect-visible="true" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+<schema name="public" layers="0" rect-visible="true" fill-color="#99c1f1" name-color="#000000" sql-disabled="true" faded-out="true">
 </schema>
 
-<table name="product" layers="0" collapse-mode="1" max-obj-count="8" z-value="0">
+<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="440" y="180"/>
+	<position x="440" y="200"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -47,10 +47,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="fabricant" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+<table name="fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="80" y="-60"/>
+	<position x="440" y="-60"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -76,16 +76,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#37922c"
 	 src-table="public.fabricant"
 	 dst-table="public.product"
-	 src-required="false" dst-required="false">
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="-12.8549" y="-3.18281"/>
+		<position x="-91.4497" y="-314.053"/>
 	</label>
 </relationship>
 
-<table name="client" layers="0" collapse-mode="1" max-obj-count="20" z-value="0">
+<table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="20" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="780" y="180"/>
+	<position x="820" y="280"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -139,10 +141,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="societe" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
+<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1080" y="400"/>
+	<position x="1160" y="280"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -171,16 +173,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 custom-color="#2e4eaf"
 	 src-table="public.societe"
 	 dst-table="public.client"
-	 src-required="false" dst-required="false">
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="0" y="0"/>
+		<position x="-213.45" y="-561.853"/>
 	</label>
 </relationship>
 
-<table name="ensemble" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="240" y="-60"/>
+	<position x="60" y="40"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -207,14 +211,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 	 table-name="many_ensemble_has_many_product">
 	<label ref-type="name-label">
-		<position x="0" y="0"/>
+		<position x="119.05" y="-414.853"/>
 	</label>
 </relationship>
 
-<table name="category" layers="0" collapse-mode="2" max-obj-count="3" z-value="0">
+<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="60" y="180"/>
+	<position x="60" y="220"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -239,12 +243,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-table="public.category"
 	 dst-table="public.product"
 	 src-required="false" dst-required="false"
-	 table-name="many_category_has_many_product"/>
+	 table-name="many_category_has_many_product"
+	upd-action="RESTRICT"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="316.55" y="-464.853"/>
+	</label>
+</relationship>
 
-<table name="vehicule_model" layers="0" collapse-mode="2" max-obj-count="8" z-value="0">
+<table name="vehicule_model" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="60" y="360"/>
+	<position x="60" y="400"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -283,7 +293,126 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 	 table-name="many_vehicule_model_has_many_product">
 	<label ref-type="name-label">
-		<position x="23.484" y="-114.323"/>
+		<position x="375.05" y="-616.453"/>
+	</label>
+</relationship>
+
+<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="820" y="-60"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="city">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="state">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="country">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="website">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="manager">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="contact">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="256"/>
+	</column>
+	<constraint name="magasin_pk" type="pk-constr" table="public.magasin">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="level" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1160" y="-60"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" default-value="RDC">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="elevation" default-value="0">
+		<type name="smallint" length="64"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="0"/>
+	</column>
+	<constraint name="aile_pk" type="pk-constr" table="public.level">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1480" y="-60"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" default-value="R1">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="number" default-value="1">
+		<type name="smallint" length="64"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="0"/>
+	</column>
+	<constraint name="rayon_pk" type="pk-constr" table="public.rayon">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_level" index="4"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="level_fk" index="1"/>
+	</customidxs></table>
+
+<relationship name="magasin_has_many_level" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#47b37f"
+	 src-table="public.magasin"
+	 dst-table="public.level"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="-132.95" y="-261.853"/>
+	</label>
+</relationship>
+
+<relationship name="level_has_many_rayon" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#d09d5a"
+	 src-table="public.level"
+	 dst-table="public.rayon"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="-291.95" y="-234.853"/>
 	</label>
 </relationship>
 
