@@ -3,9 +3,9 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="12"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="16"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="235,-80" last-zoom="0.75" scene-rect="0,-240.5,1672.31,1096.8"
+	 last-position="0,193" last-zoom="0.7" scene-rect="-88,-240.5,1780.31,1450.42"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -17,15 +17,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<tablespace name="pg_default"/>
 </database>
 
-<schema name="public" layers="0" rect-visible="true" fill-color="#99c1f1" name-color="#000000" sql-disabled="true" faded-out="true">
+<schema name="public" layers="0" rect-visible="true" fill-color="#eed7a3" name-color="#000000" sql-disabled="true">
 </schema>
 
-<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="440" y="200"/>
+	<position x="360" y="320"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name" not-null="true">
 		<type name="character varying" length="128"/>
@@ -36,23 +39,32 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="reference">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
-	</column>
 	<column name="origin">
 		<type name="character varying" length="32"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="256"/>
 	</column>
 	<constraint name="product_pk" type="pk-constr" table="public.product">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-</table>
 
-<table name="fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
+	<customidxs object-type="column">
+		<object name="id_fabricant" index="5"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="fabricant_fk" index="1"/>
+	</customidxs></table>
+
+<table name="fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="440" y="-60"/>
+	<position x="360" y="40"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name">
 		<type name="character varying" length="64"/>
@@ -62,6 +74,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="website">
 		<type name="character varying" length="128"/>
+	</column>
+	<column name="contact">
+		<type name="character varying" length="16"/>
 	</column>
 	<constraint name="fabricant_pk" type="pk-constr" table="public.fabricant">
 		<columns names="id" ref-type="src-columns"/>
@@ -80,16 +95,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="-91.4497" y="-314.053"/>
+		<position x="-11.4497" y="-54.053"/>
 	</label>
 </relationship>
 
-<table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="20" z-value="0">
+<table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="820" y="280"/>
+	<position x="680" y="40"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name" not-null="true">
 		<type name="character varying" length="128"/>
@@ -139,14 +157,23 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<constraint name="client_pk" type="pk-constr" table="public.client">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-</table>
 
-<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="0">
+	<customidxs object-type="column">
+		<object name="id_societe" index="17"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="societe_fk" index="1"/>
+	</customidxs></table>
+
+<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1160" y="280"/>
+	<position x="1020" y="40"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="raison_social">
 		<type name="character varying" length="128"/>
@@ -204,16 +231,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="-213.45" y="-561.853"/>
+		<position x="6.55032" y="-68.853"/>
 	</label>
 </relationship>
 
-<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
+<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="60" y="40"/>
+	<position x="20" y="560"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name">
 		<type name="character varying" length="64"/>
@@ -238,16 +268,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 	 table-name="many_ensemble_has_many_product">
 	<label ref-type="name-label">
-		<position x="119.05" y="-414.853"/>
+		<position x="-25.0139" y="-77.0388"/>
 	</label>
 </relationship>
 
-<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
+<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="60" y="220"/>
+	<position x="20" y="320"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name">
 		<type name="character varying" length="64"/>
@@ -274,16 +307,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="RESTRICT"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="316.55" y="-464.853"/>
+		<position x="-3.44968" y="-64.853"/>
 	</label>
 </relationship>
 
-<table name="vehicule_model" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+<table name="vehicule_model" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="60" y="400"/>
+	<position x="20" y="40"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="marque">
 		<type name="character varying" length="16"/>
@@ -320,16 +356,19 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 	 table-name="many_vehicule_model_has_many_product">
 	<label ref-type="name-label">
-		<position x="375.05" y="-616.453"/>
+		<position x="-4.94968" y="-36.453"/>
 	</label>
 </relationship>
 
-<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
+<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="820" y="-60"/>
+	<position x="20" y="800"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name">
 		<type name="character varying" length="64"/>
@@ -363,12 +402,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="level" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
+<table name="floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1160" y="-60"/>
+	<position x="360" y="980"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name" default-value="RDC">
 		<type name="character varying" length="64"/>
@@ -379,17 +421,26 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="description">
 		<type name="character varying" length="0"/>
 	</column>
-	<constraint name="aile_pk" type="pk-constr" table="public.level">
+	<constraint name="aile_pk" type="pk-constr" table="public.floor">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-</table>
 
-<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
+	<customidxs object-type="column">
+		<object name="id_magasin" index="5"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="magasin_fk" index="1"/>
+	</customidxs></table>
+
+<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1480" y="-60"/>
+	<position x="680" y="780"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
 	</column>
 	<column name="name" default-value="R1">
 		<type name="character varying" length="64"/>
@@ -405,10 +456,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 
 	<customidxs object-type="column">
-		<object name="id_level" index="4"/>
+		<object name="id_floor" index="5"/>
 	</customidxs>
 	<customidxs object-type="constraint">
-		<object name="level_fk" index="1"/>
+		<object name="floor_fk" index="1"/>
 	</customidxs></table>
 
 <relationship name="magasin_has_many_level" type="rel1n" layers="0"
@@ -418,12 +469,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 fk-idx-pattern="{st}_idx"
 	 custom-color="#47b37f"
 	 src-table="public.magasin"
-	 dst-table="public.level"
+	 dst-table="public.floor"
 	 src-required="false" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="-132.95" y="-261.853"/>
+		<position x="7.05032" y="-81.853"/>
 	</label>
 </relationship>
 
@@ -433,13 +484,232 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-fk-pattern="{st}_fk"
 	 fk-idx-pattern="{st}_idx"
 	 custom-color="#d09d5a"
-	 src-table="public.level"
+	 src-table="public.floor"
 	 dst-table="public.rayon"
 	 src-required="false" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="-291.95" y="-234.853"/>
+		<position x="8.05032" y="-74.853"/>
+	</label>
+</relationship>
+
+<table name="reception" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1340" y="560"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="date_commande">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_livraison" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activee" not-null="true" default-value="1">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="payee" not-null="true" default-value="0">
+		<type name="boolean" length="0"/>
+	</column>
+	<constraint name="reception_pk" type="pk-constr" table="public.reception">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_fournisseur" index="5"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="fournisseur_fk" index="1"/>
+	</customidxs></table>
+
+<table name="fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1340" y="40"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="address_l1">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_l2">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_city">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_state">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_country">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_zip">
+		<type name="character varying" length="8"/>
+	</column>
+	<column name="tel">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="mobile">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="whatsapp">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="fax">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="website">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="source">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="id_societe" alias="id_societe">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="fournisseur_pk" type="pk-constr" table="public.fournisseur">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="fournisseur_has_many_reception" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#5e255d"
+	 src-table="public.fournisseur"
+	 dst-table="public.reception"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<table name="entree" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1020" y="560"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="date_commande">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_livraison" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="entree_pk" type="pk-constr" table="public.entree">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_product" index="1"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="product_fk" index="1"/>
+	</customidxs></table>
+
+<relationship name="product_has_many_entree" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#77b355"
+	 src-table="public.product"
+	 dst-table="public.entree"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="rayon_has_many_entree" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#805340"
+	 src-table="public.rayon"
+	 dst-table="public.entree"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="reception_has_many_entree" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#c67420"
+	 src-table="public.reception"
+	 dst-table="public.entree"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="CASCADE"/>
+
+<table name="file" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="360" y="700"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="path">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="type" default-value="image">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="256"/>
+	</column>
+	<constraint name="file_pk" type="pk-constr" table="public.file">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="product_has_many_file" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#12137c"
+	 src-table="public.product"
+	 dst-table="public.file"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<constraint name="societe_fk" type="fk-constr" alias="societe_fk" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.societe" table="public.fournisseur">
+	<columns names="id_societe" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_fournisseur_societe" type="relfk" layers="0"
+	 src-table="public.fournisseur"
+	 dst-table="public.societe" reference-fk="societe_fk"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="11.5503" y="-88.853"/>
 	</label>
 </relationship>
 
