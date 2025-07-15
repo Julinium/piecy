@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+ Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="4"
+	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
+	 last-position="0,0" last-zoom="0.7"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
+	 show-layer-names="false" show-layer-rects="false">
+<database name="pieces_auto" is-template="false" allow-conns="true">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+</database>
+
+<schema name="public" layers="0" rect-visible="true" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
+</schema>
+
+<table name="product" layers="0" collapse-mode="1" max-obj-count="8" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="60" y="60"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="label">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="reference">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="origin">
+		<type name="character varying" length="32"/>
+	</column>
+	<constraint name="product_pk" type="pk-constr" table="public.product">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="fabricant" layers="0" collapse-mode="1" max-obj-count="4" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="60" y="480"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="country">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="website">
+		<type name="character varying" length="128"/>
+	</column>
+	<constraint name="fabricant_pk" type="pk-constr" table="public.fabricant">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="fabricant_has_many_product" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#37922c"
+	 src-table="public.fabricant"
+	 dst-table="public.product"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="10.9936" y="-13.0774"/>
+	</label>
+</relationship>
+
+<table name="client" layers="0" collapse-mode="1" max-obj-count="20" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="800" y="60"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="address_l1">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_l2">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_city">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_state">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_country">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_zip">
+		<type name="character varying" length="8"/>
+	</column>
+	<column name="tel">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="mobile">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="whatsapp">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="fax">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="website">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="description">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="source">
+		<type name="character varying" length="32"/>
+	</column>
+	<constraint name="client_pk" type="pk-constr" table="public.client">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="societe" layers="0" collapse-mode="1" max-obj-count="6" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="860" y="720"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="raison_social">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="forme">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="ice" not-null="true">
+		<type name="character varying" length="0"/>
+	</column>
+	<column name="ville">
+		<type name="character varying" length="0"/>
+	</column>
+	<constraint name="societe_pk" type="pk-constr" table="public.societe">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="societe_has_many_client" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#2e4eaf"
+	 src-table="public.societe"
+	 dst-table="public.client"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
