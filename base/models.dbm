@@ -3,10 +3,10 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="24"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="26"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="-68,146" last-zoom="1" scene-rect="-88,-240.5,1920.31,2013.42"
-	 default-schema="public" default-owner="postgres"
+	 last-position="381,35" last-zoom="1" scene-rect="-1048,-30,3060.31,1119.92"
+	 default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
 	 layer-name-colors="#000000"
@@ -51,6 +51,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="sku">
 		<type name="character varying" length="128"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="product_pk" type="pk-constr" table="public.product">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -84,6 +96,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="contact">
 		<type name="character varying" length="16"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="fabricant_pk" type="pk-constr" table="public.fabricant">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -108,7 +132,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="700" y="40"/>
+	<position x="1380" y="800"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -160,6 +184,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="source">
 		<type name="character varying" length="32"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="client_pk" type="pk-constr" table="public.client">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -174,7 +210,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="40"/>
+	<position x="1720" y="420"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -220,6 +256,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="website">
 		<type name="character varying" length="64"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="societe_pk" type="pk-constr" table="public.societe">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -244,7 +292,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="560"/>
+	<position x="20" y="480"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -256,6 +304,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="description">
 		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="ensemble_pk" type="pk-constr" table="public.ensemble">
 		<columns names="id" ref-type="src-columns"/>
@@ -281,7 +341,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="320"/>
+	<position x="20" y="300"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -293,6 +353,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="description">
 		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="category_pk" type="pk-constr" table="public.category">
 		<columns names="id" ref-type="src-columns"/>
@@ -345,6 +417,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="category">
 		<type name="character varying" length="16"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="vehicule_model_pk" type="pk-constr" table="public.vehicule_model">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -366,10 +450,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
+<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="800"/>
+	<position x="1240" y="440"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -403,15 +487,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="description">
 		<type name="character varying" length="256"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="magasin_pk" type="pk-constr" table="public.magasin">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+<table name="floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="-1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="380" y="1080"/>
+	<position x="1060" y="540"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -427,6 +523,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="description">
 		<type name="character varying" length="0"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="aile_pk" type="pk-constr" table="public.floor">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -438,10 +546,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="magasin_fk" index="1"/>
 	</customidxs></table>
 
-<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="-1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="700" y="780"/>
+	<position x="1060" y="360"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -456,6 +564,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="description">
 		<type name="character varying" length="0"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="rayon_pk" type="pk-constr" table="public.rayon">
 		<columns names="id" ref-type="src-columns"/>
@@ -483,7 +603,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<position x="-8.30837" y="-6.99059"/>
 	</label>
 	<label ref-type="name-label">
-		<position x="17.0503" y="-77.253"/>
+		<position x="28.5503" y="2.74701"/>
 	</label>
 </relationship>
 
@@ -499,14 +619,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="-11.9497" y="-55.653"/>
+		<position x="45.0503" y="-15.653"/>
 	</label>
 </relationship>
 
-<table name="reception" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+<table name="reception" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="6">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1400" y="560"/>
+	<position x="1060" y="20"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -522,6 +642,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="payee" not-null="true" default-value="0">
 		<type name="boolean" length="0"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="reception_pk" type="pk-constr" table="public.reception">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -536,7 +668,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1400" y="40"/>
+	<position x="1380" y="100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -591,6 +723,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="id_societe" alias="id_societe">
 		<type name="uuid" length="0"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="fournisseur_pk" type="pk-constr" table="public.fournisseur">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -615,7 +759,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="entree" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="560"/>
+	<position x="700" y="160"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -623,6 +767,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="date" length="0"/>
 	</column>
 	<column name="date_livraison" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
 		<type name="date" length="0"/>
 	</column>
 	<constraint name="entree_pk" type="pk-constr" table="public.entree">
@@ -687,7 +843,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="file" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="380" y="700"/>
+	<position x="20" y="660"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -705,6 +861,18 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="description">
 		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="file_pk" type="pk-constr" table="public.file">
 		<columns names="id" ref-type="src-columns"/>
@@ -727,10 +895,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="tenant" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
+<table name="tenant" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="1080"/>
+	<position x="-660" y="20"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -767,15 +935,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="description">
 		<type name="character varying" length="256"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="tenant_pk" type="pk-constr" table="public.tenant">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="plan" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
+<table name="plan" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1400" y="1080"/>
+	<position x="-1020" y="440"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -803,6 +983,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="mailbox" default-value="0">
 		<type name="boolean" length="0"/>
 	</column>
+	<column name="ecommerce" default-value="0">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="vitrine" default-value="0">
+		<type name="boolean" length="0"/>
+	</column>
 	<column name="max_users" default-value="2">
 		<type name="smallint" length="0"/>
 		<comment> <![CDATA[Max number of users, including admins. 0 is unlimited]]> </comment>
@@ -815,6 +1001,24 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="smallint" length="0"/>
 		<comment> <![CDATA[Max number of products. 0 is unlimited]]> </comment>
 	</column>
+	<column name="max_pdfs" default-value="20">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="max_excels" default-value="20">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="plan_pk" type="pk-constr" table="public.plan">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -823,7 +1027,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="xtemp" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1560" y="800"/>
+	<position x="1820" y="860"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -832,67 +1036,85 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="name">
 		<type name="character varying" length="16"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
 	</column>
 	<constraint name="xtemp_pk" type="pk-constr" table="public.xtemp">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="user" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+<table name="user" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="700" y="1080"/>
+	<position x="-1020" y="20"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="active" default-value="1">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="name">
-		<type name="character varying" length="16"/>
-	</column>
 	<column name="verified" default-value="0">
 		<type name="boolean" length="0"/>
 	</column>
+	<column name="username">
+		<type name="character varying" length="16"/>
+	</column>
 	<column name="email">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="phone">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="first_name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="last_name">
 		<type name="character varying" length="64"/>
 	</column>
 	<column name="is_superuser" default-value="0">
 		<type name="boolean" length="0"/>
 	</column>
+	<column name="is_admin" default-value="0">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="user_pk" type="pk-constr" table="public.&quot;user&quot;">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
-</table>
 
-<relationship name="ten_user" type="relnn" layers="0"
-	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
-	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
-	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
-	 pk-col-pattern="id"
-	 fk-idx-pattern="{gt}_idx"
-	 custom-color="#873f05"
-	 src-table="public.tenant"
-	 dst-table="public.&quot;user&quot;"
-	 src-required="false" dst-required="false"
-	 table-name="many_tenant_has_many_user"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-	<column name="admin" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="readonly" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-</relationship>
+	<customidxs object-type="column">
+		<object name="id_tenant" index="2"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="tenant_fk" index="1"/>
+	</customidxs></table>
 
-<table name="payment" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
+<table name="payment" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1400" y="1480"/>
+	<position x="-320" y="420"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -920,15 +1142,27 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="maker">
 		<type name="character varying" length="64"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="payment_pk" type="pk-constr" table="public.payment">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="subscription" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="6" z-value="0">
+<table name="subscription" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="1480"/>
+	<position x="-660" y="420"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -944,10 +1178,194 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="date_to">
 		<type name="date" length="0"/>
 	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
 	<constraint name="subscription_pk" type="pk-constr" table="public.subscription">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
+
+<relationship name="tena_sub" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#3ef183"
+	 src-table="public.tenant"
+	 dst-table="public.subscription"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="51.5503" y="-41.153"/>
+	</label>
+</relationship>
+
+<relationship name="plan_sub" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#1afed8"
+	 src-table="public.plan"
+	 dst-table="public.subscription"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<relationship name="pay_sub" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#6a18a4"
+	 src-table="public.payment"
+	 dst-table="public.subscription"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="ten_usr" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#97e2d7"
+	 src-table="public.tenant"
+	 dst-table="public.&quot;user&quot;"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
+
+<table name="commande" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="6">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1060" y="800"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="date_commande">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_livraison" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="activee" not-null="true" default-value="1">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="payee" not-null="true" default-value="0">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="commande_pk" type="pk-constr" table="public.commande">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="cli_comd" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#644145"
+	 src-table="public.client"
+	 dst-table="public.commande"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="sortie" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="700" y="500"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="date_commande">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_livraison" not-null="true">
+		<type name="date" length="0"/>
+	</column>
+	<column name="id_rayon" alias="id_rayon">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="id_reception" alias="id_reception">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="sortee_pk" type="pk-constr" table="public.sortie">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+
+	<customidxs object-type="column">
+		<object name="id_commande" index="5"/>
+	</customidxs>
+	<customidxs object-type="constraint">
+		<object name="commande_fk" index="2"/>
+	</customidxs></table>
+
+<relationship name="comd_sort" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#513ada"
+	 src-table="public.commande"
+	 dst-table="public.sortie"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="prod_sort" type="rel1n" layers="0"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 fk-idx-pattern="{st}_idx"
+	 custom-color="#8084f8"
+	 src-table="public.product"
+	 dst-table="public.sortie"
+	 src-required="false" dst-required="false"
+	upd-action="CASCADE"
+	del-action="RESTRICT"/>
 
 <constraint name="societe_fk" type="fk-constr" alias="societe_fk" comparison-type="MATCH FULL"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.societe" table="public.fournisseur">
@@ -955,12 +1373,23 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="four_soc" type="relfk" layers="0"
+<constraint name="rayon_fk" type="fk-constr" alias="rayon_fk" comparison-type="MATCH FULL"
+	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.rayon" table="public.sortie">
+	<columns names="id_rayon" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_fournisseur_societe" type="relfk" layers="0"
 	 src-table="public.fournisseur"
 	 dst-table="public.societe" reference-fk="societe_fk"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="sort_ray" type="relfk" layers="0"
+	 src-table="public.sortie"
+	 dst-table="public.rayon" reference-fk="rayon_fk"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="11.5503" y="-88.853"/>
+		<position x="0" y="0"/>
 	</label>
 </relationship>
 
