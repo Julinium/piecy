@@ -7,15 +7,22 @@
 -- ** Database creation must be performed outside a multi lined SQL file. 
 -- ** These commands were put in this file only as a convenience.
 
--- object: pieces_auto | type: DATABASE --
--- DROP DATABASE IF EXISTS pieces_auto;
-CREATE DATABASE pieces_auto
+-- object: dbieces | type: DATABASE --
+-- DROP DATABASE IF EXISTS dbieces;
+CREATE DATABASE dbieces
 	TABLESPACE = pg_default
 	OWNER = postgres;
 -- ddl-end --
 
 
-SET search_path TO pg_catalog,public;
+-- object: test | type: SCHEMA --
+-- DROP SCHEMA IF EXISTS test CASCADE;
+CREATE SCHEMA test;
+-- ddl-end --
+ALTER SCHEMA test OWNER TO postgres;
+-- ddl-end --
+
+SET search_path TO pg_catalog,public,test;
 -- ddl-end --
 
 -- object: public.product | type: TABLE --
@@ -216,14 +223,14 @@ CREATE TABLE public.many_category_has_many_product (
 -- ALTER TABLE public.many_category_has_many_product DROP CONSTRAINT IF EXISTS category_fk CASCADE;
 ALTER TABLE public.many_category_has_many_product ADD CONSTRAINT category_fk FOREIGN KEY (id_category)
 REFERENCES public.category (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE RESTRICT;
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: product_fk | type: CONSTRAINT --
 -- ALTER TABLE public.many_category_has_many_product DROP CONSTRAINT IF EXISTS product_fk CASCADE;
 ALTER TABLE public.many_category_has_many_product ADD CONSTRAINT product_fk FOREIGN KEY (id_product)
 REFERENCES public.product (id) MATCH FULL
-ON DELETE RESTRICT ON UPDATE RESTRICT;
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: public.vehicule_model | type: TABLE --
@@ -440,7 +447,7 @@ ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ALTER TABLE public.entree DROP CONSTRAINT IF EXISTS reception_fk CASCADE;
 ALTER TABLE public.entree ADD CONSTRAINT reception_fk FOREIGN KEY (id_reception)
 REFERENCES public.reception (id) MATCH FULL
-ON DELETE CASCADE ON UPDATE CASCADE;
+ON DELETE RESTRICT ON UPDATE CASCADE;
 -- ddl-end --
 
 -- object: public.file | type: TABLE --
@@ -530,9 +537,9 @@ COMMENT ON COLUMN public.plan.max_products IS E'Max number of products. 0 is unl
 ALTER TABLE public.plan OWNER TO postgres;
 -- ddl-end --
 
--- object: public.xxxx | type: TABLE --
--- DROP TABLE IF EXISTS public.xxxx CASCADE;
-CREATE TABLE public.xxxx (
+-- object: test.xxxx | type: TABLE --
+-- DROP TABLE IF EXISTS test.xxxx CASCADE;
+CREATE TABLE test.xxxx (
 	id uuid NOT NULL DEFAULT uuid.uuid4(),
 	active boolean DEFAULT 1,
 	name character varying(16),
@@ -543,7 +550,7 @@ CREATE TABLE public.xxxx (
 	CONSTRAINT xtemp_pk PRIMARY KEY (id)
 );
 -- ddl-end --
-ALTER TABLE public.xxxx OWNER TO postgres;
+ALTER TABLE test.xxxx OWNER TO postgres;
 -- ddl-end --
 
 -- object: public."user" | type: TABLE --

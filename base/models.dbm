@@ -5,19 +5,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="31"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="-524,-170" last-zoom="1" scene-rect="-1048,-170,3180.31,1300.92"
+	 last-position="-524,-85" last-zoom="0.5" scene-rect="-1048,-170,3180.31,1460.92"
 	 default-owner="postgres"
 	 layers="Default layer,System,Infra,Data,Transactions"
 	 active-layers="0,1,2,3,4"
 	 layer-name-colors="#000000,#000000,#000000,#000000,#000000"
 	 layer-rect-colors="#babe81,#68180b,#02c0fd,#4de291,#2bd1c3"
 	 show-layer-names="false" show-layer-rects="false">
-<role name="dbaser"
- createdb="true"
- login="true"
- password="xxxxx-change-me-xxxxx">
-</role>
-
 <database name="dbieces" is-template="false" allow-conns="true">
 	<role name="postgres"/>
 	<tablespace name="pg_default"/>
@@ -26,9 +20,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layers="0" rect-visible="true" fill-color="#eed7a3" name-color="#000000" sql-disabled="true">
 </schema>
 
+<schema name="test" layers="0" rect-visible="true" fill-color="#f8f68d" name-color="#82a7cc">
+	<role name="postgres"/>
+</schema>
+
 <table name="product" layers="3" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="32" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="500" y="360"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -120,7 +118,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="fabricant" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="500" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -175,7 +173,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="client" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="26" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1940" y="500"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -253,8 +251,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="societe" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="22" z-value="2">
 	<schema name="public"/>
-	<role name="dbaser"/>
-	<position x="1940" y="-120"/>
+	<role name="postgres"/>
+	<position x="1940" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -335,7 +333,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="ensemble" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-240" y="660"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -384,7 +382,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="category" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-240" y="40"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -435,7 +433,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="vehicule_model" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="120" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -496,7 +494,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="magasin" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-1">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1220" y="840"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -550,7 +548,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="floor" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1580" y="260"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -592,7 +590,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="rayon" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1220" y="220"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -669,7 +667,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="reception" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="6">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1220" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -711,7 +709,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="fournisseur" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="26" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1580" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -802,7 +800,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="entree" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="860" y="80"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -890,7 +888,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="file" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-2">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="120" y="780"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -951,7 +949,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="tenant" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-660" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1008,7 +1006,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="plan" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="24" z-value="-13">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-1020" y="280"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1079,9 +1077,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </table>
 
 <table name="xxxx" layers="1" collapse-mode="0" max-obj-count="8" z-value="0">
-	<schema name="public"/>
-	<role name="dbaser"/>
-	<position x="-1020" y="1060"/>
+	<schema name="test"/>
+	<role name="postgres"/>
+	<position x="-1020" y="1220"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1103,14 +1101,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="edited_on">
 		<type name="date" length="0"/>
 	</column>
-	<constraint name="xtemp_pk" type="pk-constr" table="public.xxxx">
+	<constraint name="xtemp_pk" type="pk-constr" table="test.xxxx">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
 <table name="user" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-13">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-1020" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1167,7 +1165,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="payment" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="-13">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-1020" y="640"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1218,7 +1216,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="subscription" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-660" y="300"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1314,7 +1312,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="commande" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="6">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="1580" y="700"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1381,7 +1379,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="sortie" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="860" y="500"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1432,7 +1430,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="5.55032" y="-138.853"/>
+		<position x="15.5503" y="-68.853"/>
 	</label>
 </relationship>
 
@@ -1454,7 +1452,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="count" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="500" y="840"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1487,7 +1485,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="checkup" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="6">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="860" y="840"/>
 	<column name="id" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1545,7 +1543,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 dst-table="public.checkup"
 	 src-required="false" dst-required="false">
 	<label ref-type="name-label">
-		<position x="4.05032" y="81.147"/>
+		<position x="-5.94968" y="11.147"/>
 	</label>
 </relationship>
 
@@ -1563,7 +1561,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="group" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-240" y="340"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1608,7 +1606,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 
 <table name="registre" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<position x="-660" y="640"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
@@ -1657,14 +1655,22 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="rel_fournisseur_societe" type="relfk" layers="0"
+<relationship name="four_soc" type="relfk" layers="0"
 	 src-table="public.fournisseur"
 	 dst-table="public.societe" reference-fk="societe_fk"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-8.44968" y="1.14701"/>
+	</label>
+</relationship>
 
-<relationship name="rel_sortie_rayon" type="relfk" layers="0"
+<relationship name="sort_ray" type="relfk" layers="0"
 	 src-table="public.sortie"
 	 dst-table="public.rayon" reference-fk="rayon_fk"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
 
 </dbmodel>
