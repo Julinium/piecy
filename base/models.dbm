@@ -5,7 +5,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="26"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="381,35" last-zoom="1" scene-rect="-1048,-30,3060.31,1119.92"
+	 last-position="0,0" last-zoom="0.35" scene-rect="-1048,-210,3220.31,1339.92"
 	 default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -20,10 +20,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layers="0" rect-visible="true" fill-color="#eed7a3" name-color="#000000" sql-disabled="true">
 </schema>
 
-<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
+<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="380" y="320"/>
+	<position x="380" y="360"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -74,10 +74,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="fabricant_fk" index="1"/>
 	</customidxs></table>
 
-<table name="fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+<table name="fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="380" y="40"/>
+	<position x="380" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -129,10 +129,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="0">
+<table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="26" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1380" y="800"/>
+	<position x="1300" y="660"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -207,10 +207,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="societe_fk" index="1"/>
 	</customidxs></table>
 
-<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
+<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="22" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1720" y="420"/>
+	<position x="1540" y="300"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -289,10 +289,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
+<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="480"/>
+	<position x="20" y="600"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -338,10 +338,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
+<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="300"/>
+	<position x="20" y="280"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -389,10 +389,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="vehicule_model" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+<table name="vehicule_model" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="40"/>
+	<position x="20" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -450,10 +450,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-1">
+<table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1240" y="440"/>
+	<position x="980" y="540"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -504,10 +504,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="-1">
+<table name="floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="540"/>
+	<position x="1300" y="300"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -546,10 +546,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="magasin_fk" index="1"/>
 	</customidxs></table>
 
-<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="-1">
+<table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="360"/>
+	<position x="980" y="220"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -619,14 +619,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT">
 	<label ref-type="name-label">
-		<position x="45.0503" y="-15.653"/>
+		<position x="25.0503" y="-58.853"/>
 	</label>
 </relationship>
 
 <table name="reception" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="6">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="20"/>
+	<position x="980" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -665,10 +665,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="fournisseur_fk" index="1"/>
 	</customidxs></table>
 
-<table name="fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="0">
+<table name="fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="26" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1380" y="100"/>
+	<position x="1300" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -756,10 +756,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="entree" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="0">
+<table name="entree" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="700" y="160"/>
+	<position x="680" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -840,10 +840,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="file" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+<table name="file" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-2">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="20" y="660"/>
+	<position x="380" y="780"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -895,10 +895,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="tenant" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
+<table name="tenant" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="-660" y="20"/>
+	<position x="-340" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -952,10 +952,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="plan" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
+<table name="plan" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="24" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="-1020" y="440"/>
+	<position x="-700" y="280"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1024,10 +1024,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="xtemp" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
+<table name="xxxx" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1820" y="860"/>
+	<position x="-340" y="860"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1049,15 +1049,15 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="edited_on">
 		<type name="date" length="0"/>
 	</column>
-	<constraint name="xtemp_pk" type="pk-constr" table="public.xtemp">
+	<constraint name="xtemp_pk" type="pk-constr" table="public.xxxx">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="user" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-13">
+<table name="user" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="-1020" y="20"/>
+	<position x="-700" y="-100"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1111,10 +1111,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="tenant_fk" index="1"/>
 	</customidxs></table>
 
-<table name="payment" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="-13">
+<table name="payment" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="-320" y="420"/>
+	<position x="-700" y="640"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1159,10 +1159,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="subscription" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="-13">
+<table name="subscription" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="-660" y="420"/>
+	<position x="-340" y="440"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1245,10 +1245,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
 
-<table name="commande" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="7" z-value="6">
+<table name="commande" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="6">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="1060" y="800"/>
+	<position x="980" y="840"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1297,10 +1297,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="sortie" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+<table name="sortie" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="700" y="500"/>
+	<position x="680" y="500"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1379,10 +1379,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="rel_fournisseur_societe" type="relfk" layers="0"
+<relationship name="frn_soc" type="relfk" layers="0"
 	 src-table="public.fournisseur"
 	 dst-table="public.societe" reference-fk="societe_fk"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
 
 <relationship name="sort_ray" type="relfk" layers="0"
 	 src-table="public.sortie"
