@@ -5,15 +5,21 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="31"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="0,0" last-zoom="0.4" scene-rect="-1058,-184.531,3200.31,1479.66"
-	 default-owner="dbaser"
+	 last-position="-524,-170" last-zoom="1" scene-rect="-1048,-170,3180.31,1300.92"
+	 default-owner="postgres"
 	 layers="Default layer,System,Infra,Data,Transactions"
 	 active-layers="0,1,2,3,4"
-	 layer-name-colors="#000000,#a51d2d,#5ec312,#c9c5ca,#000000"
-	 layer-rect-colors="#b4b4b4,#c27c82,#f9f06b,#99c1f1,#eacc80"
-	 show-layer-names="true" show-layer-rects="true">
+	 layer-name-colors="#000000,#000000,#000000,#000000,#000000"
+	 layer-rect-colors="#babe81,#68180b,#02c0fd,#4de291,#2bd1c3"
+	 show-layer-names="false" show-layer-rects="false">
+<role name="dbaser"
+ createdb="true"
+ login="true"
+ password="xxxxx-change-me-xxxxx">
+</role>
+
 <database name="dbieces" is-template="false" allow-conns="true">
-	<role name="dbaser"/>
+	<role name="postgres"/>
 	<tablespace name="pg_default"/>
 </database>
 
@@ -1651,31 +1657,14 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<columns names="id" ref-type="dst-columns"/>
 </constraint>
 
-<relationship name="frn_soc" type="relfk" layers="0"
+<relationship name="rel_fournisseur_societe" type="relfk" layers="0"
 	 src-table="public.fournisseur"
 	 dst-table="public.societe" reference-fk="societe_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
-<relationship name="sort_ray" type="relfk" layers="0"
+<relationship name="rel_sortie_rayon" type="relfk" layers="0"
 	 src-table="public.sortie"
 	 dst-table="public.rayon" reference-fk="rayon_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<relationship name="cnt_prod" type="relfk" layers="0"
-	 src-table="public.count"
-	 dst-table="public.product" reference-fk="product_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="50.5503" y="-31.953"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
 </dbmodel>
