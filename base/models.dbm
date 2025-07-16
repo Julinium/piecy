@@ -3,15 +3,15 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="30"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="31"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="0,-62" last-zoom="0.35" scene-rect="-1058,-180,3200.31,1319.92"
+	 last-position="0,0" last-zoom="0.4" scene-rect="-1058,-184.531,3200.31,1479.66"
 	 default-owner="postgres"
 	 layers="Default layer,System,Infra,Data,Transactions"
 	 active-layers="0,1,2,3,4"
-	 layer-name-colors="#000000,#a51d2d,#000000,#000000,#000000"
-	 layer-rect-colors="#b4b4b4,#c27c82,#2569f4,#da2220,#eacc80"
-	 show-layer-names="false" show-layer-rects="true">
+	 layer-name-colors="#000000,#a51d2d,#5ec312,#c9c5ca,#000000"
+	 layer-rect-colors="#b4b4b4,#c27c82,#f9f06b,#99c1f1,#eacc80"
+	 show-layer-names="true" show-layer-rects="true">
 <database name="pieces_auto" is-template="false" allow-conns="true">
 	<role name="postgres"/>
 	<tablespace name="pg_default"/>
@@ -1072,10 +1072,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="xxxx" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+<table name="xxxx" layers="1" collapse-mode="0" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<position x="-660" y="860"/>
+	<position x="-1020" y="1060"/>
 	<column name="id" not-null="true" default-value="uuid.uuid4()">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1599,6 +1599,45 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 src-required="false" dst-required="false"
 	upd-action="CASCADE"
 	del-action="RESTRICT"/>
+
+<table name="registre" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="-660" y="640"/>
+	<column name="id" not-null="true" default-value="uuid.uuid4()">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active" default-value="1">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+	<column name="model">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="operation">
+		<type name="character varying" length="1"/>
+	</column>
+	<column name="record">
+		<type name="uuid" length="32"/>
+	</column>
+	<column name="created_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="date" length="0"/>
+	</column>
+	<column name="edited_by" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="date" length="0"/>
+	</column>
+	<constraint name="registre_pk" type="pk-constr" table="public.registre">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
 
 <constraint name="societe_fk" type="fk-constr" alias="societe_fk" comparison-type="MATCH FULL"
 	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.societe" table="public.fournisseur">
