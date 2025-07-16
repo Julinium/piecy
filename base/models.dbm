@@ -5,7 +5,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="26"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="0,0" last-zoom="0.35" scene-rect="-1048,-210,3220.31,1339.92"
+	 last-position="-607,490" last-zoom="1" scene-rect="-1048,-210,3220.31,1339.92"
 	 default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -756,7 +756,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="entree" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
+<table name="entree" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="680" y="-100"/>
@@ -895,7 +895,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="tenant" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
+<table name="tenant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="-340" y="-100"/>
@@ -952,7 +952,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="plan" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="24" z-value="-13">
+<table name="plan" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="24" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="-700" y="280"/>
@@ -1024,7 +1024,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="xxxx" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
+<table name="xxxx" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="8" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="-340" y="860"/>
@@ -1054,7 +1054,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="user" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-13">
+<table name="user" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="-700" y="-100"/>
@@ -1111,7 +1111,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<object name="tenant_fk" index="1"/>
 	</customidxs></table>
 
-<table name="payment" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="-13">
+<table name="payment" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="-700" y="640"/>
@@ -1159,7 +1159,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="subscription" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
+<table name="subscription" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="-340" y="440"/>
@@ -1297,7 +1297,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</label>
 </relationship>
 
-<table name="sortie" layers="0" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
+<table name="sortie" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="postgres"/>
 	<position x="680" y="500"/>
