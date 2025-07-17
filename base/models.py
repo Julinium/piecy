@@ -2,7 +2,7 @@ import uuid #, os
 from django.db import models
 from django.utils.translation import gettext as _
 # from datetime import date, datetime
-from back_office.models import User
+from back.models import User
 
 
 # from django.contrib.auth.models import User
