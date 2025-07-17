@@ -22,7 +22,6 @@ class Category(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_category'
 
     def __str__(self):
@@ -59,7 +58,6 @@ class Client(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_client'
 
     def __str__(self):
@@ -97,7 +95,6 @@ class Commande(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_commande'
 
     @property
@@ -135,7 +132,6 @@ class Stock(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_stock'
     
     def __str__(self):
@@ -155,7 +151,6 @@ class Ensemble(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_ensemble'
     
     def __str__(self):
@@ -178,7 +173,6 @@ class Entree(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_entree'
     
     def __str__(self):
@@ -200,7 +194,6 @@ class Fabricant(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_fabricant'
 
 
@@ -219,7 +212,6 @@ class File(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_file'
 
 
@@ -237,7 +229,6 @@ class Floor(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_floor'
 
 
@@ -269,7 +260,6 @@ class Fournisseur(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_fournisseur'
 
 
@@ -285,7 +275,6 @@ class Group(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_group'
 
 
@@ -308,7 +297,6 @@ class Magasin(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_magasin'
 
 
@@ -323,7 +311,6 @@ class CategoryProduct(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_category_product'
 
 
@@ -338,7 +325,6 @@ class EnsembleProduct(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_ensemble_product'
 
 
@@ -353,7 +339,6 @@ class VehiculeProduct(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_vehicule_product'
 
 
@@ -376,7 +361,6 @@ class Payment(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_payment'
 
 
@@ -414,7 +398,6 @@ class Product(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_product'
 
     def __str__(self):
@@ -437,7 +420,6 @@ class Rayon(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_rayon'
 
     def __str__(self):
@@ -458,28 +440,7 @@ class Reception(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_reception'
-
-
-# class Registre(models.Model):
-#     OPERATIONS = [('C', 'Create'), ('R', 'Read'), ('U', 'Update'), ('D', 'Delete'),]
-
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     date = models.DateField(blank=True, null=True)
-#     model = models.CharField(max_length=32, blank=True, null=True)
-#     instance = models.CharField(max_length=128, blank=True, null=True)
-#     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
-
-#     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_registre')
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_registre')
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-#     class Meta:
-#         managed = False
-#         db_table = 'base_tab_registre'
 
 
 class Societe(models.Model):
@@ -506,7 +467,8 @@ class Societe(models.Model):
     ice = models.CharField(max_length=64, blank=True, null=True)
     rc = models.CharField(max_length=64, blank=True, null=True)
     tp = models.CharField(max_length=64, blank=True, null=True)
-    # rib = models.CharField(max_length=64, blank=True, null=True)
+    rib = models.CharField(max_length=64, blank=True, null=True)
+    secret = models.CharField(max_length=256, blank=True, null=True)
 
     city = models.CharField(max_length=64, blank=True, null=True)
     state = models.CharField(max_length=64, blank=True, null=True)
@@ -525,7 +487,6 @@ class Societe(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_societe'
 
 
@@ -545,7 +506,6 @@ class Sortie(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_sortie'
 
 
@@ -565,5 +525,4 @@ class VehiculeModel(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'base_tab_vehicule_model'
