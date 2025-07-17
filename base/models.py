@@ -9,10 +9,38 @@ from back.models import User
 # from base.storage import OverwriteStorage
 
 
-class Category(models.Model):
+class Product(models.Model):
+    class Conditions(models.TextChoices):
+        BRAND_NEW   = 'N', _('Nouveau')
+        REFURBISHED = 'R', _('Reconditionné')
+        USED        = 'U', _('Utilisé')
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
-    name = models.CharField(max_length=64, blank=True, null=True)
+    reference = models.CharField(max_length=64, blank=True, null=True)
+    name = models.CharField(max_length=128, blank=False, null=False)
+
+    condition = models.CharField(max_length=1, choices=Conditions.choices, default=Conditions.BRAND_NEW)
+    um = models.CharField(max_length=16, blank=True, null=True)
+    sku = models.CharField(max_length=128, blank=True, null=True)
+    group = models.ForeignKey('Group', on_delete=models.RESTRICT, blank=True, null=True)
+    fabricant = models.ForeignKey('Fabricant', on_delete=models.RESTRICT, blank=True, null=True)
+    origin = models.CharField(max_length=32, blank=True, null=True)
+
+    barcode = models.CharField(max_length=256, blank=True, null=True)
+    tva_percent = models.SmallIntegerField(blank=True, null=True)
+    prix_vente_public = models.SmallIntegerField(blank=True, null=True)
+    prix_vente_online = models.SmallIntegerField(blank=True, null=True)
+    list_online = models.BooleanField(blank=True, null=True)
+    max_discount = models.SmallIntegerField(blank=True, null=True)
+
+    dimension_l_cm = models.SmallIntegerField(blank=True, null=True, default=50)
+    dimension_w_cm = models.SmallIntegerField(blank=True, null=True, default=20)
+    dimension_h_cm = models.SmallIntegerField(blank=True, null=True, default=30)
+    weight_kg = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
+
+    expires = models.BooleanField(blank=True, null=True)
+    fragile = models.BooleanField(blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
@@ -21,16 +49,23 @@ class Category(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_category'
+        db_table = 'base_tab_product'
 
     def __str__(self):
-        return self.name
+        p = f'[{self.reference}] {self.name}'
+        if self.um: p += f' ({self.um})'
+        return p
 
 
 class Client(models.Model):
+    class Civilites(models.TextChoices):
+        MR     = 'M', _('Mr.')
+        MS     = 'F', _('Mme.')
+        ML     = 'L', _('Mlle.')
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
-    civilite = models.CharField(max_length=8, blank=True, null=True, default='Mr.')
+    civilite = models.CharField(max_length=1, choices=Civilites.choices, default=Civilites.MR)
     first_name = models.CharField(max_length=64, blank=True, null=True)
     last_name = models.CharField(max_length=64, blank=False, null=False)
 
@@ -68,6 +103,24 @@ class Client(models.Model):
         return callee.strip()
 
 
+class Clientele(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    name = models.CharField(max_length=64, blank=True, null=True)
+    note = models.CharField(max_length=256, blank=True, null=True)
+
+    created_by = models.UUIDField(blank=True, null=True)
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(blank=True, null=True)
+    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+
+    class Meta:
+        db_table = 'base_tab_clientele'
+
+    def __str__(self):
+        return self.name
+
+
 class Commande(models.Model):
     class Status(models.TextChoices):
         DRAFT     = '1', _('Brouillon')
@@ -100,14 +153,14 @@ class Commande(models.Model):
     def get_total_ht(self):
         total_bt = 0
         for item in self.sorties:
-            total_bt += item.qtte_recv * item.product.prix_vente_public
+            total_bt += item.quantity * item.product.prix_vente_public
         return total_bt
 
     @property
     def get_total_ttc(self):
         total_ttc = 0
         for item in self.sorties:
-            total_ttc += item.qtte_recv * item.product.prix_vente_public * ( 1 + item.product.tva_percent / 100)
+            total_ttc += item.quantity * item.product.prix_vente_public * ( 1 + item.product.tva_percent / 100)
         return total_ttc
 
     
@@ -117,12 +170,11 @@ class Commande(models.Model):
         if self.client.societe : cmde += f' ({self.client.societe.name})'
 
 
-
 class Stock(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
-    qtte = models.SmallIntegerField(blank=True, null=True, default=0)
+    quantity = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
@@ -160,8 +212,8 @@ class Entree(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     reception = models.ForeignKey('Reception', on_delete=models.RESTRICT, blank=True, null=True)
-    qtte_cmd = models.SmallIntegerField(blank=True, null=True, default=0)
-    qtte_recv = models.SmallIntegerField(blank=True, null=True, default=0)
+    quantity = models.SmallIntegerField(blank=True, null=True, default=0)
+    # qtte_recv = models.SmallIntegerField(blank=True, null=True, default=0)
     prix_unit = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
@@ -175,14 +227,14 @@ class Entree(models.Model):
         db_table = 'base_tab_entree'
     
     def __str__(self):
-        return f'{self.qtte_recv} x {self.product.reference} - {self.reception.date_livraison.strftime("%Y-%m-%d")}'
+        return f'{self.quantity} x {self.product.reference} - {self.product.name} - {self.reception.date_livraison.strftime("%Y-%m-%d")}'
 
 
 class Fabricant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     name = models.CharField(max_length=64, blank=True, null=True)
-    country = models.CharField(max_length=16, blank=True, null=True)
+    country = models.CharField(max_length=16, blank=True, null=True, default='ma')
     website = models.CharField(max_length=128, blank=True, null=True)
     contact = models.CharField(max_length=16, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
@@ -277,6 +329,24 @@ class Group(models.Model):
         db_table = 'base_tab_group'
 
 
+class Category(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    name = models.CharField(max_length=64, blank=True, null=True)
+    note = models.CharField(max_length=256, blank=True, null=True)
+
+    created_by = models.UUIDField(blank=True, null=True)
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(blank=True, null=True)
+    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+
+    class Meta:
+        db_table = 'base_tab_category'
+
+    def __str__(self):
+        return self.name
+
+
 class Magasin(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
@@ -297,6 +367,20 @@ class Magasin(models.Model):
 
     class Meta:
         db_table = 'base_tab_magasin'
+
+
+class ClienteleClient(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    clientele = models.ForeignKey('Clientele', on_delete=models.RESTRICT, blank=True, null=True)
+    client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
+    
+    created_by = models.UUIDField(blank=True, null=True)
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(blank=True, null=True)
+    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+
+    class Meta:
+        db_table = 'base_tab_clientele_client'
 
 
 class CategoryProduct(models.Model):
@@ -361,48 +445,6 @@ class Payment(models.Model):
 
     class Meta:
         db_table = 'base_tab_payment'
-
-
-class Product(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active = models.BooleanField(blank=True, null=True, default=True)
-    reference = models.CharField(max_length=64, blank=True, null=True)
-    name = models.CharField(max_length=128, blank=False, null=False)
-
-    um = models.CharField(max_length=16, blank=True, null=True)
-    sku = models.CharField(max_length=128, blank=True, null=True)
-    group = models.ForeignKey('Group', on_delete=models.RESTRICT, blank=True, null=True)
-    fabricant = models.ForeignKey('Fabricant', on_delete=models.RESTRICT, blank=True, null=True)
-    origin = models.CharField(max_length=32, blank=True, null=True)
-
-    barcode = models.CharField(max_length=256, blank=True, null=True)
-    tva_percent = models.SmallIntegerField(blank=True, null=True)
-    prix_vente_public = models.SmallIntegerField(blank=True, null=True)
-    prix_vente_online = models.SmallIntegerField(blank=True, null=True)
-    list_online = models.BooleanField(blank=True, null=True)
-    max_discount = models.SmallIntegerField(blank=True, null=True)
-
-    dimension_l_cm = models.SmallIntegerField(blank=True, null=True, default=50)
-    dimension_w_cm = models.SmallIntegerField(blank=True, null=True, default=20)
-    dimension_h_cm = models.SmallIntegerField(blank=True, null=True, default=30)
-    weight_kg = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
-
-    expires = models.BooleanField(blank=True, null=True)
-    fragile = models.BooleanField(blank=True, null=True)
-    note = models.CharField(max_length=256, blank=True, null=True)
-
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-    class Meta:
-        db_table = 'base_tab_product'
-
-    def __str__(self):
-        p = f'[{self.reference}] {self.name}'
-        if self.um: p += f' ({self.um})'
-        return p
 
 
 class Rayon(models.Model):
