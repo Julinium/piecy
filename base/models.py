@@ -103,6 +103,16 @@ class Client(models.Model):
 
 
 class Commande(models.Model):
+    class Status(models.TextChoices):
+        DRAFT     = 'D', _('Draft')
+        QUOTE     = 'Q', _('Quote')
+        UNPAID    = 'U', _('Unpaid')
+        PAID      = 'P', _('Paid')
+        CANCELLED = 'X', _('Cancelled')
+        # TODO: Partial payments ?
+
+    status = models.CharField(max_length=1, choices=Formes.choices, default=Formes.SARL)
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     client = models.ForeignKey("Client", on_delete=models.RESTRICT, blank=True, null=True)
@@ -377,7 +387,7 @@ class VehiculeProduct(models.Model):
         db_table = 'base_tab_vehicule_product'
 
 
-class Payment(models.Model):
+class SystemPayment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     verified = models.BooleanField(blank=True, null=True)
@@ -396,7 +406,7 @@ class Payment(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'base_tab_payment'
+        db_table = 'base_tab_system_payment'
 
 
 class Plan(models.Model):
@@ -453,9 +463,9 @@ class Product(models.Model):
     list_online = models.BooleanField(blank=True, null=True)
     max_discount = models.SmallIntegerField(blank=True, null=True)
 
-    dimension_l_cm = models.SmallIntegerField(blank=True, null=True)
-    dimension_w_cm = models.SmallIntegerField(blank=True, null=True)
-    dimension_h_cm = models.SmallIntegerField(blank=True, null=True)
+    dimension_l_cm = models.SmallIntegerField(blank=True, null=True, default=50)
+    dimension_w_cm = models.SmallIntegerField(blank=True, null=True, default=20)
+    dimension_h_cm = models.SmallIntegerField(blank=True, null=True, default=30)
     weight_kg = models.DecimalField(max_digits=6, decimal_places=2, blank=True, null=True)
 
     expires = models.BooleanField(blank=True, null=True)
@@ -473,16 +483,6 @@ class Product(models.Model):
 
     def __str__(self):
         return f'[{self.reference}] {self.name}'
-    
-    # @property
-    # def remaining_days(self):
-    #     rays = self.date_limite_depot.date() - date.today()
-    #     return rays.days
-    
-    # @property
-    # def displayed_days(self):
-    #     rays = date.today() - self.date_publication.date()
-    #     return rays.days
 
 
 class Rayon(models.Model):
@@ -525,12 +525,14 @@ class Reception(models.Model):
 
 
 class Registre(models.Model):
+    OPERATIONS = [('C', 'Create'), ('R', 'Read'), ('U', 'Update'), ('D', 'Delete'),]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     date = models.DateField(blank=True, null=True)
     model = models.CharField(max_length=32, blank=True, null=True)
-    operation = models.CharField(max_length=1, blank=True, null=True)
-    record = models.UUIDField(blank=True, null=True)
+    instance = models.CharField(max_length=128, blank=True, null=True)
+    operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
     created_by = models.ForeignKey('User', blank=False, null=False)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
@@ -543,10 +545,25 @@ class Registre(models.Model):
 
 
 class Societe(models.Model):
+    class Formes(models.TextChoices):
+        SARL  = 'L', 'SARL'
+        SA    = 'A', 'SA'
+        SNC   = 'N', 'SNC'
+        SCS   = 'S', 'SCS'
+        SCA   = 'B', 'SCA'
+        EI    = 'I', 'EI'
+        AE    = 'P', 'AUTO-ENTREP.'
+        COOP  = 'C', 'COOPERATIVE'
+        ETAT  = 'E', 'ETAT'
+        AUTRE = 'X', '-AUTRE-'
+        # Usage in code:
+        # societe.forme = societe.Formes.SARL
+        # print(societe.get_forme_display())  # "SARL" 
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     raison_social = models.CharField(max_length=128, blank=True, null=True)
-    forme = models.CharField(max_length=16, blank=True, null=True)
+    forme = models.CharField(max_length=1, choices=Formes.choices, default=Formes.SARL)
     ice = models.CharField(max_length=64, blank=True, null=True)
     city = models.CharField(max_length=64, blank=True, null=True)
     state = models.CharField(max_length=64, blank=True, null=True)
