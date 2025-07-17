@@ -9,7 +9,6 @@ from back.models import User
 # from base.storage import OverwriteStorage
 
 
-
 class Category(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
@@ -17,10 +16,8 @@ class Category(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_category')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_category')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -55,10 +52,8 @@ class Client(models.Model):
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_client')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_client')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -94,10 +89,8 @@ class Commande(models.Model):
     internal_note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_commande')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_commande')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -133,10 +126,8 @@ class Stock(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_stock')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_stock')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -154,10 +145,8 @@ class Ensemble(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_ensemble')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_ensemble')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -178,10 +167,8 @@ class Entree(models.Model):
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_entree')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_entree')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -201,10 +188,8 @@ class Fabricant(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_fabricant')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_fabricant')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -221,10 +206,8 @@ class File(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_file')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_file')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -240,10 +223,8 @@ class Floor(models.Model):
     magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_floor')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_floor')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -273,10 +254,8 @@ class Fournisseur(models.Model):
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_fournisseur')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_fournisseur')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -290,10 +269,8 @@ class Group(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_group')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_group')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -314,10 +291,8 @@ class Magasin(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_magasin')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_magasin')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -330,10 +305,8 @@ class CategoryProduct(models.Model):
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_categ_prod')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_categ_prod')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -346,10 +319,8 @@ class EnsembleProduct(models.Model):
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_ensemble_prod')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_ensemble_prod')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -362,10 +333,8 @@ class VehiculeProduct(models.Model):
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_vehic_prod')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_vehic_prod')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -386,10 +355,8 @@ class Payment(models.Model):
     note = models.CharField(max_length=64, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_payment')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_payment')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -425,10 +392,8 @@ class Product(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_product')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_product')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -449,10 +414,8 @@ class Rayon(models.Model):
     floor = models.ForeignKey('Floor', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_rayon')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_rayon')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -471,10 +434,8 @@ class Reception(models.Model):
     fournisseur = models.ForeignKey('Fournisseur', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_reception')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_reception')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -505,7 +466,7 @@ class Societe(models.Model):
     ice = models.CharField(max_length=64, blank=True, null=True)
     rc = models.CharField(max_length=64, blank=True, null=True)
     tp = models.CharField(max_length=64, blank=True, null=True)
-    # rib = models.CharField(max_length=64, blank=True, null=True)
+    rib = models.CharField(max_length=64, blank=True, null=True)
 
     city = models.CharField(max_length=64, blank=True, null=True)
     state = models.CharField(max_length=64, blank=True, null=True)
@@ -519,10 +480,8 @@ class Societe(models.Model):
     website = models.CharField(max_length=64, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_societe')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_societe')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -540,10 +499,8 @@ class Sortie(models.Model):
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_sortie')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_sortie')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -561,10 +518,8 @@ class VehiculeModel(models.Model):
     category = models.CharField(max_length=16, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='created_vehicule_model')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=True, related_name='edited_vehicule_model')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:

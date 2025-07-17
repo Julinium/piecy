@@ -17,13 +17,10 @@ class Tenant(models.Model):
     owner = models.CharField(max_length=64, blank=True, null=True)
     channel = models.CharField(max_length=32, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
-    # secret = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_tenants')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_tenants')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -44,10 +41,8 @@ class User(models.Model):
     is_admin = models.BooleanField(blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_users')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_users')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -65,10 +60,8 @@ class Subscription(models.Model):
     payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_subscriptions')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_subscriptions')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -87,10 +80,8 @@ class SystemPayment(models.Model):
     note = models.CharField(max_length=64, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_system_payment')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_system_payment')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -123,10 +114,8 @@ class Plan(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_plans')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_plans')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -147,10 +136,8 @@ class Registre(models.Model):
     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
     created_by = models.UUIDField(blank=True, null=True)
-    #created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_registre')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
-    #edited_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_registre')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
