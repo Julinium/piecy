@@ -17,7 +17,7 @@ class Tenant(models.Model):
     owner = models.CharField(max_length=64, blank=True, null=True)
     channel = models.CharField(max_length=32, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
-    secret = models.CharField(max_length=256, blank=True, null=True)
+    # secret = models.CharField(max_length=256, blank=True, null=True)
 
     created_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=False, null=False, related_name='created_tenants')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
@@ -25,7 +25,6 @@ class Tenant(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'back_tab_tenant'
 
 
@@ -48,7 +47,6 @@ class User(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'back_tab_user'
 
 
@@ -68,7 +66,6 @@ class Subscription(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'back_tab_subscription'
 
 class SystemPayment(models.Model):
@@ -89,7 +86,6 @@ class SystemPayment(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'back_tab_system_payment'
 
 
@@ -124,7 +120,6 @@ class Plan(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'back_tab_plan'
 
 
@@ -147,5 +142,4 @@ class Registre(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        managed = False
         db_table = 'back_tab_registre'
