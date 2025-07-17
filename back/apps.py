@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class BackOfficeConfig(AppConfig):
+class BackConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'back_office'
+    name = 'back'
