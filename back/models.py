@@ -18,6 +18,7 @@ class Tenant(models.Model):
     channel = models.CharField(max_length=32, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
+    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -40,6 +41,7 @@ class User(models.Model):
     is_superuser = models.BooleanField(blank=True, null=True)
     is_admin = models.BooleanField(blank=True, null=True)
 
+    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -59,6 +61,7 @@ class Subscription(models.Model):
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
     payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
 
+    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -79,6 +82,7 @@ class SystemPayment(models.Model):
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
+    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -113,6 +117,7 @@ class Plan(models.Model):
 
     note = models.CharField(max_length=256, blank=True, null=True)
 
+    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -120,9 +125,6 @@ class Plan(models.Model):
 
     class Meta:
         db_table = 'back_tab_plan'
-
-
-
 
 
 class Registre(models.Model):
@@ -135,6 +137,7 @@ class Registre(models.Model):
     instance = models.CharField(max_length=128, blank=True, null=True)
     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
+    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
