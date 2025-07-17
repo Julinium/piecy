@@ -16,9 +16,9 @@ class Category(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_categories')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_category')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_categories')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_category')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -29,37 +29,12 @@ class Category(models.Model):
         return self.name
 
 
-class Checkup(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active = models.BooleanField(blank=True, null=True, default=True)
-    date = models.DateField(blank=False, null=False, auto_now_add=True)
-    counter = models.CharField(max_length=64, blank=True, null=True)
-    reason = models.CharField(max_length=64, blank=True, null=True)
-    reference = models.CharField(max_length=128, blank=True, null=True)
-    note = models.CharField(max_length=256, blank=True, null=True)
-    magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
-    document = models.CharField(max_length=256, blank=True, null=True)
-    
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_checkups')
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_checkups')
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-    class Meta:
-        managed = False
-        db_table = 'base_tab_checkup'
-        
-    def __str__(self):
-        return f'{self.magasin.name} - {self.date.strftime("%Y-%m-%d")}'
-
-
 class Client(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     civilite = models.CharField(max_length=8, blank=True, null=True, default='Mr.')
     first_name = models.CharField(max_length=64, blank=True, null=True)
     last_name = models.CharField(max_length=64, blank=False, null=False)
-    # name = models.CharField(max_length=128)
 
     address_l1 = models.CharField(max_length=64, blank=True, null=True)
     address_l2 = models.CharField(max_length=64, blank=True, null=True)
@@ -78,9 +53,9 @@ class Client(models.Model):
     source = models.CharField(max_length=32, blank=True, null=True)
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_clients')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_client')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_clients')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_client')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -97,15 +72,12 @@ class Client(models.Model):
 
 
 class Commande(models.Model):
-    # class Status(models.TextChoices):
-    #     DRAFT     = 'D', _('Draft')
-    #     QUOTE     = 'Q', _('Quote')
-    #     UNPAID    = 'U', _('Unpaid')
-    #     PAID      = 'P', _('Paid')
-    #     CANCELLED = 'X', _('Cancelled')
-    #     # TODO: Partial payments ?
-
-    # status = models.CharField(max_length=1, choices=Formes.choices, default=Formes.SARL)
+    class Status(models.TextChoices):
+        DRAFT     = '1', _('Brouillon')
+        QUOTE     = '2', _('Devis')
+        ACCEPTED  = '3', _('Acceptée')
+        DELIVERED = '4', _('Livrée')
+        CANCELLED = '0', _('Annulée')
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
@@ -113,13 +85,15 @@ class Commande(models.Model):
     date_commande = models.DateField(blank=True, null=True)
     date_livraison = models.DateField(blank=True, null=True, auto_now_add=True)
     payee = models.BooleanField(blank=True, null=True, default=False)
+    status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
+    
     document = models.CharField(max_length=256, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
     internal_note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_commandes')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_commande')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_commandes')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_commande')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -148,24 +122,25 @@ class Commande(models.Model):
 
 
 
-class Count(models.Model):
+class Stock(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
-    checkup = models.ForeignKey('Checkup', on_delete=models.RESTRICT, blank=True, null=True)
-    qtte_reelle = models.SmallIntegerField(blank=True, null=True)
+    magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
+    qtte = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_counts')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_stock')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_counts')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_stock')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
         managed = False
-        db_table = 'base_tab_count'
+        db_table = 'base_tab_stock'
     
     def __str__(self):
-        return f'{self.product.name} - {self.checkup.date.strftime(("%Y-%m-%d"))}' 
+        d = self.edited_on if self.edited_on else self.created_on
+        return f'{self.product.name} - {self.magasin.name} - {d.strftime(("%Y-%m-%d"))}'
 
 
 class Ensemble(models.Model):
@@ -174,9 +149,9 @@ class Ensemble(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_ensembles')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_ensemble')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_ensembles')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_ensemble')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -193,12 +168,13 @@ class Entree(models.Model):
     reception = models.ForeignKey('Reception', on_delete=models.RESTRICT, blank=True, null=True)
     qtte_cmd = models.SmallIntegerField(blank=True, null=True, default=0)
     qtte_recv = models.SmallIntegerField(blank=True, null=True, default=0)
+    prix_unit = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_entries')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_entree')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_entries')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_entree')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -218,9 +194,9 @@ class Fabricant(models.Model):
     contact = models.CharField(max_length=16, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_fabricants')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_fabricant')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_fabricants')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_fabricant')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -237,9 +213,9 @@ class File(models.Model):
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_files')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_file')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_files')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_file')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -255,9 +231,9 @@ class Floor(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_floors')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_floor')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_floors')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_floor')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -287,9 +263,9 @@ class Fournisseur(models.Model):
     source = models.CharField(max_length=32, blank=True, null=True)
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_fournisseurs')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_fournisseur')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_fournisseurs')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_fournisseur')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -381,61 +357,27 @@ class VehiculeProduct(models.Model):
         db_table = 'base_tab_vehicule_product'
 
 
-# class SystemPayment(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     verified = models.BooleanField(blank=True, null=True)
-#     reference = models.CharField(max_length=32, blank=True, null=True)
-#     mode = models.CharField(max_length=32, blank=True, null=True)
-#     date_made = models.DateField(blank=True, null=True)
-#     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-#     currency = models.CharField(max_length=16, blank=True, null=True)
-#     maker = models.CharField(max_length=64, blank=True, null=True)
-#     note = models.CharField(max_length=64, blank=True, null=True)
+class Payment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    verified = models.BooleanField(blank=True, null=True)
+    commande = models.ForeignKey('Commande', on_delete=models.RESTRICT, blank=True, null=True)
+    reference = models.CharField(max_length=32, blank=True, null=True)
+    mode = models.CharField(max_length=32, blank=True, null=True)
+    date_made = models.DateField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=16, blank=True, null=True)
+    maker = models.CharField(max_length=64, blank=True, null=True)
+    note = models.CharField(max_length=64, blank=True, null=True)
 
-#     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_system_payment')
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_system_payment')
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_payment')
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_payment')
+    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
-#     class Meta:
-#         managed = False
-#         db_table = 'base_tab_system_payment'
-
-
-# class Plan(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     name = models.CharField(max_length=16, blank=True, null=True)
-#     header = models.CharField(max_length=128, blank=True, null=True)
-#     ordre = models.SmallIntegerField(blank=True, null=True)
-#     cta = models.CharField(max_length=128, blank=True, null=True, default=_('Free quote'))
-    
-#     year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
-#     first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)
-#     monthly_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-#     custom_domain = models.BooleanField(blank=True, null=True)
-#     mailbox = models.BooleanField(blank=True, null=True)
-#     ecommerce = models.BooleanField(blank=True, null=True)
-#     vitrine = models.BooleanField(blank=True, null=True)
-
-#     max_users = models.SmallIntegerField(blank=True, null=True)
-#     max_clients = models.SmallIntegerField(blank=True, null=True)
-#     max_products = models.SmallIntegerField(blank=True, null=True)
-#     max_pdfs = models.SmallIntegerField(blank=True, null=True)
-#     max_excels = models.SmallIntegerField(blank=True, null=True)
-
-#     note = models.CharField(max_length=256, blank=True, null=True)
-
-#     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_plans')
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_plans')
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-#     class Meta:
-#         managed = False
-#         db_table = 'base_tab_plan'
+    class Meta:
+        managed = False
+        db_table = 'base_tab_payment'
 
 
 class Product(models.Model):
@@ -466,9 +408,9 @@ class Product(models.Model):
     fragile = models.BooleanField(blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_products')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_product')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_products')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_product')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -476,7 +418,9 @@ class Product(models.Model):
         db_table = 'base_tab_product'
 
     def __str__(self):
-        return f'[{self.reference}] {self.name}'
+        p = f'[{self.reference}] {self.name}'
+        if self.um: p += f' ({self.um})'
+        return p
 
 
 class Rayon(models.Model):
@@ -552,13 +496,18 @@ class Societe(models.Model):
         AUTRE = 'X', '-AUTRE-'
         # Usage in code:
         # societe.forme = societe.Formes.SARL
-        # print(societe.get_forme_display())  # "SARL" 
+        # print(societe.get_forme_display())  # "SARL"
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     raison_social = models.CharField(max_length=128, blank=True, null=True)
     forme = models.CharField(max_length=1, choices=Formes.choices, default=Formes.SARL)
+    
     ice = models.CharField(max_length=64, blank=True, null=True)
+    rc = models.CharField(max_length=64, blank=True, null=True)
+    tp = models.CharField(max_length=64, blank=True, null=True)
+    # rib = models.CharField(max_length=64, blank=True, null=True)
+
     city = models.CharField(max_length=64, blank=True, null=True)
     state = models.CharField(max_length=64, blank=True, null=True)
     country = models.CharField(max_length=64, blank=True, null=True)
@@ -570,9 +519,9 @@ class Societe(models.Model):
     email = models.CharField(max_length=64, blank=True, null=True)
     website = models.CharField(max_length=64, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_soocietes')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_societe')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_societes')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_societe')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -586,83 +535,18 @@ class Sortie(models.Model):
     commande = models.ForeignKey('Commande', on_delete=models.RESTRICT, related_name='sorties', blank=True, null=True)
     qtte_cmde = models.SmallIntegerField(blank=True, null=True, default=0)
     qtte_recv = models.SmallIntegerField(blank=True, null=True, default=0)
+    prix_unit = models.SmallIntegerField(blank=True, null=True, default=0)
+    discount = models.SmallIntegerField(blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_sorties')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_sortie')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_sorties')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_sortie')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
         managed = False
         db_table = 'base_tab_sortie'
-
-
-# class Subscription(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     name = models.CharField(max_length=16, blank=True, null=True)
-#     date_fm = models.DateField(blank=True, null=True)
-#     date_to = models.DateField(blank=True, null=True)
-#     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
-#     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
-#     payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
-
-#     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_subscriptions')
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_subscriptions')
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-#     class Meta:
-#         managed = False
-#         db_table = 'base_tab_subscription'
-
-
-# class Tenant(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     name = models.CharField(max_length=128, blank=True, null=True)
-#     tel = models.CharField(max_length=16, blank=True, null=True)
-#     email = models.CharField(max_length=16, blank=True, null=True)
-#     phone = models.CharField(max_length=16, blank=True, null=True)
-#     whatsapp = models.CharField(max_length=16, blank=True, null=True)
-#     domain = models.CharField(max_length=32, blank=True, null=True)
-#     slug = models.CharField(max_length=32, blank=True, null=True)
-#     owner = models.CharField(max_length=64, blank=True, null=True)
-#     channel = models.CharField(max_length=32, blank=True, null=True)
-#     note = models.CharField(max_length=256, blank=True, null=True)
-
-#     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_tenants')
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_tenants')
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-#     class Meta:
-#         managed = False
-#         db_table = 'base_tab_tenant'
-
-
-# class User(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
-#     verified = models.BooleanField(blank=True, null=True)
-#     username = models.CharField(max_length=16, blank=True, null=True)
-#     email = models.CharField(max_length=64, blank=True, null=True)
-#     phone = models.CharField(max_length=64, blank=True, null=True)
-#     first_name = models.CharField(max_length=64, blank=True, null=True)
-#     last_name = models.CharField(max_length=64, blank=True, null=True)
-#     is_superuser = models.BooleanField(blank=True, null=True)
-#     is_admin = models.BooleanField(blank=True, null=True)
-
-#     created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_users')
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_users')
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-#     class Meta:
-#         managed = False
-#         db_table = 'base_tab_user'
 
 
 class VehiculeModel(models.Model):
@@ -675,9 +559,9 @@ class VehiculeModel(models.Model):
     year_end = models.DateField(blank=True, null=True)
     category = models.CharField(max_length=16, blank=True, null=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_vehicles')
+    created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='created_vehicule_model')
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_vehicles')
+    edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=False, null=False, related_name='edited_vehicule_model')
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
