@@ -43,7 +43,7 @@ class Product(models.Model):
     fragile = models.BooleanField(blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -87,7 +87,7 @@ class Client(models.Model):
     source = models.CharField(max_length=32, blank=True, null=True)
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -111,7 +111,7 @@ class Clientele(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -144,7 +144,7 @@ class Commande(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     internal_note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -181,7 +181,7 @@ class Stock(models.Model):
     quantity = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -201,7 +201,7 @@ class Ensemble(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -223,7 +223,7 @@ class Entree(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -246,7 +246,7 @@ class Fabricant(models.Model):
     contact = models.CharField(max_length=16, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -267,12 +267,12 @@ class File(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     name = models.CharField(max_length=64, blank=True, null=True)
-    upload = models.FileField(upload_to=tenant_directory_path)
+    upload = models.FileField(upload_to=tenant_directory_path, blank=True, null=True)
     mime = models.CharField(max_length=32, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -293,7 +293,7 @@ class Floor(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -328,7 +328,7 @@ class Fournisseur(models.Model):
     source = models.CharField(max_length=32, blank=True, null=True)
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -349,7 +349,7 @@ class Group(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -368,7 +368,7 @@ class Category(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -394,7 +394,7 @@ class Magasin(models.Model):
     contact = models.CharField(max_length=128, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -412,7 +412,7 @@ class ClienteleClient(models.Model):
     clientele = models.ForeignKey('Clientele', on_delete=models.RESTRICT, blank=True, null=True)
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -430,7 +430,7 @@ class CategoryProduct(models.Model):
     category = models.ForeignKey('Category', on_delete=models.RESTRICT, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -448,7 +448,7 @@ class EnsembleProduct(models.Model):
     ensemble = models.ForeignKey('Ensemble', on_delete=models.RESTRICT, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -466,7 +466,7 @@ class VehiculeProduct(models.Model):
     vehicule = models.ForeignKey('Vehicule', on_delete=models.RESTRICT, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -492,7 +492,7 @@ class Payment(models.Model):
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -521,7 +521,7 @@ class Rayon(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     floor = models.ForeignKey('Floor', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -542,7 +542,7 @@ class Reception(models.Model):
     payee = models.BooleanField(blank=True, null=True, default=False)
     fournisseur = models.ForeignKey('Fournisseur', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -589,7 +589,7 @@ class Societe(models.Model):
     email = models.CharField(max_length=64, blank=True, null=True)
     website = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -609,7 +609,7 @@ class Sortie(models.Model):
     discount = models.SmallIntegerField(blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
@@ -629,11 +629,11 @@ class Vehicule(models.Model):
     year_end = models.DateField(blank=True, null=True)
     category = models.CharField(max_length=16, blank=True, null=True)
 
-    owned_by = models.ForeignKey('User', on_delete=models.RESTRICT, blank=True, null=True)
+    owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_vehicule_model'
+        db_table = 'base_tab_vehicule'
