@@ -1,14 +1,15 @@
 # Piecy
 
 ## Introduction
-Piecy is a django-based web application to efficiently manage a car spares business or any business with similar setup and workflow.
+Piecy is a web application designed to efficiently manage a car spares business or any business with similar setup and workflow.
 
 ## Testing/Development
-- Clone or download our repo.
+- Clone the repo with git or download and extract the zip.
 - Setup a python virtual environment.
-- Install requirements.txt.
+- Install requirements.txt using pip.
 - Copy .env.example to .env and change values as needed.
-- Run the server.
+- Make migrations and migrate.
+- Run the server for test.
 
 ## Production
 - Setup a WSGI and a webserver.

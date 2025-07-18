@@ -1,16 +1,8 @@
 import uuid #, os
 from django.db import models
 from django.utils.translation import gettext as _
-# from datetime import date, datetime
 from back.models import User, Tenant
 
-
-# from django.contrib.auth.models import User
-# from base.storage import OverwriteStorage
-
-
-def tenant_directory_path(instance, filename):     # return 't-{0}/{1}'.format(instance.product.id, filename)
-    return f'prod-{instance.product.id}/{filename}'
 
 
 class Product(models.Model):
@@ -148,7 +140,7 @@ class Commande(models.Model):
     payment_reminder = models.SmallIntegerField(blank=True, null=True, default=7)
     global_discount = models.SmallIntegerField(blank=True, null=True)
 
-    file = models.FileField(upload_to=tenant_directory_path, blank=True, null=True)
+    file = models.FileField(upload_to='commandes/', blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
     gage = models.CharField(max_length=64, blank=True, null=True)
     internal_note = models.CharField(max_length=256, blank=True, null=True)
@@ -272,7 +264,7 @@ class File(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     name = models.CharField(max_length=64, blank=True, null=True)
-    upload = models.FileField(upload_to=tenant_directory_path, blank=True, null=True)
+    upload = models.FileField(upload_to='products/', blank=True, null=True)
     mime = models.CharField(max_length=32, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
