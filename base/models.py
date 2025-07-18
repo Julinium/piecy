@@ -55,7 +55,7 @@ class Product(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_product'
+        db_table = 'product'
 
     def __str__(self):
         p = f'[{self.reference}] {self.name}'
@@ -99,7 +99,7 @@ class Client(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_client'
+        db_table = 'client'
 
     def __str__(self):
         callee = ""
@@ -123,7 +123,7 @@ class Clientele(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_clientele'
+        db_table = 'clientele'
 
     def __str__(self):
         return self.name
@@ -160,7 +160,7 @@ class Commande(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_commande'
+        db_table = 'commande'
 
     @property
     def get_total_ht(self):
@@ -197,7 +197,7 @@ class Stock(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_stock'
+        db_table = 'stock'
     
     def __str__(self):
         d = self.edited_on if self.edited_on else self.created_on
@@ -217,7 +217,7 @@ class Ensemble(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_ensemble'
+        db_table = 'ensemble'
     
     def __str__(self):
         return self.name
@@ -239,7 +239,7 @@ class Entree(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_entree'
+        db_table = 'entree'
     
     def __str__(self):
         dts = self.reception.date_livraison.strftime("%Y-%m-%d")
@@ -262,7 +262,7 @@ class Fabricant(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_fabricant'
+        db_table = 'fabricant'
     
     def __str__(self):
         return self.name
@@ -284,7 +284,7 @@ class File(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_file'
+        db_table = 'file'
     
     def __str__(self):
         return f'{self.name} - {self.upload}'
@@ -305,7 +305,7 @@ class Floor(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_floor'
+        db_table = 'floor'
     
     def __str__(self):
         return f'{self.magasin.name} - {self.name}'
@@ -340,7 +340,7 @@ class Fournisseur(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_fournisseur'
+        db_table = 'fournisseur'
     
     def __str__(self):
         f = self.name
@@ -361,7 +361,7 @@ class Group(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_group'
+        db_table = 'group'
     
     def __str__(self):    
         return self.name
@@ -380,7 +380,7 @@ class Category(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_category'
+        db_table = 'category'
 
     def __str__(self):
         return self.name
@@ -406,7 +406,7 @@ class Magasin(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_magasin'
+        db_table = 'magasin'
 
     def __str__(self):
         return self.name
@@ -424,7 +424,7 @@ class ClienteleClient(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_clientele_client'
+        db_table = 'clientele_client'
 
     def __str__(self):
         return f'{self.clientele} _ {self.client}'
@@ -442,7 +442,7 @@ class CategoryProduct(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_category_product'
+        db_table = 'category_product'
 
     def __str__(self):
         return f'{self.category} _ {self.product}'
@@ -460,7 +460,7 @@ class EnsembleProduct(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_ensemble_product'
+        db_table = 'ensemble_product'
 
     def __str__(self):
         return f'{self.ensemble} _ {self.product}'
@@ -478,7 +478,7 @@ class VehiculeProduct(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_vehicule_product'
+        db_table = 'vehicule_product'
 
     def __str__(self):
         return f'{self.vehicule} _ {self.product}'
@@ -504,7 +504,7 @@ class Payment(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_payment'
+        db_table = 'payment'
 
     def __str__(self):
         soc, cli = None, None
@@ -533,7 +533,7 @@ class Rayon(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_rayon'
+        db_table = 'rayon'
 
     def __str__(self):
         return f'{self.floor.magasin.name} - {self.floor.name} - {self.name}'
@@ -557,7 +557,7 @@ class Reception(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_reception'
+        db_table = 'reception'
 
 
 class Societe(models.Model):
@@ -604,7 +604,7 @@ class Societe(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_societe'
+        db_table = 'societe'
 
 
 class Sortie(models.Model):
@@ -624,7 +624,7 @@ class Sortie(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_sortie'
+        db_table = 'sortie'
 
 
 class Vehicule(models.Model):
@@ -644,7 +644,7 @@ class Vehicule(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_vehicule'
+        db_table = 'vehicule'
 
 
 class Constant(models.Model):
@@ -663,4 +663,4 @@ class Constant(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'base_tab_constant'
+        db_table = 'constant'

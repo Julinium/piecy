@@ -23,7 +23,7 @@ class User(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'back_tab_user'
+        db_table = 'user'
 
 
 class Tenant(models.Model):
@@ -47,7 +47,7 @@ class Tenant(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'back_tab_tenant'
+        db_table = 'tenant'
 
 
 class Subscription(models.Model):
@@ -67,7 +67,7 @@ class Subscription(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'back_tab_subscription'
+        db_table = 'subscription'
 
 class SystemPayment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -88,7 +88,7 @@ class SystemPayment(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'back_tab_system_payment'
+        db_table = 'system_payment'
 
 
 class Plan(models.Model):
@@ -123,7 +123,7 @@ class Plan(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'back_tab_plan'
+        db_table = 'plan'
 
 
 class Registre(models.Model):
@@ -143,4 +143,4 @@ class Registre(models.Model):
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'back_tab_registre'
+        db_table = 'registre'
