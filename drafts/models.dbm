@@ -3,127 +3,1120 @@
 CAUTION: Do not modify this file unless you know what you are doing.
  Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="31"
+<dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="80"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="-524,-85" last-zoom="0.5" scene-rect="-1048,-170,3180.31,1460.92"
-	 default-owner="postgres"
-	 layers="Default layer,System,Infra,Data,Transactions"
-	 active-layers="0,1,2,3,4"
-	 layer-name-colors="#000000,#000000,#000000,#000000,#000000"
-	 layer-rect-colors="#babe81,#68180b,#02c0fd,#4de291,#2bd1c3"
+	 last-position="0,-157" last-zoom="0.45" scene-rect="0,-350,2492.31,5099.92"
+	 default-schema="public" default-owner="postgres"
+	 layers="Default layer"
+	 active-layers="0"
+	 layer-name-colors="#000000"
+	 layer-rect-colors="#b4b4b4"
 	 show-layer-names="false" show-layer-rects="false">
-<database name="dbieces" is-template="false" allow-conns="true">
-	<role name="postgres"/>
+<role name="dbaser"
+ inherit="true"
+ login="true"
+ password="********">
+</role>
+
+<database name="dbieces" encoding="UTF8" lc-collate="en_US.UTF-8" lc-ctype="en_US.UTF-8" is-template="false" allow-conns="true">
+	<role name="dbaser"/>
 	<tablespace name="pg_default"/>
 </database>
 
-<schema name="public" layers="0" rect-visible="true" fill-color="#eed7a3" name-color="#000000" sql-disabled="true">
+<schema name="public" layers="0" rect-visible="true" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
 </schema>
 
-<schema name="test" layers="0" rect-visible="true" fill-color="#f8f68d" name-color="#82a7cc">
-	<role name="postgres"/>
-</schema>
-
-<table name="product" layers="3" collapse-mode="2" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="32" z-value="0">
+<table name="django_migrations" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="2">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="500" y="360"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
+	<role name="dbaser"/>
+	<position x="640" y="-80"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+		<type name="bigint" length="0"/>
 	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
+	<column name="app" not-null="true">
+		<type name="character varying" length="255"/>
 	</column>
 	<column name="name" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="applied" not-null="true">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="django_migrations_pkey" type="pk-constr" table="public.django_migrations">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="django_migrations_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="django_content_type" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="3">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1680" y="-80"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="app_label" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="model" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<constraint name="django_content_type_pkey" type="pk-constr" table="public.django_content_type">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="django_content_type_app_label_model_76bd3d3b_uniq" type="uq-constr" table="public.django_content_type">
+		<columns names="app_label,model" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="django_content_type_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="auth_permission" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="3">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="2080" y="-280"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="content_type_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="codename" not-null="true">
+		<type name="character varying" length="100"/>
+	</column>
+	<constraint name="auth_permission_pkey" type="pk-constr" table="public.auth_permission">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="auth_permission_content_type_id_codename_01ab375a_uniq" type="uq-constr" table="public.auth_permission">
+		<columns names="content_type_id,codename" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="auth_permission_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="auth_group" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="2" z-value="2">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1000" y="-280"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<constraint name="auth_group_pkey" type="pk-constr" table="public.auth_group">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="auth_group_name_key" type="uq-constr" table="public.auth_group">
+		<columns names="name" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="auth_group_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="auth_group_permissions" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="3">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1660" y="-280"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="group_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="permission_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="auth_group_permissions_pkey" type="pk-constr" table="public.auth_group_permissions">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="auth_group_permissions_group_id_permission_id_0cd325b0_uniq" type="uq-constr" table="public.auth_group_permissions">
+		<columns names="group_id,permission_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="auth_group_permissions_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="auth_user" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="3">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1680" y="140"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="password" not-null="true">
 		<type name="character varying" length="128"/>
 	</column>
-	<column name="label">
-		<type name="character varying" length="64"/>
+	<column name="last_login">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="um">
+	<column name="is_superuser" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="username" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="first_name" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="last_name" not-null="true">
+		<type name="character varying" length="150"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="254"/>
+	</column>
+	<column name="is_staff" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="is_active" not-null="true">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="date_joined" not-null="true">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="auth_user_pkey" type="pk-constr" table="public.auth_user">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="auth_user_username_key" type="uq-constr" table="public.auth_user">
+		<columns names="username" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="auth_user_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="auth_user_groups" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="2">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="980" y="220"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="group_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="auth_user_groups_pkey" type="pk-constr" table="public.auth_user_groups">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="auth_user_groups_user_id_group_id_94350c0c_uniq" type="uq-constr" table="public.auth_user_groups">
+		<columns names="user_id,group_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="auth_user_groups_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<table name="auth_user_user_permissions" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="3">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="2060" y="200"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
+		<type name="bigint" length="0"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="permission_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="auth_user_user_permissions_pkey" type="pk-constr" table="public.auth_user_user_permissions">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+	<constraint name="auth_user_user_permissions_user_id_permission_id_14a6b632_uniq" type="uq-constr" table="public.auth_user_user_permissions">
+		<columns names="user_id,permission_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="auth_user_user_permissions_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<index name="auth_permission_content_type_id_2f476e4b" table="public.auth_permission"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="content_type_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_group_permissions_group_id_b120cbf9" table="public.auth_group_permissions"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="group_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_group_permissions_permission_id_84c5c92e" table="public.auth_group_permissions"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="permission_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_user_groups_user_id_6a12ed8b" table="public.auth_user_groups"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="user_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_user_groups_group_id_97559544" table="public.auth_user_groups"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="group_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_user_user_permissions_user_id_a95ead1b" table="public.auth_user_user_permissions"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="user_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_user_user_permissions_permission_id_1fbb5f2c" table="public.auth_user_user_permissions"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="permission_id"/>
+		</idxelement>
+</index>
+
+<table name="django_admin_log" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="3">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1280" y="-120"/>
+	<column name="id" not-null="true"
+	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="action_time" not-null="true">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="object_id">
+		<type name="text" length="0"/>
+	</column>
+	<column name="object_repr" not-null="true">
+		<type name="character varying" length="200"/>
+	</column>
+	<column name="action_flag" not-null="true">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="change_message" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="content_type_id">
+		<type name="integer" length="0"/>
+	</column>
+	<column name="user_id" not-null="true">
+		<type name="integer" length="0"/>
+	</column>
+	<constraint name="django_admin_log_action_flag_check" type="ck-constr" table="public.django_admin_log">
+			<expression> <![CDATA[(action_flag >= 0)]]> </expression>
+	</constraint>
+	<constraint name="django_admin_log_pkey" type="pk-constr" table="public.django_admin_log">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="django_admin_log_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="2147483647" cache="1" sql-disabled="true">
+	<schema name="public"/>
+	<role name="dbaser"/>
+</sequence>
+
+<index name="django_admin_log_content_type_id_c4bce8eb" table="public.django_admin_log"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="content_type_id"/>
+		</idxelement>
+</index>
+
+<index name="django_admin_log_user_id_c564eba6" table="public.django_admin_log"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="user_id"/>
+		</idxelement>
+</index>
+
+<index name="auth_user_username_6821ab7c_like" table="public.auth_user"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="username"/>
+		</idxelement>
+</index>
+
+<index name="auth_group_name_a6ea08ec_like" table="public.auth_group"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="name"/>
+		</idxelement>
+</index>
+
+<table name="django_session" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="2">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="640" y="-260"/>
+	<column name="session_key" not-null="true">
+		<type name="character varying" length="40"/>
+	</column>
+	<column name="session_data" not-null="true">
+		<type name="text" length="0"/>
+	</column>
+	<column name="expire_date" not-null="true">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="django_session_pkey" type="pk-constr" table="public.django_session">
+		<columns names="session_key" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="django_session_session_key_c0390e0f_like" table="public.django_session"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="session_key"/>
+		</idxelement>
+</index>
+
+<index name="django_session_expire_date_a5c62663" table="public.django_session"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="expire_date"/>
+		</idxelement>
+</index>
+
+<table name="back_tab_plan" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="28" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="60" y="800"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
 		<type name="character varying" length="16"/>
 	</column>
-	<column name="reference">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="sku">
+	<column name="header">
 		<type name="character varying" length="128"/>
 	</column>
-	<column name="origin">
-		<type name="character varying" length="32"/>
+	<column name="ordre">
+		<type name="smallint" length="0"/>
 	</column>
-	<column name="barcode">
+	<column name="cta">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="year_free_mth">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="first_time_disc">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="monthly_price" not-null="true">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="custom_domain">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="mailbox">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="ecommerce">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="vitrine">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="max_users">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="max_clients">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="max_products">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="max_pdfs">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="max_excels">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="note">
 		<type name="character varying" length="256"/>
 	</column>
-	<column name="tva_percent" default-value="20">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="prix_vente_public">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="prix_vente_online">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="list_online" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="max_discount" default-value="30">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="expires" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="dimension_l_cm" default-value="50">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="dimension_w_cm" default-value="20">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="dimension_h_cm" default-value="30">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="weight_kg" default-value="30">
-		<type name="decimal" length="6" precision="2"/>
-	</column>
-	<column name="fragile" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="product_pk" type="pk-constr" table="public.product">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_fabricant" index="7"/>
-		<object name="id_group" index="8"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="fabricant_fk" index="1"/>
-		<object name="group_fk" index="2"/>
-	</customidxs></table>
-
-<table name="fabricant" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="500" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<column name="owned_by_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
+	<constraint name="back_tab_plan_pkey" type="pk-constr" table="public.back_tab_plan">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="back_tab_tenant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="540" y="880"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="tel">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="phone">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="whatsapp">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="domain">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="slug">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="owner">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="channel">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<constraint name="back_tab_tenant_pkey" type="pk-constr" table="public.back_tab_tenant">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="back_tab_user" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-1">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1000" y="1020"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="verified">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="username">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="phone">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="first_name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="last_name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="is_superuser">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="is_admin">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="tenant_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="back_tab_user_pkey" type="pk-constr" table="public.back_tab_user">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="back_tab_system_payment" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1520" y="720"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="verified">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="reference">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="mode">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="date_made">
+		<type name="date" length="0"/>
+	</column>
+	<column name="amount">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="currency">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="maker">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="back_tab_system_payment_pkey" type="pk-constr" table="public.back_tab_system_payment">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="back_tab_subscription" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="900" y="460"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="date_fm">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_to">
+		<type name="date" length="0"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="plan_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="payment_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="tenant_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="back_tab_subscription_pkey" type="pk-constr" table="public.back_tab_subscription">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="back_tab_registre" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="60" y="1500"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="date">
+		<type name="date" length="0"/>
+	</column>
+	<column name="model">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="instance">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="operation" not-null="true">
+		<type name="character varying" length="1"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="back_tab_registre_pkey" type="pk-constr" table="public.back_tab_registre">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<index name="back_tab_user_tenant_id_548cf4dd" table="public.back_tab_user"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="tenant_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_system_payment_owned_by_id_b124bd67" table="public.back_tab_system_payment"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_subscription_plan_id_ca7333fa" table="public.back_tab_subscription"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="plan_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_subscription_payment_id_6e827b93" table="public.back_tab_subscription"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="payment_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_subscription_tenant_id_e58c9863" table="public.back_tab_subscription"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="tenant_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_subscription_owned_by_id_9e126211" table="public.back_tab_subscription"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_registre_owned_by_id_ee3f7bfa" table="public.back_tab_registre"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="back_tab_plan_owned_by_id_fb24db4f" table="public.back_tab_plan"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<table name="base_tab_category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="580" y="1500"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_category_pkey" type="pk-constr" table="public.base_tab_category">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="30" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1340" y="1760"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="civilite" not-null="true">
+		<type name="character varying" length="1"/>
+	</column>
+	<column name="first_name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="last_name" not-null="true">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_l1">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_l2">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="address_city">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_state">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_country">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="address_zip">
+		<type name="character varying" length="8"/>
+	</column>
+	<column name="tel">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="mobile">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="whatsapp">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="fax">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="email">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="website">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="source">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="societe_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_client_pkey" type="pk-constr" table="public.base_tab_client">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_clientele" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1660" y="1500"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_clientele_pkey" type="pk-constr" table="public.base_tab_clientele">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_clientele_client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="2200" y="1500"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="client_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="clientele_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_clientele_client_pkey" type="pk-constr" table="public.base_tab_clientele_client">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_commande" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="60" y="2280"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="date_commande">
+		<type name="date" length="0"/>
+	</column>
+	<column name="date_livraison">
+		<type name="date" length="0"/>
+	</column>
+	<column name="payee">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="status" not-null="true">
+		<type name="character varying" length="1"/>
+	</column>
+	<column name="document">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="internal_note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="client_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_commande_pkey" type="pk-constr" table="public.base_tab_commande">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="620" y="2280"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_ensemble_pkey" type="pk-constr" table="public.base_tab_ensemble">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1160" y="2280"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
 	<column name="name">
@@ -138,47 +1131,37 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="contact">
 		<type name="character varying" length="16"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="fabricant_pk" type="pk-constr" table="public.fabricant">
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_fabricant_pkey" type="pk-constr" table="public.base_tab_fabricant">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<relationship name="fabr_prod" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#37922c"
-	 src-table="public.fabricant"
-	 dst-table="public.product"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="53.0503" y="-38.853"/>
-	</label>
-</relationship>
-
-<table name="client" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="26" z-value="0">
+<table name="base_tab_fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="27" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1940" y="500"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="1720" y="2280"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
 	<column name="name" not-null="true">
@@ -220,283 +1203,76 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="website">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="description">
+	<column name="note">
 		<type name="character varying" length="256"/>
 	</column>
 	<column name="source">
 		<type name="character varying" length="32"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="client_pk" type="pk-constr" table="public.client">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_societe" index="17"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="societe_fk" index="1"/>
-	</customidxs></table>
-
-<table name="societe" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="22" z-value="2">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1940" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<column name="owned_by_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="raison_social">
-		<type name="character varying" length="128"/>
-	</column>
-	<column name="forme">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="ice">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="city">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="state">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="country" default-value="MA">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="manager">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="date_est">
-		<type name="date" length="64"/>
-	</column>
-	<column name="sector">
-		<type name="character varying" length="128"/>
-	</column>
-	<column name="phone">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="fax">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="email">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="website">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="created_by" not-null="true">
+	<column name="societe_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="societe_pk" type="pk-constr" table="public.societe">
+	<constraint name="base_tab_fournisseur_pkey" type="pk-constr" table="public.base_tab_fournisseur">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<relationship name="soc_cli" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#2e4eaf"
-	 src-table="public.societe"
-	 dst-table="public.client"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="6.55032" y="-68.853"/>
-	</label>
-</relationship>
-
-<table name="ensemble" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+<table name="base_tab_group" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-240" y="660"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="2280" y="2280"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
 	<column name="name">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="description">
+	<column name="note">
 		<type name="character varying" length="256"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="ensemble_pk" type="pk-constr" table="public.ensemble">
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_group_pkey" type="pk-constr" table="public.base_tab_group">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<relationship name="ens_prod" type="relnn" layers="0"
-	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
-	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
-	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
-	 pk-col-pattern="id"
-	 fk-idx-pattern="{gt}_idx"
-	 custom-color="#da4bf5"
-	 src-table="public.ensemble"
-	 dst-table="public.product"
-	 src-required="false" dst-required="false"
-	 table-name="many_ensemble_has_many_product">
-	<label ref-type="name-label">
-		<position x="-28.4497" y="-69.603"/>
-	</label>
-</relationship>
-
-<table name="category" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+<table name="base_tab_magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-240" y="40"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="name">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="category_pk" type="pk-constr" table="public.category">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
-
-<relationship name="cate_prod" type="relnn" layers="0"
-	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
-	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
-	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
-	 pk-col-pattern="id"
-	 fk-idx-pattern="{gt}_idx"
-	 custom-color="#447840"
-	 src-table="public.category"
-	 dst-table="public.product"
-	 src-required="false" dst-required="false"
-	 table-name="many_category_has_many_product"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="-25.9497" y="10.397"/>
-	</label>
-</relationship>
-
-<table name="vehicule_model" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="120" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="marque">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="model_nom">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="model_code">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="year_start">
-		<type name="date" length="0"/>
-	</column>
-	<column name="year_end">
-		<type name="date" length="0"/>
-	</column>
-	<column name="category">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="vehicule_model_pk" type="pk-constr" table="public.vehicule_model">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
-
-<relationship name="vehi_prod" type="relnn" layers="0"
-	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
-	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
-	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
-	 pk-col-pattern="id"
-	 fk-idx-pattern="{gt}_idx"
-	 custom-color="#88871a"
-	 src-table="public.vehicule_model"
-	 dst-table="public.product"
-	 src-required="false" dst-required="false"
-	 table-name="many_vehicule_model_has_many_product">
-	<label ref-type="name-label">
-		<position x="33.0503" y="-70.403"/>
-	</label>
-</relationship>
-
-<table name="magasin" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-1">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1220" y="840"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="60" y="3000"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="active">
@@ -526,150 +1302,379 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="contact">
 		<type name="character varying" length="128"/>
 	</column>
-	<column name="description">
+	<column name="note">
 		<type name="character varying" length="256"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="magasin_pk" type="pk-constr" table="public.magasin">
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_magasin_pkey" type="pk-constr" table="public.base_tab_magasin">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="floor" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
+<table name="base_tab_floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1580" y="260"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="600" y="3000"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="name" default-value="RDC">
+	<column name="name">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="elevation" default-value="0">
-		<type name="smallint" length="64"/>
+	<column name="elevation">
+		<type name="smallint" length="0"/>
 	</column>
-	<column name="description">
-		<type name="character varying" length="0"/>
+	<column name="note">
+		<type name="character varying" length="256"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="aile_pk" type="pk-constr" table="public.floor">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_magasin" index="5"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="magasin_fk" index="1"/>
-	</customidxs></table>
-
-<table name="rayon" layers="2" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1220" y="220"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<column name="owned_by_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
+	<column name="magasin_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_floor_pkey" type="pk-constr" table="public.base_tab_floor">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_payment" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1140" y="3000"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="name" default-value="R1">
+	<column name="verified">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="reference">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="mode">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="date_made">
+		<type name="date" length="0"/>
+	</column>
+	<column name="amount">
+		<type name="numeric" length="10" precision="2"/>
+	</column>
+	<column name="currency">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="maker">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="number" default-value="1">
-		<type name="smallint" length="64"/>
+	<column name="note">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="description">
-		<type name="character varying" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="rayon_pk" type="pk-constr" table="public.rayon">
+	<column name="commande_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_payment_pkey" type="pk-constr" table="public.base_tab_payment">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
+</table>
 
-	<customidxs object-type="column">
-		<object name="id_floor" index="5"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="floor_fk" index="1"/>
-	</customidxs></table>
-
-<relationship name="mag_lev" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#47b37f"
-	 src-table="public.magasin"
-	 dst-table="public.floor"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="src-label">
-		<position x="-8.30837" y="-6.99059"/>
-	</label>
-	<label ref-type="name-label">
-		<position x="28.5503" y="2.74701"/>
-	</label>
-</relationship>
-
-<relationship name="lev_ray" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#d09d5a"
-	 src-table="public.floor"
-	 dst-table="public.rayon"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="25.0503" y="-58.853"/>
-	</label>
-</relationship>
-
-<table name="reception" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="6">
+<table name="base_tab_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="33" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1220" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="1740" y="3000"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="reference">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="name" not-null="true">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="condition" not-null="true">
+		<type name="character varying" length="1"/>
+	</column>
+	<column name="um">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="sku">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="origin">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="barcode">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="tva_percent">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="prix_vente_public">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="prix_vente_online">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="list_online">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="max_discount">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="dimension_l_cm">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="dimension_w_cm">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="dimension_h_cm">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="weight_kg">
+		<type name="numeric" length="6" precision="2"/>
+	</column>
+	<column name="expires">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="fragile">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="fabricant_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="group_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_product_pkey" type="pk-constr" table="public.base_tab_product">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_file" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="2300" y="3000"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="upload">
+		<type name="character varying" length="100"/>
+	</column>
+	<column name="mime">
+		<type name="character varying" length="32"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_file_pkey" type="pk-constr" table="public.base_tab_file">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_ensemble_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="60" y="3880"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="ensemble_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_ensemble_product_pkey" type="pk-constr" table="public.base_tab_ensemble_product">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_category_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="580" y="3880"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="category_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_category_product_pkey" type="pk-constr" table="public.base_tab_category_product">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1100" y="3880"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
+		<type name="boolean" length="0"/>
+	</column>
+	<column name="name">
+		<type name="character varying" length="64"/>
+	</column>
+	<column name="number">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="floor_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_rayon_pkey" type="pk-constr" table="public.base_tab_rayon">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_reception" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1620" y="3880"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="date_commande">
@@ -678,73 +1683,127 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="date_livraison" not-null="true">
 		<type name="date" length="0"/>
 	</column>
-	<column name="activee" not-null="true" default-value="1">
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="payee" not-null="true" default-value="0">
+	<column name="payee">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="reception_pk" type="pk-constr" table="public.reception">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_fournisseur" index="5"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="fournisseur_fk" index="1"/>
-	</customidxs></table>
-
-<table name="fournisseur" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="26" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1580" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<column name="fournisseur_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_reception_pkey" type="pk-constr" table="public.base_tab_reception">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_entree" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="2160" y="3880"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="quantity">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="prix_unit">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="note">
+		<type name="character varying" length="256"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="rayon_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="reception_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_entree_pkey" type="pk-constr" table="public.base_tab_entree">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="27" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="60" y="4460"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="name" not-null="true">
+	<column name="raison_social">
 		<type name="character varying" length="128"/>
 	</column>
-	<column name="address_l1">
+	<column name="forme" not-null="true">
+		<type name="character varying" length="1"/>
+	</column>
+	<column name="ice">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="address_l2">
+	<column name="rc">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="address_city">
-		<type name="character varying" length="32"/>
+	<column name="tp">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="address_state">
-		<type name="character varying" length="32"/>
+	<column name="rib">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="address_country">
-		<type name="character varying" length="32"/>
+	<column name="city">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="address_zip">
-		<type name="character varying" length="8"/>
+	<column name="state">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="tel">
-		<type name="character varying" length="16"/>
+	<column name="country">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="mobile">
-		<type name="character varying" length="16"/>
+	<column name="manager">
+		<type name="character varying" length="64"/>
 	</column>
-	<column name="whatsapp">
+	<column name="date_est">
+		<type name="date" length="0"/>
+	</column>
+	<column name="sector">
+		<type name="character varying" length="128"/>
+	</column>
+	<column name="phone">
 		<type name="character varying" length="16"/>
 	</column>
 	<column name="fax">
@@ -756,921 +1815,1534 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="website">
 		<type name="character varying" length="64"/>
 	</column>
-	<column name="description">
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_societe_pkey" type="pk-constr" table="public.base_tab_societe">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_sortie" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="580" y="4460"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="qtte_cmde">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="qtte_recv">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="prix_unit">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="discount">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="created_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="created_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="edited_by">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="edited_on">
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
+	</column>
+	<column name="commande_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="rayon_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_sortie_pkey" type="pk-constr" table="public.base_tab_sortie">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="base_tab_stock" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
+	<schema name="public"/>
+	<role name="dbaser"/>
+	<position x="1160" y="4460"/>
+	<column name="id" not-null="true">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="quantity">
+		<type name="smallint" length="0"/>
+	</column>
+	<column name="note">
 		<type name="character varying" length="256"/>
 	</column>
-	<column name="source">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="id_societe" alias="id_societe">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="fournisseur_pk" type="pk-constr" table="public.fournisseur">
+	<column name="magasin_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_stock_pkey" type="pk-constr" table="public.base_tab_stock">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<relationship name="four_rec" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#5e255d"
-	 src-table="public.fournisseur"
-	 dst-table="public.reception"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<table name="entree" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="-1">
+<table name="base_tab_vehicule" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="860" y="80"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="1680" y="4460"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="qtte_cmd" not-null="true" default-value="1">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="qtte_recv" not-null="true" default-value="1">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="entree_pk" type="pk-constr" table="public.entree">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_product" index="1"/>
-		<object name="id_rayon" index="5"/>
-		<object name="id_reception" index="2"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="product_fk" index="1"/>
-		<object name="rayon_fk" index="2"/>
-		<object name="reception_fk" index="3"/>
-	</customidxs></table>
-
-<relationship name="prod_entr" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#77b355"
-	 src-table="public.product"
-	 dst-table="public.entree"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="62.5503" y="-20.403"/>
-	</label>
-</relationship>
-
-<relationship name="ray_entr" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#805340"
-	 src-table="public.rayon"
-	 dst-table="public.entree"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
-
-<relationship name="recep_entr" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#c67420"
-	 src-table="public.reception"
-	 dst-table="public.entree"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="6.05032" y="-79.553"/>
-	</label>
-</relationship>
-
-<table name="file" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="-2">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="120" y="780"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
+	<column name="active">
 		<type name="boolean" length="0"/>
 	</column>
-	<column name="name">
-		<type name="character varying" length="64"/>
+	<column name="marque">
+		<type name="character varying" length="16"/>
 	</column>
-	<column name="path">
-		<type name="character varying" length="256"/>
+	<column name="model_nom">
+		<type name="character varying" length="16"/>
 	</column>
-	<column name="type" default-value="image">
-		<type name="character varying" length="32"/>
+	<column name="model_code">
+		<type name="character varying" length="16"/>
 	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
+	<column name="year_start">
+		<type name="date" length="0"/>
 	</column>
-	<column name="created_by" not-null="true">
+	<column name="year_end">
+		<type name="date" length="0"/>
+	</column>
+	<column name="category">
+		<type name="character varying" length="16"/>
+	</column>
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="file_pk" type="pk-constr" table="public.file">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-
-	<customidxs object-type="column">
-		<object name="id_product" index="5"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="product_fk" index="1"/>
-	</customidxs></table>
-
-<relationship name="prod_file" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#12137c"
-	 src-table="public.product"
-	 dst-table="public.file"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="50.5503" y="-21.953"/>
-	</label>
-</relationship>
-
-<table name="tenant" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="-13">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-660" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<column name="owned_by_id">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="name">
-		<type name="character varying" length="128"/>
-	</column>
-	<column name="tel">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="email">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="phone">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="whatsapp">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="domain">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="slug">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="owner">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="channel" default-value="M2E">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="tenant_pk" type="pk-constr" table="public.tenant">
+	<constraint name="base_tab_vehicule_pkey" type="pk-constr" table="public.base_tab_vehicule">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="plan" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="24" z-value="-13">
+<table name="base_tab_vehicule_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-1020" y="280"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
+	<role name="dbaser"/>
+	<position x="2240" y="4460"/>
+	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="name">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="label">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="year_free_mth" default-value="2">
-		<type name="smallint" length="16"/>
-	</column>
-	<column name="first_time_disc" default-value="50">
-		<type name="smallint" length="16"/>
-	</column>
-	<column name="monthy_price" not-null="true" default-value="0.0">
-		<type name="decimal" length="12" precision="2"/>
-	</column>
-	<column name="custom_domain" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="mailbox" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="ecommerce" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="vitrine" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="max_users" default-value="2">
-		<type name="smallint" length="0"/>
-		<comment> <![CDATA[Max number of users, including admins. 0 is unlimited]]> </comment>
-	</column>
-	<column name="max_clients" default-value="10">
-		<type name="smallint" length="0"/>
-		<comment> <![CDATA[Max number of clients. 0 is unlimited]]> </comment>
-	</column>
-	<column name="max_products" default-value="50">
-		<type name="smallint" length="0"/>
-		<comment> <![CDATA[Max number of products. 0 is unlimited]]> </comment>
-	</column>
-	<column name="max_pdfs" default-value="20">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="max_excels" default-value="20">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
+	<column name="created_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="created_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<column name="edited_by" not-null="true">
+	<column name="edited_by">
 		<type name="uuid" length="0"/>
 	</column>
 	<column name="edited_on">
-		<type name="date" length="0"/>
+		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
-	<constraint name="plan_pk" type="pk-constr" table="public.plan">
+	<column name="owned_by_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="product_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<column name="vehicule_id">
+		<type name="uuid" length="0"/>
+	</column>
+	<constraint name="base_tab_vehicule_product_pkey" type="pk-constr" table="public.base_tab_vehicule_product">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
 </table>
 
-<table name="xxxx" layers="1" collapse-mode="0" max-obj-count="8" z-value="0">
-	<schema name="test"/>
-	<role name="postgres"/>
-	<position x="-1020" y="1220"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="name">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="xtemp_pk" type="pk-constr" table="test.xxxx">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+<index name="base_tab_category_owned_by_id_01d4ef7b" table="public.base_tab_category"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
 
-<table name="user" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="-13">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-1020" y="-100"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="verified" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="username">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="email">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="phone">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="first_name">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="last_name">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="is_superuser" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="is_admin" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="user_pk" type="pk-constr" table="public.&quot;user&quot;">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
+<index name="base_tab_client_owned_by_id_328c6903" table="public.base_tab_client"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
 
-	<customidxs object-type="column">
-		<object name="id_tenant" index="2"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="tenant_fk" index="1"/>
-	</customidxs></table>
+<index name="base_tab_clientele_owned_by_id_3c167d93" table="public.base_tab_clientele"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
 
-<table name="payment" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="-13">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-1020" y="640"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="verified" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="reference">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="mode">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="date_made">
-		<type name="date" length="32"/>
-	</column>
-	<column name="amount">
-		<type name="decimal" length="12" precision="2"/>
-	</column>
-	<column name="currency" default-value="MAD">
-		<type name="character varying" length="0"/>
-	</column>
-	<column name="maker">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="description">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="payment_pk" type="pk-constr" table="public.payment">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+<index name="base_tab_clientele_client_client_id_78d83261" table="public.base_tab_clientele_client"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="client_id"/>
+		</idxelement>
+</index>
 
-<table name="subscription" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="-13">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-660" y="300"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="name">
-		<type name="character varying" length="16"/>
-	</column>
-	<column name="date_fm">
-		<type name="date" length="0"/>
-	</column>
-	<column name="date_to">
-		<type name="date" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="subscription_pk" type="pk-constr" table="public.subscription">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
+<index name="base_tab_clientele_client_clientele_id_1ea9946a" table="public.base_tab_clientele_client"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="clientele_id"/>
+		</idxelement>
+</index>
 
-	<customidxs object-type="column">
-		<object name="id_payment" index="7"/>
-		<object name="id_plan" index="6"/>
-		<object name="id_tenant" index="5"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="payment_fk" index="3"/>
-		<object name="plan_fk" index="2"/>
-		<object name="tenant_fk" index="1"/>
-	</customidxs></table>
+<index name="base_tab_clientele_client_owned_by_id_0b2f2e75" table="public.base_tab_clientele_client"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
 
-<relationship name="tena_sub" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#3ef183"
-	 src-table="public.tenant"
-	 dst-table="public.subscription"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="51.5503" y="-41.153"/>
+<index name="base_tab_commande_client_id_83037807" table="public.base_tab_commande"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="client_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_commande_owned_by_id_da953637" table="public.base_tab_commande"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_ensemble_owned_by_id_ffb0163d" table="public.base_tab_ensemble"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_fabricant_owned_by_id_52603db2" table="public.base_tab_fabricant"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_fournisseur_owned_by_id_e046757a" table="public.base_tab_fournisseur"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_group_owned_by_id_e39e52f7" table="public.base_tab_group"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_magasin_owned_by_id_5400ca76" table="public.base_tab_magasin"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_floor_owned_by_id_2e29f219" table="public.base_tab_floor"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_floor_magasin_id_2474c58c" table="public.base_tab_floor"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="magasin_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_payment_commande_id_f5e5f4b8" table="public.base_tab_payment"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="commande_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_payment_owned_by_id_bddc4494" table="public.base_tab_payment"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_product_fabricant_id_4f3265d1" table="public.base_tab_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="fabricant_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_product_group_id_02c415d6" table="public.base_tab_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="group_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_product_owned_by_id_de7889ef" table="public.base_tab_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_file_owned_by_id_4eaaa4b1" table="public.base_tab_file"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_file_product_id_868fe664" table="public.base_tab_file"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_ensemble_product_ensemble_id_3349a328" table="public.base_tab_ensemble_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="ensemble_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_ensemble_product_owned_by_id_c68a6291" table="public.base_tab_ensemble_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_ensemble_product_product_id_cc5f1fc1" table="public.base_tab_ensemble_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_category_product_category_id_7d5e7cde" table="public.base_tab_category_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="category_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_category_product_owned_by_id_1a4b295a" table="public.base_tab_category_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_category_product_product_id_b486db98" table="public.base_tab_category_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_rayon_floor_id_018447b9" table="public.base_tab_rayon"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="floor_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_rayon_owned_by_id_1054bc34" table="public.base_tab_rayon"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_reception_fournisseur_id_90ef4a79" table="public.base_tab_reception"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="fournisseur_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_reception_owned_by_id_23051cd4" table="public.base_tab_reception"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_entree_owned_by_id_ff260597" table="public.base_tab_entree"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_entree_product_id_ee3b32d5" table="public.base_tab_entree"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_entree_rayon_id_9f66f859" table="public.base_tab_entree"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="rayon_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_entree_reception_id_c34aa2b0" table="public.base_tab_entree"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="reception_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_societe_owned_by_id_f2268ec2" table="public.base_tab_societe"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_fournisseur_societe_id_569a95d3" table="public.base_tab_fournisseur"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="societe_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_client_societe_id_69c93900" table="public.base_tab_client"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="societe_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_sortie_commande_id_c111d1a0" table="public.base_tab_sortie"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="commande_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_sortie_owned_by_id_0eb22c87" table="public.base_tab_sortie"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_sortie_product_id_66a9a982" table="public.base_tab_sortie"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_sortie_rayon_id_fe4118dd" table="public.base_tab_sortie"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="rayon_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_stock_magasin_id_477115e7" table="public.base_tab_stock"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="magasin_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_stock_owned_by_id_993a7649" table="public.base_tab_stock"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_stock_product_id_125d2ad5" table="public.base_tab_stock"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_vehicule_owned_by_id_25894230" table="public.base_tab_vehicule"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_vehicule_product_owned_by_id_3b8351e2" table="public.base_tab_vehicule_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="owned_by_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_vehicule_product_product_id_b3943362" table="public.base_tab_vehicule_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="product_id"/>
+		</idxelement>
+</index>
+
+<index name="base_tab_vehicule_product_vehicule_id_428eb3ce" table="public.base_tab_vehicule_product"
+	 concurrent="false" unique="false" fast-update="false" buffering="false" nulls-not-distinct="false"
+	 index-type="btree" factor="90">
+		<idxelement use-sorting="false">
+			<column name="vehicule_id"/>
+		</idxelement>
+</index>
+
+<constraint name="auth_permission_content_type_id_2f476e4b_fk_django_co" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.django_content_type"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_permission">
+	<columns names="content_type_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_group"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_group_permissions">
+	<columns names="group_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_permission"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_group_permissions">
+	<columns names="permission_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_user_groups">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="auth_user_groups_group_id_97559544_fk_auth_group_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_group"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_user_groups">
+	<columns names="group_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_user_user_permissions">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_permission"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.auth_user_user_permissions">
+	<columns names="permission_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="django_admin_log_content_type_id_c4bce8eb_fk_django_co" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.django_content_type"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.django_admin_log">
+	<columns names="content_type_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="django_admin_log_user_id_c564eba6_fk_auth_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.auth_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.django_admin_log">
+	<columns names="user_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_plan_owned_by_id_fb24db4f_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_plan">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_user_tenant_id_548cf4dd_fk_back_tab_tenant_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_tenant"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_user">
+	<columns names="tenant_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_system_paym_owned_by_id_b124bd67_fk_back_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_system_payment">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_subscription_plan_id_ca7333fa_fk_back_tab_plan_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_plan"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_subscription">
+	<columns names="plan_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_subscriptio_payment_id_6e827b93_fk_back_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_system_payment"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_subscription">
+	<columns names="payment_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_subscription_tenant_id_e58c9863_fk_back_tab_tenant_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_tenant"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_subscription">
+	<columns names="tenant_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_subscription_owned_by_id_9e126211_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_subscription">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="back_tab_registre_owned_by_id_ee3f7bfa_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.back_tab_registre">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_category_owned_by_id_01d4ef7b_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_category">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_client_societe_id_69c93900_fk_base_tab_societe_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_societe"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_client">
+	<columns names="societe_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_client_owned_by_id_328c6903_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_client">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_clientele_owned_by_id_3c167d93_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_clientele">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_clientele_c_client_id_78d83261_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_client"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_clientele_client">
+	<columns names="client_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_clientele_c_clientele_id_1ea9946a_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_clientele"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_clientele_client">
+	<columns names="clientele_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_clientele_c_owned_by_id_0b2f2e75_fk_back_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_clientele_client">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_commande_client_id_83037807_fk_base_tab_client_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_client"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_commande">
+	<columns names="client_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_commande_owned_by_id_da953637_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_commande">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_ensemble_owned_by_id_ffb0163d_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_ensemble">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_fabricant_owned_by_id_52603db2_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_fabricant">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_fournisseur_societe_id_569a95d3_fk_base_tab_societe_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_societe"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_fournisseur">
+	<columns names="societe_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_fournisseur_owned_by_id_e046757a_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_fournisseur">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_group_owned_by_id_e39e52f7_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_group">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_magasin_owned_by_id_5400ca76_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_magasin">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_floor_owned_by_id_2e29f219_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_floor">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_floor_magasin_id_2474c58c_fk_base_tab_magasin_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_magasin"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_floor">
+	<columns names="magasin_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_payment_commande_id_f5e5f4b8_fk_base_tab_commande_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_commande"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_payment">
+	<columns names="commande_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_payment_owned_by_id_bddc4494_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_payment">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_product_fabricant_id_4f3265d1_fk_base_tab_fabricant_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_fabricant"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_product">
+	<columns names="fabricant_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_product_group_id_02c415d6_fk_base_tab_group_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_group"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_product">
+	<columns names="group_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_product_owned_by_id_de7889ef_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_product">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_file_owned_by_id_4eaaa4b1_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_file">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_file_product_id_868fe664_fk_base_tab_product_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_file">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_ensemble_pr_ensemble_id_3349a328_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_ensemble"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_ensemble_product">
+	<columns names="ensemble_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_ensemble_pr_owned_by_id_c68a6291_fk_back_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_ensemble_product">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_ensemble_pr_product_id_cc5f1fc1_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_ensemble_product">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_category_pr_category_id_7d5e7cde_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_category"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_category_product">
+	<columns names="category_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_category_pr_owned_by_id_1a4b295a_fk_back_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_category_product">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_category_pr_product_id_b486db98_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_category_product">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_rayon_floor_id_018447b9_fk_base_tab_floor_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_floor"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_rayon">
+	<columns names="floor_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_rayon_owned_by_id_1054bc34_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_rayon">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_reception_fournisseur_id_90ef4a79_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_fournisseur"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_reception">
+	<columns names="fournisseur_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_reception_owned_by_id_23051cd4_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_reception">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_entree_owned_by_id_ff260597_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_entree">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_entree_product_id_ee3b32d5_fk_base_tab_product_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_entree">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_entree_rayon_id_9f66f859_fk_base_tab_rayon_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_rayon"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_entree">
+	<columns names="rayon_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_entree_reception_id_c34aa2b0_fk_base_tab_reception_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_reception"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_entree">
+	<columns names="reception_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_societe_owned_by_id_f2268ec2_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_societe">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_sortie_commande_id_c111d1a0_fk_base_tab_commande_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_commande"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_sortie">
+	<columns names="commande_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_sortie_owned_by_id_0eb22c87_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_sortie">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_sortie_product_id_66a9a982_fk_base_tab_product_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_sortie">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_sortie_rayon_id_fe4118dd_fk_base_tab_rayon_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_rayon"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_sortie">
+	<columns names="rayon_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_stock_magasin_id_477115e7_fk_base_tab_magasin_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_magasin"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_stock">
+	<columns names="magasin_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_stock_owned_by_id_993a7649_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_stock">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_stock_product_id_125d2ad5_fk_base_tab_product_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_stock">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_vehicule_owned_by_id_25894230_fk_back_tab_user_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_vehicule">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_vehicule_pr_owned_by_id_3b8351e2_fk_back_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.back_tab_user"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_vehicule_product">
+	<columns names="owned_by_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_vehicule_pr_product_id_b3943362_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_product"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_vehicule_product">
+	<columns names="product_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="base_tab_vehicule_pr_vehicule_id_428eb3ce_fk_base_tab_" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.base_tab_vehicule"
+	deferrable="true" defer-type="INITIALLY DEFERRED"
+ table="public.base_tab_vehicule_product">
+	<columns names="vehicule_id" ref-type="src-columns"/>
+	<columns names="id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_auth_permission_django_content_type" type="relfk" layers="0"
+	 custom-color="#5425d8"
+	 src-table="public.auth_permission"
+	 dst-table="public.django_content_type" reference-fk="auth_permission_content_type_id_2f476e4b_fk_django_co"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_auth_group_permissions_auth_group" type="relfk" layers="0"
+	 custom-color="#b524d3"
+	 src-table="public.auth_group_permissions"
+	 dst-table="public.auth_group" reference-fk="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_auth_group_permissions_auth_permission" type="relfk" layers="0"
+	 custom-color="#fa295f"
+	 src-table="public.auth_group_permissions"
+	 dst-table="public.auth_permission" reference-fk="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_auth_user_groups_auth_user" type="relfk" layers="0"
+	 custom-color="#5216eb"
+	 src-table="public.auth_user_groups"
+	 dst-table="public.auth_user" reference-fk="auth_user_groups_user_id_6a12ed8b_fk_auth_user_id"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_auth_user_groups_auth_group" type="relfk" layers="0"
+	 custom-color="#6dc76d"
+	 src-table="public.auth_user_groups"
+	 dst-table="public.auth_group" reference-fk="auth_user_groups_group_id_97559544_fk_auth_group_id"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_auth_user_user_permissions_auth_user" type="relfk" layers="0"
+	 custom-color="#0773f8"
+	 src-table="public.auth_user_user_permissions"
+	 dst-table="public.auth_user" reference-fk="auth_user_user_permissions_user_id_a95ead1b_fk_auth_user_id"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_auth_user_user_permissions_auth_permission" type="relfk" layers="0"
+	 custom-color="#3d4523"
+	 src-table="public.auth_user_user_permissions"
+	 dst-table="public.auth_permission" reference-fk="auth_user_user_permi_permission_id_1fbb5f2c_fk_auth_perm"
+	 src-required="false" dst-required="true"/>
+
+<relationship name="rel_django_admin_log_django_content_type" type="relfk" layers="0"
+	 custom-color="#6a89ec"
+	 src-table="public.django_admin_log"
+	 dst-table="public.django_content_type" reference-fk="django_admin_log_content_type_id_c4bce8eb_fk_django_co"
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="-2" y="-9.00623"/>
 	</label>
 </relationship>
 
-<relationship name="plan_sub" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#1afed8"
-	 src-table="public.plan"
-	 dst-table="public.subscription"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
+<relationship name="rel_django_admin_log_auth_user" type="relfk" layers="0"
+	 custom-color="#db7180"
+	 src-table="public.django_admin_log"
+	 dst-table="public.auth_user" reference-fk="django_admin_log_user_id_c564eba6_fk_auth_user_id"
+	 src-required="false" dst-required="true"/>
 
-<relationship name="pay_sub" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#6a18a4"
-	 src-table="public.payment"
-	 dst-table="public.subscription"
+<relationship name="rel_back_tab_plan_back_tab_user" type="relfk" layers="0"
+	 custom-color="#a901be"
+	 src-table="public.back_tab_plan"
+	 dst-table="public.back_tab_user" reference-fk="back_tab_plan_owned_by_id_fb24db4f_fk_back_tab_user_id"
 	 src-required="false" dst-required="false"/>
 
-<relationship name="ten_usr" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#97e2d7"
-	 src-table="public.tenant"
-	 dst-table="public.&quot;user&quot;"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
+<relationship name="rel_back_tab_user_back_tab_tenant" type="relfk" layers="0"
+	 custom-color="#686350"
+	 src-table="public.back_tab_user"
+	 dst-table="public.back_tab_tenant" reference-fk="back_tab_user_tenant_id_548cf4dd_fk_back_tab_tenant_id"
+	 src-required="false" dst-required="false"/>
 
-<table name="commande" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="6">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="1580" y="700"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="activee" not-null="true" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="date_commande">
-		<type name="date" length="0"/>
-	</column>
-	<column name="date_livraison" not-null="true">
-		<type name="date" length="0"/>
-	</column>
-	<column name="payee" not-null="true" default-value="0">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="report">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="public_note">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="internal_note">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="commande_pk" type="pk-constr" table="public.commande">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
+<relationship name="rel_back_tab_system_payment_back_tab_user" type="relfk" layers="0"
+	 custom-color="#b7be97"
+	 src-table="public.back_tab_system_payment"
+	 dst-table="public.back_tab_user" reference-fk="back_tab_system_paym_owned_by_id_b124bd67_fk_back_tab_"
+	 src-required="false" dst-required="false"/>
 
-	<customidxs object-type="column">
-		<object name="id_client" index="2"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="client_fk" index="1"/>
-	</customidxs></table>
+<relationship name="rel_back_tab_subscription_back_tab_plan" type="relfk" layers="0"
+	 custom-color="#6a343f"
+	 src-table="public.back_tab_subscription"
+	 dst-table="public.back_tab_plan" reference-fk="back_tab_subscription_plan_id_ca7333fa_fk_back_tab_plan_id"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="cli_comd" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#644145"
-	 src-table="public.client"
-	 dst-table="public.commande"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
+<relationship name="rel_back_tab_subscription_back_tab_system_payment" type="relfk" layers="0"
+	 custom-color="#787894"
+	 src-table="public.back_tab_subscription"
+	 dst-table="public.back_tab_system_payment" reference-fk="back_tab_subscriptio_payment_id_6e827b93_fk_back_tab_"
+	 src-required="false" dst-required="false"/>
 
-<table name="sortie" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="860" y="500"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="qtte_cmde" not-null="true" default-value="1">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="qtte_recv" not-null="true" default-value="1">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="id_rayon" alias="id_rayon">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="sortee_pk" type="pk-constr" table="public.sortie">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
+<relationship name="rel_back_tab_subscription_back_tab_tenant" type="relfk" layers="0"
+	 custom-color="#5aac3b"
+	 src-table="public.back_tab_subscription"
+	 dst-table="public.back_tab_tenant" reference-fk="back_tab_subscription_tenant_id_e58c9863_fk_back_tab_tenant_id"
+	 src-required="false" dst-required="false"/>
 
-	<customidxs object-type="column">
-		<object name="id_commande" index="2"/>
-		<object name="id_product" index="1"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="commande_fk" index="2"/>
-		<object name="product_fk" index="3"/>
-	</customidxs></table>
+<relationship name="rel_back_tab_subscription_back_tab_user" type="relfk" layers="0"
+	 custom-color="#fb371b"
+	 src-table="public.back_tab_subscription"
+	 dst-table="public.back_tab_user" reference-fk="back_tab_subscription_owned_by_id_9e126211_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="comd_sort" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#513ada"
-	 src-table="public.commande"
-	 dst-table="public.sortie"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="15.5503" y="-68.853"/>
-	</label>
-</relationship>
+<relationship name="rel_back_tab_registre_back_tab_user" type="relfk" layers="0"
+	 custom-color="#95aaa9"
+	 src-table="public.back_tab_registre"
+	 dst-table="public.back_tab_user" reference-fk="back_tab_registre_owned_by_id_ee3f7bfa_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="prod_sort" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#8084f8"
-	 src-table="public.product"
-	 dst-table="public.sortie"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT">
-	<label ref-type="name-label">
-		<position x="-16.9497" y="9.59701"/>
-	</label>
-</relationship>
+<relationship name="rel_base_tab_category_back_tab_user" type="relfk" layers="0"
+	 custom-color="#7e95c7"
+	 src-table="public.base_tab_category"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_category_owned_by_id_01d4ef7b_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<table name="count" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="500" y="840"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="qtte_cmde" not-null="true" default-value="1">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="qtte_recv" not-null="true" default-value="1">
-		<type name="smallint" length="0"/>
-	</column>
-	<column name="id_rayon" alias="id_rayon">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="count_pk" type="pk-constr" table="public.count">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+<relationship name="rel_base_tab_client_base_tab_societe" type="relfk" layers="0"
+	 custom-color="#887c3b"
+	 src-table="public.base_tab_client"
+	 dst-table="public.base_tab_societe" reference-fk="base_tab_client_societe_id_69c93900_fk_base_tab_societe_id"
+	 src-required="false" dst-required="false"/>
 
-<table name="checkup" layers="4" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="16" z-value="6">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="860" y="840"/>
-	<column name="id" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="activee" not-null="true" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="date" not-null="true">
-		<type name="date" length="0"/>
-	</column>
-	<column name="counter">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="reason">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="reference">
-		<type name="character varying" length="128"/>
-	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="report">
-		<type name="character varying" length="256"/>
-	</column>
+<relationship name="rel_base_tab_client_back_tab_user" type="relfk" layers="0"
+	 custom-color="#5a3e2a"
+	 src-table="public.base_tab_client"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_client_owned_by_id_328c6903_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-	<customidxs object-type="column">
-		<object name="id_count" index="12"/>
-		<object name="id_magasin" index="11"/>
-	</customidxs>
-	<customidxs object-type="constraint">
-		<object name="count_fk" index="1"/>
-		<object name="magasin_fk" index="0"/>
-	</customidxs></table>
+<relationship name="rel_base_tab_clientele_back_tab_user" type="relfk" layers="0"
+	 custom-color="#5c6e7f"
+	 src-table="public.base_tab_clientele"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_clientele_owned_by_id_3c167d93_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="mag_chkp" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#458e51"
-	 src-table="public.magasin"
-	 dst-table="public.checkup"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="-5.94968" y="11.147"/>
-	</label>
-</relationship>
+<relationship name="rel_base_tab_clientele_client_base_tab_client" type="relfk" layers="0"
+	 custom-color="#d58bb7"
+	 src-table="public.base_tab_clientele_client"
+	 dst-table="public.base_tab_client" reference-fk="base_tab_clientele_c_client_id_78d83261_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="cnt_chkp" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#8cdf03"
-	 src-table="public.count"
-	 dst-table="public.checkup"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
+<relationship name="rel_base_tab_clientele_client_base_tab_clientele" type="relfk" layers="0"
+	 custom-color="#41047c"
+	 src-table="public.base_tab_clientele_client"
+	 dst-table="public.base_tab_clientele" reference-fk="base_tab_clientele_c_clientele_id_1ea9946a_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
 
-<table name="group" layers="3" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-240" y="340"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="name">
-		<type name="character varying" length="64"/>
-	</column>
-	<column name="description">
-		<type name="character varying" length="256"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="group_pk" type="pk-constr" table="public.&quot;group&quot;">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+<relationship name="rel_base_tab_clientele_client_back_tab_user" type="relfk" layers="0"
+	 custom-color="#c679c4"
+	 src-table="public.base_tab_clientele_client"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_clientele_c_owned_by_id_0b2f2e75_fk_back_tab_"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="grp_prod" type="rel1n" layers="0"
-	 src-col-pattern="{sc}_{st}"
-	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
-	 src-fk-pattern="{st}_fk"
-	 fk-idx-pattern="{st}_idx"
-	 custom-color="#04a920"
-	 src-table="public.&quot;group&quot;"
-	 dst-table="public.product"
-	 src-required="false" dst-required="false"
-	upd-action="CASCADE"
-	del-action="RESTRICT"/>
+<relationship name="rel_base_tab_commande_base_tab_client" type="relfk" layers="0"
+	 custom-color="#f5e411"
+	 src-table="public.base_tab_commande"
+	 dst-table="public.base_tab_client" reference-fk="base_tab_commande_client_id_83037807_fk_base_tab_client_id"
+	 src-required="false" dst-required="false"/>
 
-<table name="registre" layers="1" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
-	<schema name="public"/>
-	<role name="postgres"/>
-	<position x="-660" y="640"/>
-	<column name="id" not-null="true" default-value="uuid.uuid4()">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="active" default-value="1">
-		<type name="boolean" length="0"/>
-	</column>
-	<column name="date">
-		<type name="date" length="0"/>
-	</column>
-	<column name="model">
-		<type name="character varying" length="32"/>
-	</column>
-	<column name="operation">
-		<type name="character varying" length="1"/>
-	</column>
-	<column name="record">
-		<type name="uuid" length="32"/>
-	</column>
-	<column name="created_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="created_on">
-		<type name="date" length="0"/>
-	</column>
-	<column name="edited_by" not-null="true">
-		<type name="uuid" length="0"/>
-	</column>
-	<column name="edited_on">
-		<type name="date" length="0"/>
-	</column>
-	<constraint name="registre_pk" type="pk-constr" table="public.registre">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
+<relationship name="rel_base_tab_commande_back_tab_user" type="relfk" layers="0"
+	 custom-color="#19a65e"
+	 src-table="public.base_tab_commande"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_commande_owned_by_id_da953637_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<constraint name="societe_fk" type="fk-constr" alias="societe_fk" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.societe" table="public.fournisseur">
-	<columns names="id_societe" ref-type="src-columns"/>
-	<columns names="id" ref-type="dst-columns"/>
-</constraint>
+<relationship name="rel_base_tab_ensemble_back_tab_user" type="relfk" layers="0"
+	 custom-color="#4aae75"
+	 src-table="public.base_tab_ensemble"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_ensemble_owned_by_id_ffb0163d_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<constraint name="rayon_fk" type="fk-constr" alias="rayon_fk" comparison-type="MATCH FULL"
-	 upd-action="CASCADE" del-action="RESTRICT" ref-table="public.rayon" table="public.sortie">
-	<columns names="id_rayon" ref-type="src-columns"/>
-	<columns names="id" ref-type="dst-columns"/>
-</constraint>
+<relationship name="rel_base_tab_fabricant_back_tab_user" type="relfk" layers="0"
+	 custom-color="#161790"
+	 src-table="public.base_tab_fabricant"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_fabricant_owned_by_id_52603db2_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="four_soc" type="relfk" layers="0"
-	 src-table="public.fournisseur"
-	 dst-table="public.societe" reference-fk="societe_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="-8.44968" y="1.14701"/>
-	</label>
-</relationship>
+<relationship name="rel_base_tab_fournisseur_base_tab_societe" type="relfk" layers="0"
+	 custom-color="#8b9d2a"
+	 src-table="public.base_tab_fournisseur"
+	 dst-table="public.base_tab_societe" reference-fk="base_tab_fournisseur_societe_id_569a95d3_fk_base_tab_societe_id"
+	 src-required="false" dst-required="false"/>
 
-<relationship name="sort_ray" type="relfk" layers="0"
-	 src-table="public.sortie"
-	 dst-table="public.rayon" reference-fk="rayon_fk"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="0" y="0"/>
-	</label>
-</relationship>
+<relationship name="rel_base_tab_fournisseur_back_tab_user" type="relfk" layers="0"
+	 custom-color="#81b688"
+	 src-table="public.base_tab_fournisseur"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_fournisseur_owned_by_id_e046757a_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_group_back_tab_user" type="relfk" layers="0"
+	 custom-color="#6bd619"
+	 src-table="public.base_tab_group"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_group_owned_by_id_e39e52f7_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_magasin_back_tab_user" type="relfk" layers="0"
+	 custom-color="#af4fea"
+	 src-table="public.base_tab_magasin"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_magasin_owned_by_id_5400ca76_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_floor_back_tab_user" type="relfk" layers="0"
+	 custom-color="#12152c"
+	 src-table="public.base_tab_floor"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_floor_owned_by_id_2e29f219_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_floor_base_tab_magasin" type="relfk" layers="0"
+	 custom-color="#d6190b"
+	 src-table="public.base_tab_floor"
+	 dst-table="public.base_tab_magasin" reference-fk="base_tab_floor_magasin_id_2474c58c_fk_base_tab_magasin_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_payment_base_tab_commande" type="relfk" layers="0"
+	 custom-color="#072607"
+	 src-table="public.base_tab_payment"
+	 dst-table="public.base_tab_commande" reference-fk="base_tab_payment_commande_id_f5e5f4b8_fk_base_tab_commande_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_payment_back_tab_user" type="relfk" layers="0"
+	 custom-color="#61a5e9"
+	 src-table="public.base_tab_payment"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_payment_owned_by_id_bddc4494_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_product_base_tab_fabricant" type="relfk" layers="0"
+	 custom-color="#4a5a60"
+	 src-table="public.base_tab_product"
+	 dst-table="public.base_tab_fabricant" reference-fk="base_tab_product_fabricant_id_4f3265d1_fk_base_tab_fabricant_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_product_base_tab_group" type="relfk" layers="0"
+	 custom-color="#488db9"
+	 src-table="public.base_tab_product"
+	 dst-table="public.base_tab_group" reference-fk="base_tab_product_group_id_02c415d6_fk_base_tab_group_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_product_back_tab_user" type="relfk" layers="0"
+	 custom-color="#c25b80"
+	 src-table="public.base_tab_product"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_product_owned_by_id_de7889ef_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_file_back_tab_user" type="relfk" layers="0"
+	 custom-color="#b17125"
+	 src-table="public.base_tab_file"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_file_owned_by_id_4eaaa4b1_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_file_base_tab_product" type="relfk" layers="0"
+	 custom-color="#651cd5"
+	 src-table="public.base_tab_file"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_file_product_id_868fe664_fk_base_tab_product_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_ensemble_product_base_tab_ensemble" type="relfk" layers="0"
+	 custom-color="#0527c7"
+	 src-table="public.base_tab_ensemble_product"
+	 dst-table="public.base_tab_ensemble" reference-fk="base_tab_ensemble_pr_ensemble_id_3349a328_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_ensemble_product_back_tab_user" type="relfk" layers="0"
+	 custom-color="#de61c7"
+	 src-table="public.base_tab_ensemble_product"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_ensemble_pr_owned_by_id_c68a6291_fk_back_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_ensemble_product_base_tab_product" type="relfk" layers="0"
+	 custom-color="#469ded"
+	 src-table="public.base_tab_ensemble_product"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_ensemble_pr_product_id_cc5f1fc1_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_category_product_base_tab_category" type="relfk" layers="0"
+	 custom-color="#def19a"
+	 src-table="public.base_tab_category_product"
+	 dst-table="public.base_tab_category" reference-fk="base_tab_category_pr_category_id_7d5e7cde_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_category_product_back_tab_user" type="relfk" layers="0"
+	 custom-color="#cb3e68"
+	 src-table="public.base_tab_category_product"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_category_pr_owned_by_id_1a4b295a_fk_back_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_category_product_base_tab_product" type="relfk" layers="0"
+	 custom-color="#8dc06b"
+	 src-table="public.base_tab_category_product"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_category_pr_product_id_b486db98_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_rayon_base_tab_floor" type="relfk" layers="0"
+	 custom-color="#550ada"
+	 src-table="public.base_tab_rayon"
+	 dst-table="public.base_tab_floor" reference-fk="base_tab_rayon_floor_id_018447b9_fk_base_tab_floor_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_rayon_back_tab_user" type="relfk" layers="0"
+	 custom-color="#9bfde3"
+	 src-table="public.base_tab_rayon"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_rayon_owned_by_id_1054bc34_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_reception_base_tab_fournisseur" type="relfk" layers="0"
+	 custom-color="#ea4ce6"
+	 src-table="public.base_tab_reception"
+	 dst-table="public.base_tab_fournisseur" reference-fk="base_tab_reception_fournisseur_id_90ef4a79_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_reception_back_tab_user" type="relfk" layers="0"
+	 custom-color="#ce988c"
+	 src-table="public.base_tab_reception"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_reception_owned_by_id_23051cd4_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_entree_back_tab_user" type="relfk" layers="0"
+	 custom-color="#04e268"
+	 src-table="public.base_tab_entree"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_entree_owned_by_id_ff260597_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_entree_base_tab_product" type="relfk" layers="0"
+	 custom-color="#aedd94"
+	 src-table="public.base_tab_entree"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_entree_product_id_ee3b32d5_fk_base_tab_product_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_entree_base_tab_rayon" type="relfk" layers="0"
+	 custom-color="#1afded"
+	 src-table="public.base_tab_entree"
+	 dst-table="public.base_tab_rayon" reference-fk="base_tab_entree_rayon_id_9f66f859_fk_base_tab_rayon_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_entree_base_tab_reception" type="relfk" layers="0"
+	 custom-color="#c18a78"
+	 src-table="public.base_tab_entree"
+	 dst-table="public.base_tab_reception" reference-fk="base_tab_entree_reception_id_c34aa2b0_fk_base_tab_reception_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_societe_back_tab_user" type="relfk" layers="0"
+	 custom-color="#55d7a6"
+	 src-table="public.base_tab_societe"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_societe_owned_by_id_f2268ec2_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_sortie_base_tab_commande" type="relfk" layers="0"
+	 custom-color="#3b93ab"
+	 src-table="public.base_tab_sortie"
+	 dst-table="public.base_tab_commande" reference-fk="base_tab_sortie_commande_id_c111d1a0_fk_base_tab_commande_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_sortie_back_tab_user" type="relfk" layers="0"
+	 custom-color="#f77607"
+	 src-table="public.base_tab_sortie"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_sortie_owned_by_id_0eb22c87_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_sortie_base_tab_product" type="relfk" layers="0"
+	 custom-color="#bc2982"
+	 src-table="public.base_tab_sortie"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_sortie_product_id_66a9a982_fk_base_tab_product_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_sortie_base_tab_rayon" type="relfk" layers="0"
+	 custom-color="#151bd1"
+	 src-table="public.base_tab_sortie"
+	 dst-table="public.base_tab_rayon" reference-fk="base_tab_sortie_rayon_id_fe4118dd_fk_base_tab_rayon_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_stock_base_tab_magasin" type="relfk" layers="0"
+	 custom-color="#328398"
+	 src-table="public.base_tab_stock"
+	 dst-table="public.base_tab_magasin" reference-fk="base_tab_stock_magasin_id_477115e7_fk_base_tab_magasin_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_stock_back_tab_user" type="relfk" layers="0"
+	 custom-color="#51ffee"
+	 src-table="public.base_tab_stock"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_stock_owned_by_id_993a7649_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_stock_base_tab_product" type="relfk" layers="0"
+	 custom-color="#ae1a5c"
+	 src-table="public.base_tab_stock"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_stock_product_id_125d2ad5_fk_base_tab_product_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_vehicule_back_tab_user" type="relfk" layers="0"
+	 custom-color="#5111aa"
+	 src-table="public.base_tab_vehicule"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_vehicule_owned_by_id_25894230_fk_back_tab_user_id"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_vehicule_product_back_tab_user" type="relfk" layers="0"
+	 custom-color="#0bd3f2"
+	 src-table="public.base_tab_vehicule_product"
+	 dst-table="public.back_tab_user" reference-fk="base_tab_vehicule_pr_owned_by_id_3b8351e2_fk_back_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_vehicule_product_base_tab_product" type="relfk" layers="0"
+	 custom-color="#e23419"
+	 src-table="public.base_tab_vehicule_product"
+	 dst-table="public.base_tab_product" reference-fk="base_tab_vehicule_pr_product_id_b3943362_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_base_tab_vehicule_product_base_tab_vehicule" type="relfk" layers="0"
+	 custom-color="#e1d6b0"
+	 src-table="public.base_tab_vehicule_product"
+	 dst-table="public.base_tab_vehicule" reference-fk="base_tab_vehicule_pr_vehicule_id_428eb3ce_fk_base_tab_"
+	 src-required="false" dst-required="false"/>
 
 </dbmodel>
