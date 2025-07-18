@@ -27,8 +27,8 @@ class Product(models.Model):
     condition = models.CharField(max_length=1, choices=Conditions.choices, default=Conditions.BRAND_NEW)
     um = models.CharField(max_length=16, blank=True, null=True)
     sku = models.CharField(max_length=128, blank=True, null=True)
-    group = models.ForeignKey(Group, on_delete=models.RESTRICT, blank=True, null=True)
-    fabricant = models.ForeignKey(Fabricant, on_delete=models.RESTRICT, blank=True, null=True)
+    group = models.ForeignKey('Group', on_delete=models.RESTRICT, blank=True, null=True)
+    fabricant = models.ForeignKey('Fabricant', on_delete=models.RESTRICT, blank=True, null=True)
     origin = models.CharField(max_length=32, blank=True, null=True)
     guarantee = models.SmallIntegerField(blank=True, null=True, default=12)
 
@@ -90,7 +90,7 @@ class Client(models.Model):
     website = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
     source = models.CharField(max_length=32, blank=True, null=True)
-    societe = models.ForeignKey(Societe, on_delete=models.RESTRICT, blank=True, null=True)
+    societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -140,7 +140,7 @@ class Commande(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
-    client = models.ForeignKey(Client, on_delete=models.RESTRICT, blank=True, null=True)
+    client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
     date_commande = models.DateField(blank=True, null=True)
     date_livraison = models.DateField(blank=True, null=True, auto_now_add=True)
     payee = models.BooleanField(blank=True, null=True, default=False)
@@ -185,8 +185,8 @@ class Commande(models.Model):
 
 class Stock(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
-    magasin = models.ForeignKey(Magasin, on_delete=models.RESTRICT, blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
+    magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
     quantity = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
 
@@ -225,12 +225,12 @@ class Ensemble(models.Model):
 
 class Entree(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
-    reception = models.ForeignKey(Reception, on_delete=models.RESTRICT, blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
+    reception = models.ForeignKey('Reception', on_delete=models.RESTRICT, blank=True, null=True)
     quantity = models.SmallIntegerField(blank=True, null=True, default=0)
     prix_unit = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
-    rayon = models.ForeignKey(Rayon, on_delete=models.RESTRICT, blank=True, null=True)
+    rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -274,7 +274,7 @@ class File(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     upload = models.FileField(upload_to=tenant_directory_path, blank=True, null=True)
     mime = models.CharField(max_length=32, blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
@@ -296,7 +296,7 @@ class Floor(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     elevation = models.SmallIntegerField(blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
-    magasin = models.ForeignKey(Magasin, on_delete=models.RESTRICT, blank=True, null=True)
+    magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -331,7 +331,7 @@ class Fournisseur(models.Model):
     website = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
     source = models.CharField(max_length=32, blank=True, null=True)
-    societe = models.ForeignKey(Societe, on_delete=models.RESTRICT, blank=True, null=True)
+    societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -414,8 +414,8 @@ class Magasin(models.Model):
 
 class ClienteleClient(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    clientele = models.ForeignKey(Clientele, on_delete=models.RESTRICT, blank=True, null=True)
-    client = models.ForeignKey(Client, on_delete=models.RESTRICT, blank=True, null=True)
+    clientele = models.ForeignKey('Clientele', on_delete=models.RESTRICT, blank=True, null=True)
+    client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
     
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -432,8 +432,8 @@ class ClienteleClient(models.Model):
 
 class CategoryProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    category = models.ForeignKey(Category, on_delete=models.RESTRICT, blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
+    category = models.ForeignKey('Category', on_delete=models.RESTRICT, blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -450,8 +450,8 @@ class CategoryProduct(models.Model):
 
 class EnsembleProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ensemble = models.ForeignKey(Ensemble, on_delete=models.RESTRICT, blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
+    ensemble = models.ForeignKey('Ensemble', on_delete=models.RESTRICT, blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -468,8 +468,8 @@ class EnsembleProduct(models.Model):
 
 class VehiculeProduct(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    vehicule = models.ForeignKey(Vehicule, on_delete=models.RESTRICT, blank=True, null=True)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
+    vehicule = models.ForeignKey('Vehicule', on_delete=models.RESTRICT, blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -488,7 +488,7 @@ class Payment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     verified = models.BooleanField(blank=True, null=True)
-    commande = models.ForeignKey(Commande, on_delete=models.RESTRICT, blank=True, null=True)
+    commande = models.ForeignKey('Commande', on_delete=models.RESTRICT, blank=True, null=True)
     reference = models.CharField(max_length=32, blank=True, null=True)
     mode = models.CharField(max_length=32, blank=True, null=True)
     date_made = models.DateField(blank=True, null=True)
@@ -524,7 +524,7 @@ class Rayon(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     number = models.SmallIntegerField(blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
-    floor = models.ForeignKey(Floor, on_delete=models.RESTRICT, blank=True, null=True)
+    floor = models.ForeignKey('Floor', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
@@ -541,7 +541,7 @@ class Rayon(models.Model):
 
 class Reception(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    fournisseur = models.ForeignKey(Fournisseur, on_delete=models.RESTRICT, blank=True, null=True)
+    fournisseur = models.ForeignKey('Fournisseur', on_delete=models.RESTRICT, blank=True, null=True)
     date_commande = models.DateField(blank=True, null=True)
     date_livraison = models.DateField()
     active = models.BooleanField(blank=True, null=True, default=True)
@@ -609,13 +609,13 @@ class Societe(models.Model):
 
 class Sortie(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    product = models.ForeignKey(Product, on_delete=models.RESTRICT, blank=True, null=True)
-    commande = models.ForeignKey(Commande, on_delete=models.RESTRICT, related_name='sorties', blank=True, null=True)
+    product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
+    commande = models.ForeignKey('Commande', on_delete=models.RESTRICT, related_name='sorties', blank=True, null=True)
     qtte_cmde = models.SmallIntegerField(blank=True, null=True, default=0)
     qtte_recv = models.SmallIntegerField(blank=True, null=True, default=0)
     prix_unit = models.SmallIntegerField(blank=True, null=True, default=0)
     discount = models.SmallIntegerField(blank=True, null=True)
-    rayon = models.ForeignKey(Rayon, on_delete=models.RESTRICT, blank=True, null=True)
+    rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
