@@ -150,6 +150,7 @@ class Commande(models.Model):
 
     file = models.FileField(upload_to=tenant_directory_path, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
+    gage = models.CharField(max_length=64, blank=True, null=True)
     internal_note = models.CharField(max_length=256, blank=True, null=True)
 
     owned_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
@@ -545,6 +546,7 @@ class Reception(models.Model):
     date_livraison = models.DateField()
     active = models.BooleanField(blank=True, null=True, default=True)
     date_due = models.DateField(blank=True, null=True)
+    gage = models.CharField(max_length=64, blank=True, null=True)
     payment_reminder = models.SmallIntegerField(blank=True, null=True, default=7)
     payee = models.BooleanField(blank=True, null=True, default=False)
 
