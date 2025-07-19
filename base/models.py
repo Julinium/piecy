@@ -1,7 +1,8 @@
 import uuid #, os
 from django.db import models
 from django.utils.translation import gettext as _
-from back.models import User, Tenant
+from accs.models import Utilisateur
+from back.models import Tenant
 
 
 

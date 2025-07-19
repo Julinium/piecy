@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'accs',
     'base',
     'back',
 ]
@@ -152,9 +153,9 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-AUTH_USER_MODEL = "auth.Utilisateur"
+AUTH_USER_MODEL = "accs.Utilisateur"
 
 AUTHENTICATION_BACKENDS = [
-    "accounts.authentication.EmailOrUsernameModelBackend",  # custom backend
+    "accs.authentication.EmailOrUsernameModelBackend",  # custom backend
     "django.contrib.auth.backends.ModelBackend",            # default fallback
 ]
