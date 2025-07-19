@@ -59,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
     'django.middleware.locale.LocaleMiddleware',
 ]
 
@@ -151,3 +150,11 @@ STATICFILES_DIRS = [
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+AUTH_USER_MODEL = "auth.Utilisateur"
+
+AUTHENTICATION_BACKENDS = [
+    "accounts.authentication.EmailOrUsernameModelBackend",  # custom backend
+    "django.contrib.auth.backends.ModelBackend",            # default fallback
+]
