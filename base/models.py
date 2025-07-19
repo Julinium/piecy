@@ -135,12 +135,13 @@ class Commande(models.Model):
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
     date_commande = models.DateField(blank=True, null=True)
     date_livraison = models.DateField(blank=True, null=True, auto_now_add=True)
+    delivery_data = models.CharField(max_length=256, blank=True, null=True)
     payee = models.BooleanField(blank=True, null=True, default=False)
     date_due = models.DateField(blank=True, null=True)
     payment_reminder = models.SmallIntegerField(blank=True, null=True, default=7)
     global_discount = models.SmallIntegerField(blank=True, null=True)
 
-    file = models.FileField(upload_to='commandes/', blank=True, null=True)
+    file = models.FileField(upload_to='orders/', blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
     gage = models.CharField(max_length=64, blank=True, null=True)
     internal_note = models.CharField(max_length=256, blank=True, null=True)
@@ -501,9 +502,10 @@ class Payment(models.Model):
     def __str__(self):
         soc, cli = None, None
         if self.commande:
-            cli = self.commande.client.name
-            if self.commande.societe:
-                soc = self.commande.societe.name
+            if self.commande.client:
+                cli = self.commande.client.name
+                if self.commande.client.societe:
+                    soc = self.commande.client.societe.name
         p = f'[{self.amount} {self.currency}]'
         if cli: p += ' - ' + cli
         if soc: p += ' - ' + soc
@@ -535,7 +537,8 @@ class Reception(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     fournisseur = models.ForeignKey('Fournisseur', on_delete=models.RESTRICT, blank=True, null=True)
     date_commande = models.DateField(blank=True, null=True)
-    date_livraison = models.DateField()
+    date_livraison = models.DateField(blank=True, null=True)
+    delivery_data = models.CharField(max_length=256, blank=True, null=True)
     active = models.BooleanField(blank=True, null=True, default=True)
     date_due = models.DateField(blank=True, null=True)
     gage = models.CharField(max_length=64, blank=True, null=True)
@@ -550,6 +553,41 @@ class Reception(models.Model):
 
     class Meta:
         db_table = 'reception'
+
+
+class PaymentFournisseur(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    verified = models.BooleanField(blank=True, null=True)
+    reception = models.ForeignKey('Reception', on_delete=models.RESTRICT, blank=True, null=True)
+    reference = models.CharField(max_length=32, blank=True, null=True)
+    mode = models.CharField(max_length=32, blank=True, null=True)
+    date_made = models.DateField(blank=True, null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(max_length=16, blank=True, null=True)
+    maker = models.CharField(max_length=64, blank=True, null=True)
+    note = models.CharField(max_length=64, blank=True, null=True)
+
+    owned_by = models.UUIDField(blank=True, null=True)
+    created_by = models.UUIDField(blank=True, null=True)
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(blank=True, null=True)
+    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+
+    class Meta:
+        db_table = 'payment_fournisseur'
+
+    def __str__(self):
+        soc, cli = None, None
+        if self.reception:
+            if self.reception.fournisseur:
+                cli = self.reception.fournisseur.name
+                if self.reception.fournisseur.societe:
+                    soc = self.reception.fournisseur.societe.name
+        p = f'[{self.amount} {self.currency}]'
+        if cli: p += ' - ' + cli
+        if soc: p += ' - ' + soc
+        return p
 
 
 class Societe(models.Model):
