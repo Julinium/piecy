@@ -53,3 +53,5 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'utilisateur'
+        verbose_name = "User"
+        # verbose_name_plural = "Users"
