@@ -22,15 +22,18 @@ class Tenant(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     # owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    edited_by = models.UUIDField(blank=True, null=True)
     # created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     # edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
+    created_by = models.UUIDField(blank=True, null=True)
+    edited_by = models.UUIDField(blank=True, null=True)
     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'tenant'
+    
+    def __str__(self):
+        return f'{self.name} - {self.owner}'
 
 
 class Subscription(models.Model):
@@ -51,6 +54,7 @@ class Subscription(models.Model):
 
     class Meta:
         db_table = 'subscription'
+
 
 class SystemPayment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -107,6 +111,9 @@ class Plan(models.Model):
 
     class Meta:
         db_table = 'plan'
+    
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Registre(models.Model):

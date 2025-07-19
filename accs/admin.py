@@ -1,21 +1,57 @@
 from django.contrib import admin
+from django import forms
+from django.db import models
 from django.contrib.auth.admin import UserAdmin
 from .models import Utilisateur
 
 class UtilisateurAdmin(UserAdmin):
     model = Utilisateur
-    list_display = ("username", "email", "tenant", "is_tenant_admin", "is_staff", "is_active")
+
+
+    # username = models.CharField(max_length=150, unique=True)
+    # email = models.EmailField(unique=True)
+    # is_active = models.BooleanField(default=True)
+    # is_staff = models.BooleanField(default=False)
+    # tenant = models.ForeignKey(Tenant, on_delete=models.RESTRICT, blank=True, null=True)
+    # verified = models.BooleanField(blank=True, null=True)
+    # phone = models.CharField(max_length=64, blank=True, null=True)
+    # first_name = models.CharField(max_length=64, blank=True, null=True)
+    # last_name = models.CharField(max_length=64, blank=True, null=True)
+    # is_tenant_admin = models.BooleanField(blank=True, null=True)
+
+
+
+    list_display = ("username", "is_active", "email", "tenant", "is_tenant_admin")
+    
     fieldsets = (
-        (None, {"fields": ("username", "email", "password", "tenant")}),
-        ("Permissions", {"fields": ("is_staff", "is_active", "is_superuser", "groups", "user_permissions")}),
+        ("Basics",   {"fields": ("is_active", "is_tenant_admin", "username", "password", "tenant")}),
+        ("Personal", {"fields": ("first_name", "last_name", "email", "phone")}),
+        ("Security", {"fields": ("verified", "groups", "user_permissions")}),
+        # ("Advanced", {"fields": ("is_staff", "is_superuser")}),
     )
+    
     add_fieldsets = (
-        (None, {
-            "classes": ("wide",),
-            "fields": ("username", "email", "password1", "password2", "is_staff", "is_active")}
-        ),
+        # (None, {
+        #     # "classes": ("wide",),
+        #     "fields": ("username", "email", "password1", "password2", "", "")}
+        # ),
+        ("Basics",   {"fields": ("is_active", "tenant", "is_tenant_admin", "username", "password1", "password2")}),
+        ("Personal", {"fields": ("first_name", "last_name", "email", "phone")}),
+        
     )
+
+    # add_fieldsets = (
+    #     (None, {
+    #         "classes": ("wide",),
+    #         "fields": ("username", "email", "password1", "password2", "is_staff", "is_active")}
+    #     ),
+    # )
+
     search_fields = ("username", "email", "tenant", "last_name")
-    ordering = ("username",)
+    ordering = ("username", "tenant",)
+
+    formfield_overrides = {
+        models.BooleanField: {'widget': forms.CheckboxInput},
+    }
 
 admin.site.register(Utilisateur, UtilisateurAdmin)
