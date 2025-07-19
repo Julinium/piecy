@@ -31,11 +31,11 @@ class TenantAdmin(admin.ModelAdmin):
     
     def get_created_by(self, obj):
         return self._get_username(obj.created_by)
-    get_created_by.short_description = 'Created By'
+    get_created_by.short_description = 'Created by'
 
     def get_edited_by(self, obj):
         return self._get_username(obj.edited_by)
-    get_edited_by.short_description = 'Edited By'
+    get_edited_by.short_description = 'Edited by'
 
     def _get_username(self, user_id):
         try:
@@ -72,11 +72,11 @@ class PlanAdmin(admin.ModelAdmin):
     
     def get_created_by(self, obj):
         return self._get_username(obj.created_by)
-    get_created_by.short_description = 'Created By'
+    get_created_by.short_description = 'Created by'
 
     def get_edited_by(self, obj):
         return self._get_username(obj.edited_by)
-    get_edited_by.short_description = 'Edited By'
+    get_edited_by.short_description = 'Edited by'
 
     def _get_username(self, user_id):
         try:
