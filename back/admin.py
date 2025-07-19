@@ -1,6 +1,10 @@
 from django.contrib import admin
-# from django.contrib.auth.admin import UserAdmin
+from django import forms
+from django.db import models
+from django.contrib.auth import get_user_model
 from back.models import Tenant
+
+User = get_user_model()
 
 class TenantAdmin(admin.ModelAdmin):
     model = Tenant
@@ -23,11 +27,12 @@ class TenantAdmin(admin.ModelAdmin):
     # edited_by = models.UUIDField(blank=True, null=True)
     # edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
     ###################
-    list_display = ("name", "active", "address", "owner", "note", 'created_on', 'created_by', 'edited_on', 'edited_by')
+    list_display = ("name", "active", "address", "owner", 'created_on')
     fieldsets = (
         ("Basics", {"fields": ("active", "name", "owner")}),
         ("Contact", {"fields": ("email", "phone", "whatsapp", "address")}),
         ("Advanced", {"fields": ("domain", "slug", "channel", "note")}),
+        ("History", {"fields": ('get_created_by', 'created_on', 'get_edited_by', 'edited_on')}),
     )
 
     # add_fieldsets = (
@@ -41,7 +46,27 @@ class TenantAdmin(admin.ModelAdmin):
 
     list_filter = ('active', 'created_on')
     search_fields = ('name', 'owner')
-    ordering = ("active", 'name', 'owner', 'edited_on')
+    ordering = ("active", 'name', 'address', 'owner', 'edited_on')
+
+    readonly_fields = ('get_created_by', 'created_on', 'get_edited_by', 'edited_on')
+
+    formfield_overrides = {
+        models.BooleanField: {'widget': forms.CheckboxInput},
+    }
+    
+    def get_created_by(self, obj):
+        return self._get_username(obj.created_by)
+    get_created_by.short_description = 'Created By'
+
+    def get_edited_by(self, obj):
+        return self._get_username(obj.edited_by)
+    get_edited_by.short_description = 'Edited By'
+
+    def _get_username(self, user_id):
+        try:
+            return User.objects.get(pk=user_id).username
+        except User.DoesNotExist:
+            return f"(Deleted user: {user_id})" if user_id else "-"
 
     def save_model(self, request, obj, form, change):
         # if not change:

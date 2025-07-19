@@ -1,29 +1,10 @@
 import uuid #, os
 from django.db import models
+# from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
-# from datetime import date, datetime
+# from accs.models import Utilisateur as User
 
-
-# class User(models.Model):
-#     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-#     active = models.BooleanField(blank=True, null=True, default=True)
-#     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
-#     verified = models.BooleanField(blank=True, null=True)
-#     username = models.CharField(max_length=16, blank=True, null=True)
-#     email = models.CharField(max_length=64, blank=True, null=True)
-#     phone = models.CharField(max_length=64, blank=True, null=True)
-#     first_name = models.CharField(max_length=64, blank=True, null=True)
-#     last_name = models.CharField(max_length=64, blank=True, null=True)
-#     is_superuser = models.BooleanField(blank=True, null=True)
-#     is_admin = models.BooleanField(blank=True, null=True)
-
-#     created_by = models.UUIDField(blank=True, null=True)
-#     created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-#     edited_by = models.UUIDField(blank=True, null=True)
-#     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
-
-#     class Meta:
-#         db_table = 'user'
+# User = get_user_model()
 
 
 class Tenant(models.Model):
@@ -42,8 +23,10 @@ class Tenant(models.Model):
 
     # owned_by = models.UUIDField(blank=True, null=True)
     created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(blank=True, null=True)
+    # created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
+    # edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
     edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
 
     class Meta:
