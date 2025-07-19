@@ -30,7 +30,7 @@ class Tenant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
     name = models.CharField(max_length=128, blank=True, null=True)
-    tel = models.CharField(max_length=16, blank=True, null=True)
+    address = models.CharField(max_length=64, blank=True, null=True)
     email = models.CharField(max_length=16, blank=True, null=True)
     phone = models.CharField(max_length=16, blank=True, null=True)
     whatsapp = models.CharField(max_length=16, blank=True, null=True)
