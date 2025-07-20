@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from accs.models import Utilisateur
 from back.models import Tenant
+from datetime import date
 
 
 
@@ -41,11 +42,11 @@ class Product(models.Model):
     fragile = models.BooleanField(blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'product'
@@ -85,11 +86,11 @@ class Client(models.Model):
     source = models.CharField(max_length=32, blank=True, null=True)
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'client'
@@ -109,11 +110,11 @@ class Clientele(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'clientele'
@@ -130,51 +131,93 @@ class Commande(models.Model):
         DELIVERED = '4', _('Livrée')
         CANCELLED = '0', _('Annulée')
 
+    class Deliveries(models.TextChoices):
+        BUYER      = 'B', _('À la charge du client')
+        SELLER     = 'S', _('À la charge du vendeur')
+        ACCEPTED   = 'A', _('Agent tiers')
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active = models.BooleanField(blank=True, null=True, default=True)
-    status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
-    client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
-    date_commande = models.DateField(blank=True, null=True)
-    date_livraison = models.DateField(blank=True, null=True, auto_now_add=True)
-    delivery_data = models.CharField(max_length=256, blank=True, null=True)
-    payee = models.BooleanField(blank=True, null=True, default=False)
-    date_due = models.DateField(blank=True, null=True)
-    payment_reminder = models.SmallIntegerField(blank=True, null=True, default=7)
-    global_discount = models.SmallIntegerField(blank=True, null=True)
+    active = models.BooleanField(verbose_name=_("Activée"), blank=True, null=True, default=True)
+    status = models.CharField(verbose_name=_("Status"), max_length=1, choices=Status.choices, default=Status.DRAFT)
+    client = models.ForeignKey('Client', verbose_name=_("Client"), on_delete=models.RESTRICT, blank=True, null=True)
+    order_number = models.CharField(verbose_name=_("Numéro de commande"), max_length=256, blank=True, null=True, default=1)
+    order_date = models.DateField(verbose_name=_("Date de commande"), blank=True, null=True, auto_now_add=True)
+    total_bt = models.SmallIntegerField(verbose_name=_("Total hors taxes"), blank=True, null=True)
+    total_at = models.SmallIntegerField(verbose_name=_("Total TTC"), blank=True, null=True)
 
-    file = models.FileField(upload_to='orders/', blank=True, null=True)
-    note = models.CharField(max_length=256, blank=True, null=True)
-    gage = models.CharField(max_length=64, blank=True, null=True)
-    internal_note = models.CharField(max_length=256, blank=True, null=True)
+    delivery_terms = models.CharField(verbose_name=_("Termes de livraison"), max_length=1, choices=Deliveries.choices, default=Deliveries.BUYER)
+    delivery_due_date = models.DateField(verbose_name=_("Date de livraison due"), blank=True, null=True)
+    packager = models.CharField(verbose_name=_("Responsable emballage"), max_length=256, blank=True, null=True)
+    charger = models.CharField(verbose_name=_("Responsable chargement"), max_length=256, blank=True, null=True)
+    delivery_agent = models.CharField(verbose_name=_("Responsable livraison"), max_length=256, blank=True, null=True)
+    delivery_mean = models.CharField(verbose_name=_("Moyen livraison"), max_length=256, blank=True, null=True)
+    delivery_actual_date = models.DateField(verbose_name=_("Date livraison éffective"), blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    payment_done = models.BooleanField(verbose_name=_("Payment effectué"), blank=True, null=True, default=False)
+    payment_date_due = models.DateField(verbose_name=_("Date de payment dù"), blank=True, null=True)
+    payment_reminder = models.SmallIntegerField(verbose_name=_("Rappel de payment"), blank=True, null=True, default=7)
+    global_discount = models.SmallIntegerField(verbose_name=_("Remise globale"), blank=True, null=True)
+
+    file = models.FileField(verbose_name=_("Fichier"), upload_to='orders/', blank=True, null=True)
+    note = models.CharField(verbose_name=_("Note"), max_length=256, blank=True, null=True)
+    gage = models.CharField(verbose_name=_("Gage ou Garantie"), max_length=64, blank=True, null=True)
+    internal_note = models.CharField(verbose_name=_("Note interne"), max_length=256, blank=True, null=True)
+
+    owned_by = models.UUIDField(verbose_name=_("Propriétaire"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'commande'
 
+    def __str__(self):
+        cmde = f'[{self.get_total_ttc}] - '
+        cmde += f'{self.client.last_name}'
+        if self.client.societe : cmde += f' ({self.client.societe.name})'
+        return cmde
+
+    
+    def save(self, *args, **kwargs):
+        self.total_bt = self.get_total_bt
+        self.total_at = self.get_total_at
+        if not self.pk:
+            self.order_number = self.get_order_number
+        super().save(*args, **kwargs)
+
     @property
-    def get_total_ht(self):
+    def get_order_number(self):
+        # Returns a sequenced Order number like : C2520300001
+        # C is a prefix
+        # 25203 is a coded date
+        # 00001 is a sequence that resets every year.
+        new_sequence = 1
+        latest_order = Commande.objects.latest('order_date')
+        d = date().today()
+        if self.order_date.year == d.year:
+            if latest_order:
+                if latest_order.order_number:
+                    old_sequence = int(latest_order.order_number[6:])
+                    new_sequence = 1 + old_sequence
+        year = d.year % 100
+        day_of_year = d.timetuple().tm_yday
+        return f"C{year:02d}{day_of_year:03d}{new_sequence:5d}"
+
+
+    @property
+    def get_total_bt(self):
         total_bt = 0
         for item in self.sorties:
             total_bt += item.quantity * item.product.prix_vente_public
         return total_bt
 
     @property
-    def get_total_ttc(self):
+    def get_total_at(self):
         total_ttc = 0
         for item in self.sorties:
             total_ttc += item.quantity * item.product.prix_vente_public * ( 1 + item.product.tva_percent / 100)
         return total_ttc
-
-    
-    def __str__(self):
-        cmde = f'[{self.get_total_ttc}] - '
-        cmde += f'{self.client.last_name}'
-        if self.client.societe : cmde += f' ({self.client.societe.name})'
 
 
 class Stock(models.Model):
@@ -184,11 +227,11 @@ class Stock(models.Model):
     quantity = models.SmallIntegerField(blank=True, null=True, default=0)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'stock'
@@ -204,11 +247,11 @@ class Ensemble(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'ensemble'
@@ -226,11 +269,11 @@ class Entree(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'entree'
@@ -249,11 +292,11 @@ class Fabricant(models.Model):
     contact = models.CharField(max_length=16, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'fabricant'
@@ -271,11 +314,11 @@ class File(models.Model):
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'file'
@@ -292,11 +335,11 @@ class Floor(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     magasin = models.ForeignKey('Magasin', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'floor'
@@ -327,11 +370,11 @@ class Fournisseur(models.Model):
     source = models.CharField(max_length=32, blank=True, null=True)
     societe = models.ForeignKey('Societe', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'fournisseur'
@@ -348,11 +391,11 @@ class Group(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'group'
@@ -367,11 +410,11 @@ class Category(models.Model):
     name = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'category'
@@ -393,11 +436,11 @@ class Magasin(models.Model):
     contact = models.CharField(max_length=128, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'magasin'
@@ -411,11 +454,11 @@ class ClienteleClient(models.Model):
     clientele = models.ForeignKey('Clientele', on_delete=models.RESTRICT, blank=True, null=True)
     client = models.ForeignKey('Client', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'clientele_client'
@@ -429,11 +472,11 @@ class CategoryProduct(models.Model):
     category = models.ForeignKey('Category', on_delete=models.RESTRICT, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'category_product'
@@ -447,11 +490,11 @@ class EnsembleProduct(models.Model):
     ensemble = models.ForeignKey('Ensemble', on_delete=models.RESTRICT, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'ensemble_product'
@@ -465,11 +508,11 @@ class VehiculeProduct(models.Model):
     vehicule = models.ForeignKey('Vehicule', on_delete=models.RESTRICT, blank=True, null=True)
     product = models.ForeignKey('Product', on_delete=models.RESTRICT, blank=True, null=True)
     
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'vehicule_product'
@@ -491,11 +534,11 @@ class Payment(models.Model):
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'payment'
@@ -521,11 +564,11 @@ class Rayon(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
     floor = models.ForeignKey('Floor', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'rayon'
@@ -546,11 +589,11 @@ class Reception(models.Model):
     payment_reminder = models.SmallIntegerField(blank=True, null=True, default=7)
     payee = models.BooleanField(blank=True, null=True, default=False)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'reception'
@@ -569,11 +612,11 @@ class PaymentFournisseur(models.Model):
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'payment_fournisseur'
@@ -628,11 +671,11 @@ class Societe(models.Model):
     email = models.CharField(max_length=64, blank=True, null=True)
     website = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'societe'
@@ -648,11 +691,11 @@ class Sortie(models.Model):
     discount = models.SmallIntegerField(blank=True, null=True)
     rayon = models.ForeignKey('Rayon', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'sortie'
@@ -668,11 +711,11 @@ class Vehicule(models.Model):
     year_end = models.DateField(blank=True, null=True)
     category = models.CharField(max_length=16, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'vehicule'
@@ -687,11 +730,11 @@ class Constant(models.Model):
     value = models.CharField(max_length=256, blank=True, null=True)
     tenant = models.ForeignKey(Tenant, on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'constant'

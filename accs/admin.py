@@ -7,20 +7,6 @@ from .models import Utilisateur
 class UtilisateurAdmin(UserAdmin):
     model = Utilisateur
 
-
-    # username = models.CharField(max_length=150, unique=True)
-    # email = models.EmailField(unique=True)
-    # is_active = models.BooleanField(default=True)
-    # is_staff = models.BooleanField(default=False)
-    # tenant = models.ForeignKey(Tenant, on_delete=models.RESTRICT, blank=True, null=True)
-    # verified = models.BooleanField(blank=True, null=True)
-    # phone = models.CharField(max_length=64, blank=True, null=True)
-    # first_name = models.CharField(max_length=64, blank=True, null=True)
-    # last_name = models.CharField(max_length=64, blank=True, null=True)
-    # is_tenant_admin = models.BooleanField(blank=True, null=True)
-
-
-
     list_display = ("username", "is_active", "email", "tenant", "is_tenant_admin")
     
     fieldsets = (

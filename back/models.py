@@ -17,17 +17,21 @@ class Tenant(models.Model):
     whatsapp = models.CharField(max_length=16, blank=True, null=True)
     domain = models.CharField(max_length=32, blank=True, null=True)
     slug = models.CharField(max_length=32, blank=True, null=True)
+    logo = models.ImageField(verbose_name=_("Logo"), upload_to='tenants/logos/', blank=True, null=True)
+    brand = models.ImageField(verbose_name=_("Bannière"), upload_to='tenants/brands/', blank=True, null=True)
+    header = models.ImageField(verbose_name=_("Bannière"), upload_to='tenants/headers/', blank=True, null=True)
+    footer = models.ImageField(verbose_name=_("Bannière"), upload_to='tenants/footers/', blank=True, null=True)
     owner = models.CharField(max_length=64, blank=True, null=True)
     channel = models.CharField(max_length=32, blank=True, null=True)
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    # owned_by = models.UUIDField(blank=True, null=True)
+    # owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
     # created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
     # edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'tenant'
@@ -46,11 +50,11 @@ class Subscription(models.Model):
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
     payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'subscription'
@@ -68,11 +72,11 @@ class SystemPayment(models.Model):
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'system_payment'
@@ -84,7 +88,7 @@ class Plan(models.Model):
     name = models.CharField(max_length=16, blank=True, null=True)
     header = models.CharField(max_length=128, blank=True, null=True)
     ordre = models.SmallIntegerField(blank=True, null=True)
-    cta = models.CharField(max_length=128, blank=True, null=True, default=_('Free quote'))
+    # cta = models.CharField(max_length=128, blank=True, null=True, default=_('Free quote'))
     
     year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
     first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)
@@ -103,11 +107,11 @@ class Plan(models.Model):
 
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'plan'
@@ -126,11 +130,11 @@ class Registre(models.Model):
     instance = models.CharField(max_length=128, blank=True, null=True)
     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
-    owned_by = models.UUIDField(blank=True, null=True)
-    created_by = models.UUIDField(blank=True, null=True)
-    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(blank=True, null=True)
-    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         db_table = 'registre'

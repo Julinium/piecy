@@ -54,7 +54,33 @@ class TenantAdmin(admin.ModelAdmin):
 class PlanAdmin(admin.ModelAdmin):
     model = Plan
 
-    # list_display = ("name", "active", "address", "owner", 'created_on')
+    #######################
+    active = models.BooleanField(blank=True, null=True, default=True)
+    name = models.CharField(max_length=16, blank=True, null=True)
+    header = models.CharField(max_length=128, blank=True, null=True)
+    ordre = models.SmallIntegerField(blank=True, null=True)
+    # cta = models.CharField(max_length=128, blank=True, null=True, default=_('Free quote'))
+    
+    year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
+    first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)
+    monthly_price = models.DecimalField(max_digits=10, decimal_places=2)
+
+    custom_domain = models.BooleanField(blank=True, null=True)
+    mailbox = models.BooleanField(blank=True, null=True)
+    ecommerce = models.BooleanField(blank=True, null=True)
+    vitrine = models.BooleanField(blank=True, null=True)
+
+    max_users = models.SmallIntegerField(blank=True, null=True)
+    max_clients = models.SmallIntegerField(blank=True, null=True)
+    max_products = models.SmallIntegerField(blank=True, null=True)
+    max_pdfs = models.SmallIntegerField(blank=True, null=True)
+    max_excels = models.SmallIntegerField(blank=True, null=True)
+
+    note = models.CharField(max_length=256, blank=True, null=True)
+    #######################
+
+
+    list_display = ("name", "active", "monthly_price", "ordre", 'header')
     # fieldsets = (
     #     ("Basics", {"fields": ("active", "name", "owner")}),
     #     ("Contact", {"fields": ("email", "phone", "whatsapp", "address")}),
@@ -90,6 +116,7 @@ class PlanAdmin(admin.ModelAdmin):
         else:
             obj.edited_by = request.user.id
         super().save_model(request, obj, form, change)
+
 
 class SystemPaymentAdmin(admin.ModelAdmin):
     model = SystemPayment
