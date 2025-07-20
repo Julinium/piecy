@@ -86,23 +86,23 @@ WSGI_APPLICATION = 'piecy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE":   DB_ENGINE,
-        "HOST":     DB_HOST,
-        "PORT":     DB_PORT,
-        "NAME":     DB_NAME,
-        "USER":     DB_USER,
-        "PASSWORD": DB_PASSWORD,
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE":   DB_ENGINE,
+#         "HOST":     DB_HOST,
+#         "PORT":     DB_PORT,
+#         "NAME":     DB_NAME,
+#         "USER":     DB_USER,
+#         "PASSWORD": DB_PASSWORD,
+#     }
+# }
 
 
 
