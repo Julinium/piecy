@@ -32,7 +32,6 @@ DB_PASSWORD = os.getenv('DB_PASSWORD')
 DB_HOST     = os.getenv('DB_HOST')
 DB_PORT     = os.getenv('DB_PORT')
 
-
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 SECRET_KEY  = os.getenv('SECRET_KEY')
 
@@ -50,6 +49,11 @@ INSTALLED_APPS = [
     'accs',
     'base',
     'back',
+
+    'allauth',
+    'allauth.account',
+    # 'allauth.socialaccount',
+
 ]
 
 MIDDLEWARE = [
@@ -61,7 +65,11 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
+
+SITE_ID = 1
+DEFAULT_DOMAIN  = "mode-777.com"
 
 ROOT_URLCONF = 'piecy.urls'
 
@@ -86,23 +94,23 @@ WSGI_APPLICATION = 'piecy.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE":   DB_ENGINE,
-        "HOST":     DB_HOST,
-        "PORT":     DB_PORT,
-        "NAME":     DB_NAME,
-        "USER":     DB_USER,
-        "PASSWORD": DB_PASSWORD,
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE":   DB_ENGINE,
+#         "HOST":     DB_HOST,
+#         "PORT":     DB_PORT,
+#         "NAME":     DB_NAME,
+#         "USER":     DB_USER,
+#         "PASSWORD": DB_PASSWORD,
+#     }
+# }
 
 
 
@@ -163,6 +171,41 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accs.Utilisateur"
 
 AUTHENTICATION_BACKENDS = [
+    'allauth.account.auth_backends.AuthenticationBackend',
     "accs.authentication.EmailOrUsernameModelBackend",  # custom backend
     "django.contrib.auth.backends.ModelBackend",            # default fallback
 ]
+
+
+# Email backend (for testing use console)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# EMAIL_BACKEND       = os.getenv('EMAIL_BACKEND')
+# EMAIL_HOST          = os.getenv('EMAIL_HOST')
+# EMAIL_PORT          = os.getenv('EMAIL_PORT')
+# EMAIL_USE_TLS       = os.getenv('EMAIL_USE_TLS') == 'True'
+# EMAIL_HOST_USER     = os.getenv('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+# DEFAULT_FROM_EMAIL  = os.getenv('DEFAULT_FROM_EMAIL')
+
+
+# Django_allauth parameters
+LOGIN_URL = 'account_login'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = LOGIN_URL
+ACCOUNT_LOGIN_METHODS = {'username', 'email'}
+ACCOUNT_CHANGE_EMAIL = False
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Mode - 777'
+ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = 'age'
+ACCOUNT_USERNAME_BLACKLIST = ['admin', 'owner', 'wassim', 'm777', 'mode777', 'mode-777', 'emarches', 'root', 'insi', 'system']
+ACCOUNT_USERNAME_MIN_LENGTH = 4
+# ACCOUNT_USERNAME_VALIDATORS = 'base.validators.username_ASCII_validators'
+ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
+
+ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
+ACCOUNT_EMAIL_VERIFICATION_BY_CODE_MAX_ATTEMPTS = 5
+ACCOUNT_EMAIL_VERIFICATION_BY_CODE_TIMEOUT = 900
+# ACCOUNT_EMAIL_NOTIFICATIONS = True
