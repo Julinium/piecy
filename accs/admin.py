@@ -26,8 +26,8 @@ class UtilisateurAdmin(UserAdmin):
     fieldsets = (
         ("Basics",   {"fields": ("is_active", "is_tenant_admin", "username", "password", "tenant")}),
         ("Personal", {"fields": ("first_name", "last_name", "email", "phone")}),
-        ("Security", {"fields": ("verified", "groups", "user_permissions")}),
-        # ("Advanced", {"fields": ("is_staff", "is_superuser")}),
+        # ("Security", {"fields": ("verified")}),
+        ("Advanced", {"fields": ("is_staff", "is_superuser", "groups", "user_permissions")}),
     )
     
     add_fieldsets = (
