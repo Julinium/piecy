@@ -200,7 +200,7 @@ ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Mode - 777'
 ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = 'age'
 ACCOUNT_USERNAME_BLACKLIST = ['admin', 'owner', 'wassim', 'm777', 'mode777', 'mode-777', 'emarches', 'root', 'insi', 'system']
 ACCOUNT_USERNAME_MIN_LENGTH = 4
-# ACCOUNT_USERNAME_VALIDATORS = 'base.validators.username_ASCII_validators'
+ACCOUNT_USERNAME_VALIDATORS = 'base.validators.username_ASCII_validators'
 ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
