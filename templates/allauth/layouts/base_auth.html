@@ -34,10 +34,8 @@
                 <div class="container mt-4">
                     <div class="row justify-content-center">
                         <div class="col col-md-8 col-lg-6 col-xl-5">
-                            {% if messages %}
-                                {% include 'base/includes/messages.html' %}
-                            {% endif %}
                             {% include "allauth/elements/topbar.html" %}
+                            {% include 'base/includes/messages.html' %}
                             {% block content %}{% endblock %}
                         </div>
                     </div>

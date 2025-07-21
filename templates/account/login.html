@@ -9,11 +9,9 @@
 
 {% block content %}
 
-    <div class="my-3 text-center">
-        {% element h1 %}
-            {% trans "Sign In" %}
-        {% endelement %}
-    </div>
+    {% element h1 %}
+        {% trans "Sign In" %}
+    {% endelement %}
 
     {% if not SOCIALACCOUNT_ONLY %}
         {% setvar link %}
