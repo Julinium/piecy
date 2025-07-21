@@ -10,7 +10,7 @@ Piecy is a web application designed to efficiently manage a car spares business 
 
 ### Setup and software
 - Anything that runs Python and Django, with internet connectivity. We are using Rocky Linux.
-- Python, git and code or text editor.
+- Python, git and code or text editor. Root access (or sudo) may be needed to install/update other required software.
 
 ## Testing/Development
 - Clone the repo with git or download and extract the zip.  
