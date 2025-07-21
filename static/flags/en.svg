@@ -6,7 +6,7 @@
    sodipodi:docname="en.svg"
    width="750"
    height="500.00003"
-   inkscape:version="1.4 (e7c3feb100, 2024-10-09)"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -23,8 +23,8 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:zoom="0.619455"
-     inkscape:cx="319.63581"
-     inkscape:cy="259.09872"
+     inkscape:cx="219.54783"
+     inkscape:cy="385.01586"
      inkscape:window-width="1920"
      inkscape:window-height="1052"
      inkscape:window-x="0"
@@ -35,17 +35,21 @@
      fill="#bd3d44"
      d="M 0,0 H 750 V 500.00002 H 0"
      id="path1"
-     style="stroke-width:1" />
+     style="stroke-width:1"
+     mask="none" />
   <path
      stroke="#ffffff"
      stroke-width="37.763"
-     d="M 0,57.604169 H 750 M 0,134.375 H 750 M 0,211.45834 H 750 M 0,288.54168 H 750 M 0,365.62501 H 750 M 0,442.70835 h 750"
-     id="path2" />
+     d="M 0,57.44794 H 750 M 0,134.21878 H 750 M 0,211.30211 H 750 M 0,288.38546 H 750 M 0,365.46879 H 750 M 0,442.55209 h 750"
+     id="path2"
+     mask="none"
+     clip-path="none" />
   <path
      fill="#192f5d"
      d="M 0,0 H 364.8 V 269.27084 H 0"
      id="path3"
-     style="stroke-width:1" />
+     style="stroke-width:1"
+     mask="none" />
   <marker
      id="us-a"
      markerHeight="30"
@@ -59,7 +63,8 @@
   <path
      fill="none"
      marker-mid="url(#us-a)"
-     d="m 0,0 16,11.458334 h 61 61 61 61 60 L 47,38.541668 h 61 61 60 61 L 16,65.625002 h 61 61 61 61 60 L 47,92.708336 h 61 61 60 61 L 16,119.79167 h 61 61 61 61 60 L 47,146.875 h 61 61 60 61 L 16,172.91667 h 61 61 61 61 60 L 47,200.00001 h 61 61 60 61 L 16,227.08334 h 61 61 61 61 60 z"
-     id="path5"
-     style="stroke-width:1" />
+     d="M -8,-7.4582997 8,4.0000306 h 61 61 61 61 60 L 39,31.08336 h 61 61 60 61 L 8,58.1667 h 61 61 61 61 60 L 39,85.25003 h 61 61 60 61 L 8,112.33338 h 61 61 61 61 60 L 39,139.41671 h 61 61 60 61 L 8,165.45837 h 61 61 61 61 60 L 39,192.54171 h 61 61 60 61 L 8,219.62504 h 61 61 61 61 60 z"
+     id="path118"
+     style="stroke-width:1"
+     mask="none" />
 </svg>

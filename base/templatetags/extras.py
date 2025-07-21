@@ -10,3 +10,8 @@ def replace(value, args):
         return value.replace(old, new, 1)
     except ValueError:
         return value  # fallback if args is malformed
+
+
+@register.filter(name='add_class')
+def add_class(field, css):
+    return field.as_widget(attrs={"class": css})
