@@ -1,13 +1,20 @@
 {% extends "account/base_entrance.html" %}
 {% load i18n %}
 {% load allauth account %}
-{% block head_title %}
-    {% trans "Sign In" %}
-{% endblock head_title %}
-{% block content %}
-    {% element h1 %}
+{% load extras %}
+
+    {% block head_title %}
         {% trans "Sign In" %}
-    {% endelement %}
+    {% endblock head_title %}
+
+{% block content %}
+
+    <div class="my-3 text-center">
+        {% element h1 %}
+            {% trans "Sign In" %}
+        {% endelement %}
+    </div>
+
     {% if not SOCIALACCOUNT_ONLY %}
         {% setvar link %}
             <a href="{{ signup_url }}">
@@ -33,6 +40,7 @@
             {% endslot %}
         {% endelement %}
     {% endif %}
+
     {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
         {% element hr %}
         {% endelement %}
@@ -49,10 +57,13 @@
             {% endif %}
         {% endelement %}
     {% endif %}
+
     {% if SOCIALACCOUNT_ENABLED %}
         {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
     {% endif %}
+
 {% endblock content %}
+
 {% block extra_body %}
     {{ block.super }}
     {% if PASSKEY_LOGIN_ENABLED %}
