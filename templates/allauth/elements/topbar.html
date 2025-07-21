@@ -1,0 +1,22 @@
+{% load i18n %}
+{% load static %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<div class="d-flex justify-content-between py-3">
+    <div id="brand" style="max-width: 50%;">
+        <img 
+        class="img-fluid"
+        src="{% if LANGUAGE_CODE == 'ar' %}{% static 'images/brand-ar.svg' %}{% else %}{% static 'images/brand.svg' %}{% endif %}" alt="PIECY">
+    </div>
+    
+    <div id="languages" class="">
+        {% for code, name in LANGUAGES %}
+            <a class="px-1 {% if code == LANGUAGE_CODE %} fw-bold disabled{% endif %}"
+                    href="{% if code != LANGUAGE_CODE %}/{{ code }}{% else %}#{% endif %}"
+                    data-bs-toggle="tooltip" title="{{ name_translated|capfirst }}" type="button">
+                    <img src="{% static 'flags/' %}{{ code }}.svg" height="20" alt="{{ code|upper }}">
+                </a>
+        {% endfor %}
+
+    </div>
+</div>
