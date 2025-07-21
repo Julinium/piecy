@@ -1,22 +1,26 @@
 {% load i18n %}
 {% load static %}
-{% get_current_language as LANGUAGE_CODE %}
+{% load extras %}
 
-<div class="d-flex justify-content-between py-3">
+{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+
+<div class="d-flex justify-content-between py-4">
     <div id="brand" style="max-width: 50%;">
-        <img 
+        <img
         class="img-fluid"
-        src="{% if LANGUAGE_CODE == 'ar' %}{% static 'images/brand-ar.svg' %}{% else %}{% static 'images/brand.svg' %}{% endif %}" alt="PIECY">
+        src="{% if LANGUAGE_BIDI %}{% static 'images/brand-ar.svg' %}{% else %}{% static 'images/brand.svg' %}{% endif %}" alt="PIECY">
     </div>
     
     <div id="languages" class="">
         {% for code, name in LANGUAGES %}
-            <a class="px-1 {% if code == LANGUAGE_CODE %} fw-bold disabled{% endif %}"
-                    href="{% if code != LANGUAGE_CODE %}/{{ code }}{% else %}#{% endif %}"
-                    data-bs-toggle="tooltip" title="{{ name_translated|capfirst }}" type="button">
+            {% with arg=LANGUAGE_CODE|add:","|add:code %}
+                <a class="px-1 {% if code == LANGUAGE_CODE %} fw-bold disabled{% endif %}"
+                    href='{{ request.path|replace:arg }}'
+                    data-bs-toggle="tooltip" title="{{ name|capfirst }} ({{ code }})" type="button">
                     <img src="{% static 'flags/' %}{{ code }}.svg" height="20" alt="{{ code|upper }}">
                 </a>
+            {% endwith %}
         {% endfor %}
-
     </div>
 </div>
