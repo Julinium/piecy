@@ -29,7 +29,8 @@
                 </div>
             {% endif %}
 
-            <div class="mb-3 form-control">
+            
+            <div class="mb-3 {% if attrs.type != 'checkbox' and attrs.type != 'radio' %}form-control{% endif %}">
                 <input
                     {% if attrs.required %}required{% endif %}
                     {% if attrs.disabled %}disabled{% endif %}
@@ -44,13 +45,12 @@
             </div>
 
         {% if attrs.type == "checkbox" or attrs.type == "radio" %}
-            <div class="mb-3 form-label">
+            <div class="mb-3">
                 <label for="{{ attrs.id }}">
                     {% slot label %}
                     {% endslot %}
                 </label>
             </div>
-
         {% endif %}
     {% endif %}
     {% if slots.help_text %}

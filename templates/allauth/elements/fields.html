@@ -9,15 +9,32 @@
 
 {% for field in attrs.form %}
   <div class="mb-3">
-    <!-- <label for="{{ field.id_for_label }}" class="form-label small text-muted">{{ field.label }}</label> -->
-    {% if field.name == 'age' %}
-        {{ field|add_class:"form-control d-none" }}
+    {% if field.name != "remember" %}
+      <!-- <label for="{{ field.id_for_label }}" class="form-label small text-muted">{{ field.label }}</label> -->
+      {% if field.name == 'age' %}
+          {{ field|add_class:"form-control d-none" }}
+      {% else %}
+          {{ field|add_class:"form-control" }}
+      {% endif %}
     {% else %}
-        {{ field|add_class:"form-control" }}
+      {{ field }}
+      <label for="{{ field.id_for_label }}" class="small text-muted">{{ field.label }}</label>
     {% endif %}
 
     {% if field.help_text %}
-        <div class="form-text my-3">{{ field.help_text }}</div>
+        {% if field.name != "password1" %}
+            <div class="form-text my-3">{{ field.help_text }}</div>
+        {% else %}
+            <a class="px-2 pt-3 text-small text-muted" 
+              data-bs-toggle="collapse" href="#passValidation" 
+              aria-expanded="false" aria-controls="passValidation">
+              &#128274;&#9872;
+            </a>
+            <div class="collapse text-muted fs-7 fw-light" id="passValidation">
+              {{ field.help_text }}
+            </div>
+
+        {% endif %}
     {% endif %}
 
     {% if field.errors %}

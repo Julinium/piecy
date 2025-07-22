@@ -8,29 +8,33 @@
 <div class="d-flex justify-content-between pt-3">
 
     <div id="brand" class="d-flex align-items-center" style="max-width: 36%;">
-        <img
-            class="img-fluid"
-            src="{% if LANGUAGE_BIDI %}
-                    {% static 'images/brand-ar.svg' %}
-                {% else %}
-                    {% static 'images/brand.svg' %}
-                {% endif %}" 
-            alt="PIECY">
+        <a href="/">
+            <img
+                class="img-fluid"
+                src="{% if LANGUAGE_BIDI %}
+                        {% static 'images/brand-ar.svg' %}
+                    {% else %}
+                        {% static 'images/brand.svg' %}
+                    {% endif %}" 
+                alt="PIECY">
+        </a>
     </div>
 
-    <div id="languages"  class="d-flex align-items-center">
-        {% for code, name in LANGUAGES %}
-            {% with arg=LANGUAGE_CODE|add:","|add:code %}
-                <a class="px-1{% if code == LANGUAGE_CODE %} disabled{% endif %}"
-                    {% if code != LANGUAGE_CODE %}href={{ request.path|replace:arg }}{% endif %}
-                    data-bs-toggle="tooltip" title="{{ name|capfirst }} ({{ code }})" type="button">
-                    <img
-                        class="img-fluid p-0" width="24" height="24"
-                        src="{% static 'flags/' %}{{ code }}.svg"
-                        alt="{{ code|upper }}">
-                </a>
-            {% endwith %}
-        {% endfor %}
+    <div class="d-flex justify-content-end">
+        <div id="languages"  class="d-flex align-items-center">
+            {% for code, name in LANGUAGES %}
+                {% with arg=LANGUAGE_CODE|add:","|add:code %}
+                    <a class="px-1{% if code == LANGUAGE_CODE %} disabled{% endif %}"
+                        {% if code != LANGUAGE_CODE %}href={{ request.path|replace:arg }}{% endif %}
+                        data-bs-toggle="tooltip" title="{{ name|capfirst }} ({{ code }})" type="button">
+                        <img
+                            class="img-fluid p-0" width="24" height="24"
+                            src="{% static 'flags/' %}{{ code }}.svg"
+                            alt="{{ code|upper }}">
+                    </a>
+                {% endwith %}
+            {% endfor %}
+        </div>
     </div>
 </div>
 <hr>
