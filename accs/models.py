@@ -29,7 +29,7 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    tenant = models.ForeignKey(Tenant, on_delete=models.RESTRICT, blank=True, null=True)
+    tenant = models.ForeignKey(Tenant, on_delete=models.RESTRICT, blank=True, null=True, related_name="workers")
     verified = models.BooleanField(blank=True, null=True)
     phone = models.CharField(max_length=64, blank=True, null=True)
     first_name = models.CharField(max_length=64, blank=True, null=True)
@@ -53,5 +53,5 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'utilisateur'
-        # verbose_name = "User"
-        # verbose_name_plural = "Users"
+        verbose_name = "User"
+        ordering = ['-is_active', 'tenant', 'created_on', 'last_login', 'is_tenant_admin']

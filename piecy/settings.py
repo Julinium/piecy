@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'accs',
     'base',
     'back',
+    'tenancy',
 
     'allauth',
     'allauth.account',

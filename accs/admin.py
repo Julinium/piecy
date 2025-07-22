@@ -33,8 +33,9 @@ class UtilisateurAdmin(UserAdmin):
     #     ),
     # )
 
-    search_fields = ("username", "email", "tenant", "last_name")
-    ordering = ("username", "tenant",)
+    search_fields = ("username", "email", "last_name")
+    # ordering = ("username", "tenant",)
+    ordering = ('-is_active', '-tenant', 'created_on', 'last_login', 'is_tenant_admin',)
 
     formfield_overrides = {
         models.BooleanField: {'widget': forms.CheckboxInput},
