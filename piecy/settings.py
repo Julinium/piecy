@@ -163,9 +163,8 @@ LANGUAGES = [
     ("es", _("Spanish")),
     ("de", _("German")),
     ]
-    
-LOCALE_PATHS = [BASE_DIR / "locale", ]
 
+LOCALE_PATHS = [BASE_DIR / "locale", ]
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
@@ -186,9 +185,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-# Email backend (for testing use console)
+# Email backend
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 # EMAIL_BACKEND       = os.getenv('EMAIL_BACKEND')
 # EMAIL_HOST          = os.getenv('EMAIL_HOST')
 # EMAIL_PORT          = os.getenv('EMAIL_PORT')
@@ -197,10 +195,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 # DEFAULT_FROM_EMAIL  = os.getenv('DEFAULT_FROM_EMAIL')
 
-
 # Django_allauth parameters
 LOGIN_URL = 'account_login'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'base_home'
 LOGOUT_REDIRECT_URL = LOGIN_URL
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 ACCOUNT_CHANGE_EMAIL = False
@@ -211,7 +208,7 @@ ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = 'age'
 ACCOUNT_USERNAME_BLACKLIST = ['admin', 'owner', 'wassim', 'm777', 'mode777', 'mode-777', 'emarches', 'root', 'insi', 'system']
 ACCOUNT_USERNAME_MIN_LENGTH = 4
 ACCOUNT_USERNAME_VALIDATORS = 'accs.validators.username_ASCII_validators'
-# ACCOUNT_SESSION_REMEMBER = True
+ACCOUNT_SESSION_REMEMBER = True
 ACCOUNT_DEFAULT_HTTP_PROTOCOL = "https"
 
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
