@@ -1,4 +1,4 @@
-<!-- {{ attrs.form.as_p }} -->
+{% load i18n %}
 {% load extras %}
 
 {% if attrs.form.non_field_errors %}
@@ -21,21 +21,34 @@
       <label for="{{ field.id_for_label }}" class="small text-muted">{{ field.label }}</label>
     {% endif %}
 
-    {% if field.help_text %}
-        {% if field.name != "password1" %}
-            <div class="form-text my-3">{{ field.help_text }}</div>
-        {% else %}
-            <a class="px-2 pt-3 text-small text-muted" 
-              data-bs-toggle="collapse" href="#passValidation" 
-              aria-expanded="false" aria-controls="passValidation">
-              &#128274;&#9872;
-            </a>
-            <div class="collapse text-muted fs-7 fw-light" id="passValidation">
-              {{ field.help_text }}
-            </div>
+    <div class="d-flex justify-content-between">
+      {% if field.name == 'password' or field.name == 'password1' or field.name == 'password2' %}
+        <div class="mt-1 flex toggle-{{field.name}}">
+          <input type="checkbox" id="toggle-{{field.name}}">
+          <label for="toggle-{{field.name}}" class="text-secondary small cursor-pointer">
+              {% trans 'Show Password' %}
+          </label>
+        </div>
+      {% endif %}
 
-        {% endif %}
-    {% endif %}
+      {% if field.help_text %}
+          {% if field.name != "password1" %}
+              <div class="form-text mt-1">{{ field.help_text }}</div>
+          {% else %}
+              <a class="px-2 mt-1 text-small text-muted" 
+                data-bs-toggle="collapse" href="#passValidation" 
+                aria-expanded="false" aria-controls="passValidation">
+                ! &#128274;&#9872;
+              </a>
+          {% endif %}
+      {% endif %}
+    </div>
+
+          {% if field.name == "password1" %}
+              <div class="collapse text-muted fs-7 fw-light mt-2" id="passValidation">
+                {{ field.help_text }}
+              </div>
+      {% endif %}
 
     {% if field.errors %}
       <div class="text-danger small">
@@ -44,3 +57,28 @@
     {% endif %}
   </div>
 {% endfor %}
+<script>
+  const passwordToggle = document.getElementById("toggle-password");
+  if (passwordToggle) {
+    passwordToggle.addEventListener("change", function () {
+      const passwordInput = document.getElementById('id_password');
+      passwordInput.type = this.checked ? "text" : "password";
+      });
+    }
+
+  const passwordToggle1 = document.getElementById("toggle-password1");
+  if (passwordToggle1) {
+    passwordToggle1.addEventListener("change", function () {
+      const passwordInput1 = document.getElementById('id_password1');
+      passwordInput1.type = this.checked ? "text" : "password";
+      });
+    }
+
+  const passwordToggle2 = document.getElementById("toggle-password2");
+  if (passwordToggle2) {
+    passwordToggle2.addEventListener("change", function () {
+      const passwordInput2 = document.getElementById('id_password2');
+      passwordInput2.type = this.checked ? "text" : "password";
+      });
+    }
+</script>
