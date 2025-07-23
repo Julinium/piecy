@@ -1,0 +1,110 @@
+{% load i18n %}
+{% load static %}
+
+<div id="languages"  class="d-flex align-items-center text-small fw-light">
+    <div class="btn-group dropdown">
+        <button type="button" class="btn px-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            {% if request.user.is_authenticated %}
+                {{ request.user.username }}
+            {% else %}
+                {% trans 'Menu' %}
+            {% endif %}
+        </button>
+        <ul class="dropdown-menu">
+            {% if request.user.is_authenticated %}
+                    <li>
+                        <a href="#" class="dropdown-item">{% trans "Support" %}</a>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-item">{% trans "My Subscription" %}</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'tenancy_home' %}" class="dropdown-item">{% trans "My Business" %}</a>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-item">{% trans "My Profile" %}</a>
+                    </li>
+
+                    <li><hr class="dropdown-divider"></li>
+
+                    <li>
+                        <a href="#" class="dropdown-item">{% trans "Settings" %}</a>
+                    </li>
+
+                {% url 'account_email' as email_url_ %}
+                {% if email_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ email_url_ }}" class="dropdown-item">{% trans "Change Email" %}</a>
+                    </li>
+                {% endif %}
+
+                {% url 'account_change_password' as change_password_url_ %}
+                {% if change_password_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ change_password_url_ }}" class="dropdown-item">{% trans "Change Password" %}</a>
+                    </li>
+                {% endif %}
+
+                {% url 'socialaccount_connections' as connections_url_ %}
+                {% if connections_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ connections_url_ }}" class="dropdown-item">{% trans "Account Connections" %}</a>
+                    </li>
+                {% endif %}
+
+                {% url 'mfa_index' as mfa_url_ %}
+                {% if mfa_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ mfa_url_ }}" class="dropdown-item">{% trans "Two-Factor Authentication" %}</a>
+                    </li>
+                {% endif %}
+
+                {% url 'request.sessions_list' as usersessions_list_url_ %}
+                {% if usersessions_list_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ usersessions_list_url_ }}" class="dropdown-item">{% trans "Sessions" %}</a>
+                    </li>
+                {% endif %}
+
+                {% url 'account_logout' as logout_url_ %}
+                {% if logout_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ logout_url_ }}" class="dropdown-item tex-danger">{% trans "Sign Out" %}</a>
+                    </li>
+                {% endif %}
+
+            {% else %}
+                {% url 'account_login' as login_url_ %}
+                {% if login_url_ %}
+                    <li>
+                        <a href="{{ login_url_ }}" class="dropdown-item">{% trans "Sign In" %}</a>
+                    </li>
+                {% endif %}
+
+                {% url 'account_signup' as signup_url_ %}
+                {% if signup_url_ %}
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a href="{{ signup_url_ }}" class="dropdown-item">{% trans "Sign Up" %}</a>
+                    </li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a href="#" class="dropdown-item">{% trans "Free demo" %}</a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a href="#" class="dropdown-item fw-bold text-success">{% trans "Contact us" %}</a>
+                </li>
+
+            {% endif %}
+
+        </ul>
+    </div>
+</div>

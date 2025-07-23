@@ -1,9 +1,14 @@
 {% load i18n %}
 
 <nav class="navbar navbar-expand-md" aria-label="Navbar">
-    <div class="container-fluid"> <a class="navbar-brand" href="#">Piecy</a> <button class="navbar-toggler"
+    <div class="container-fluid">
+        <!-- <a class="navbar-brand" href="#">Piecy</a> -->
+        {% include 'base/includes/menu-brand.html' %}
+        <button class="navbar-toggler"
             type="button" data-bs-toggle="collapse" data-bs-target="#navbarino" aria-controls="navbarino"
-            aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+            aria-expanded="false" aria-label="Toggle navigation"> 
+            <span class="navbar-toggler-icon"></span> 
+        </button>
         <div class="collapse navbar-collapse" id="navbarino">
             <ul class="navbar-nav me-auto mb-2 mb-md-0">
                 <!-- <li class="nav-item"> <a class="nav-link active" aria-current="page" href="#">Home</a> </li> -->
@@ -18,8 +23,21 @@
                     </ul>
                 </li>
             </ul>
-            <!-- <form role="search"> <input class="form-control" type="search" placeholder="Search" aria-label="Search">
-            </form> -->
+            <span>
+              <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll text-end">
+                <div class="d-flex justify-content-end">
+                    {% include 'base/includes/menu-user.html' %}
+                </div>
+              </ul>
+            </span>
+            <span>
+              <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll text-end">
+                <div class="d-flex justify-content-end">
+                    {% include 'base/includes/menu-langs.html' %}
+                </div>
+              </ul>
+            </span>
+
         </div>
     </div>
 </nav>

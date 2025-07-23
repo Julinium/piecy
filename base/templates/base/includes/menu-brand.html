@@ -1,0 +1,15 @@
+{% load static %}
+{% load i18n %}
+{% get_current_language_bidi as LANGUAGE_BIDI %}
+
+<a class="navbar-brand" href="/">
+    <img
+        class="img-fluid"
+        style="max-height: 2rem;"
+        src="{% if LANGUAGE_BIDI %}
+                {% static 'images/brand-ar.svg' %}
+            {% else %}
+                {% static 'images/brand.svg' %}
+            {% endif %}" 
+        alt="PIECY">
+</a>

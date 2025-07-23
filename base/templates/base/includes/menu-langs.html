@@ -1,0 +1,35 @@
+{% load i18n %}
+{% load static %}
+{% load extras %}
+
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<div id="languages"  class="d-flex align-items-center text-small fw-light">
+    <div class="btn-group dropdown">
+        <button type="button" class="btn px-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img
+                class="img-fluid p-0" width="24" height="24"
+                src="{% static 'flags/' %}{{ LANGUAGE_CODE }}.svg"
+                alt="{{ LANGUAGE_CODE|upper }}">
+        </button>
+        <ul class="dropdown-menu">
+            {% for code, name in LANGUAGES %}
+                {% if code != LANGUAGE_CODE %}
+                    {% with arg=LANGUAGE_CODE|add:","|add:code %}
+                        <li>
+                            <a class="dropdown-item"
+                                href="{{ request.path|replace:arg }}"
+                                data-bs-toggle="tooltip" title="{{ name|capfirst }} ({{ code }})">
+                                <img
+                                    class="img-fluid p-0" width="24" height="24"
+                                    src="{% static 'flags/' %}{{ code }}.svg"
+                                    alt="{{ code|upper }}"><span class="px-2">{{ name|capfirst }} - {{ code|upper }}</span>
+                            </a>
+                        </li>
+                    {% endwith %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
