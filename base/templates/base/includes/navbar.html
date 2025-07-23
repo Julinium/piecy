@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load static %}
 
 <nav class="navbar navbar-expand-md" aria-label="Navbar">
     <div class="container-fluid">
@@ -37,95 +38,6 @@
                 </div>
               </ul>
             </span>
-
-
-
-            #########################$
-            <span>
-              <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll text-end">
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img height="20" src="{% static 'flags/' %}{{ LANGUAGE_CODE }}.svg" alt="{{ LANGUAGE_CODE|upper }}">
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">                      
-                      {% for lang in transes %}
-                          <li>
-                            <a class="px-2 dropdown-item{% if lang.code != LANGUAGE_CODE %} btn-preload{% else %} fw-bold disabled{% endif %}"
-                            href="{% if lang.code != LANGUAGE_CODE %}{% switch_language_url lang.code %}{% endif %}" 
-                            data-bs-toggle="tooltip" title="{{ lang.name_translated|capfirst }}" type="button">
-                              <img src="{% static 'flags/' %}{{ lang.code }}.svg" height="20" alt="{{ lang.code|upper }}">
-                              {{ lang.name_local|capfirst }}
-                              <div class="progress bg-danger mt-1" style="height: 2px;">
-                                <div
-                                    class="progress-bar bg-primary"
-                                    role="progressbar"
-                                    style="width: {{ lang.ratio }}%;"
-                                    aria-valuenow="{{ lang.ratio }}"
-                                    aria-valuemin="0"
-                                    aria-valuemax="100">
-                                </div>
-                              </div>
-                            </a>
-                          </li>
-                          {% if not forloop.last %}<li><hr class="dropdown-divider my-2"></li> {% endif %}
-                        
-                      {% endfor %}
-                  </ul>
-                </li>
-
-                {% if request.user.is_authenticated %}
-
-                <li class="nav-item dropdown">
-                  <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img class="img-fluid border rounded-circle mx-1" src="{% if request.user.profile.avatar %}{{ MEDIA_URL }}{{ request.user.profile.avatar }}{% else %}/static/media/users/avatars/default.png{% endif %}" alt="" style="width: 1.5rem; height: 1.5rem; object-fit: cover;">
-                    <span data-bs-toggle="tooltip" title="{{ request.user.username }}">{{ request.user.username|truncatechars:8 }}</span>
-                    {% if new_contactings %}
-                      <span class="badge mb-2 px-1 bg-danger text-white"> </span>
-                    {% endif %}
-                  </a>
-                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                    <li>
-                        <a class="dropdown-item btn-preload" href="{% url 'base_profile' %}"><i class="bi bi-person-circle"></i> {% translate 'Profile' %}</a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item btn-preload" href="{% url 'account_change_password' %}"><i class="bi bi-shield-lock-fill"></i> {% translate 'Change Password' %}</a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item btn-preload text-danger fw-bold" href="{% url 'account_logout' %}"><i class="bi bi-box-arrow-right"></i> {% translate 'Sign Out' %}</a>
-                    </li>
-                    
-                    {% if request.user|in_group:'CRM' %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                      <a class="dropdown-item btn-preload" href="{% url 'crm_supervision' %}">
-                        <i class="bi bi-eye-fill"></i> {% translate 'Supervision' %}
-                        {% if new_contactings %}<span class="badge bg-danger text-white mx-1">{{ new_contactings.count }}</span>{% endif %}
-                      </a>
-                    </li>
-                    {% endif %}
-                    {% if request.user.is_superuser %}
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item" target="_blank" href="/admin"><i class="bi bi-tools"></i> {% translate 'Administration' %}</a>
-                    </li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <a class="dropdown-item" target="_blank" href="https://pgadmin.emarches.com/"><i class="bi bi-database-fill-gear"></i> {% translate 'Database' %}</a>
-                    </li>
-                    {% endif %}
-                  </ul>
-                    {% else %}
-                        <li class="dropdown-item btn-preload">
-                            <a class="btn btn-primary" href="{% url 'account_login' %}"><i class="bi bi-person-circle"></i> {% translate 'Sign In' %}</a>
-                        </li>
-                    {% endif %}
-                </li>
-              </ul>
-            </span>
-            ##########################
-
         </div>
     </div>
 </nav>
