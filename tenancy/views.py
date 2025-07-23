@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 from django.http import HttpResponse
 from django.utils.text import capfirst
-from back.models import Tenant
+from back.models import Tenant, Utilisateur
 
 
 @login_required(login_url="account_login")
@@ -16,8 +16,17 @@ def tenant(request):
                 if tenant.active:
                     fields = [(capfirst(field.verbose_name), getattr(tenant, field.name)) for field in tenant._meta.fields]
                     admins = tenant.workers.filter(is_tenant_admin = True)#.order_by("-is_active")
-                    workers = tenant.workers.exclude(is_tenant_admin = True)#.order_by("-is_active")
-                    context = { "tenant" : tenant, "fields" : fields, "admins" : admins, "workers" : workers }
+                    users = tenant.workers.exclude(is_tenant_admin = True)#.order_by("-is_active")
+                    # created_by = Utilisateur.objects.filter(id=tenant.created_by)
+                    # owned_by = owners.first() if owners else None
+
+                    context = { 
+                        "tenant"   : tenant, 
+                        # "owned_by" : owned_by,
+                        "fields"   : fields, 
+                        "admins"   : admins, 
+                        "users"    : users 
+                    }
                     return render(request, 'tenancy/tenancy-detail.html', context)
                 
                 return HttpResponse(_('Tenant inactive'), status=403)

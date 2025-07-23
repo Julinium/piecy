@@ -9,11 +9,11 @@ User = get_user_model()
 
 class TenantAdmin(admin.ModelAdmin):
     model = Tenant
-    list_display = ("name", "active", "address", "owner", 'created_on')
+    list_display = ("name", "active", "city", "owner", 'created_on')
     fieldsets = (
         ("Basics", {"fields": ("active", "name", "owner")}),
-        ("Contact", {"fields": ("email", "phone", "whatsapp", "address")}),
-        ("Advanced", {"fields": ("domain", "slug", "channel", "note")}),
+        ("Contact", {"fields": ("email", "phone", "whatsapp", "address1", "address2", "city", "state", "country")}),
+        ("Advanced", {"fields": ("domain_name", "channel", "note")}),
         ("History", {"fields": ('get_created_by', 'created_on', 'get_edited_by', 'edited_on')}),
     )
 
@@ -21,7 +21,7 @@ class TenantAdmin(admin.ModelAdmin):
 
     list_filter = ('active', 'created_on')
     search_fields = ('name', 'owner')
-    ordering = ("active", 'name', 'address', 'owner', 'edited_on')
+    ordering = ("active", 'name', 'city', 'owner', 'edited_on')
 
     readonly_fields = ('get_created_by', 'created_on', 'get_edited_by', 'edited_on')
 

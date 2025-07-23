@@ -7,9 +7,12 @@
 {% endblock title %}
 
 {% block content %}
-    <h1>
-        {% trans "Tenancy details" %}
-    </h1>
+    {% with avatar=tenant.logo headline=tenant.name subtitle=tenant.owner %}
+    {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %} {% endwith %}
+            
+        
+    
+
     <table class="table">
     {% for label, value in fields %}
             <tr class="border-bottom">
@@ -48,21 +51,21 @@
 
         <tr class="border-bottom">
             <td>
-                <small class="text-muted">{% trans 'Workers' %} ({{ workers.count }}):</small><br>
+                <small class="text-muted">{% trans 'Users' %} ({{ users.count }}):</small><br>
                 <strong>
                     <table class="table">
-                        {% for worker in workers %}
+                        {% for user in users %}
                             <tr><td>
-                                {{ worker.username }}
-                                {% if worker == request.user %}
+                                {{ user.username }}
+                                {% if user == request.user %}
                                     <span class="text-success">({% trans "You" %})</span>                                
                                 {% endif %}
-                                {% if not worker.is_active %}
+                                {% if not user.is_active %}
                                     <span class="text-danger">({% trans "Inactive" %})</span>                                
                                 {% endif %}
                             </td></tr>
                         {% empty %}
-                            <p class="text-muted small fw-light">No workers found !</p>
+                            <p class="text-muted small fw-light">No users found !</p>
                         {% endfor %}
                     </table>
                 </strong>

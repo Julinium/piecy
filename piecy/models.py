@@ -188,10 +188,6 @@ class Commande(models.Model):
 
     @property
     def get_order_number(self):
-        # Returns a sequenced Order number like : C2520300001
-        # C is a prefix
-        # 25203 is a coded date
-        # 00001 is a sequence that resets every year.
         new_sequence = 1
         latest_order = Commande.objects.latest('order_date')
         d = date().today()

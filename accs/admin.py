@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.db import models
 from django.contrib.auth.admin import UserAdmin
-from .models import Utilisateur
+from back.models import Utilisateur
 
 class UtilisateurAdmin(UserAdmin):
     model = Utilisateur

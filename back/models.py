@@ -1,43 +1,155 @@
 import uuid #, os
 from django.db import models
-# from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
-# from accs.models import Utilisateur as User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-# User = get_user_model()
 
 
 class Tenant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active = models.BooleanField(blank=True, null=True, default=True)
-    name = models.CharField(max_length=128, blank=True, null=True)
-    address = models.CharField(max_length=64, blank=True, null=True)
-    email = models.CharField(max_length=128, blank=True, null=True)
-    phone = models.CharField(max_length=16, blank=True, null=True)
-    whatsapp = models.CharField(max_length=16, blank=True, null=True)
-    domain = models.CharField(max_length=32, blank=True, null=True)
-    slug = models.CharField(max_length=32, blank=True, null=True)
+    active = models.BooleanField(verbose_name=_("Activé"), blank=True, null=True, default=True)
+    onboarded = models.BooleanField(verbose_name=_("Activé"), blank=True, null=True, default=False)
+    name = models.CharField(verbose_name=_("Nom"), max_length=128, blank=True, null=True)
+
+    email = models.CharField(verbose_name=_("Email"), max_length=128, blank=True, null=True)
+    phone = models.CharField(verbose_name=_("Tél."), max_length=16, blank=True, null=True)
+    whatsapp = models.CharField(verbose_name=_("Whatsapp"), max_length=16, blank=True, null=True)
+
+    address1 = models.CharField(verbose_name=_("Adresse ligne 1"), max_length=64, blank=True, null=True, default="N°24, Rue La Fontaine")
+    address2 = models.CharField(verbose_name=_("Adresse ligne 2"), max_length=64, blank=True, null=True, default="Av. Mohammed V, Quartier Massira")
+    city = models.CharField(verbose_name=_("Ville"), max_length=64, blank=True, null=True, default="Rabat")
+    zip_code = models.CharField(verbose_name=_("Code postal"), max_length=64, blank=True, null=True, default="10000")
+    state = models.CharField(verbose_name=_("Région ou état"), max_length=64, blank=True, null=True, default="Région Rabat-Salé-Kenitra")
+    country = models.CharField(verbose_name=_("Pays"), max_length=64, blank=True, null=True, default=_('Maroc'))
+
+    domain_name = models.CharField(verbose_name=_("Nom de domaine"), max_length=32, blank=True, null=True, default="mode-777.com")
+    # slug = models.CharField(verbose_name=_("Nom abrégé"), max_length=32, blank=True, null=True)
     logo = models.ImageField(verbose_name=_("Logo"), upload_to='tenants/logos/', blank=True, null=True)
     brand = models.ImageField(verbose_name=_("Bannière"), upload_to='tenants/brands/', blank=True, null=True)
     header = models.ImageField(verbose_name=_("En-tête"), upload_to='tenants/headers/', blank=True, null=True)
     footer = models.ImageField(verbose_name=_("Bas de page"), upload_to='tenants/footers/', blank=True, null=True)
-    owner = models.CharField(max_length=64, blank=True, null=True)
-    channel = models.CharField(max_length=32, blank=True, null=True)
-    note = models.CharField(max_length=256, blank=True, null=True)
+    owner = models.CharField(verbose_name=_("Propriétaire"), max_length=64, blank=True, null=True)
+    channel = models.CharField(verbose_name=_("Canal"), max_length=32, blank=True, null=True, default='Website')
+    note = models.CharField(verbose_name=_("Observation"), max_length=256, blank=True, null=True, default='Créé automatiquement suite création utilisateur')
 
-    # owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
-    # created_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
-    # edited_by = models.ForeignKey(User, on_delete=models.RESTRICT, blank=True, null=True)
+    created_by_user = models.CharField(verbose_name=_("Créé par utilisateur"), max_length=64, blank=True, null=True)
+    edited_by_user  = models.CharField(verbose_name=_("Modifié par utilisateur"), max_length=64, blank=True, null=True)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
+
+    @property
+    def get_postal_address(self):
+        pa = self.address1
+        if self.address1: pa += f'\n{self.address1}'
+        if self.city: pa += f'\n{self.city}'
+        if self.state: pa += f'\n{self.state}'
+        pa += f'\n{self.country}'
+        return pa
 
     class Meta:
         db_table = 'tenant'
     
     def __str__(self):
         return f'{self.name} - {self.owner}'
+    
+    def save(self, *args, **kwargs):
+        # if self.pk is None: print("Creating object")
+        # else: print("Updating object")
+        try:
+            self.created_by_user = Utilisateur.objects.get(id=self.created_by).username
+            self.edited_by_user = Utilisateur.objects.get(id=self.edited_by).username
+        except Exception as xc:
+            print(f'Error while updating Utilisateur fields: {str(xc)}')
+        super().save(*args, **kwargs)
+
+    # def delete(self, *args, **kwargs):
+    #     print("Deleting object")
+    #     super().delete(*args, **kwargs)
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, username, email, password=None, **extra_fields):
+        if not username:
+            raise ValueError("The Username must be set")
+        if not email:
+            raise ValueError("The Email must be set")
+
+        email = self.normalize_email(email)
+        user = self.model(username=username, email=email, **extra_fields)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, username, email, password=None, **extra_fields):
+        extra_fields.setdefault("is_staff", True)
+        extra_fields.setdefault("is_superuser", True)
+        return self.create_user(username, email, password, **extra_fields)
+
+
+class Utilisateur(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+
+    username = models.CharField(max_length=150, unique=True)
+    email = models.EmailField(unique=True)
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    tenant = models.ForeignKey(Tenant, on_delete=models.RESTRICT, blank=True, null=True, related_name="workers")
+    verified = models.BooleanField(blank=True, null=True)
+    phone = models.CharField(max_length=64, blank=True, null=True)
+    first_name = models.CharField(max_length=64, blank=True, null=True)
+    last_name = models.CharField(max_length=64, blank=True, null=True)
+    is_tenant_admin = models.BooleanField(blank=True, null=True)
+
+    created_by = models.UUIDField(blank=True, null=True)
+    created_on = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(blank=True, null=True)
+    edited_on = models.DateTimeField(blank=True, null=True, auto_now=True)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = "username"
+    REQUIRED_FIELDS = ["email"]
+
+    def __str__(self):
+        un = self.username
+        if self.tenant: un += ' - ' + self.tenant.name
+        return un
+
+    class Meta:
+        db_table = 'utilisateur'
+        verbose_name = "User"
+        ordering = ['-is_active', 'tenant', 'created_on', 'last_login', 'is_tenant_admin']
+    
+    # def save(self, *args, **kwargs):
+    #     is_new = self._state.adding
+    #     if is_new: # print("Creating object")
+    #         print(f"+++++++++++++++++++++++++++++++++++++++ {self.username}")
+    #         creator = Utilisateur.objects.get(id=self.created_by)
+    #         if not creator.tenant:
+    #             tenant = Tenant(
+    #                 name = f'Piéces Auto {self.last_name.upper()}',
+    #                 owner = f'{self.first_name} {self.last_name}',
+    #                 email = self.email,
+    #                 created_by_user = self.username,
+    #                 created_by = self.id
+    #             )
+    #             try:
+    #                 tenant.save()
+    #                 self.tenant = tenant
+    #             except Exception as xc:
+    #                 print(f'Error while creating Tenant: {str(xc)}')
+    #     else: # print("Updating object")
+    #         print(f"==========================================  {self.pk}")
+    #     super().save(*args, **kwargs)
+        
+        
+
+    # def delete(self, *args, **kwargs):
+    #     print("Deleting object")
+    #     super().delete(*args, **kwargs)
+
 
 
 class Subscription(models.Model):
