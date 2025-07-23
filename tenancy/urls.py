@@ -4,14 +4,10 @@ from tenancy import views
 
 urlpatterns = [
     path('summary/', views.summary, name='tenancy_summary'),
-    # path('about', views.about, name='base_about'),
-    # path('legal', views.legal, name='base_legal'),
-    # path('faqs', views.faqs, name='base_faqs'),
-    # path('contact', views.contact, name='base_contact'),
-    # path('contact_success', views.contact_success, name='base_contact_success'),
-    # path('lockout', views.lockout, name='base_lockout'),
-    # path('accounts/profile', views.profile, name='base_profile'),
-    # path('accounts/profile/update', views.update_profile, name='base_profile_update'),
-    # path('services', views.services, name='base_services'),
-    # path('portfolio', views.portfolio, name='base_portfolio'),
+    path('details/', views.details, name='tenancy_details'),
+    path('history/', views.history, name='tenancy_history'),
+    path('sub-cancel/', views.sub_cancel, name='tenancy_sub_cancel'),
+    path('sub-renew/', views.sub_renew, name='tenancy_sub_renew'),
+    path('sub-upgrade/', views.sub_upgrade, name='tenancy_sub_upgrade'),
+    path('users/', views.users, name='tenancy_users'),
 ]

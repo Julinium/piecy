@@ -31,8 +31,11 @@
                     {% include 'base/includes/navbar.html' %}
                     {% include 'base/includes/messages.html' %}
                     {% block content %}{% endblock content %}
-                    <hr>
-                    {% include 'base/includes/footer.html' %}
+                    <!-- <div class="py-5"></div> -->
+                    <hr class="my-5">
+                    <div class="py-5">
+                        {% include 'base/includes/footer.html' %}
+                    </div>
                 </div>
             </div>
         </div>
