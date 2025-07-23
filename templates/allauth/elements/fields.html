@@ -44,11 +44,11 @@
       {% endif %}
     </div>
 
-          {% if field.name == "password1" %}
-              <div class="collapse text-muted fs-7 fw-light mt-2" id="passValidation">
-                {{ field.help_text }}
-              </div>
-      {% endif %}
+    {% if field.name == "password1" %}
+        <div class="collapse text-muted fs-7 fw-light mt-2" id="passValidation">
+          {{ field.help_text }}
+        </div>
+    {% endif %}
 
     {% if field.errors %}
       <div class="text-danger small">
@@ -57,6 +57,7 @@
     {% endif %}
   </div>
 {% endfor %}
+
 <script>
   const passwordToggle = document.getElementById("toggle-password");
   if (passwordToggle) {
