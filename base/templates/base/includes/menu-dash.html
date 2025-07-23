@@ -1,11 +1,10 @@
 {% load i18n %}
 
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="portalScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+<!-- <li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="dashDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="bi bi-search"></i> {% translate 'Dashboard' %}
-            <!-- <span class="badge mb-2 px-1 text-white bg-danger"> </span> -->
     </a>
-    <ul class="dropdown-menu" aria-labelledby="portalScrollingDropdown">
+    <ul class="dropdown-menu" aria-labelledby="dashDropdown">
         <li><a class="dropdown-item" href="#"><i class="bi bi-hourglass-split"></i> {% translate 'Expiring' %}</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="#"><i class="bi bi-menu-app-fill"></i> {% translate 'Newest' %}</a></li>
@@ -16,4 +15,13 @@
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" aria-disabled="true" href="#"><i class="bi bi-cart4"></i> {% translate 'Purchase Orders' %}</a></li>
     </ul>
+</li> -->
+
+<li class="nav-item">
+    <a 
+        class="nav-link nav-section" tabindex="-1"
+        aria-disabled="true" href="#">
+            <i class="bi bi-rocket-takeoff-fill"></i>
+            {% translate 'Dashboard' %}
+    </a>
 </li>

@@ -3,8 +3,9 @@
 
 {% get_current_language as LANGUAGE_CODE %}
 {% get_current_language_bidi as LANGUAGE_BIDI %}
+
 <!DOCTYPE html>
-<html>
+<html dir="{% if LANGUAGE_BIDI %}rtl{% else %}ltr{% endif %}">
 
 <head>
     <title>{% block title %}{% endblock title %}</title>

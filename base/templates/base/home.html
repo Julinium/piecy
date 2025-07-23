@@ -5,9 +5,8 @@
 {% block content %}
 <div class="text-center">
     <img class="img-fluid p-2" src="{% static 'images/goal.svg' %}" style="max-width: 20rem;" alt="Goal">
-    <!-- <h2 class="p-1">{% translate "It's working." %}</h2> -->
     <h2 class="p-1">{% translate "It's going to work." %}</h2>
-    {% if request.user.is_authenticated %}
+    <!-- {% if request.user.is_authenticated %}
     <div class="p-2">
         <p>You are logged in as: {{ request.user.username }}</p>
         <a href="{% url 'account_logout' %}" class="btn btn-outline-warning px-3">Logout</a>
@@ -16,6 +15,6 @@
         <p>You are not logged in</p>
         <a href="{% url 'account_login' %}" class="btn btn-primary px-3">Login</a>
         <a href="{% url 'account_signup' %}" class="btn btn-outline-success px-3">Signup</a>
-    {% endif %}
+    {% endif %} -->
 </div>
 {% endblock content %}
