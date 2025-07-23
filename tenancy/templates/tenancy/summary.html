@@ -84,7 +84,7 @@
                         {% if admin == request.user %}
                             <span class="text-success">({% trans "Vous" %})</span>                                
                         {% endif %}
-                        {{ admin.username }} (<span class="fw-bold">{% trans "Admin" %}</span>)
+                        {{ admin.username }} - <a href="mailto:{{ admin.email }}">{{ admin.email }}</a> (<span class="fw-bold">{% trans "Admin" %}</span>)
                         {% if not admin.is_active %}
                             <span class="text-danger">({% trans "Désactivé" %})</span>                                
                         {% endif %}
@@ -95,7 +95,7 @@
                         {% if user == request.user %}
                             <span class="text-success">({% trans "Vous" %})</span>                                
                         {% endif %}
-                        {{ user.username }}
+                        {{ user.username }} - <a href="mailto:{{ user.email }}">{{ user.email }}</a>
                         {% if not user.is_active %}
                             <span class="text-danger">({% trans "Désactivé" %})</span>                                
                         {% endif %}

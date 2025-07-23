@@ -1,42 +1,38 @@
-{% load i18n %}
 {% load static %}
+{% load i18n %}
+<!-- {% load extras %} -->
 
-<nav class="navbar navbar-expand-md" aria-label="Navbar">
-    <div class="container-fluid px-0">
-        {% include 'base/includes/menu-brand.html' %}
-        <button class="navbar-toggler px-2"
-            type="button" data-bs-toggle="collapse" data-bs-target="#navbarino" aria-controls="navbarino"
-            aria-expanded="false" aria-label="Toggle navigation"> 
-            <span class="navbar-toggler-icon"></span> 
-        </button>
-        <div class="collapse navbar-collapse" id="navbarino">
-            <ul class="navbar-nav me-auto mb-2 mb-md-0">
-                <!-- <li class="nav-item"> <a class="nav-link active" aria-current="page" href="#">Home</a> </li> -->
-                <li class="nav-item"> <a class="nav-link" href="#">Link</a> </li>
-                <li class="nav-item"> <a class="nav-link disabled" aria-disabled="true">Disabled</a> </li>
-                <li class="nav-item dropdown"> <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown"
-                        aria-expanded="false">Dropdown</a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <span>
+{% get_current_language as LANGUAGE_CODE %}
+
+
+<nav class="navbar navbar-expand-lg pt-2 mb-4 bg-light sticky-top shadow">
+  <div class="container container-fluid">
+    {% include 'base/includes/menu-brand.html' %}
+    <button class="navbar-toggler border-0 px-1" type="button" 
+        data-bs-toggle="collapse" data-bs-target="#navbarToggler"
+        aria-controls="navbarToggler" aria-expanded="false" 
+        style="outline: none; box-shadow: none;"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+      
+    <div class="collapse navbar-collapse" id="navbarToggler">
+      
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
+            {% include 'base/includes/menu-dash.html' %}
+            {% include 'base/includes/menu-stock.html' %}
+            {% include 'base/includes/menu-buying.html' %}
+            {% include 'base/includes/menu-selling.html' %}
+          </ul>
+
+          <span>
               <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll text-end">
-                <div class="d-flex justify-content-end">
-                    {% include 'base/includes/menu-user.html' %}
-                </div>
+                {% include 'base/includes/menu-user.html' %}
+                {% include 'base/includes/menu-langs.html' %}
+
               </ul>
-            </span>
-            <span>
-              <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll text-end">
-                <div class="d-flex justify-content-end">
-                    {% include 'base/includes/menu-langs.html' %}
-                </div>
-              </ul>
-            </span>
-        </div>
+          </span>
+      
     </div>
+  </div>
 </nav>

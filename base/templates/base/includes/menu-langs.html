@@ -4,34 +4,26 @@
 
 {% get_current_language as LANGUAGE_CODE %}
 
-
-<div id="languages"  class="d-flex align-items-center text-small fw-light">
-    <div class="btn-group dropdown">
-        <button type="button" class="btn px-2 dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            <img
-                class="img-fluid p-0" width="24" height="24"
-                src="{% static 'flags/' %}{{ LANGUAGE_CODE }}.svg"
-                alt="{{ LANGUAGE_CODE|upper }}">
-        </button>
-        <ul class="dropdown-menu">
-            {% for code, name in LANGUAGES %}
-                {% if code != LANGUAGE_CODE %}
-                    {% with arg=LANGUAGE_CODE|add:","|add:code %}
-                        <li>
-                            <a class="dropdown-item"
-                                href="{{ request.path|replace:arg }}"
-                                data-bs-toggle="tooltip" title="{{ name|capfirst }} ({{ code }})">
-                                <img
-                                    class="img-fluid p-0" width="24" height="24"
-                                    src="{% static 'flags/' %}{{ code }}.svg"
-                                    alt="{{ code|upper }}"><span class="px-2">{{ name|capfirst }} - {{ code|upper }}</span>
-                            </a>
-                        </li>
-                    {% endwith %}
-                {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-</div>
-
-<!-- TODO: Review radio box styling in allauth -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img height="20" src="{% static 'flags/' %}{{ LANGUAGE_CODE }}.svg" alt="{{ LANGUAGE_CODE|upper }}">
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+        {% for code, name in LANGUAGES %}            
+            {% with arg=LANGUAGE_CODE|add:","|add:code %}
+                <li>
+                    <a class="px-2 dropdown-item"
+                    href="{% if code != LANGUAGE_CODE %}{{ request.path|replace:arg }}{% else %}#{% endif %}" 
+                    data-bs-toggle="tooltip" title="{{ name|capfirst }} ({{ code }})" type="button">
+                        <img 
+                            src="{% static 'flags/' %}{{ code }}.svg"
+                            height="20" 
+                            alt="{{ code|upper }}">
+                            <span class="px-2{% if code == LANGUAGE_CODE %} fw-bold disabled{% endif %}">{{ name|capfirst }} - {{ code|upper }}</span>
+                    </a>
+                </li>
+            {% endwith %}
+            {% if not forloop.last %}<li><hr class="dropdown-divider my-2"></li> {% endif %}
+        {% endfor %}
+    </ul>
+</li>

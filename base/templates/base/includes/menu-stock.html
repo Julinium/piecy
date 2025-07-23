@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="portalScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-search"></i> {% translate 'Stocks' %}
+            <!-- <span class="badge mb-2 px-1 text-white bg-danger"> </span> -->
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="portalScrollingDropdown">
+        <li><a class="dropdown-item" href="#"><i class="bi bi-hourglass-split"></i> {% translate 'Expiring' %}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#"><i class="bi bi-menu-app-fill"></i> {% translate 'Newest' %}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark-heart-fill"></i> {% translate 'My Favourites' %}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" aria-disabled="true" href="#"><i class="bi bi-opencollective"></i> {% translate 'Insights' %}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" aria-disabled="true" href="#"><i class="bi bi-cart4"></i> {% translate 'Purchase Orders' %}</a></li>
+    </ul>
+</li>

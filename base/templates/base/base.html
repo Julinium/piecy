@@ -25,19 +25,23 @@
 
 <body>
     <div id="main-content">
+        {% include 'base/includes/navbar.html' %}
         <div class="container mt-4">
             <div class="row justify-content-center">
                 <div class="col col-md col-lg-10 col-xl-8">
-                    {% include 'base/includes/navbar.html' %}
                     {% include 'base/includes/messages.html' %}
                     {% block content %}{% endblock content %}
                     <!-- <div class="py-5"></div> -->
-                    <hr class="my-5">
-                    <div class="py-5">
-                        {% include 'base/includes/footer.html' %}
-                    </div>
                 </div>
             </div>
+            <hr class="py-4">
+            <div class="row justify-content-center">
+                <div class="col col-md col-lg-10 col-xl-8">
+                    {% include 'base/includes/footer.html' %}
+                </div>
+            </div>
+
+            <div class="py-4"> </div>
         </div>
     </div>
 </body>
