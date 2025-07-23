@@ -3,7 +3,7 @@ from django.urls import path
 from tenancy import views
 
 urlpatterns = [
-    path('', views.tenant, name='tenancy_home'),
+    path('summary/', views.summary, name='tenancy_summary'),
     # path('about', views.about, name='base_about'),
     # path('legal', views.legal, name='base_legal'),
     # path('faqs', views.faqs, name='base_faqs'),

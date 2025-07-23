@@ -33,29 +33,3 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
 @receiver(post_delete, sender=Utilisateur)
 def utilisateur_deleted(sender, instance, **kwargs):
     print(f"Object deleted: {instance}")
-
-
-# def create_tenant(utilisateur):
-#     print(f" +++++++++++++++++++++ Creating Tenant for {utilisateur} (id={utilisateur.created_by})")
-#     create_tenant = False
-#     if utilisateur.created_by:
-#         print(f"cccccccccccccccccccccccccccccccccccccccccccccc")
-#         creator = Utilisateur.objects.filter(id=utilisateur.created_by).first()
-#         if not creator.tenant: create_tenant = True
-#     else: create_tenant = True
-    
-#     if create_tenant :
-#         biz_name = utilisateur.last_name if utilisateur.last_name else  utilisateur.username 
-#         tenant = Tenant(
-#             name = f'Pièces Auto {biz_name.title()}',
-#             owner = f'{utilisateur.first_name} {biz_name}',
-#             email = utilisateur.email,
-#             created_by_user = utilisateur.username,
-#             created_by = utilisateur.id
-#         )
-#         try:
-#             print(f" +++++++++++++++ Saving Tenant { tenant }")
-#             tenant.save()
-#             utilisateur.tenant = tenant
-#         except Exception as xc:
-#             print(f'Error while creating Tenant: {str(xc)}')

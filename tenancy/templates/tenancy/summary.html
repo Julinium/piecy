@@ -3,7 +3,7 @@
 {% load extras %}
 
 {% block title %}
-{% trans "Tenancy details" %}
+    {% trans "Sommaire Entreprise" %}
 {% endblock title %}
 
     <!-- 
@@ -20,23 +20,45 @@
     {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %} {% endwith %}
 
     <!-- Subscription status -->
+    <div class="card mb-4">
+        <div class="card-header text-success fs-5">
+            {% trans "État de l'Abonnement" %}
+        </div>
+        <div class="card-body">
+            <h5 class="card-title text-danger fw-bold">Coming soon !</h5>
+            <p class="card-text">We are working hard to get this done. Apologies for any inconvenience we may have caused.</p>
+            <a href="#" class="btn btn-outline-primary">Go Home</a>
+        </div>
+    </div>
+
     <!-- Tenant Details -->
+    <h4>{% trans 'Subscription status' %}</h4>
+    {% if not tenant.active %}
+    <p class="fw-bold fs-1 text-danger p-3">{% trans 'ENTREPRISE DÉSACTIVÉE' %}</p>
+    <a href="#" class="btn btn-lg btn-warning">{% trans 'Nous contacter' %}</a>
+    {% endif %}
+
     <!-- Tenant Admins -->
     <!-- Tenant Users -->
+    <!-- Tenant Actions -->
 
 
     <table class="table">
-    {% for label, value in fields %}
-            <tr class="border-bottom">
-                <td>
-                    <small class="text-muted">{{ label }}:</small><br>
-                    {% if value %} <strong>{{ value }}</strong> {% endif %}
-                </td>
-            </tr>
-    {% empty %}
-        <p class="text-danger">Empty Record !</p>
-    {% endfor %}
+        <tr class="border-bottom">
+            <td>
+                <small class="text-muted">{% trans 'Nom Entreprise' %} | {% trans 'Propriétaire' %}</small><br>
+                <strong>{{ tenant.name }} | {{ tenant.owner }}</strong>
+            </td>
+        </tr>
+        <tr class="border-bottom">
+            <td>
+                <small class="text-muted">{% trans 'Addresse' %}</small><br>
+                <strong>{{ tenant.city }} - {{ tenant.country }}</strong>
+            </td>
+        </tr>
+    </table>
 
+    <table class="table">
         <tr class="border-bottom">
             <td>
                 <small class="text-muted">{% trans 'Admins' %} ({{ admins.count }}):</small><br>
