@@ -20,7 +20,7 @@
     {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %} {% endwith %}
 
     {% if not tenant.active %}
-    <div class="card mb-4 shadow shadow-lg">
+    <div class="card mb-4 shadow shadow">
         <div class="card-header fw-bold fs-5 bg-danger text-center text-light">
             {% trans "ENTREPRISE DÉSACTIVÉE" %}
         </div>
@@ -35,86 +35,77 @@
     </div>
     {% endif %}
 
-    <!-- Subscription status -->
-    <div class="card mb-4 shadow">
-        <div class="card-header fs-5 bg-danger-subtle"">
-            {% trans "État de l'Abonnement" %}
-        </div>
-        <div class="card-body">
-            <h5 class="card-title text-danger fw-bold">Coming soon !</h5>
-            <p class="card-text">We are working hard to get this done. Apologies for any inconvenience we may have caused.</p>
-            <div class="">
-                <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-primary">{% trans 'Renouveler' %}</a>
-                <a href="{% url 'tenancy_sub_upgrade' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Améliorer' %}</a>
-                <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique' %}</a>
-                <a href="{% url 'tenancy_sub_cancel' %}" class="me-2 mb-2 btn btn-outline-danger">{% trans 'Annuler' %}</a>
+    {% if tenant.active %}
+        <!-- Subscription status -->
+        <div class="card mb-4 shadow">
+            <div class="card-header fs-5 bg-danger-subtle"">
+                {% trans "État de l'Abonnement" %}
+            </div>
+            <div class="card-body">
+                <h5 class="card-title text-danger fw-bold">Coming soon !</h5>
+                <p class="card-text">We are working hard to get this done. Apologies for any inconvenience we may have caused.</p>
+                <div class="">
+                    <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-primary">{% trans 'Renouveler' %}</a>
+                    <a href="{% url 'tenancy_sub_upgrade' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Améliorer' %}</a>
+                    <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique' %}</a>
+                    <a href="{% url 'tenancy_sub_cancel' %}" class="me-2 mb-2 btn btn-outline-danger">{% trans 'Annuler' %}</a>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Tenant Details -->
-    <br class="mt-4">
-    <div id="tenant-details" class="mb-4">
-        <h4>{% trans "Détails de l'Entreprise" %}</h4>
+        <!-- Tenant Details -->
+        <br class="mt-4">
+        <div id="tenant-details" class="mb-4">
+            <h4>{% trans "Détails de l'Entreprise" %}</h4>
 
-        <ul class="list-group">
-            <li class="list-group-item">
-                <small class="text-muted">{% trans 'Nom Entreprise' %} | {% trans 'Propriétaire' %}</small><br>
-                <strong>{{ tenant.name }} | {{ tenant.owner }}</strong>
-            </li>
-            <li class="list-group-item">
-                <small class="text-muted">{% trans 'Addresse' %}</small><br>
-                <strong>{{ tenant.city }} - {{ tenant.country }}</strong>
-            </li>
-        </ul>
-
-        <!-- <table class="table">
-            <tr class="border-bottom">
-                <td>
-                </td>
-            </tr>
-            <tr class="border-bottom">
-                <td>
-                </td>
-            </tr>
-        </table> -->
-        <div id="tenant-actions" class="mt-2">
-            <a href="{% url 'tenancy_details' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Modifier les détails' %}</a>
-            <!-- <a href="#" class="me-2 mb-2 btn btn-outline-primary">{% trans 'En savoir plus' %}</a> -->
-        </div>
-    </div>
-
-    <!-- Tenant Users -->
-    <br class="mt-4">
-    <div id="tenant-admins" class="mb-4">
-        <h4>{% trans "Utilisateurs" %}: {{ admins.count|add:users.count }}</h4>
-        <ul class="list-group">
-            {% for admin in admins %}
+            <ul class="list-group">
                 <li class="list-group-item">
-                    {% if admin == request.user %}
-                        <span class="text-success">({% trans "Vous" %})</span>                                
-                    {% endif %}
-                    {{ admin.username }} (<span class="fw-bold">{% trans "Admin" %}</span>)
-                    {% if not admin.is_active %}
-                        <span class="text-danger">({% trans "Désactivé" %})</span>                                
-                    {% endif %}
+                    <small class="text-muted">{% trans 'Nom Entreprise' %} | {% trans 'Propriétaire' %}</small><br>
+                    <strong>{{ tenant.name }} | {{ tenant.owner }}</strong>
                 </li>
-            {% endfor %}
-            {% for user in users %}
                 <li class="list-group-item">
-                    {% if user == request.user %}
-                        <span class="text-success">({% trans "Vous" %})</span>                                
-                    {% endif %}
-                    {{ user.username }}
-                    {% if not user.is_active %}
-                        <span class="text-danger">({% trans "Désactivé" %})</span>                                
-                    {% endif %}
+                    <small class="text-muted">{% trans 'Addresse' %}</small><br>
+                    <strong>{{ tenant.city }} - {{ tenant.country }}</strong>
                 </li>
-            {% endfor %}
-        </ul>
-        <div id="admins-actions" class="mt-2">
-            <a href="{% url 'tenancy_users' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Gestion des Utilisateurs' %}</a>
+            </ul>
+            <div id="tenant-actions" class="mt-2">
+                <a href="{% url 'tenancy_details' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Modifier les détails' %}</a>
+                <!-- <a href="#" class="me-2 mb-2 btn btn-outline-primary">{% trans 'En savoir plus' %}</a> -->
+            </div>
         </div>
-    </div>
+
+        <!-- Tenant Users -->
+        <br class="mt-4">
+        <div id="tenant-admins" class="mb-4">
+            <h4>{% trans "Utilisateurs" %}: {{ admins.count|add:users.count }}</h4>
+            <ul class="list-group">
+                {% for admin in admins %}
+                    <li class="list-group-item">
+                        {% if admin == request.user %}
+                            <span class="text-success">({% trans "Vous" %})</span>                                
+                        {% endif %}
+                        {{ admin.username }} (<span class="fw-bold">{% trans "Admin" %}</span>)
+                        {% if not admin.is_active %}
+                            <span class="text-danger">({% trans "Désactivé" %})</span>                                
+                        {% endif %}
+                    </li>
+                {% endfor %}
+                {% for user in users %}
+                    <li class="list-group-item">
+                        {% if user == request.user %}
+                            <span class="text-success">({% trans "Vous" %})</span>                                
+                        {% endif %}
+                        {{ user.username }}
+                        {% if not user.is_active %}
+                            <span class="text-danger">({% trans "Désactivé" %})</span>                                
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <div id="admins-actions" class="mt-2">
+                <a href="{% url 'tenancy_users' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Gestion des Utilisateurs' %}</a>
+            </div>
+        </div>    
+    {% endif %}
 
 {% endblock content %}
