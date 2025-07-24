@@ -202,6 +202,7 @@ class Plan(models.Model):
 
     max_users = models.SmallIntegerField(blank=True, null=True)
     max_clients = models.SmallIntegerField(blank=True, null=True)
+    max_magasins = models.SmallIntegerField(blank=True, null=True)
     max_products = models.SmallIntegerField(blank=True, null=True)
     max_pdfs = models.SmallIntegerField(blank=True, null=True)
     max_excels = models.SmallIntegerField(blank=True, null=True)
@@ -216,7 +217,7 @@ class Plan(models.Model):
 
     class Meta:
         db_table = 'plan'
-    
+        ordering = ['ordre']
     def __str__(self):
         return f'{self.name}'
 

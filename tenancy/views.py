@@ -13,6 +13,10 @@ from back.models import Tenant, Utilisateur, Subscription
 SUB_DAYS_WARNING = 90
 SUB_DAYS_DANGER = 30
 
+TRIAL_DAYS = 30
+
+today = now().date()
+
 @login_required(login_url="account_login")
 def summary(request):
     user = request.user
@@ -20,7 +24,6 @@ def summary(request):
         if user.is_active:
             tenant = user.tenant
             if tenant:
-                today = now().date()
                 admins = tenant.workers.filter(is_tenant_admin = True)
                 users = tenant.workers.exclude(is_tenant_admin = True)
 
@@ -70,8 +73,13 @@ def trial(request):
         if user.is_active:
             tenant = user.tenant
             if tenant:
+                trial_date_start = today
+                trial_date_end = today + timedelta(days=TRIAL_DAYS) 
                 
-                context = {}
+                context = {
+                    'trial_date_start' : trial_date_start,
+                    'trial_date_end'   : trial_date_end,
+                }
                 return render(request, 'tenancy/trial.html', context)
 
 

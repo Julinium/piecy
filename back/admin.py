@@ -80,7 +80,7 @@ class PlanAdmin(admin.ModelAdmin):
     #######################
 
 
-    list_display = ("name", "active", "monthly_price", "ordre", 'header')
+    list_display = ("name", "active", "monthly_price", 'header')
     # fieldsets = (
     #     ("Basics", {"fields": ("active", "name", "owner")}),
     #     ("Contact", {"fields": ("email", "phone", "whatsapp", "address")}),

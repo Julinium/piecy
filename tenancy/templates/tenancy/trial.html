@@ -14,18 +14,18 @@
     {% endwith %}
 
     {% if request.user.is_authenticated and request.user.is_tenant_admin %}
-        <ul class="list-group mb-3">
-            <li class="list-group-item">
-                <small class="text-muted">{% trans 'Date début' %}</small><br>
-                <div>{{ current_subscription.date_fm }}</div>
-            </li>
-            <li class="list-group-item bg-{{ tint }}-subtle">
-                <small class="text-muted">{% trans 'Date fin' %}</small><br>
-                <strong>{{ current_subscription.date_to }}</strong>
-            </li>            
-        </ul>
         <form method="post">
             {% csrf_token %}
+            <ul class="list-group mb-3">
+                <li class="list-group-item">
+                    <small class="text-muted">{% trans 'Date début' %}</small><br>
+                    <div>{{ trial_date_start }}</div>
+                </li>
+                <li class="list-group-item bg-{{ tint }}-subtle">
+                    <small class="text-muted">{% trans 'Date fin' %}</small><br>
+                    <strong>{{ trial_date_end }}</strong>
+                </li>            
+            </ul>
             <a href="{% url 'tenancy_sub_renew' %}" type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Activer période d'éssai" %}</a>
         </form>
 
