@@ -17,7 +17,8 @@
 
     <!-- Header -->
     {% with avatar=tenant.logo headline=tenant.name subtitle=tenant.owner %}
-    {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %} {% endwith %}
+        {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
+    {% endwith %}
 
     {% if not tenant.active %}
     <div class="card mb-4 shadow shadow">
@@ -52,7 +53,7 @@
                         {% if can_try %}
                             <a href="{% url 'tenancy_trial' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Essai Gratuit" %}</a>
                         {% endif %}
-                        <a href="{% url 'base_coming' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +77,7 @@
                             {% if request.user.is_authenticated and request.user.is_tenant_admin %}
                                 <div id="sub-actions" >
                                     <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Acheter un Abonnement" %}</a>
-                                    <a href="{% url 'base_coming' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
+                                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
                                 </div>
                             {% else %}
                                 <p class="card-text">{% trans "Contacter votre administrateur en cas de besoin." %}</p>
@@ -95,7 +96,6 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <!-- <h5 class="card-title"><small class="text-muted">{% trans 'Plan' %}: </small><strong class="fw-bold">{{ current_subscription.plan }}</strong></h5> -->
                             <ul class="list-group mb-3">
                                 <li class="list-group-item">
                                     <small class="text-muted">{% trans 'Date début' %}</small><br>

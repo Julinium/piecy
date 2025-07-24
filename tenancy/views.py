@@ -64,9 +64,15 @@ def summary(request):
 
 
 @login_required(login_url="account_login")
-def trial(request):
-    context = {}
-    return render(request, 'tenancy/trial.html', context)
+def trial(request):    
+    user = request.user
+    if user:
+        if user.is_active:
+            tenant = user.tenant
+            if tenant:
+                
+                context = {}
+                return render(request, 'tenancy/trial.html', context)
 
 
 

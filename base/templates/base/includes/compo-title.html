@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 
 <div class="d-flex-row text-center py-3">
     
@@ -9,7 +10,7 @@
     {% if headline %}
         <div id="header-headline" class="">
             <h2>
-                {{ headline }}
+                    {{ headline }}
             </h2>
         </div>
     {% endif %}
@@ -17,7 +18,7 @@
     {% if subtitle %}
         <div id="header-subtitle" class="">
             <p class="small text-muted">
-                {{ subtitle }}
+                    {{ subtitle }}
             </p>
         </div>
     {% endif %}

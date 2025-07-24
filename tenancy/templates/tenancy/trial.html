@@ -3,8 +3,40 @@
 {% load static %}
 
 {% block content %}
-<div class="text-center">
-    <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
-    <h2 class="p-1 my-3">{% translate "Activation Essai gratuit" %}</h2>
-</div>
+    <!-- <div class="text-center">
+        <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
+        <h2 class="p-1 my-3">{% translate "Activation Essai gratuit" %}</h2>
+    </div> -->
+
+    <!-- Header -->
+    {% with headline=_("Activation Essai gratuit") subtitle=_("Bénéficiez d'une période d'essai gratuite pour découvrir toutes les fonctionnalités de notre applications") %}
+        {% include "base/includes/compo-title.html" with headline=headline subtitle=subtitle %}
+    {% endwith %}
+
+    {% if request.user.is_authenticated and request.user.is_tenant_admin %}
+        <ul class="list-group mb-3">
+            <li class="list-group-item">
+                <small class="text-muted">{% trans 'Date début' %}</small><br>
+                <div>{{ current_subscription.date_fm }}</div>
+            </li>
+            <li class="list-group-item bg-{{ tint }}-subtle">
+                <small class="text-muted">{% trans 'Date fin' %}</small><br>
+                <strong>{{ current_subscription.date_to }}</strong>
+            </li>            
+        </ul>
+        <form method="post">
+            {% csrf_token %}
+            <a href="{% url 'tenancy_sub_renew' %}" type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Activer période d'éssai" %}</a>
+        </form>
+
+        <div id="admins-actions" class="mt-2 mb-4">
+            <p>{% translate "Vous pouvez à tout moment souscrire un Abonnement pour continuer à utiliser l'application" %}.</p>
+            <div>
+                <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Souscrire un Abonnement' %}</a>
+                <a href="{% url 'tenancy_summary' %}" type="button" class="me-2 mb-2 btn btn-outline-primary">{% trans "Annuler" %}</a>
+            </div>
+        </div>
+        {% else %}
+            <p class="text-danger">{% trans "Vous n'avez pas les permissions requises pour effectuer cette opération. Contactez votre Administrateur." %}</p>
+    {% endif %}
 {% endblock content %}
