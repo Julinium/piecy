@@ -7,6 +7,18 @@ def home(request):
     context = {}
     return render(request, 'base/home.html', context)
 
-def coming_soon(request):
+def about(request):
     context = {}
-    return render(request, 'base/coming-soon.html', context)
+    return render(request, 'base/about.html', context)
+
+def contact(request):
+    context = {}
+    return render(request, 'base/contact.html', context)
+
+def legal(request):
+    context = {}
+    return render(request, 'base/legal.html', context)
+
+def coming(request):
+    context = {}
+    return render(request, 'base/coming.html', context)

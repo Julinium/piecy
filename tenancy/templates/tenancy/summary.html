@@ -45,14 +45,14 @@
                 </div>
                 <div class="card-body bg-danger-subtle">
                     <p class="card-text">{% trans "Votre Entreprise n'a pas d'Abonnement actif en ce moment. Un Abonnement est nécessaire pour continuer à utiliser cette application." %}
-                        <span class="text-danger">{% trans "Vous risquez de perdre vos données à jamais si vous restez sans Abonnement actif pour longtemps." %} !</span>
+                        {% if not can_try %}<span class="text-danger">{% trans "Vous risquez de perdre vos données à jamais si vous restez sans Abonnement actif pour longtemps." %} !</span>{% endif %}
                     </p>
                     <div class="">
-                        <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-success">{% trans "Activer un Abonnement" %}</a>
-                        {% if tenant.can_try %}
-                            <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Essai Gratuit" %}</a>
+                        <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Activer un Abonnement" %}</a>
+                        {% if can_try %}
+                            <a href="{% url 'tenancy_trial' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Essai Gratuit" %}</a>
                         {% endif %}
-                        <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                        <a href="{% url 'base_coming' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
             </div>
@@ -76,7 +76,7 @@
                             {% if request.user.is_authenticated and request.user.is_tenant_admin %}
                                 <div id="sub-actions" >
                                     <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Acheter un Abonnement" %}</a>
-                                    <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
+                                    <a href="{% url 'base_coming' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
                                 </div>
                             {% else %}
                                 <p class="card-text">{% trans "Contacter votre administrateur en cas de besoin." %}</p>

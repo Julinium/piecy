@@ -5,9 +5,10 @@ from base import views
 
 urlpatterns = [
     path('', views.home, name='base_home'),
-    path('coming/', views.coming_soon, name='base_coming_soon'),
-    # path('about', views.about, name='base_about'),
-    # path('legal', views.legal, name='base_legal'),
+    path('coming/', views.coming, name='base_coming'),
+    path('about', views.about, name='base_about'),
+    path('contact/', views.contact, name='base_contact'),
+    path('legal', views.legal, name='base_legal'),
     # path('faqs', views.faqs, name='base_faqs'),
     # path('contact', views.contact, name='base_contact'),
     # path('contact_success', views.contact_success, name='base_contact_success'),

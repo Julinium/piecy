@@ -24,7 +24,7 @@ def summary(request):
                 admins = tenant.workers.filter(is_tenant_admin = True)
                 users = tenant.workers.exclude(is_tenant_admin = True)
 
-                all_subscriptions  = subscriptions.filter(tenant=tenant)
+                all_subscriptions  = Subscription.objects.filter(tenant=tenant)
                 subscriptions = all_subscriptions.filter(active=True)
                 active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
                 current_subscription = active_subscriptions.last()
@@ -60,6 +60,13 @@ def summary(request):
             return HttpResponse(_('Tenant not found !'), status=404)
         return HttpResponse(_('User inactive'), status=403)
     return HttpResponse(_('User not found!'), status=404)
+
+
+
+@login_required(login_url="account_login")
+def trial(request):
+    context = {}
+    return render(request, 'tenancy/trial.html', context)
 
 
 
