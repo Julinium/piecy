@@ -7,10 +7,11 @@ from .models import Utilisateur, Tenant
 def utilisateur_created_or_updated(sender, instance, created, **kwargs):
     if created:
         create_tenant = False
-        if instance.created_by:
-            creator = Utilisateur.objects.filter(id=instance.created_by).first()
-            if not creator.tenant: create_tenant = True
-        else: create_tenant = True
+        if not instance.is_superuser:
+            if instance.created_by:
+                creator = Utilisateur.objects.filter(id=instance.created_by).first()
+                if not creator.tenant: create_tenant = True
+            else: create_tenant = True
         
         if create_tenant :
             biz_name = instance.last_name if instance.last_name else  instance.username 

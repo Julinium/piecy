@@ -23,16 +23,15 @@ def summary(request):
                 today = now().date()
                 admins = tenant.workers.filter(is_tenant_admin = True)
                 users = tenant.workers.exclude(is_tenant_admin = True)
-                active_subscriptions  = Subscription.objects.filter(
-                    active=True,
-                    tenant=tenant, 
-                    date_fm__lte=today, 
-                    date_to__gte=today
-                    ).order_by('date_to')
+
+                subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+                active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
                 current_subscription = active_subscriptions.last()
 
+                can_try = False if subscriptions else True
+
                 days_remaining = 0
-                if current_subscription: 
+                if current_subscription:
                     delta = current_subscription.date_to - today
                     days_remaining = delta.days
 
@@ -50,6 +49,7 @@ def summary(request):
                     "days_remaining"       : days_remaining, 
                     "active_subscriptions" : active_subscriptions, 
                     "current_subscription" : current_subscription, 
+                    "can_try"              : can_try,
                     "tint"                 : tint, 
                     "admins"               : admins, 
                     "users"                : users

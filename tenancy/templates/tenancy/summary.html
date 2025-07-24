@@ -26,7 +26,7 @@
         </div>
         <div class="card-body bg-danger-subtle">
             <!-- <h5 class="card-title text-danger fw-bold">Coming soon !</h5> -->
-            <p class="card-text">We are working hard to get this done. Apologies for any inconvenience we may have caused.</p>
+            <p class="card-text">{% trans 'Cette Entreprise est désactivée. Merci de contacter notre Service Clients pour résoudre ce problème' %}.</p>
             <div class="">
                 <!-- <a href="#" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Plus de détails' %}</a> -->
                 <a href="#" class="me-2 mb-2 btn btn-primary">{% trans 'Nous Contacter' %}</a>
@@ -48,8 +48,9 @@
                         <span class="text-danger">{% trans "Vous risquez de perdre vos données à jamais si vous restez sans Abonnement actif pour longtemps." %} !</span>
                     </p>
                     <div class="">
-                        <a href="#" class="me-2 mb-2 btn btn-success">{% trans "Acheter un Abonnement" %}</a>
-                        <a href="#" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                        <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-success">{% trans "Activer un Abonnement" %}</a>
+                        <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Essai Gratuit" %}</a>
+                        <a href="{% url 'base_coming_soon' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
             </div>

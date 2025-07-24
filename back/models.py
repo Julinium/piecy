@@ -8,7 +8,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Permis
 class Tenant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(verbose_name=_("Activé"), blank=True, null=True, default=True)
-    onboarded = models.BooleanField(verbose_name=_("Activé"), blank=True, null=True, default=False)
+    onboarded = models.BooleanField(verbose_name=_("Onboarded"), blank=True, null=True, default=False)
+    can_try = models.BooleanField(verbose_name=_("Peut tester"), blank=True, null=True, default=True)
     name = models.CharField(verbose_name=_("Nom"), max_length=128, blank=True, null=True)
 
     email = models.CharField(verbose_name=_("Email"), max_length=128, blank=True, null=True)
