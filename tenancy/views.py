@@ -24,7 +24,8 @@ def summary(request):
                 admins = tenant.workers.filter(is_tenant_admin = True)
                 users = tenant.workers.exclude(is_tenant_admin = True)
 
-                subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+                all_subscriptions  = subscriptions.filter(tenant=tenant)
+                subscriptions = all_subscriptions.filter(active=True)
                 active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
                 current_subscription = active_subscriptions.last()
 
