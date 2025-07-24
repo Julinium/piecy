@@ -93,7 +93,7 @@
                         </div>
                         <div class="card-body">
                             <!-- <h5 class="card-title"><small class="text-muted">{% trans 'Plan' %}: </small><strong class="fw-bold">{{ current_subscription.plan }}</strong></h5> -->
-                            <ul class="list-group mb-2">
+                            <ul class="list-group mb-3">
                                 <li class="list-group-item">
                                     <small class="text-muted">{% trans 'Date début' %}</small><br>
                                     <div>{{ current_subscription.date_fm }}</div>
@@ -103,20 +103,25 @@
                                     <strong>{{ current_subscription.date_to }}</strong>
                                 </li>
                                 {% if current_subscription.payment %}
-                                    {% if current_subscription.payment.verified %}
-                                        <li class="list-group-item">
-                                            <small class="text-muted">{% trans 'Date Paiment' %}</small><br>
-                                            <div>{{ current_subscription.payment.date_made }}</div>
-                                        </li>
-                                        <li class="list-group-item">
-                                            <small class="text-muted">{% trans 'Référence Paiment' %}</small><br>
-                                            <div>{{ current_subscription.payment.reference }}</div>
-                                        </li>
-                                    {% else %}
-                                        <li class="list-group-item">
-                                            <small class="text-danger">{% trans 'Paiment non Vérifié' %}. {% trans 'Contactez nous' %}. </small><br>
-                                        </li>
-                                    {% endif %}
+                                    <li class="list-group-item">
+                                        <small class="text-muted">{% trans 'Date Paiment' %}</small><br>
+                                        <div>{{ current_subscription.payment.date_made }}</div>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <small class="text-muted">{% trans 'Référence Paiment' %}</small><br>
+                                        <div>{{ current_subscription.payment.reference }}</div>
+                                        <div>
+                                            {% if current_subscription.payment.verified %}
+                                                <small class="text-success fw-bold">
+                                                    {% trans 'Paiment Vérifié' %}
+                                                </small>
+                                            {% else %}
+                                                <small class="text-danger fw-bold">
+                                                    {% trans 'Paiment non Vérifié' %} !
+                                                </small>
+                                            {% endif %}
+                                        </div>
+                                    </li>
                                 {% else %}
                                     <li class="list-group-item">
                                         <small class="text-muted">{% trans 'Aucun Paiment trouvé pour cet Abonnement' %} !</small><br>
@@ -140,7 +145,7 @@
         {% endif %}
 
         {% if request.user.is_authenticated and request.user.is_tenant_admin %}
-            <div id="admins-actions" class="mt-2">
+            <div id="admins-actions" class="mt-2 mb-4">
                 <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique des Abonnements' %}</a>
             </div>
         {% endif %}
