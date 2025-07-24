@@ -2,18 +2,15 @@
 
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="stockDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-search"></i> {% translate 'Stocks' %}
-            <!-- <span class="badge mb-2 px-1 text-white bg-danger"> </span> -->
+        <i class="bi bi-search"></i> {% translate 'Stock' %}
     </a>
     <ul class="dropdown-menu" aria-labelledby="stockDropdown">
-        <li><a class="dropdown-item" href="#"><i class="bi bi-hourglass-split"></i> {% translate 'Expiring' %}</a></li>
+        <li><a class="dropdown-item" href="{% url 'base_coming_soon' %}"><i class="bi bi-hourglass-split"></i> {% translate 'Recherche Article' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#"><i class="bi bi-menu-app-fill"></i> {% translate 'Newest' %}</a></li>
+        <li><a class="dropdown-item" href="{% url 'base_coming_soon' %}"><i class="bi bi-hourglass-split"></i> {% translate 'Vérifier Commande' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#"><i class="bi bi-bookmark-heart-fill"></i> {% translate 'My Favourites' %}</a></li>
+        <li><a class="dropdown-item" href="{% url 'base_coming_soon' %}"><i class="bi bi-menu-app-fill"></i> {% translate 'Inventaire' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" aria-disabled="true" href="#"><i class="bi bi-opencollective"></i> {% translate 'Insights' %}</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" aria-disabled="true" href="#"><i class="bi bi-cart4"></i> {% translate 'Purchase Orders' %}</a></li>
-    </ul>
+        <li><a class="dropdown-item" href="{% url 'base_coming_soon' %}"><i class="bi bi-bookmark-heart-fill"></i> {% translate 'Gestion Magasins' %}</a></li>
+</ul>
 </li>

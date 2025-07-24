@@ -6,3 +6,7 @@ from django.shortcuts import render
 def home(request):
     context = {}
     return render(request, 'base/home.html', context)
+
+def coming_soon(request):
+    context = {}
+    return render(request, 'base/coming-soon.html', context)

@@ -121,41 +121,13 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
         db_table = 'utilisateur'
         verbose_name = "User"
         ordering = ['-is_active', 'tenant', 'created_on', 'last_login', 'is_tenant_admin']
-    
-    # def save(self, *args, **kwargs):
-    #     is_new = self._state.adding
-    #     if is_new: # print("Creating object")
-    #         print(f"+++++++++++++++++++++++++++++++++++++++ {self.username}")
-    #         creator = Utilisateur.objects.get(id=self.created_by)
-    #         if not creator.tenant:
-    #             tenant = Tenant(
-    #                 name = f'Piéces Auto {self.last_name.upper()}',
-    #                 owner = f'{self.first_name} {self.last_name}',
-    #                 email = self.email,
-    #                 created_by_user = self.username,
-    #                 created_by = self.id
-    #             )
-    #             try:
-    #                 tenant.save()
-    #                 self.tenant = tenant
-    #             except Exception as xc:
-    #                 print(f'Error while creating Tenant: {str(xc)}')
-    #     else: # print("Updating object")
-    #         print(f"==========================================  {self.pk}")
-    #     super().save(*args, **kwargs)
-        
-        
-
-    # def delete(self, *args, **kwargs):
-    #     print("Deleting object")
-    #     super().delete(*args, **kwargs)
 
 
 
 class Subscription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
-    name = models.CharField(max_length=16, blank=True, null=True)
+    is_trial = models.BooleanField(blank=True, null=True, default=False)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
@@ -171,6 +143,8 @@ class Subscription(models.Model):
     class Meta:
         db_table = 'subscription'
 
+    def __str__(self):
+        return f'{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
 
 class SystemPayment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -180,7 +154,7 @@ class SystemPayment(models.Model):
     mode = models.CharField(max_length=32, blank=True, null=True)
     date_made = models.DateField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=16, blank=True, null=True)
+    currency = models.CharField(max_length=16, blank=True, null=True, default="MAD")
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
@@ -193,6 +167,10 @@ class SystemPayment(models.Model):
     class Meta:
         db_table = 'system_payment'
 
+    def __str__(self):
+        prefix = "VERIF" if self.verified else "UNVERIF"
+        return f'{prefix}#{self.amount}{self.currency}#-{self.maker}-{self.date_made}-{self.reference}'
+
 
 class Plan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -200,7 +178,6 @@ class Plan(models.Model):
     name = models.CharField(max_length=16, blank=True, null=True)
     header = models.CharField(max_length=128, blank=True, null=True)
     ordre = models.SmallIntegerField(blank=True, null=True)
-    # cta = models.CharField(max_length=128, blank=True, null=True, default=_('Free quote'))
     
     year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
     first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)

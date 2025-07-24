@@ -5,6 +5,7 @@ from base import views
 
 urlpatterns = [
     path('', views.home, name='base_home'),
+    path('coming/', views.coming_soon, name='base_coming_soon'),
     # path('about', views.about, name='base_about'),
     # path('legal', views.legal, name='base_legal'),
     # path('faqs', views.faqs, name='base_faqs'),

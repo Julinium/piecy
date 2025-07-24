@@ -18,24 +18,18 @@
                 <li>
                     <a class="dropdown-item" href="#"><i class="bi bi-person-circle"></i> {% translate 'Mon Profile' %}</a>
                 </li>
-                <li>
-                    <a class="dropdown-item" href="{% url 'tenancy_summary' %}"><i class="bi bi-person-circle"></i> {% translate 'Mon Entreprise' %}</a>
-                </li>
-                <li>
-                    <a class="dropdown-item" href="#"><i class="bi bi-person-circle"></i> {% translate 'Support' %}</a>
-                </li>
 
                 <li><hr class="dropdown-divider"></li>
 
                 <li>
-                    <a class="dropdown-item" href="#"><i class="bi bi-person-circle"></i> {% translate 'Réglages' %}</a>
+                    <a class="dropdown-item" href="#"><i class="bi bi-person-circle"></i> {% translate 'Préférences' %}</a>
                 </li>
 
             {% url 'account_email' as email_url_ %}
             {% if email_url_ %}
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item" href="{{ email_url_ }}"><i class="bi bi-person-circle"></i> {% translate "Changer d'Email" %}</a>
+                    <a class="dropdown-item" href="{{ email_url_ }}"><i class="bi bi-person-circle"></i> {% translate "Adresses Email" %}</a>
                 </li>
                 </li>
             {% endif %}
@@ -44,7 +38,7 @@
             {% if change_password_url_ %}
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                    <a class="dropdown-item" href="{{ change_password_url_ }}"><i class="bi bi-person-circle"></i> {% translate "Modifier Mot de passe" %}</a>
+                    <a class="dropdown-item" href="{{ change_password_url_ }}"><i class="bi bi-person-circle"></i> {% translate "Mot de passe" %}</a>
                 </li>
             {% endif %}
 
@@ -97,7 +91,7 @@
             {% endif %}
             <li><hr class="dropdown-divider"></li>
             <li>
-                <a href="#" class="dropdown-item fw-bold text-success">{% trans "Contact us" %}</a>
+                <a href="{% url 'base_coming_soon' %}" class="dropdown-item text-primary">{% trans "Nous Contacter" %}</a>
             </li>
 
         {% endif %}

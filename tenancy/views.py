@@ -1,10 +1,17 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
-from django.http import HttpResponse
-from django.utils.text import capfirst
-from back.models import Tenant, Utilisateur
+# from datetime import date, datetime, timedelta, timezone
+from datetime import timedelta
+from django.utils.timezone import now
 
+from django.http import HttpResponse
+# from django.utils.text import capfirst
+from back.models import Tenant, Utilisateur, Subscription
+
+
+SUB_DAYS_WARNING = 90
+SUB_DAYS_DANGER = 15
 
 @login_required(login_url="account_login")
 def summary(request):
@@ -13,27 +20,52 @@ def summary(request):
         if user.is_active:
             tenant = user.tenant
             if tenant:
-                # if tenant.active:
-                fields = [(capfirst(field.verbose_name), getattr(tenant, field.name)) for field in tenant._meta.fields]
-                admins = tenant.workers.filter(is_tenant_admin = True)#.order_by("-is_active")
-                users = tenant.workers.exclude(is_tenant_admin = True)#.order_by("-is_active")
+                today = now().date()
+                admins = tenant.workers.filter(is_tenant_admin = True)
+                users = tenant.workers.exclude(is_tenant_admin = True)
+                active_subscriptions  = Subscription.objects.filter(
+                    active=True,
+                    tenant=tenant, 
+                    date_fm__lte=today, 
+                    date_to__gte=today
+                    ).order_by('date_to')
+                current_subscription = active_subscriptions.last()
+
+                days_remaining = 0
+                if current_subscription: 
+                    delta = current_subscription.date_to - today
+                    days_remaining = delta.days
+
+                tint = 'secondary'
+                if days_remaining >= SUB_DAYS_WARNING: tint = "success"
+                elif SUB_DAYS_DANGER <= days_remaining < 90: tint = "warning"
+                elif 0 <= days_remaining < SUB_DAYS_DANGER: tint = "danger"
+
 
                 # Subscription status
                 # General required action: None, Renew, Upgrade, 
 
                 context = { 
-                    "tenant"   : tenant, 
-                    "fields"   : fields, 
-                    "admins"   : admins, 
-                    "users"    : users
+                    "tenant"               : tenant, 
+                    "days_remaining"       : days_remaining, 
+                    "active_subscriptions" : active_subscriptions, 
+                    "current_subscription" : current_subscription, 
+                    "tint"                 : tint, 
+                    "admins"               : admins, 
+                    "users"                : users
                 }
-                return render(request, 'tenancy/summary.html', context)
-                
-                # return HttpResponse(_('Tenant inactive'), status=403)
+
+                return render(request, 'tenancy/summary.html', context)                
             return HttpResponse(_('Tenant not found !'), status=404)
         return HttpResponse(_('User inactive'), status=403)
     return HttpResponse(_('User not found!'), status=404)
 
+
+
+@login_required(login_url="account_login")
+def users(request):
+    context = {}
+    return render(request, 'tenancy/users.html', context)
 
 
 
@@ -44,9 +76,9 @@ def details(request):
 
 
 @login_required(login_url="account_login")
-def users(request):
+def dashboard(request):
     context = {}
-    return render(request, 'tenancy/users.html', context)
+    return render(request, 'tenancy/dashboard.html', context)
 
 
 @login_required(login_url="account_login")

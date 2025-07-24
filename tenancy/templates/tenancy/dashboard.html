@@ -1,0 +1,12 @@
+
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+<div class="text-center">
+    <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
+    <h2 class="p-1 my-3">{% translate "Dashboard" %}</h2>
+    <p class="p-3 fw-bold fs-2">{% translate "Coming soon" %}</p>
+</div>
+{% endblock content %}

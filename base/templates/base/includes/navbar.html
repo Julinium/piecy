@@ -19,10 +19,17 @@
     <div class="collapse navbar-collapse" id="navbarToggler">
       
           <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll">
-            {% include 'base/includes/menu-dash.html' %}
-            {% include 'base/includes/menu-stock.html' %}
-            {% include 'base/includes/menu-buying.html' %}
-            {% include 'base/includes/menu-selling.html' %}
+            {% if not request.user.is_authenticated %}
+              <a href="{% url 'account_login' %}" class="btn btn-sm btn-outline-primary">{% trans "Se Connecter" %}</a>
+            {% endif %}
+            {% if request.user.is_authenticated %}
+              {% if request.user.is_tenant_admin %}
+                {% include 'base/includes/menu-dash.html' %}
+              {% endif %}
+              {% include 'base/includes/menu-stock.html' %}
+              {% include 'base/includes/menu-buying.html' %}
+              {% include 'base/includes/menu-selling.html' %}
+            {% endif %}
           </ul>
 
           <span>
