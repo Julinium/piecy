@@ -11,7 +11,7 @@ from back.models import Tenant, Utilisateur, Subscription
 
 
 SUB_DAYS_WARNING = 90
-SUB_DAYS_DANGER = 15
+SUB_DAYS_DANGER = 30
 
 @login_required(login_url="account_login")
 def summary(request):

@@ -103,14 +103,20 @@
                                     <strong>{{ current_subscription.date_to }}</strong>
                                 </li>
                                 {% if current_subscription.payment %}
-                                    <li class="list-group-item">
-                                        <small class="text-muted">{% trans 'Date Paiment' %}</small><br>
-                                        <div>{{ current_subscription.payment.date_made }}</div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <small class="text-muted">{% trans 'Référence Paiment' %}</small><br>
-                                        <div>{{ current_subscription.payment.reference }}</div>
-                                    </li>
+                                    {% if current_subscription.payment.verified %}
+                                        <li class="list-group-item">
+                                            <small class="text-muted">{% trans 'Date Paiment' %}</small><br>
+                                            <div>{{ current_subscription.payment.date_made }}</div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <small class="text-muted">{% trans 'Référence Paiment' %}</small><br>
+                                            <div>{{ current_subscription.payment.reference }}</div>
+                                        </li>
+                                    {% else %}
+                                        <li class="list-group-item">
+                                            <small class="text-danger">{% trans 'Paiment non Vérifié' %}. {% trans 'Contactez nous' %}. </small><br>
+                                        </li>
+                                    {% endif %}
                                 {% else %}
                                     <li class="list-group-item">
                                         <small class="text-muted">{% trans 'Aucun Paiment trouvé pour cet Abonnement' %} !</small><br>
