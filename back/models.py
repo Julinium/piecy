@@ -228,17 +228,24 @@ class Plan(models.Model):
         return int(self.monthly_price)
 
     @property
-    def monthly_tag_year(self):
-        return int(12 * self.monthly_price)
-
-    @property
     def yearly_tag_month(self):
-        # return int(12 * self.monthly_price)
         return int(max((12 -self.year_free_mth), 0) * self.monthly_price/12)
 
     @property
-    def yearly_tag_year(self):
-        return int(max((12 -self.year_free_mth), 0) * self.monthly_price)
+    def monthly_tag_month_new(self):
+        return int(self.monthly_price * self.first_time_disc/100)
+
+    @property
+    def yearly_tag_month_new(self):
+        return int(max((12 -self.year_free_mth), 0) * self.monthly_price * self.first_time_disc/1200)
+
+    # @property
+    # def monthly_tag_year(self):
+    #     return int(12 * self.monthly_price)
+
+    # @property
+    # def yearly_tag_year(self):
+    #     return int(max((12 -self.year_free_mth), 0) * self.monthly_price)
 
 
 class Registre(models.Model):

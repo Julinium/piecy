@@ -8,7 +8,8 @@
                 <h4 class="my-0 fw-normal">{{ plan.name }}</h4>
             </div>
             <div class="card-body">
-                <h1 class="card-title pricing-card-title">{{ tag }}<small class="text-body-secondary fw-light">/{% trans "mois" %}</small></h1> 
+                <h1 class="card-title pricing-card-title">{{ tag_new }}<small class="text-body-secondary fw-light">/{% trans "mois" %}</small></h1> 
+                <small class="text-body-secondary fw-light text-start">{% trans "le premer an, puis" %} <span class="card-text fs-5">{{ tag }}</span>/{% trans "mois" %}</small> 
                 <ul class="list-unstyled mt-3 mb-4 text-start">
                     <li>{{ plan.max_users }} {% trans "Utilisateurs" %}</li>
                     <li>{{ plan.max_magasins }} {% trans "Magasins" %}</li>
