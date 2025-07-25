@@ -24,6 +24,7 @@
                 <form method="POST"  action="{% url 'tenancy_sub_renew' %}">
                     {% csrf_token %}
                     <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                    <input type="hidden" name="tag" value="{{ tag }}">
                     <input type="hidden" name="period" value="{{ period }}">
                     <button type="submit" class="w-100 btn btn-lg btn-outline-primary">{% trans "Souscrire" %}</button> 
                 </form>

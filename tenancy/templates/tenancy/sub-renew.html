@@ -16,4 +16,21 @@
 
     {% include 'back/snipets/plan-cards.html' with plans=plans %}
 
+    <div class="col">
+        <h4>{% trans "Besoin spécifiques ?" %}</h4>
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{% trans "Sur mesure" %}</h4>
+            </div>
+            <div class="card-body">
+                <div class="card-text">
+                    {% trans "C'est pas à vous de vous adapter au logiciel. C'est au logiciel de s'adapter à vos besoins." %}
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}

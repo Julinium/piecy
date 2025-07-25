@@ -126,12 +126,13 @@ def sub_renew(request):
     code, message = can_admin(request)
     if code == 200:
         if request.method == "POST":
-            # TODO: data = request.POST.get()
-            messages.success(request, "")
+            plan_id = request.POST.get('plan_id', '')
+            tag = request.POST.get('tag', '')
+            period = request.POST.get('period', '')
+            messages.success(request, f"POST returned period = {period}, tag = {tag} and plan = {plan_id}")
             return redirect("tenancy_summary")
 
         plans = Plan.objects.filter(active=True)
-
         context = {
             "plans" : plans,
         }
