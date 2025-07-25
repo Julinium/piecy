@@ -156,7 +156,8 @@ class Subscription(models.Model):
     #     super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
+        istial = "TRIAL-" if self.is_trial else ""
+        return f'{istial}{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
 
 class SystemPayment(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

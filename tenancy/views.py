@@ -1,13 +1,14 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 # from datetime import date, datetime, timedelta, timezone
 from datetime import timedelta
+from django.contrib import messages
 from django.utils.timezone import now
 
 from django.http import HttpResponse
 # from django.utils.text import capfirst
-from back.models import Tenant, Utilisateur, Subscription
+from back.models import Tenant, Plan, Utilisateur, Subscription
 
 
 SUB_DAYS_WARNING = 90
@@ -74,13 +75,36 @@ def trial(request):
             tenant = user.tenant
             if tenant:
                 trial_date_start = today
-                trial_date_end = today + timedelta(days=TRIAL_DAYS) 
-                
-                context = {
-                    'trial_date_start' : trial_date_start,
-                    'trial_date_end'   : trial_date_end,
-                }
-                return render(request, 'tenancy/trial.html', context)
+                trial_date_end = today + timedelta(days=TRIAL_DAYS)
+                plan = Plan.objects.filter(active=True).order_by('ordre').first()
+
+                if request.method == "POST":
+                    if user.is_tenant_admin:
+                        subscription = Subscription(
+                                is_trial = True,
+                                date_fm = trial_date_start,
+                                date_to = trial_date_end,
+                                tenant = tenant,
+                                plan = plan,
+                        )
+                        try: 
+                            subscription.save()
+                            messages.success(request, _("Votre période d'essai a commencé"))
+                        except Exception as xc: 
+                            messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))
+                            print(str(xc))
+                    else:
+                        messages.error(request, _("Vous n'êtes pas Administrateur de l'Entreprise."))
+
+
+                    return redirect('tenancy_summary')
+                else:
+                    context = {
+                        'trial_date_start' : trial_date_start,
+                        'trial_date_end'   : trial_date_end,
+                        'plan'             : plan,
+                    }
+                    return render(request, 'tenancy/trial.html', context)
 
 
 
