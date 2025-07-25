@@ -16,8 +16,8 @@
 
     {% if request.user.is_authenticated and request.user.is_tenant_admin %}
         <form method="POST" action="{% url 'tenancy_trial' %}">
-            <h4>{% trans "Essai à activer" %}</h4>
             {% csrf_token %}
+            <h4>{% trans "Plan à essayer" %}</h4>
             <ul class="list-group mb-3">
                 {% if plan %}
                     <li class="list-group-item">
@@ -37,7 +37,9 @@
 
             <button type="submit" class="btn btn-primary">{% trans "Activer période d'éssai" %}</button>
         </form>
+
         <br>
+
         <div id="admins-actions" class="my-4">
             <p>{% translate "Vous pouvez à tout moment souscrire un Abonnement pour continuer à utiliser l'application" %}.</p>
             <div>

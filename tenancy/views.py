@@ -125,12 +125,18 @@ def trial(request):
 def sub_renew(request):
     code, message = can_admin(request)
     if code == 200:
+        if request.method == "POST":
+            # TODO: data = request.POST.get()
+            messages.success(request, "")
+            return redirect("tenancy_summary")
+
         plans = Plan.objects.filter(active=True)
 
         context = {
             "plans" : plans,
         }
         return render(request, 'tenancy/sub-renew.html', context)
+
     return HttpResponse(message, status=code)
 
 
