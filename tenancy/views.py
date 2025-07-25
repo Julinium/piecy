@@ -43,6 +43,8 @@ def can_admin(request) -> tuple[int, str]:
 def summary(request):
     code, message = can_admin(request)
     if code == 200:
+        tenant = request.user.tenant
+
         admins = tenant.workers.filter(is_tenant_admin = True)
         users = tenant.workers.exclude(is_tenant_admin = True)
 
@@ -86,28 +88,26 @@ def summary(request):
 def trial(request):
     code, message = can_admin(request)
     if code == 200:
+        tenant = request.user.tenant
+
         trial_date_start = today
         trial_date_end = today + timedelta(days=TRIAL_DAYS)
         plan = Plan.objects.filter(active=True).order_by('ordre').first()
 
         if request.method == "POST":
-            if user.is_tenant_admin:
-                subscription = Subscription(
-                        is_trial = True,
-                        date_fm = trial_date_start,
-                        date_to = trial_date_end,
-                        tenant = tenant,
-                        plan = plan,
-                )
-                try: 
-                    subscription.save()
-                    messages.success(request, _("Votre période d'essai a commencé"))
-                except Exception as xc: 
-                    messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))
-                    print(str(xc))
-            else:
-                messages.error(request, _("Vous n'êtes pas Administrateur de l'Entreprise."))
-
+            subscription = Subscription(
+                    is_trial = True,
+                    date_fm = trial_date_start,
+                    date_to = trial_date_end,
+                    tenant = tenant,
+                    plan = plan,
+            )
+            try: 
+                subscription.save()
+                messages.success(request, _("Votre période d'essai a commencé"))
+            except Exception as xc: 
+                messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))
+                print(str(xc))
 
             return redirect('tenancy_summary')
         else:
@@ -125,7 +125,7 @@ def trial(request):
 def sub_renew(request):
     code, message = can_admin(request)
     if code == 200:
-        plans = Plans.objects.filter(active=True)
+        plans = Plan.objects.filter(active=True)
 
         context = {
             "plans" : plans,
