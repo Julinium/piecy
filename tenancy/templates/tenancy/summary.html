@@ -49,7 +49,7 @@
                         {% if not can_try %}<span class="text-danger">{% trans "Vous risquez de perdre vos données à jamais si vous restez sans Abonnement actif pour longtemps." %} !</span>{% endif %}
                     </p>
                     <div class="">
-                        <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Activer un Abonnement" %}</a>
+                        <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Souscrire un Abonnement" %}</a>
                         {% if can_try %}
                             <a href="{% url 'tenancy_trial' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Essai Gratuit" %}</a>
                         {% endif %}
@@ -69,14 +69,32 @@
 
                     <div class="card mb-4 shadow">
                         <div class="card-header fw-bold fs-5 bg-danger-subtle text-danger">
-                            <div>{% trans "Periode d'essai" %}.<span class="ms-4">{% trans "Jours restant" %}: {{ days_remaining }}</span></div>                            
+                            <div>{% trans "Periode d'essai" %}</div>                            
                         </div>
                         <div class="card-body">
-                            <h5 class="card-title">{% trans "Période d'essai" %}.</h5>
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item">
+                                    <small class="text-muted">{% trans 'Plan' %}</small><br>
+                                    <div>{{ current_subscription.plan.name }}</div>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">{% trans 'Date début' %}</small><br>
+                                    <div>{{ current_subscription.date_fm }}</div>
+                                </li>
+                                <li class="list-group-item bg-danger-subtle">
+                                    <small class="text-muted">{% trans 'Date fin' %}</small><br>
+                                    <strong>{{ current_subscription.date_to }}</strong>
+                                </li>
+                                <li class="list-group-item">
+                                    <small class="text-muted">{% trans 'Jours restant' %}</small><br>
+                                    <strong>{{ days_remaining }}</strong>
+                                </li>
+                            </ul>
+                            <!-- <h5 class="card-title">{% trans "Période d'essai" %}.</h5> -->
                             <p class="card-text">{% trans "Votre période d'essai s'écoulera bientôt. Veuillez activer un abonnement pour continuer à utiliser cette application." %}</p>
                             {% if request.user.is_authenticated and request.user.is_tenant_admin %}
                                 <div id="sub-actions" >
-                                    <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Acheter un Abonnement" %}</a>
+                                    <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Souscrire un Abonnement" %}</a>
                                     <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
                                 </div>
                             {% else %}
@@ -84,14 +102,14 @@
                             {% endif %}
                         </div>
                     </div>
-                
+
                 {% else %}
 
                     <div class="card mb-4 shadow">
                         <div class="card-header fw-bold fs-5 bg-{{ tint }}-subtle">
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <div>{% trans 'Plan' %}: {{ current_subscription.plan }}.<span class="ms-4">{% trans "Jours restant" %}:  {{ days_remaining }}</span></div> 
+                                    <div>{% trans 'Plan' %}: {{ current_subscription.plan.name }}.<span class="ms-4">{% trans "Jours restant" %}:  {{ days_remaining }}</span></div> 
                                 </div>
                             </div>
                         </div>

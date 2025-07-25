@@ -3,8 +3,12 @@
 {% load static %}
 
 {% block content %}
-<div class="text-center">
-    <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
-    <h2 class="p-1 my-3">{% translate "Subscription Renewal" %}</h2>
-</div>
+
+    <!-- Header -->
+    {% with headline=_("Séléction Abonnement") subtitle=_("Séléctionner l'Abonnement qui vous convient et procéder à son activation.") %}
+        {% include "base/includes/compo-title.html" %}
+    {% endwith %}
+
+    
+
 {% endblock content %}

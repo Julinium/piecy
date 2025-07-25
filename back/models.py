@@ -219,8 +219,25 @@ class Plan(models.Model):
     class Meta:
         db_table = 'plan'
         ordering = ['ordre']
+
     def __str__(self):
         return f'{self.name}'
+
+    @property
+    def monthly_tag_month(self):
+        return int(self.monthly_price)
+
+    @property
+    def monthly_tag_year(self):
+        return int(12 * self.monthly_price)
+
+    @property
+    def yearly_tag_month(self):
+        return int(12 * self.monthly_price)
+
+    @property
+    def yearly_tag_year(self):
+        return int(max((12 -self.year_free_mth), 0) * self.monthly_price)
 
 
 class Registre(models.Model):

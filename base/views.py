@@ -22,3 +22,7 @@ def legal(request):
 def coming(request):
     context = {}
     return render(request, 'base/coming.html', context)
+
+def error(request):
+    context = {}
+    return render(request, 'base/error.html', context)
