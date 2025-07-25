@@ -23,6 +23,7 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
                 created_by_user = instance.username,
                 created_by = instance.id
             )
+            
             try:
                 tenant.save()
                 instance.tenant = tenant

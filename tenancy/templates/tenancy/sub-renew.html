@@ -2,6 +2,11 @@
 {% load i18n %}
 {% load static %}
 
+
+{% block title %}
+    {% trans "Abonnement Entreprise" %}
+{% endblock title %}
+
 {% block content %}
 
     <!-- Header -->
@@ -9,6 +14,6 @@
         {% include "base/includes/compo-title.html" %}
     {% endwith %}
 
-    
+    {% include 'back/snipets/plan-cards.html' with plans=plans %}
 
 {% endblock content %}

@@ -2,22 +2,30 @@
 {% load static %}
 
 {% if plan %}
-    <div class="col"> 
-        <div class="card mb-4 rounded-3 shadow-sm"> 
-            <div class="card-header py-3"> 
-                <h4 class="my-0 fw-normal">{{ plan.name }}</h4> 
-            </div> 
-            <div class="card-body"> 
-                <h1 class="card-title pricing-card-title">{{ plan.monthly_price }}<small class="text-body-secondary fw-light">/{% trans "mois" %}</small></h1> 
-                <h1 class="card-title pricing-card-title">{{ plan.monthly_tag_month }}<small class="text-body-secondary fw-light">/{% trans "mois" %}</small></h1> 
-                <ul class="list-unstyled mt-3 mb-4"> 
-                    <li>10 users included</li> 
-                    <li>2 GB of storage</li> 
-                    <li>Email support</li> 
-                    <li>Help center access</li> 
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{{ plan.name }}</h4>
+            </div>
+            <div class="card-body">
+                <h1 class="card-title pricing-card-title">{{ tag }}<small class="text-body-secondary fw-light">/{% trans "mois" %}</small></h1> 
+                <ul class="list-unstyled mt-3 mb-4 text-start"> 
+                    <li>{{ plan.max_users }} {% trans "Utilisateurs" %}</li>
+                    <li>{{ plan.max_magasins }} {% trans "Magasins" %}</li>
+                    <li>{{ plan.max_products }} {% trans "Produits" %}</li>
+                    <!-- <li>{{ plan.max_clients }} {% trans "Clients" %}</li> -->
+                    <!-- <li>{{ plan.max_pdfs }} {% trans "Fichiers PDF" %}</li>
+                    <li>{{ plan.max_excels }} {% trans "Fichiers Excel" %}</li> -->
+
+                    <div class="mt-2 mb-1">+ {% trans "Options" %}</div>
+                    
+                    <li class="{% if not plan.vitrine %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Vitrine" %}</li>
+                    <li class="{% if not plan.custom_domain %}text-secondary text-decoration-line-through{% endif %}">{% trans "Nom de domaine" %}</li>
+                    <li class="{% if not plan.ecommerce %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Ecommerce" %}</li>
+                    <li class="{% if not plan.mailbox %}text-secondary text-decoration-line-through{% endif %}">{% trans "Serveur mail privé" %}</li>
                 </ul> 
                 <button type="button" class="w-100 btn btn-lg btn-outline-primary">{% trans "Souscrire" %}</button> 
-            </div> 
-        </div> 
+            </div>
+        </div>
     </div>
 {% endif %}

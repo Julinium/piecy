@@ -203,8 +203,8 @@ class Plan(models.Model):
 
     max_users = models.SmallIntegerField(blank=True, null=True)
     max_clients = models.SmallIntegerField(blank=True, null=True)
-    max_magasins = models.SmallIntegerField(blank=True, null=True)
     max_products = models.SmallIntegerField(blank=True, null=True)
+    max_magasins = models.SmallIntegerField(blank=True, null=True)
     max_pdfs = models.SmallIntegerField(blank=True, null=True)
     max_excels = models.SmallIntegerField(blank=True, null=True)
 
@@ -233,7 +233,8 @@ class Plan(models.Model):
 
     @property
     def yearly_tag_month(self):
-        return int(12 * self.monthly_price)
+        # return int(12 * self.monthly_price)
+        return int(max((12 -self.year_free_mth), 0) * self.monthly_price/12)
 
     @property
     def yearly_tag_year(self):

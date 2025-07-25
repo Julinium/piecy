@@ -2,6 +2,11 @@
 {% load i18n %}
 {% load static %}
 
+{% block title %}
+    {% trans "Essai gratuit" %}
+{% endblock title %}
+
+
 {% block content %}
 
     <!-- Header -->
@@ -32,8 +37,8 @@
 
             <button type="submit" class="btn btn-primary">{% trans "Activer période d'éssai" %}</button>
         </form>
-
-        <div id="admins-actions" class="mt-3 mb-4">
+        <br>
+        <div id="admins-actions" class="my-4">
             <p>{% translate "Vous pouvez à tout moment souscrire un Abonnement pour continuer à utiliser l'application" %}.</p>
             <div>
                 <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Souscrire un Abonnement' %}</a>
