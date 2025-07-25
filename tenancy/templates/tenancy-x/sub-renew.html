@@ -1,0 +1,14 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Header -->
+    {% with headline=_("Séléction Abonnement") subtitle=_("Séléctionner l'Abonnement qui vous convient et procéder à son activation.") %}
+        {% include "base/includes/compo-title.html" %}
+    {% endwith %}
+
+    
+
+{% endblock content %}

@@ -21,19 +21,20 @@ today = now().date()
 
 def can_admin(request) -> tuple[int, str]:
     user = request.user
-        if not user:
-            return 404, _("User not found")
-        if not user.is_active:
-            return 403, _("User Inactive")
-        if not user.is_authenticated:
-            return 403, _("User not authenticated")
-        if not user.is_tenant_admin:
-            return 403, _("User not an Admin")
-        tenant = user.tenant
-        if not tenant:
-            return 404, _("Tenant not found")
-        if not tenant.active:
-            return 403, _("Tenant Inactive")
+    if not user:
+        return 404, _("User not found")
+    if not user.is_active:
+        return 403, _("User Inactive")
+    if not user.is_authenticated:
+        return 403, _("User not authenticated")
+    if not user.is_tenant_admin:
+        return 403, _("User not an Admin")
+    tenant = user.tenant
+    if not tenant:
+        return 404, _("Tenant not found")
+    if not tenant.active:
+        return 403, _("Tenant Inactive")
+
     return 200, _("OK")
 
 

@@ -1,0 +1,46 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    <!-- Header -->
+    {% with headline=_("Activation Essai gratuit") subtitle=_("Bénéficiez d'une période d'essai gratuite pour découvrir les fonctionnalités de notre application") %}
+        {% include "base/includes/compo-title.html" %}
+    {% endwith %}
+
+    {% if request.user.is_authenticated and request.user.is_tenant_admin %}
+        <form method="POST" action="{% url 'tenancy_trial' %}">
+            <h4>{% trans "Essai à activer" %}</h4>
+            {% csrf_token %}
+            <ul class="list-group mb-3">
+                {% if plan %}
+                    <li class="list-group-item">
+                        <small class="text-muted">{% trans 'Plan' %}: </small><strong>{{ plan.name }}</strong><br>
+                        <small class="text-muted">{{ plan.header }}</small><br>
+                    </li>
+                {% endif %}
+                <li class="list-group-item">
+                    <small class="text-muted">{% trans 'Date début' %}</small><br>
+                    <div>{{ trial_date_start }}</div>
+                </li>
+                <li class="list-group-item bg-{{ tint }}-subtle">
+                    <small class="text-muted">{% trans 'Date fin' %}</small><br>
+                    <strong>{{ trial_date_end }}</strong>
+                </li>
+            </ul>
+
+            <button type="submit" class="btn btn-primary">{% trans "Activer période d'éssai" %}</button>
+        </form>
+
+        <div id="admins-actions" class="mt-2 mb-4">
+            <p>{% translate "Vous pouvez à tout moment souscrire un Abonnement pour continuer à utiliser l'application" %}.</p>
+            <div>
+                <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Souscrire un Abonnement' %}</a>
+                <a href="{% url 'tenancy_summary' %}" type="button" class="me-2 mb-2 btn btn-outline-primary">{% trans "Annuler" %}</a>
+            </div>
+        </div>
+        {% else %}
+            <p class="text-danger">{% trans "Vous n'avez pas les permissions requises pour effectuer cette opération. Contactez votre Administrateur." %}</p>
+    {% endif %}
+{% endblock content %}
