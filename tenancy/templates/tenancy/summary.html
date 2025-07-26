@@ -151,6 +151,25 @@
             </div>
         {% endif %}
 
+        <br class="mt-4">
+        <div id="tenant-details" class="mb-4">
+            <h4>{% trans "Mes dernies factures" %}</h4>
+            <ul class="list-group">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    A list item
+                    <span class="badge text-bg-primary rounded-pill">14</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    A second list item
+                    <span class="badge text-bg-primary rounded-pill">2</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    A third list item
+                    <span class="badge text-bg-primary rounded-pill">1</span>
+                </li>
+            </ul>
+        </div>
+
         {% if request.user.is_authenticated and request.user.is_tenant_admin %}
             <div id="admins-actions" class="mt-2 mb-4">
                 <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique des Abonnements' %}</a>
