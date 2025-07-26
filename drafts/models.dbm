@@ -5,7 +5,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 -->
 <dbmodel pgmodeler-ver="1.2.0" use-changelog="false" max-obj-count="49"
 	 gen-disabled-objs-code="false" show-sys-schemas-rects="true"
-	 last-position="0,0" last-zoom="0.2" scene-rect="-300,0,2703.31,4741.92"
+	 last-position="-480,-33" last-zoom="0.6" scene-rect="-800,-280,4983.31,5021.92"
 	 default-schema="public" default-owner="postgres"
 	 layers="Default layer"
 	 active-layers="0"
@@ -26,37 +26,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <schema name="public" layers="0" fill-color="#e1e1e1" name-color="#000000" sql-disabled="true">
 </schema>
 
-<table name="django_migrations" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
-	<schema name="public"/>
-	<role name="dbaser"/>
-	<position x="60" y="4460"/>
-	<column name="id" not-null="true"
-	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
-		<type name="bigint" length="0"/>
-	</column>
-	<column name="app" not-null="true">
-		<type name="character varying" length="255"/>
-	</column>
-	<column name="name" not-null="true">
-		<type name="character varying" length="255"/>
-	</column>
-	<column name="applied" not-null="true">
-		<type name="timestamp with time zone" length="0" with-timezone="true"/>
-	</column>
-	<constraint name="django_migrations_pkey" type="pk-constr" table="public.django_migrations">
-		<columns names="id" ref-type="src-columns"/>
-	</constraint>
-</table>
-
-<sequence name="django_migrations_id_seq" cycle="false" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1" sql-disabled="true">
-	<schema name="public"/>
-	<role name="dbaser"/>
-</sequence>
-
 <table name="plan" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="28" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1520" y="3000"/>
+	<position x="1540" y="-20"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -137,7 +110,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="registre" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="320" y="4460"/>
+	<position x="-780" y="-40"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -179,7 +152,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="system_payment" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1520" y="3320"/>
+	<position x="1540" y="300"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -233,7 +206,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="tenant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="400" y="3140"/>
+	<position x="240" y="-60"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -242,9 +215,6 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="name">
 		<type name="character varying" length="128"/>
-	</column>
-	<column name="tel">
-		<type name="character varying" length="16"/>
 	</column>
 	<column name="email">
 		<type name="character varying" length="16"/>
@@ -282,6 +252,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="edited_on">
 		<type name="timestamp with time zone" length="0" with-timezone="true"/>
 	</column>
+	<column name="address">
+		<type name="character varying" length="64"/>
+	</column>
 	<constraint name="tenant_pkey" type="pk-constr" table="public.tenant">
 		<columns names="id" ref-type="src-columns"/>
 	</constraint>
@@ -290,7 +263,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="subscription" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="960" y="3280"/>
+	<position x="900" y="-60"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -362,7 +335,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="django_content_type" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="960" y="4060"/>
+	<position x="900" y="260"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -389,7 +362,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="auth_permission" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="960" y="3760"/>
+	<position x="900" y="600"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -419,7 +392,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="auth_group" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="2" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="960" y="3600"/>
+	<position x="900" y="800"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -443,7 +416,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="auth_group_permissions" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1520" y="3680"/>
+	<position x="1540" y="620"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
 		<type name="bigint" length="0"/>
@@ -499,10 +472,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		</idxelement>
 </index>
 
-<table name="utilisateur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="-1">
+<table name="utilisateur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="21" z-value="-2">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="-180" y="3520"/>
+	<position x="-380" y="460"/>
 	<column name="password" not-null="true">
 		<type name="character varying" length="128"/>
 	</column>
@@ -571,7 +544,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="utilisateur_groups" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="400" y="3600"/>
+	<position x="240" y="760"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
 		<type name="bigint" length="0"/>
@@ -598,7 +571,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="utilisateur_user_permissions" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="4" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="400" y="3800"/>
+	<position x="240" y="560"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="9223372036854775807" cache="1">
 		<type name="bigint" length="0"/>
@@ -681,7 +654,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="django_admin_log" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="400" y="3980"/>
+	<position x="240" y="280"/>
 	<column name="id" not-null="true"
 	 identity-type="BY DEFAULT" start="1" increment="1" min-value="1" max-value="2147483647" cache="1">
 		<type name="integer" length="0"/>
@@ -736,10 +709,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		</idxelement>
 </index>
 
-<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
+<table name="category" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="-3">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1000" y="440"/>
+	<position x="-760" y="2520"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -775,7 +748,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="30" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1640" y="1140"/>
+	<position x="2360" y="2120"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -859,7 +832,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="clientele" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="2220" y="120"/>
+	<position x="3760" y="1800"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -892,10 +865,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
+<table name="ensemble" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="-3">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="940" y="120"/>
+	<position x="-760" y="1160"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -931,7 +904,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fabricant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="300" y="120"/>
+	<position x="-760" y="1500"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -976,7 +949,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="27" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1540" y="460"/>
+	<position x="2360" y="1440"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1054,7 +1027,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="group" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="10" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="340" y="460"/>
+	<position x="-760" y="1840"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1090,7 +1063,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="magasin" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1200" y="1760"/>
+	<position x="1460" y="1140"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1144,10 +1117,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="27" z-value="0">
+<table name="societe" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="27" z-value="-1">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1940" y="120"/>
+	<position x="3180" y="1620"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1225,7 +1198,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="vehicule" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1240" y="2100"/>
+	<position x="1460" y="2480"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1273,7 +1246,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="clientele_client" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1980" y="460"/>
+	<position x="3180" y="2080"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1306,7 +1279,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="commande" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="24" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1140" y="1420"/>
+	<position x="1460" y="2140"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1375,7 +1348,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="constant" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="960" y="2940"/>
+	<position x="-380" y="-60"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1420,7 +1393,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="floor" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1480" y="120"/>
+	<position x="2360" y="1120"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1462,7 +1435,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="payment" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1680" y="1480"/>
+	<position x="2360" y="2460"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1516,10 +1489,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 </table>
 
-<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="34" z-value="0">
+<table name="product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="34" z-value="-18">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="0" y="1300"/>
+	<position x="-100" y="1840"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1615,7 +1588,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="file" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="400" y="780"/>
+	<position x="-760" y="2160"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1660,7 +1633,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="ensemble_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="440" y="1120"/>
+	<position x="-80" y="1160"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1693,7 +1666,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="category_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="500" y="1400"/>
+	<position x="-100" y="2520"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1726,7 +1699,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="rayon" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="13" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1040" y="760"/>
+	<position x="1460" y="1480"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1768,7 +1741,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="reception" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="18" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1100" y="1100"/>
+	<position x="1460" y="1820"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1822,7 +1795,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="payment_fournisseur" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="19" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="1580" y="800"/>
+	<position x="2360" y="1780"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1879,7 +1852,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="entree" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="14" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="540" y="1700"/>
+	<position x="700" y="1720"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1924,7 +1897,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="sortie" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="15" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="600" y="2040"/>
+	<position x="700" y="2060"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -1972,7 +1945,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="stock" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="12" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="640" y="2380"/>
+	<position x="700" y="1380"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -2011,7 +1984,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="vehicule_product" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="9" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="700" y="2720"/>
+	<position x="700" y="2400"/>
 	<column name="id" not-null="true">
 		<type name="uuid" length="0"/>
 	</column>
@@ -2268,7 +2241,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="django_session" layers="0" collapse-mode="1" pagination="true" attribs-page="0" ext-attribs-page="0" max-obj-count="3" z-value="0">
 	<schema name="public"/>
 	<role name="dbaser"/>
-	<position x="580" y="4460"/>
+	<position x="-780" y="260"/>
 	<column name="session_key" not-null="true">
 		<type name="character varying" length="40"/>
 	</column>
@@ -2628,247 +2601,255 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <relationship name="rel_subscription_plan" type="relfk" layers="0"
-	 custom-color="#1af233"
+	 custom-color="#608f09"
 	 src-table="public.subscription"
 	 dst-table="public.plan" reference-fk="subscription_plan_id_967284a5_fk_plan_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_subscription_system_payment" type="relfk" layers="0"
-	 custom-color="#29f304"
+	 custom-color="#962c5c"
 	 src-table="public.subscription"
 	 dst-table="public.system_payment" reference-fk="subscription_payment_id_8c9e30aa_fk_system_payment_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_subscription_tenant" type="relfk" layers="0"
-	 custom-color="#19093b"
+	 custom-color="#0f26ca"
 	 src-table="public.subscription"
 	 dst-table="public.tenant" reference-fk="subscription_tenant_id_ffb18f36_fk_tenant_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_auth_permission_django_content_type" type="relfk" layers="0"
-	 custom-color="#3a821a"
+	 custom-color="#c50d72"
 	 src-table="public.auth_permission"
 	 dst-table="public.django_content_type" reference-fk="auth_permission_content_type_id_2f476e4b_fk_django_co"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_auth_group_permissions_auth_group" type="relfk" layers="0"
-	 custom-color="#c3aa24"
+	 custom-color="#32b09b"
 	 src-table="public.auth_group_permissions"
 	 dst-table="public.auth_group" reference-fk="auth_group_permissions_group_id_b120cbf9_fk_auth_group_id"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_auth_group_permissions_auth_permission" type="relfk" layers="0"
-	 custom-color="#98561c"
+	 custom-color="#685cd7"
 	 src-table="public.auth_group_permissions"
 	 dst-table="public.auth_permission" reference-fk="auth_group_permissio_permission_id_84c5c92e_fk_auth_perm"
-	 src-required="false" dst-required="true"/>
+	 src-required="false" dst-required="true">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
 
 <relationship name="rel_utilisateur_tenant" type="relfk" layers="0"
-	 custom-color="#683b18"
+	 custom-color="#8216d8"
 	 src-table="public.utilisateur"
 	 dst-table="public.tenant" reference-fk="utilisateur_tenant_id_f9b1c226_fk_tenant_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_utilisateur_groups_utilisateur" type="relfk" layers="0"
-	 custom-color="#95723f"
+	 custom-color="#55a699"
 	 src-table="public.utilisateur_groups"
 	 dst-table="public.utilisateur" reference-fk="utilisateur_groups_utilisateur_id_61ea21da_fk_utilisateur_id"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_utilisateur_groups_auth_group" type="relfk" layers="0"
-	 custom-color="#cb238b"
+	 custom-color="#aedc76"
 	 src-table="public.utilisateur_groups"
 	 dst-table="public.auth_group" reference-fk="utilisateur_groups_group_id_f333a17e_fk_auth_group_id"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_utilisateur_user_permissions_utilisateur" type="relfk" layers="0"
-	 custom-color="#eb6445"
+	 custom-color="#1b9b02"
 	 src-table="public.utilisateur_user_permissions"
 	 dst-table="public.utilisateur" reference-fk="utilisateur_user_per_utilisateur_id_b92b88e4_fk_utilisate"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_utilisateur_user_permissions_auth_permission" type="relfk" layers="0"
-	 custom-color="#ea30e3"
+	 custom-color="#90bb08"
 	 src-table="public.utilisateur_user_permissions"
 	 dst-table="public.auth_permission" reference-fk="utilisateur_user_per_permission_id_0616051c_fk_auth_perm"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_django_admin_log_django_content_type" type="relfk" layers="0"
-	 custom-color="#c5530d"
+	 custom-color="#269bcc"
 	 src-table="public.django_admin_log"
 	 dst-table="public.django_content_type" reference-fk="django_admin_log_content_type_id_c4bce8eb_fk_django_co"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_django_admin_log_utilisateur" type="relfk" layers="0"
-	 custom-color="#99abb1"
+	 custom-color="#08a081"
 	 src-table="public.django_admin_log"
 	 dst-table="public.utilisateur" reference-fk="django_admin_log_user_id_c564eba6_fk_utilisateur_id"
 	 src-required="false" dst-required="true"/>
 
 <relationship name="rel_client_societe" type="relfk" layers="0"
-	 custom-color="#7d0a4f"
+	 custom-color="#e490b3"
 	 src-table="public.client"
 	 dst-table="public.societe" reference-fk="client_societe_id_7733b35a_fk_societe_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_fournisseur_societe" type="relfk" layers="0"
-	 custom-color="#db714b"
+	 custom-color="#21db68"
 	 src-table="public.fournisseur"
 	 dst-table="public.societe" reference-fk="fournisseur_societe_id_fc000de6_fk_societe_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_clientele_client_client" type="relfk" layers="0"
-	 custom-color="#97adc4"
+	 custom-color="#81f078"
 	 src-table="public.clientele_client"
 	 dst-table="public.client" reference-fk="clientele_client_client_id_92197310_fk_client_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_clientele_client_clientele" type="relfk" layers="0"
-	 custom-color="#509af5"
+	 custom-color="#f7757f"
 	 src-table="public.clientele_client"
 	 dst-table="public.clientele" reference-fk="clientele_client_clientele_id_1069dca3_fk_clientele_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_commande_client" type="relfk" layers="0"
-	 custom-color="#142c25"
+	 custom-color="#e319e5"
 	 src-table="public.commande"
 	 dst-table="public.client" reference-fk="commande_client_id_14e664eb_fk_client_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_constant_tenant" type="relfk" layers="0"
-	 custom-color="#aa1768"
+	 custom-color="#f126cb"
 	 src-table="public.constant"
 	 dst-table="public.tenant" reference-fk="constant_tenant_id_e0df697a_fk_tenant_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_floor_magasin" type="relfk" layers="0"
-	 custom-color="#373cb5"
+	 custom-color="#2309a5"
 	 src-table="public.floor"
 	 dst-table="public.magasin" reference-fk="floor_magasin_id_d98a034f_fk_magasin_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_payment_commande" type="relfk" layers="0"
-	 custom-color="#a25615"
+	 custom-color="#e740ca"
 	 src-table="public.payment"
 	 dst-table="public.commande" reference-fk="payment_commande_id_caf6e9ba_fk_commande_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_product_fabricant" type="relfk" layers="0"
-	 custom-color="#2f9fd6"
+	 custom-color="#c6c839"
 	 src-table="public.product"
 	 dst-table="public.fabricant" reference-fk="product_fabricant_id_5a6569b8_fk_fabricant_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_product_group" type="relfk" layers="0"
-	 custom-color="#6653a2"
+	 custom-color="#94a13b"
 	 src-table="public.product"
 	 dst-table="public.&quot;group&quot;" reference-fk="product_group_id_063cac35_fk_group_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_file_product" type="relfk" layers="0"
-	 custom-color="#f6b883"
+	 custom-color="#cf0c2d"
 	 src-table="public.file"
 	 dst-table="public.product" reference-fk="file_product_id_9a0702e0_fk_product_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_ensemble_product_ensemble" type="relfk" layers="0"
-	 custom-color="#f2af5e"
+	 custom-color="#36c96b"
 	 src-table="public.ensemble_product"
 	 dst-table="public.ensemble" reference-fk="ensemble_product_ensemble_id_5c05a25f_fk_ensemble_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_ensemble_product_product" type="relfk" layers="0"
-	 custom-color="#4e9800"
+	 custom-color="#71ebcb"
 	 src-table="public.ensemble_product"
 	 dst-table="public.product" reference-fk="ensemble_product_product_id_df38292f_fk_product_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_category_product_category" type="relfk" layers="0"
-	 custom-color="#f54d77"
+	 custom-color="#e1af05"
 	 src-table="public.category_product"
 	 dst-table="public.category" reference-fk="category_product_category_id_234469f6_fk_category_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_category_product_product" type="relfk" layers="0"
-	 custom-color="#197887"
+	 custom-color="#e7ba26"
 	 src-table="public.category_product"
 	 dst-table="public.product" reference-fk="category_product_product_id_9ac73b25_fk_product_id"
-	 src-required="false" dst-required="false"/>
+	 src-required="false" dst-required="false">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
 
 <relationship name="rel_rayon_floor" type="relfk" layers="0"
-	 custom-color="#12266d"
+	 custom-color="#37a5b8"
 	 src-table="public.rayon"
 	 dst-table="public.floor" reference-fk="rayon_floor_id_2e9127b6_fk_floor_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_reception_fournisseur" type="relfk" layers="0"
-	 custom-color="#2f5483"
+	 custom-color="#cb457f"
 	 src-table="public.reception"
 	 dst-table="public.fournisseur" reference-fk="reception_fournisseur_id_cfefed9a_fk_fournisseur_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_payment_fournisseur_reception" type="relfk" layers="0"
-	 custom-color="#5c3994"
+	 custom-color="#9d4744"
 	 src-table="public.payment_fournisseur"
 	 dst-table="public.reception" reference-fk="payment_fournisseur_reception_id_3c1fbdc1_fk_reception_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_entree_product" type="relfk" layers="0"
-	 custom-color="#752f21"
+	 custom-color="#1615ac"
 	 src-table="public.entree"
 	 dst-table="public.product" reference-fk="entree_product_id_2a2c6010_fk_product_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_entree_rayon" type="relfk" layers="0"
-	 custom-color="#1fcb11"
+	 custom-color="#2b8590"
 	 src-table="public.entree"
 	 dst-table="public.rayon" reference-fk="entree_rayon_id_3fd68f68_fk_rayon_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_entree_reception" type="relfk" layers="0"
-	 custom-color="#b288d4"
+	 custom-color="#13b08a"
 	 src-table="public.entree"
 	 dst-table="public.reception" reference-fk="entree_reception_id_8124198a_fk_reception_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_sortie_commande" type="relfk" layers="0"
-	 custom-color="#e35933"
+	 custom-color="#45868d"
 	 src-table="public.sortie"
 	 dst-table="public.commande" reference-fk="sortie_commande_id_205b884f_fk_commande_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_sortie_product" type="relfk" layers="0"
-	 custom-color="#314569"
+	 custom-color="#943f95"
 	 src-table="public.sortie"
 	 dst-table="public.product" reference-fk="sortie_product_id_679141b3_fk_product_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_sortie_rayon" type="relfk" layers="0"
-	 custom-color="#188bac"
+	 custom-color="#07d559"
 	 src-table="public.sortie"
 	 dst-table="public.rayon" reference-fk="sortie_rayon_id_3241a855_fk_rayon_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_stock_magasin" type="relfk" layers="0"
-	 custom-color="#0900e5"
+	 custom-color="#9c51fd"
 	 src-table="public.stock"
 	 dst-table="public.magasin" reference-fk="stock_magasin_id_f757fcb4_fk_magasin_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_stock_product" type="relfk" layers="0"
-	 custom-color="#b2d99d"
+	 custom-color="#94b2b3"
 	 src-table="public.stock"
 	 dst-table="public.product" reference-fk="stock_product_id_da881b35_fk_product_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_vehicule_product_product" type="relfk" layers="0"
-	 custom-color="#c00a46"
+	 custom-color="#0b7239"
 	 src-table="public.vehicule_product"
 	 dst-table="public.product" reference-fk="vehicule_product_product_id_c15db5f6_fk_product_id"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_vehicule_product_vehicule" type="relfk" layers="0"
-	 custom-color="#75e500"
+	 custom-color="#3fcc4c"
 	 src-table="public.vehicule_product"
 	 dst-table="public.vehicule" reference-fk="vehicule_product_vehicule_id_da6b694b_fk_vehicule_id"
 	 src-required="false" dst-required="false"/>
