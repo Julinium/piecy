@@ -13,23 +13,36 @@
     {% with headline=_("Séléction Abonnement") subtitle=_("Séléctionner l'Abonnement qui vous convient et procéder à son activation.") %}
         {% include "base/includes/compo-title.html" %}
     {% endwith %}
-    <div class="card mb-4 rounded-3 bg-success-subtle shadow-sm">
+    <!-- <div class="card mb-4 rounded-3 bg-success-subtle shadow-sm">
         <div class="card-header py-3">
             <h4 class="my-0 fw-normal">{% trans "Tous les nouveaux clients bénéficient de grandes réductions" %}</h4>
         </div>
-    </div>
+    </div> -->
 
     {% include 'back/snipets/plan-cards.html' with plans=plans %}
 
     <div class="col">
-        <h4>{% trans "Besoin spécifiques ?" %}</h4>
+        <h4 class="mb-3 text-center">{% trans "Autres options" %}</h4>
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3">
+                <h4 class="my-0 fw-normal">{% trans "Infrastructure privée" %}</h4>
+            </div>
+            <div class="card-body">
+                <div class="card-text">
+                    {% trans "Si vous optez pour une installation privée - réseau local, cloud privé ou fournisseur IaaS tiers - Nous vous assistons dans l'installation eti la configuration de votre instance." %} {% trans "Le prix varie selon la prestation." %}
+                </div>
+                <div class="mt-3">
+                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                </div>
+            </div>
+        </div>
         <div class="card mb-4 rounded-3 shadow-sm">
             <div class="card-header py-3">
                 <h4 class="my-0 fw-normal">{% trans "Sur mesure" %}</h4>
             </div>
             <div class="card-body">
                 <div class="card-text">
-                    {% trans "C'est pas à vous de vous adapter au logiciel. C'est au logiciel de s'adapter à vos besoins." %}
+                    {% trans "Ce n'est pas à vous de vous adapter au logiciel. C'est au logiciel de s'adapter à vos besoins." %} {% trans "Nous vous livrons des solutions sur mesure adaptées à vos besoins spécifiques." %} {% trans "Le prix varie selon la prestation." %}
                 </div>
                 <div class="mt-3">
                     <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
@@ -41,6 +54,10 @@
     <div class="mt-4">
         <h4>{% trans "Mentions légales" %}</h4>
         <p>{% trans "Offres soumises à conditions.  " %}</p>
+        <p>{% trans "Garanties.  " %}</p>
+        <p>{% trans "Contenu détaillé des plans.  " %}</p>
+        <p>{% trans "Mises à jour.  " %}</p>
+        <p>{% trans "Données de l'entreprise. Divulgation des données sous conditions. " %}</p>
     </div>
 
 {% endblock content %}

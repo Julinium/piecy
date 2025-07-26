@@ -61,33 +61,26 @@
                 {% if current_subscription.is_trial %}
 
                     <div class="card mb-4 shadow">
-                        <div class="card-header fw-bold fs-5 bg-danger-subtle text-danger">
-                            <div>{% trans "Periode d'essai" %}</div>                            
+                        <div class="card-header fw-bold fs-5 bg-danger text-light">
+                            <div>{{ current_subscription.plan.name }} - {% trans "Période d'essai" %}</div>                            
                         </div>
                         <div class="card-body">
                             <ul class="list-group mb-3">
                                 <li class="list-group-item">
-                                    <small class="text-muted">{% trans 'Plan' %}</small><br>
-                                    <div>{{ current_subscription.plan.name }}</div>
-                                </li>
-                                <li class="list-group-item">
-                                    <small class="text-muted">{% trans 'Date début' %}</small><br>
-                                    <div>{{ current_subscription.date_fm }}</div>
-                                </li>
-                                <li class="list-group-item bg-danger-subtle">
-                                    <small class="text-muted">{% trans 'Date fin' %}</small><br>
-                                    <strong>{{ current_subscription.date_to }}</strong>
-                                </li>
-                                <li class="list-group-item">
-                                    <small class="text-muted">{% trans 'Jours restant' %}</small><br>
-                                    <strong>{{ days_remaining }}</strong>
+                                    <small>{{ current_subscription.date_fm }}</small> - <strong>{{ current_subscription.date_to }}</strong> <br>
+                                    <small class="text-muted">{% trans 'Jours restant' %}</small> : <strong>{{ days_remaining }}</strong>
                                 </li>
                             </ul>
-                            <!-- <h5 class="card-title">{% trans "Période d'essai" %}.</h5> -->
-                            <p class="card-text">{% trans "Votre période d'essai s'écoulera bientôt. Veuillez activer un abonnement pour continuer à utiliser cette application." %}</p>
+                            <div class="my-3">
+                                <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Avancement essai gratuit' %}" aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="progress-bar bg-success" style="width: {{ trial_percentage }}%"></div>
+                                </div>
+                            </div>
+                            
+                            <p class="card-text small text-muted">{% trans "Pour continuer à utiliser cette application et conserver vos données, merci de souscrire un abonnement." %}</p>
                             {% if request.user.is_authenticated and request.user.is_tenant_admin %}
                                 <div id="sub-actions" >
-                                    <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-success">{% trans "Souscrire un Abonnement" %}</a>
+                                    <a href="{% url 'tenancy_sub_renew' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire un Abonnement" %}</a>
                                     <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
                                 </div>
                             {% else %}

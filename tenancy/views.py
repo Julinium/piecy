@@ -52,13 +52,21 @@ def summary(request):
         subscriptions = all_subscriptions.filter(active=True)
         active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
-
+        
         can_try = False if subscriptions else True
 
         days_remaining = 0
         if current_subscription:
             delta = current_subscription.date_to - today
             days_remaining = delta.days
+            if current_subscription.is_trial: 
+                messages.error(request, _("Période d'essai. Merci de souscrire un abonnement."))
+                messages.error(request, _("Jours d'essai restant") + f" : {days_remaining}")
+        else:
+            messages.error(request, _("Aucun abonnement actif. Contacter nous."))
+
+        trial_percentage = 0
+        if TRIAL_DAYS != 0: trial_percentage = min(100, int(100 * days_remaining/TRIAL_DAYS))
 
         tint = 'secondary'
         if days_remaining >= SUB_DAYS_WARNING: tint = "success"
@@ -72,6 +80,7 @@ def summary(request):
         context = { 
             "tenant"               : tenant, 
             "days_remaining"       : days_remaining, 
+            "trial_percentage"     : trial_percentage, 
             "active_subscriptions" : active_subscriptions, 
             "current_subscription" : current_subscription, 
             "can_try"              : can_try,

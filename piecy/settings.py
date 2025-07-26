@@ -12,8 +12,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
-from django.conf import locale
+# from django.conf import locale
 from dotenv import load_dotenv
+
+from django.contrib.messages import constants as messages
 
 from django.utils.translation import gettext_lazy as _
 
@@ -176,6 +178,17 @@ STATICFILES_DIRS = [
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'secondary',
+    messages.INFO: 'info',
+    messages.SUCCESS: 'success',
+    messages.WARNING: 'warning',
+    messages.ERROR: 'danger',
+}
+
+
 
 AUTH_USER_MODEL = "back.Utilisateur"
 
