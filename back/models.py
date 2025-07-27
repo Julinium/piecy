@@ -135,7 +135,7 @@ class Subscription(models.Model):
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
     payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
 
-    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
@@ -160,18 +160,32 @@ class Subscription(models.Model):
         return f'{istial}{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
 
 class SystemPayment(models.Model):
+    class Status(models.TextChoices):
+        DRAFT    = 'D', _('Brouillon')
+        DONE     = 'P', _('Effectué')
+        CANCELED = 'X', _('Annulé')
+
+    class Modes(models.TextChoices):
+        CASH   = 'C', _('Espèces')
+        WIRE   = 'W', _('Virement')
+        CHECK  = 'K', _('Chèque')
+        ONLINE = 'O', _('Online')
+        OTHER  = 'X', _('Other')
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
+    status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
     verified = models.BooleanField(blank=True, null=True)
     reference = models.CharField(max_length=32, blank=True, null=True)
-    mode = models.CharField(max_length=32, blank=True, null=True)
+    # mode = models.CharField(max_length=32, blank=True, null=True)
+    mode = models.CharField(max_length=1, choices=Modes.choices, default=Modes.CASH)
     date_made = models.DateField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     currency = models.CharField(max_length=16, blank=True, null=True, default="MAD")
     maker = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
@@ -210,7 +224,7 @@ class Plan(models.Model):
 
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
@@ -258,7 +272,7 @@ class Registre(models.Model):
     instance = models.CharField(max_length=128, blank=True, null=True)
     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
-    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True)
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)

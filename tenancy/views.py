@@ -52,8 +52,7 @@ def summary(request):
         subscriptions = all_subscriptions.filter(active=True)
         active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
-        
-        
+    
         can_try = False if subscriptions else True
 
         days_remaining = 0
@@ -136,10 +135,14 @@ def sub_renew(request):
     code, message = can_admin(request)
     if code == 200:
         if request.method == "POST":
-            plan_id = request.POST.get('plan_id', '')
-            tag = request.POST.get('tag', '')
-            period = request.POST.get('period', '')
-            messages.success(request, f"POST returned period = {period}, tag = {tag} and plan = {plan_id}")
+            # plan_id = request.POST.get('plan_id', '')
+            # tag = request.POST.get('tag', '')
+            # period = request.POST.get('period', '')
+            data = ''
+            for key, value in request.POST.items():
+                data += f"\n{key}: {value}"
+        
+            messages.success(request, f"POST returned: {data}")
             return redirect("tenancy_summary")
 
         plans = Plan.objects.filter(active=True)
