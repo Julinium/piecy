@@ -227,14 +227,15 @@ def order(request):
                 subscriptions = all_subscriptions.filter(active=True)
                 active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
                 current_subscription = active_subscriptions.last()
-                if current_subscription.is_trial:
-                    subscription = current_subscription
-                    subscription.date_fm = start_date
-                    subscription.date_to = end_date
-                    subscription.tenant  = tenant
-                    subscription.plan    = plan
-                    subscription.payment = payment
-                    subscription.is_trial = False
+                if current_subscription:
+                    if current_subscription.is_trial:
+                        subscription = current_subscription
+                        subscription.date_fm = start_date
+                        subscription.date_to = end_date
+                        subscription.tenant  = tenant
+                        subscription.plan    = plan
+                        subscription.payment = payment
+                        subscription.is_trial = False
                 else:
                     subscription = Subscription(
                         date_fm = start_date,
