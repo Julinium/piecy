@@ -172,8 +172,8 @@ def sub_renew(request):
 def order(request):
     code, message = can_admin(request)
     if code == 200:
-        if request.method == "POST":            
-            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant)
+        if request.method == "POST":
+            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant).order_by('date_fm')
             is_new = True if len(subs) == 0 else False
             # discount_new = is_new == True
 
@@ -191,13 +191,10 @@ def order(request):
             price = monthly_price if period == "monthly" else 12 * monthly_price
             discount_year = False if period == "monthly" else True
 
-            end_date = today + relativedelta(months=1, days=1) if period == "monthly" else today + relativedelta(years=1, days=1)
-# from django.http import HttpResponse
-
-# def my_view(request):
-            amount_int = 199  # e.g., 199 cents or raw input
-            amount_decimal = Decimal(amount_int).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-    # return HttpResponse(f"Amount: {amount_decimal}")
+            start_date = today
+            sub = subs.last()
+            if sub: start_date = sub.date_to + relativedelta(days=1)
+            end_date = start_date + relativedelta(months=1, days=1) if period == "monthly" else start_date + relativedelta(years=1, days=1)
 
             ctx = {
                 "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
@@ -208,7 +205,7 @@ def order(request):
                 # "price_normal"  : price_normal,
                 "periodicity"   : periodicity + " " + _("Mois"),
                 "plan"          : plan,
-                "start_date"    : today,
+                "start_date"    : start_date,
                 "end_date"      : end_date,
                 "discount_new"  : discount_new,
                 "discount_year" : discount_year,
