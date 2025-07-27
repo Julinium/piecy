@@ -2,8 +2,8 @@
 {% load static %}
 
 {% if plan %}
-    <div class="col">
-        <div class="card mb-4 rounded-3 shadow-sm">
+    <div class="col px-1">
+        <div class="card mb-4 rounded-3 shadow-sm{% if plan.featured %} bg-success-subtle{% endif %}">
             <div class="card-header py-3{% if plan.featured %} bg-success text-light{% endif %}">
                 <h4 class="my-0 fw-bold">{{ plan.name }}</h4>
             </div>
@@ -24,6 +24,7 @@
                 </ul>
                 <form method="POST"  action="{% url 'tenancy_order' %}">
                     {% csrf_token %}
+                    <input type="hidden" name="stage" value="selection">
                     <input type="hidden" name="plan_id" value="{{ plan.id }}">
                     <input type="hidden" name="tag" value="{{ tag }}">
                     <input type="hidden" name="tag_new" value="{{ tag_new }}">

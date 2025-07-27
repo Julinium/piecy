@@ -12,7 +12,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.http import HttpResponse
 # from django.utils.text import capfirst
-from back.models import Tenant, Plan, Utilisateur, Subscription
+from back.models import SystemPayment, Plan, Subscription
 
 
 SUB_DAYS_WARNING = 90
@@ -135,34 +135,14 @@ def trial(request):
 
 
 @login_required(login_url="account_login")
-def sub_renew(request):
+def subscribe(request):
     code, message = can_admin(request)
     if code == 200:
-        # if request.method == "POST":
-        #     plan_id = request.POST.get('plan_id', '')
-        #     tag = request.POST.get('tag', '')
-        #     period = request.POST.get('period', '')
-        #     periodicity = _("Mensuelle") if period == "monthly" else _("Annuelle")
-        #     plan = Plan.objects.filter(id=plan_id)
-        #     price = int(tag) if period == "monthly" else 12 * int(tag)
-
-        #     data = ''
-        #     for key, value in request.POST.items():
-        #         data += f"\n{key}: {value}"
-
-        #     ctx = {
-        #         "price"       : price,
-        #         "periodicity" : periodicity,
-        #         "plan"        : plan,
-        #     }
-        #     messages.success(request, f"POST returned: {data}")
-        #     return redirect("tenancy_order", ctx)
-
         plans = Plan.objects.filter(active=True)
         context = {
             "plans" : plans,
         }
-        return render(request, 'tenancy/sub-renew.html', context)
+        return render(request, 'tenancy/subscribe.html', context)
 
     return HttpResponse(message, status=code)
 
@@ -173,43 +153,75 @@ def order(request):
     code, message = can_admin(request)
     if code == 200:
         if request.method == "POST":
-            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant).order_by('date_fm')
-            is_new = True if len(subs) == 0 else False
-            # discount_new = is_new == True
+            stage = request.POST.get('stage', '')
+            if stage == "selection":
+                subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant).order_by('date_fm')
+                is_new = True if len(subs) == 0 else False
 
-            plan_id = request.POST.get('plan_id', '')
-            tag = request.POST.get('tag', '')
-            tag_new = request.POST.get('tag_new', '')
-            period = request.POST.get('period', '')
-            periodicity = "1" if period == "monthly" else "12"
-            plan_uuid = uuid.UUID(plan_id, version=4)
-            plan = Plan.objects.filter(id=plan_uuid).first()
-            monthly_price = int(tag_new) if is_new else  int(tag)
+                plan_id = request.POST.get('plan_id', '')
+                tag = request.POST.get('tag', '')
+                tag_new = request.POST.get('tag_new', '')
+                period = request.POST.get('period', '')
+                periodicity = "1" if period == "monthly" else "12"
+                plan_uuid = uuid.UUID(plan_id, version=4)
+                plan = Plan.objects.filter(id=plan_uuid).first()
+                monthly_price = int(tag_new) if is_new else  int(tag)
 
-            price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
-            discount_new = True if is_new else False
-            price = monthly_price if period == "monthly" else 12 * monthly_price
-            discount_year = False if period == "monthly" else True
+                price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
+                discount_new = True if is_new else False
+                price = monthly_price if period == "monthly" else 12 * monthly_price
+                discount_year = False if period == "monthly" else True
+                
+                taxes_amount = Decimal(price * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                total_amount = Decimal(price + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                
+                start_date = today
+                sub = subs.last()
+                if sub: 
+                    start_date = sub.date_to + relativedelta(days=1)
+                end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
 
-            start_date = today
-            sub = subs.last()
-            if sub: start_date = sub.date_to + relativedelta(days=1)
-            end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
+                ctx = {
+                    "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                    "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                    "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                    "periodicity"   : periodicity + " " + _("Mois"),
+                    "plan"          : plan,
+                    "start_date"    : start_date,
+                    "end_date"      : end_date,
+                    "discount_new"  : discount_new,
+                    "discount_year" : discount_year,
+                    "taxes_amount"  : taxes_amount,
+                    "total_amount"  : total_amount,
+                }                
 
-            ctx = {
-                "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                "periodicity"   : periodicity + " " + _("Mois"),
-                "plan"          : plan,
-                "start_date"    : start_date,
-                "end_date"      : end_date,
-                "discount_new"  : discount_new,
-                "discount_year" : discount_year,
-                "taxes_amount"  : Decimal(price * 0.2).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                "total_amount"  : Decimal(price * 1.2).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-            }
-            
+            else:
+                payments = SystemPayment.objects.filter(date_made__year=today.year).order_by("-date_made")
+                order_seq = 1 + len(payments)
+                """
+                    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+                    active = models.BooleanField(blank=True, null=True, default=True)
+                    status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
+                    order_no = models.CharField(max_length=32, blank=True, null=True)
+                    verified = models.BooleanField(blank=True, null=True)
+                    reference = models.CharField(max_length=32, blank=True, null=True)
+                    mode = models.CharField(max_length=1, choices=Modes.choices, default=Modes.WIRE)
+                    date_made = models.DateField(blank=True, null=True)
+                    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+                    currency = models.CharField(max_length=4, blank=True, null=True, default="MAD")
+                    made_by = models.CharField(max_length=64, blank=True, null=True)
+                    note = models.CharField(max_length=64, blank=True, null=True)
+                """
+                payment = SystemPayment(
+                    order_no = "",
+
+                )
+                ctx = {}
+                data = ''
+                for key, value in request.POST.items():
+                    data += f"-\n-{key}: {value}"
+                messages.success(request, f"POST returned: {data}")
+
             return render(request, 'tenancy/order.html', ctx)
 
 

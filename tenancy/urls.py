@@ -10,7 +10,7 @@ urlpatterns = [
     path('details/', views.details, name='tenancy_details'),
     path('history/', views.history, name='tenancy_history'),
     path('sub-cancel/', views.sub_cancel, name='tenancy_sub_cancel'),
-    path('sub-renew/', views.sub_renew, name='tenancy_sub_renew'),
+    path('subscribe/', views.subscribe, name='tenancy_subscribe'),
     path('sub-upgrade/', views.sub_upgrade, name='tenancy_sub_upgrade'),
     path('users/', views.users, name='tenancy_users'),
 ]

@@ -2,9 +2,13 @@
 {% load i18n %}
 {% load static %}
 
+{% block title %}
+    {% trans "Bienvenue" %}
+{% endblock title %}
+
 {% block content %}
 <div class="text-center">
-    <img class="img-fluid p-2" src="{% static 'images/goal.svg' %}" style="max-width: 20rem;" alt="Goal">
+    <img class="img-fluid p-2" src="{% static 'images/goal.svg' %}" style="max-width: 10rem;" alt="Goal">
     <h2 class="p-1 my-3">{% translate "It's going to work." %}</h2>
 </div>
 {% endblock content %}

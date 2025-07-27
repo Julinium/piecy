@@ -14,29 +14,13 @@
         {% include "base/includes/compo-title.html" %}
     {% endwith %}
 
-                            
 
     {% if plan %}
-        <div class="card mb-4 rounded-3 shadow-sm">
+        <div class="card bg-success-subtle mb-4 rounded-3 shadow">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h4 class="my-0 fw-bold">{{ total_amount }} {{ plan.currency }}</h4>
-                <form method="POST"  action="{% url 'tenancy_sub_renew' %}">
-                    {% csrf_token %}
-                    <input type="hidden" name="plan_id" value="{{ plan.id }}">
-                    <input type="hidden" name="price" value="{{ price }}">
-                    <input type="hidden" name="periodicity" value="{{ periodicity }}">
-                    <button type="submit" class="btn btn-primary">{% trans "Confirmer" %}</button> 
-                </form>
+                <div>{% include "back/snipets/order-form.html" %}</div>
             </div>
-            <!-- <div class="card-body">
-                <div class="card-text">
-                    {% trans "Ce n'est pas à vous de vous adapter au logiciel. C'est au logiciel de s'adapter à vos besoins." %} {% trans "Nous vous livrons des solutions sur mesure taillées aux dimensions de vos besoins spécifiques." %} {% trans "Le prix varie selon la prestation." %}
-                </div>
-                <div class="mt-3">
-
-                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
-                </div>
-            </div> -->
         </div>
 
         <div id="order-summary" class="mb-4">
@@ -62,25 +46,15 @@
 
             {% if discount_new or discount_year %}
                 <ul class="list-group mb-3">
-                    <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <small class="text-muted me-2">{% trans "Prix Mois" %} {% trans "avant réductions" %}</small>
-                        <div class="text-muted text-decoration-line-through">
-                            {{ plan.monthly_price }}
-                        </div>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <small class="text-muted me-2">{% trans "Prix Abonnement" %} {% trans "avant réductions" %}</small>
-                        <div class="text-muted text-decoration-line-through">{{ price_normal }}</div>
-                    </li> -->
                     {% if discount_new %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <small class="text-success fw-bold me-2">{% trans "Nouvel Abonnement" %}</small><br>
+                            <small class="text-success fw-bold me-2">{% trans "Nouvel Abonnement" %}</small>
                             <div class="fw-bold text-success">-{{ plan.first_time_disc }}%</div>
                         </li>
                     {% endif %}
                     {% if discount_year %}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <small class="text-success fw-bold me-2">{% trans "Paiment Annuel" %}</small><br>
+                            <small class="text-success fw-bold me-2">{% trans "Paiment Annuel" %}</small>
                             <div class="fw-bold text-success">{{ plan.year_free_mth }} {% trans "Mois offerts" %}</div>
                         </li>
                     {% endif %}
@@ -100,7 +74,7 @@
             
             <ul class="list-group mb-3">
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <small class="text-muted me-2">{% trans "Taxes" %} (20%)</small>
+                    <small class="text-muted me-2">{% trans "Taxes" %} ({{ plan.plan_taxes }}%)</small>
                     <div class="">{{ taxes_amount }}</div>   
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -108,56 +82,12 @@
                     <div class="fw-bold">{{ total_amount }}</div>
                 </li>
             </ul>
-
-            <!-- <div><small>{% trans "Taxes" %} (20%): </small>{{ taxes_amount }}</div>
-            <div><small>{% trans "Total à payer TTC" %}: </small>{{ total_amount }}</div> -->
-
-            <!-- <div>
-                <small>{% trans "Prix par mois" %}: </small>
-                {% if discount_new or discount_year %}<span class="fs-6 text-muted text-decoration-line-through">{{ plan.monthly_price }}</span>{% endif %}
-                <span class=" fs-5 fw-bold text-success">{{ monthly_price }}</span> {{ plan.currency }}
-            </div>
-            <div>
-                <small>{% trans "Prix total" %}: </small>
-                {% if discount_new or discount_year %}<span class="fs-6 text-muted text-decoration-line-through">{{ price_normal }}</span>{% endif %}
-                <span class="fs-5 fw-bold text-success">{{ price }}</span> {{ plan.currency }}
-            </div> -->
-
-
-
-                <!-- <div class="text-success">
-                    {% if discount_new %}<div>{% trans "Réduction: Nouvel Abonnement" %} = {{ plan.first_time_disc }}%</div>{% endif %}
-                    {% if discount_year %}<div>{% trans "Réduction: Paiment Annuel" %} = {{ plan.year_free_mth }} {% trans "Mois offerts" %}</div>{% endif %}
-                </div> -->
-
-
-
-            <!-- <h4>{% trans "Votre commande" %}</h4> -->
-            <!-- <div><small>{% trans "Plan" %}: </small>{{ plan.name }}</div> -->
-            <!-- <div><small>{% trans "Période" %}: </small>{{ periodicity }}</div> -->
-            <!-- <div><small>{% trans "Date début" %}: </small>{{ start_date }}</div> -->
-            <!-- <div><small>{% trans "Date fin" %}: </small>{{ end_date }}</div> -->
-
-
-
-            <!-- <form method="POST"  action="{% url 'tenancy_sub_renew' %}">
-                {% csrf_token %}
-                <input type="hidden" name="plan_id" value="{{ plan.id }}">
-                <input type="hidden" name="price" value="{{ price }}">
-                <input type="hidden" name="periodicity" value="{{ periodicity }}">
-                <button type="submit" class="btn btn-outline-primary">{% trans "Confirmer" %}</button> 
-            </form> -->
+           
         </div>
 
         <div class="d-flex justify-content-between align-items-center">
             <div class="my-0 fw-bold"></div>
-            <form method="POST"  action="{% url 'tenancy_sub_renew' %}">
-                {% csrf_token %}
-                <input type="hidden" name="plan_id" value="{{ plan.id }}">
-                <input type="hidden" name="price" value="{{ price }}">
-                <input type="hidden" name="periodicity" value="{{ periodicity }}">
-                <button type="submit" class="btn btn-primary">{% trans "Confirmer" %}</button> 
-            </form>
+            <div>{% include "back/snipets/order-form.html" %}</div>
         </div>
 
     {% else %}
