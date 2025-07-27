@@ -12,7 +12,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.http import HttpResponse
 # from django.utils.text import capfirst
-from back.models import SystemPayment, Plan, Subscription
+from back.models import SystemPayment, Plan, Subscription, Trial
 
 
 SUB_DAYS_WARNING = 90
@@ -54,8 +54,10 @@ def summary(request):
 
         all_subscriptions  = Subscription.objects.filter(tenant=tenant)
         subscriptions = all_subscriptions.filter(active=True)
-        active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
+        active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
+        trial = Trial.objects.filter(active=True, tenant=tenant).latest('date_to')
+
     
         can_try = False if subscriptions else True
 
@@ -88,6 +90,7 @@ def summary(request):
             "active_subscriptions" : active_subscriptions, 
             "current_subscription" : current_subscription, 
             "can_try"              : can_try,
+            "trial"                : trial,
             "tint"                 : tint, 
             "admins"               : admins, 
             "users"                : users
