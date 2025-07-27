@@ -194,7 +194,7 @@ class SystemPayment(models.Model):
 
     def __str__(self):
         prefix = "VERIF" if self.verified else "UNVERIF"
-        return f'{prefix}#{self.amount}{self.currency}#-{self.maker}-{self.date_made}-{self.reference}'
+        return f'{prefix}#{self.amount}{self.currency}#-{self.made_by}-{self.date_made}-{self.reference}'
 
 
 class Plan(models.Model):

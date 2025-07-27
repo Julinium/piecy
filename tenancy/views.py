@@ -54,7 +54,7 @@ def summary(request):
 
         all_subscriptions  = Subscription.objects.filter(tenant=tenant)
         subscriptions = all_subscriptions.filter(active=True)
-        active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
         current_subscription = active_subscriptions.last()
     
         can_try = False if subscriptions else True
@@ -155,57 +155,58 @@ def order(request):
         if request.method == "POST":
             stage = request.POST.get('stage', '')
             plan_id = request.POST.get('plan_id', '')
+            tag = request.POST.get('tag', '')
+            tag_new = request.POST.get('tag_new', '')
+            period = request.POST.get('period', '')
+
             plan_uuid = uuid.UUID(plan_id, version=4)
             plan = Plan.objects.filter(id=plan_uuid).first()
+            tenant=request.user.tenant
+
+            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=tenant).order_by('date_fm')
+            is_new = True if len(subs) == 0 else False
+
+            periodicity = "1" if period == "monthly" else "12"
+            monthly_price = int(tag_new) if is_new else  int(tag)
+
+            price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
+            discount_new = True if is_new else False
+            price = monthly_price if period == "monthly" else 12 * monthly_price
+            discount_year = False if period == "monthly" else True
+            
+            taxes_amount = Decimal(price * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            total_amount = Decimal(price + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            
+            start_date = today
+            sub = subs.last()
+            if sub: 
+                start_date = sub.date_to + relativedelta(days=1)
+            end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
 
             if stage == "selection":
-                subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant).order_by('date_fm')
-                is_new = True if len(subs) == 0 else False
-
-                tag = request.POST.get('tag', '')
-                tag_new = request.POST.get('tag_new', '')
-                period = request.POST.get('period', '')
-                periodicity = "1" if period == "monthly" else "12"
-                monthly_price = int(tag_new) if is_new else  int(tag)
-
-                price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
-                discount_new = True if is_new else False
-                price = monthly_price if period == "monthly" else 12 * monthly_price
-                discount_year = False if period == "monthly" else True
-                
-                taxes_amount = Decimal(price * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                total_amount = Decimal(price + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                
-                start_date = today
-                sub = subs.last()
-                if sub: 
-                    start_date = sub.date_to + relativedelta(days=1)
-                end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
-
                 ctx = {
                     "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
                     "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
                     "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
                     "periodicity"   : periodicity + " " + _("Mois"),
                     "plan"          : plan,
+                    "tag"           : tag,
+                    "tag_new"       : tag_new,
                     "start_date"    : start_date,
                     "end_date"      : end_date,
                     "discount_new"  : discount_new,
                     "discount_year" : discount_year,
                     "taxes_amount"  : taxes_amount,
                     "total_amount"  : total_amount,
-                }                
+                }
+                return render(request, 'tenancy/order.html', ctx)
 
             else:
-                
-                # total_amount = request.POST.get('total_amount', '0')
-                total_amount = Decimal(request.POST.get('total_amount', '0')).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-                # Create System Payment                
                 payments = SystemPayment.objects.filter(date_made__year=today.year)
                 year = today.year % 100
                 day_of_year = today.timetuple().tm_yday
-                order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):5d}"
+                order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
+                paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
 
                 
                 payment = SystemPayment(
@@ -213,57 +214,44 @@ def order(request):
                     date_made   = today,
                     amount      = total_amount,
                     currency    = plan.currency,
+                    reference   = paymt_no,
                     made_by     = request.user,
-                    note        = f"{request.user.tenant}-{plan.name}-{today}"
+                    note        = f"{tenant}-{plan.name}-{today}"
                 )
                 try:
                     payment.save()
                 except Exception as xc:
                     print(f"Error raised while creating System Payment: {str(xc)}")
-
-                # Create Subscription
-                df = request.POST.get('date_fm', '')
-                dt = request.POST.get('date_to', '')
-                if df:
-                    try:
-                        date_start = datetime.strptime(df, '%Y-%m-%d').date()
-                    except ValueError:
-                        date_start = None  # or handle error
-                        print(f"Error raised while getting Subscription start date")
+                
+                all_subscriptions  = Subscription.objects.filter(tenant=tenant)
+                subscriptions = all_subscriptions.filter(active=True)
+                active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
+                current_subscription = active_subscriptions.last()
+                if current_subscription.is_trial:
+                    subscription = current_subscription
+                    subscription.date_fm = start_date
+                    subscription.date_to = end_date
+                    subscription.tenant  = tenant
+                    subscription.plan    = plan
+                    subscription.payment = payment
+                    subscription.is_trial = False
                 else:
-                    date_start = None
-                if dt:
-                    try:
-                        date_end = datetime.strptime(df, '%Y-%m-%d').date()
-                    except ValueError:
-                        date_end = None  # or handle error
-                        print(f"Error raised while getting Subscription end date")
-                else:
-                    date_end = None
-
-                subscription = Subscription(
-                    date_fm = date_start,
-                    date_to = date_end,
-                    tenant  = request.user.tenant,
-                    plan    = plan,
-                    payment = payment
-                )
+                    subscription = Subscription(
+                        date_fm = start_date,
+                        date_to = end_date,
+                        tenant  = tenant,
+                        plan    = plan,
+                        payment = payment
+                    )
 
                 try:
                     subscription.save()
                 except Exception as xc:
                     print(f"Error raised while creating Subscription: {str(xc)}")
 
-                # ctx = {
-                #     "payment"      : payment,
-                #     "subscription" : subscription
-                # }
-                sub_message = _("Abonnement souscrit avec succès.")
                 pay_message = _("Merci de confirmer votre payment.")
-                messages.success(request, f"{sub_message}")
                 messages.warning(request, f"{pay_message}")
 
-            # return render(request, 'tenancy/order.html', ctx)
             return redirect("tenancy_summary")
 
 
