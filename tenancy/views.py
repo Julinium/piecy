@@ -56,9 +56,18 @@ def summary(request):
         subscriptions = all_subscriptions.filter(active=True)
         active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
-        trial = Trial.objects.filter(active=True, tenant=tenant).latest('date_to')
+        trial = Trial.objects.filter(active=True, tenant=tenant).last()
+        trial_is_active = False
+        trial_remaining_days = 0
+        if trial:
+            if trial.date_fm <= today <= trial.date_to: 
+                trial_is_active = True
+            delta = trial.date_to - today
+            trial_remaining_days = delta.days
 
-    
+        trial_percentage = 0
+        if TRIAL_DAYS != 0: trial_percentage = min(100, int(100 * trial_remaining_days/TRIAL_DAYS))
+
         can_try = False if subscriptions else True
 
         days_remaining = 0
@@ -70,9 +79,6 @@ def summary(request):
                 messages.error(request, _("Jours d'essai restant") + f" : {days_remaining}")
         # else:
             # messages.error(request, _("Aucun abonnement actif. Contacter nous."))
-
-        trial_percentage = 0
-        if TRIAL_DAYS != 0: trial_percentage = min(100, int(100 * days_remaining/TRIAL_DAYS))
 
         tint = 'secondary'
         if days_remaining >= SUB_DAYS_WARNING: tint = "success"
@@ -86,11 +92,13 @@ def summary(request):
         context = { 
             "tenant"               : tenant, 
             "days_remaining"       : days_remaining, 
+            "trial_remaining_days" : trial_remaining_days,
             "trial_percentage"     : trial_percentage, 
             "active_subscriptions" : active_subscriptions, 
             "current_subscription" : current_subscription, 
             "can_try"              : can_try,
             "trial"                : trial,
+            "trial_is_active"      : trial_is_active,
             "tint"                 : tint, 
             "admins"               : admins, 
             "users"                : users
