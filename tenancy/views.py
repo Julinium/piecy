@@ -53,6 +53,7 @@ def summary(request):
         active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
         
+        
         can_try = False if subscriptions else True
 
         days_remaining = 0
