@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 # from datetime import date, datetime, timedelta, timezone
-from datetime import timedelta
+from datetime import timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
 from django.contrib import messages
@@ -154,17 +154,18 @@ def order(request):
     if code == 200:
         if request.method == "POST":
             stage = request.POST.get('stage', '')
+            plan_id = request.POST.get('plan_id', '')
+            plan_uuid = uuid.UUID(plan_id, version=4)
+            plan = Plan.objects.filter(id=plan_uuid).first()
+
             if stage == "selection":
                 subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant).order_by('date_fm')
                 is_new = True if len(subs) == 0 else False
 
-                plan_id = request.POST.get('plan_id', '')
                 tag = request.POST.get('tag', '')
                 tag_new = request.POST.get('tag_new', '')
                 period = request.POST.get('period', '')
                 periodicity = "1" if period == "monthly" else "12"
-                plan_uuid = uuid.UUID(plan_id, version=4)
-                plan = Plan.objects.filter(id=plan_uuid).first()
                 monthly_price = int(tag_new) if is_new else  int(tag)
 
                 price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
@@ -196,33 +197,74 @@ def order(request):
                 }                
 
             else:
-                payments = SystemPayment.objects.filter(date_made__year=today.year).order_by("-date_made")
-                order_seq = 1 + len(payments)
-                """
-                    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-                    active = models.BooleanField(blank=True, null=True, default=True)
-                    status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
-                    order_no = models.CharField(max_length=32, blank=True, null=True)
-                    verified = models.BooleanField(blank=True, null=True)
-                    reference = models.CharField(max_length=32, blank=True, null=True)
-                    mode = models.CharField(max_length=1, choices=Modes.choices, default=Modes.WIRE)
-                    date_made = models.DateField(blank=True, null=True)
-                    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-                    currency = models.CharField(max_length=4, blank=True, null=True, default="MAD")
-                    made_by = models.CharField(max_length=64, blank=True, null=True)
-                    note = models.CharField(max_length=64, blank=True, null=True)
-                """
+                
+                # total_amount = request.POST.get('total_amount', '0')
+                total_amount = Decimal(request.POST.get('total_amount', '0')).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+                # Create System Payment                
+                payments = SystemPayment.objects.filter(date_made__year=today.year)
+                year = today.year % 100
+                day_of_year = today.timetuple().tm_yday
+                order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):5d}"
+
+                
                 payment = SystemPayment(
-                    order_no = "",
-
+                    order_no    = order_no,
+                    date_made   = today,
+                    amount      = total_amount,
+                    currency    = plan.currency,
+                    made_by     = request.user,
+                    note        = f"{request.user.tenant}-{plan.name}-{today}"
                 )
-                ctx = {}
-                data = ''
-                for key, value in request.POST.items():
-                    data += f"-\n-{key}: {value}"
-                messages.success(request, f"POST returned: {data}")
+                try:
+                    payment.save()
+                except Exception as xc:
+                    print(f"Error raised while creating System Payment: {str(xc)}")
 
-            return render(request, 'tenancy/order.html', ctx)
+                # Create Subscription
+                df = request.POST.get('date_fm', '')
+                dt = request.POST.get('date_to', '')
+                if df:
+                    try:
+                        date_start = datetime.strptime(df, '%Y-%m-%d').date()
+                    except ValueError:
+                        date_start = None  # or handle error
+                        print(f"Error raised while getting Subscription start date")
+                else:
+                    date_start = None
+                if dt:
+                    try:
+                        date_end = datetime.strptime(df, '%Y-%m-%d').date()
+                    except ValueError:
+                        date_end = None  # or handle error
+                        print(f"Error raised while getting Subscription end date")
+                else:
+                    date_end = None
+
+                subscription = Subscription(
+                    date_fm = date_start,
+                    date_to = date_end,
+                    tenant  = request.user.tenant,
+                    plan    = plan,
+                    payment = payment
+                )
+
+                try:
+                    subscription.save()
+                except Exception as xc:
+                    print(f"Error raised while creating Subscription: {str(xc)}")
+
+                # ctx = {
+                #     "payment"      : payment,
+                #     "subscription" : subscription
+                # }
+                sub_message = _("Abonnement souscrit avec succès.")
+                pay_message = _("Merci de confirmer votre payment.")
+                messages.success(request, f"{sub_message}")
+                messages.warning(request, f"{pay_message}")
+
+            # return render(request, 'tenancy/order.html', ctx)
+            return redirect("tenancy_summary")
 
 
         context = {}

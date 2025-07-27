@@ -175,7 +175,8 @@ class Commande(models.Model):
     def __str__(self):
         cmde = f'[{self.get_total_ttc}] - '
         cmde += f'{self.client.last_name}'
-        if self.client.societe : cmde += f' ({self.client.societe.name})'
+        if self.client.societe: 
+            cmde += f' ({self.client.societe.name})'
         return cmde
 
     

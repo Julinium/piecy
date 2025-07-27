@@ -56,8 +56,6 @@ class Tenant(models.Model):
         return f'{self.name} - {self.owner}'
     
     def save(self, *args, **kwargs):
-        # if self.pk is None: print("Creating object")
-        # else: print("Updating object")
         try:
             self.created_by_user = Utilisateur.objects.get(id=self.created_by).username
             self.edited_by_user = Utilisateur.objects.get(id=self.edited_by).username
