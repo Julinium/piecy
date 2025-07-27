@@ -160,6 +160,7 @@ def subscribe(request):
 
 @login_required(login_url="account_login")
 def order(request):
+    # TODO: Handle downgrading
     code, message = can_admin(request)
     if code == 200:
         if request.method == "POST":
