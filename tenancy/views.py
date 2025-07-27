@@ -1,10 +1,14 @@
+import uuid
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
 # from datetime import date, datetime, timedelta, timezone
 from datetime import timedelta
-from django.contrib import messages
+from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
+from django.contrib import messages
+
+from decimal import Decimal, ROUND_HALF_UP
 
 from django.http import HttpResponse
 # from django.utils.text import capfirst
@@ -60,10 +64,10 @@ def summary(request):
             delta = current_subscription.date_to - today
             days_remaining = delta.days
             if current_subscription.is_trial: 
-                messages.error(request, _("Période d'essai. Merci de souscrire un abonnement."))
+                # messages.error(request, _("Période d'essai. Merci de souscrire un abonnement."))
                 messages.error(request, _("Jours d'essai restant") + f" : {days_remaining}")
-        else:
-            messages.error(request, _("Aucun abonnement actif. Contacter nous."))
+        # else:
+            # messages.error(request, _("Aucun abonnement actif. Contacter nous."))
 
         trial_percentage = 0
         if TRIAL_DAYS != 0: trial_percentage = min(100, int(100 * days_remaining/TRIAL_DAYS))
@@ -134,18 +138,25 @@ def trial(request):
 def sub_renew(request):
     code, message = can_admin(request)
     if code == 200:
-        if request.method == "POST":
-            plan_id = request.POST.get('plan_id', '')
-            tag = request.POST.get('tag', '')
-            period = request.POST.get('period', '')
-            data = ''
-            for key, value in request.POST.items():
-                data += f"\n{key}: {value}"
-            ctx = {
-                plan = Plan.objects.filter(id=plan_id)
-            }
-            messages.success(request, f"POST returned: {data}")
-            return redirect("tenancy/order-summary.html", {ctx})
+        # if request.method == "POST":
+        #     plan_id = request.POST.get('plan_id', '')
+        #     tag = request.POST.get('tag', '')
+        #     period = request.POST.get('period', '')
+        #     periodicity = _("Mensuelle") if period == "monthly" else _("Annuelle")
+        #     plan = Plan.objects.filter(id=plan_id)
+        #     price = int(tag) if period == "monthly" else 12 * int(tag)
+
+        #     data = ''
+        #     for key, value in request.POST.items():
+        #         data += f"\n{key}: {value}"
+
+        #     ctx = {
+        #         "price"       : price,
+        #         "periodicity" : periodicity,
+        #         "plan"        : plan,
+        #     }
+        #     messages.success(request, f"POST returned: {data}")
+        #     return redirect("tenancy_order", ctx)
 
         plans = Plan.objects.filter(active=True)
         context = {
@@ -155,6 +166,73 @@ def sub_renew(request):
 
     return HttpResponse(message, status=code)
 
+
+
+@login_required(login_url="account_login")
+def order(request):
+    code, message = can_admin(request)
+    if code == 200:
+        if request.method == "POST":            
+            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=request.user.tenant)
+            is_new = True if len(subs) == 0 else False
+            # discount_new = is_new == True
+
+            plan_id = request.POST.get('plan_id', '')
+            tag = request.POST.get('tag', '')
+            tag_new = request.POST.get('tag_new', '')
+            period = request.POST.get('period', '')
+            periodicity = "1" if period == "monthly" else "12"
+            plan_uuid = uuid.UUID(plan_id, version=4)
+            plan = Plan.objects.filter(id=plan_uuid).first()
+            monthly_price = int(tag_new) if is_new else  int(tag)
+
+            price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
+            discount_new = True if is_new else False
+            price = monthly_price if period == "monthly" else 12 * monthly_price
+            discount_year = False if period == "monthly" else True
+
+            end_date = today + relativedelta(months=1, days=1) if period == "monthly" else today + relativedelta(years=1, days=1)
+# from django.http import HttpResponse
+
+# def my_view(request):
+            amount_int = 199  # e.g., 199 cents or raw input
+            amount_decimal = Decimal(amount_int).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    # return HttpResponse(f"Amount: {amount_decimal}")
+
+            ctx = {
+                "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                # "monthly_price" : monthly_price,
+                # "price"         : price,
+                # "price_normal"  : price_normal,
+                "periodicity"   : periodicity + " " + _("Mois"),
+                "plan"          : plan,
+                "start_date"    : today,
+                "end_date"      : end_date,
+                "discount_new"  : discount_new,
+                "discount_year" : discount_year,
+                "taxes_amount"  : Decimal(price * 0.2).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                "total_amount"  : Decimal(price * 1.2).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                # "taxes_amount"  : price * 0.2,
+                # "total_amount"  : price * 1.2,
+            }
+            # messages.success(request, f"POST returned: {data}")
+            # messages.success(request, f"Extracted data: {str(ctx)}")
+            # return render(request, "tenancy/order.html", ctx)
+            return render(request, 'tenancy/order.html', ctx)
+
+        # if request.method == "POST":
+        #     data = ''
+        #     for key, value in request.POST.items():
+        #         data += f"\n{key}: {value}"
+        #     print(data)
+        #     return redirect('tenancy_summary')
+
+        context = {}
+        return render(request, 'tenancy/order.html', context)
+
+    return HttpResponse(message, status=code)
 
 
 @login_required(login_url="account_login")

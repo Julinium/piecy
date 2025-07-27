@@ -22,10 +22,11 @@
                     <li class="{% if not plan.ecommerce %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Ecommerce" %}</li>
                     <li class="{% if not plan.mailbox %}text-secondary text-decoration-line-through{% endif %}">{% trans "Serveur mail privé" %}</li>
                 </ul>
-                <form method="POST"  action="{% url 'tenancy_sub_renew' %}">
+                <form method="POST"  action="{% url 'tenancy_order' %}">
                     {% csrf_token %}
                     <input type="hidden" name="plan_id" value="{{ plan.id }}">
                     <input type="hidden" name="tag" value="{{ tag }}">
+                    <input type="hidden" name="tag_new" value="{{ tag_new }}">
                     <input type="hidden" name="period" value="{{ period }}">
                     <button type="submit" class="w-100 btn btn-lg btn-outline-primary">{% trans "Souscrire" %}</button> 
                 </form>

@@ -181,8 +181,8 @@ class SystemPayment(models.Model):
     mode = models.CharField(max_length=1, choices=Modes.choices, default=Modes.CASH)
     date_made = models.DateField(blank=True, null=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=16, blank=True, null=True, default="MAD")
-    maker = models.CharField(max_length=64, blank=True, null=True)
+    currency = models.CharField(max_length=4, blank=True, null=True, default="MAD")
+    made_by = models.CharField(max_length=64, blank=True, null=True)
     note = models.CharField(max_length=64, blank=True, null=True)
 
     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
@@ -209,6 +209,7 @@ class Plan(models.Model):
     year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
     first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)
     monthly_price = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=4, blank=True, null=True, default="MAD")
 
     custom_domain = models.BooleanField(blank=True, null=True)
     mailbox = models.BooleanField(blank=True, null=True)

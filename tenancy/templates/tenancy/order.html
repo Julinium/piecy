@@ -1,0 +1,127 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+
+{% block title %}
+    {% trans "Sommaire commande" %}
+{% endblock title %}
+
+{% block content %}
+
+    <!-- Header -->
+    {% with headline=_("Récap de la commande") %}
+        {% include "base/includes/compo-title.html" %}
+    {% endwith %}
+
+                            
+
+    {% if plan %}
+        <div id="order-summary" class="mb-4">
+
+            <ul class="list-group mb-3">
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Plan" %}</small>
+                    <div class="strong">{{ plan.name }}</div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Période" %}</small>
+                    <div class="strong">{{ periodicity }}</div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Date début" %}</small>
+                    <div class="strong">{{ start_date }}</div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Date fin" %}</small>
+                    <div class="strong">{{ end_date }}</div>
+                </li>
+                {% if discount_new or discount_year %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <small class="text-muted">{% trans "Prix par mois" %}</small>
+                        <div class="strong text-muted text-decoration-line-through">
+                            {{ plan.monthly_price }}
+                        </div>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <small class="text-muted">{% trans "Prix par période" %}</small>
+                        <div class="strong text-muted text-decoration-line-through">{{ price_normal }}</div>
+                    </li>
+                    {% if discount_new %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <small class="text-muted">{% trans "Réduction: Nouvel Abonnement" %}</small><br>
+                            <div class="strong text-success">-{{ plan.first_time_disc }}%</div>
+                        </li>
+                    {% endif %}
+                    {% if discount_year %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <small class="text-muted">{% trans "Réduction: Paiment Annuel" %}</small><br>
+                            <div class="strong text-success">{{ plan.year_free_mth }} {% trans "Mois offerts" %}</div>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Prix mensuel" %}</small>
+                    <div class="strong">{{ monthly_price }}</div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Total abonnement" %}</small>
+                    <div class="strong">{{ price }}</div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Taxes" %} (20%)</small>
+                    <div class="strong text-danger">{{ taxes_amount }}</div>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{% trans "Total à payer TTC" %}</small>
+                    <div class="strong">{{ total_amount }}</div>
+                </li>
+            </ul>
+
+            <!-- <div><small>{% trans "Taxes" %} (20%): </small>{{ taxes_amount }}</div>
+            <div><small>{% trans "Total à payer TTC" %}: </small>{{ total_amount }}</div> -->
+
+            <!-- <div>
+                <small>{% trans "Prix par mois" %}: </small>
+                {% if discount_new or discount_year %}<span class="fs-6 text-muted text-decoration-line-through">{{ plan.monthly_price }}</span>{% endif %}
+                <span class=" fs-5 fw-bold text-success">{{ monthly_price }}</span> {{ plan.currency }}
+            </div>
+            <div>
+                <small>{% trans "Prix total" %}: </small>
+                {% if discount_new or discount_year %}<span class="fs-6 text-muted text-decoration-line-through">{{ price_normal }}</span>{% endif %}
+                <span class="fs-5 fw-bold text-success">{{ price }}</span> {{ plan.currency }}
+            </div> -->
+
+
+
+                <!-- <div class="text-success">
+                    {% if discount_new %}<div>{% trans "Réduction: Nouvel Abonnement" %} = {{ plan.first_time_disc }}%</div>{% endif %}
+                    {% if discount_year %}<div>{% trans "Réduction: Paiment Annuel" %} = {{ plan.year_free_mth }} {% trans "Mois offerts" %}</div>{% endif %}
+                </div> -->
+
+
+
+            <!-- <h4>{% trans "Votre commande" %}</h4> -->
+            <!-- <div><small>{% trans "Plan" %}: </small>{{ plan.name }}</div> -->
+            <!-- <div><small>{% trans "Période" %}: </small>{{ periodicity }}</div> -->
+            <!-- <div><small>{% trans "Date début" %}: </small>{{ start_date }}</div> -->
+            <!-- <div><small>{% trans "Date fin" %}: </small>{{ end_date }}</div> -->
+
+
+
+            <form method="POST"  action="{% url 'tenancy_sub_renew' %}">
+                {% csrf_token %}
+                <input type="hidden" name="plan_id" value="{{ plan.id }}">
+                <input type="hidden" name="price" value="{{ price }}">
+                <input type="hidden" name="periodicity" value="{{ periodicity }}">
+                <button type="submit" class="w-100 btn btn-lg btn-outline-primary">{% trans "Confirmer" %}</button> 
+            </form>
+        </div>
+        {% else %}
+        <div class="text-danger">
+            {% trans "Erreur lors de la lecture du plan." %}
+        </div>
+        {% endif %}
+
+
+{% endblock content %}
