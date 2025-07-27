@@ -207,7 +207,6 @@ def order(request):
                 day_of_year = today.timetuple().tm_yday
                 order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
                 paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-
                 
                 payment = SystemPayment(
                     order_no    = order_no,

@@ -122,6 +122,27 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
         ordering = ['-is_active', 'tenant', 'created_on', 'last_login', 'is_tenant_admin']
 
 
+class Trial(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
+    date_fm = models.DateField(blank=True, null=True)
+    date_to = models.DateField(blank=True, null=True)
+    tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
+    plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
+
+    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
+    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
+
+    class Meta:
+        db_table = 'trial'
+
+    def __str__(self):
+        return f'TRIAL-{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
+
+
 
 class Subscription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
