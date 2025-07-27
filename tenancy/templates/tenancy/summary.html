@@ -36,20 +36,20 @@
             {% if trial_is_active %}
                 <div class="card mb-4 shadow shadow bg-warning-subtle">
                     <div class="card-header fw-bold fs-5 text-center">
-                        {% trans "Essai Gratuit" %}
+                        {% trans "Essai Gratuit" %} <span class="fw-light small text-muted">- {% trans "Jours restant" %}: </span>{{ trial_remaining_days }}
                     </div>
                     <div class="card-body bg-warning-subtle">
                         <p class="card-text">{% trans "Vous avez activé un Essai gratuit. Un Abonnement est nécessaire pour continuer à utiliser cette application." %}
-                            <span class="text-danger">{% trans "Attention: sans Abonnement valide, vos données  risquent de disparître définitivement." %} !</span>
+                            <span class="text-danger fw-bold">{% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !</span>
                         </p>
-                        <div class="">
-                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-success">{% trans "Souscrire un Abonnement" %}</a>
-                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
-                        </div>
                         <div class="my-3">
                             <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Essai gratuit' %}" aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
                                 <div class="progress-bar bg-success" style="width: {{ trial_percentage }}%"></div>
                             </div>
+                        </div>
+                        <div class="">
+                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire un Abonnement" %}</a>
+                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                         </div>
                     </div>
                 </div>

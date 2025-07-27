@@ -119,15 +119,14 @@ def trial(request):
         plan = Plan.objects.filter(active=True).order_by('ordre').first()
 
         if request.method == "POST":
-            subscription = Subscription(
-                    is_trial = True,
+            trial = Trial(
                     date_fm = trial_date_start,
                     date_to = trial_date_end,
                     tenant = tenant,
                     plan = plan,
             )
             try: 
-                subscription.save()
+                trial.save()
                 messages.success(request, _("Votre période d'essai a commencé"))
             except Exception as xc: 
                 messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))

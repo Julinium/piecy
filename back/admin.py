@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
-from .models import Plan, Tenant, SystemPayment, Subscription
+from .models import Plan, Tenant, SystemPayment, Subscription, Trial
 
 User = get_user_model()
 
@@ -126,8 +126,13 @@ class SubscriptionAdmin(admin.ModelAdmin):
     model = Subscription
 
 
+class TrialAdmin(admin.ModelAdmin):
+    model = Trial
+
+
 
 admin.site.register(Tenant, TenantAdmin)
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(SystemPayment, SystemPaymentAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
+admin.site.register(Trial, TrialAdmin)
