@@ -202,6 +202,7 @@ class SystemPayment(models.Model):
 class Plan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
+    featured = models.BooleanField(blank=True, null=True, default=False)
     name = models.CharField(max_length=16, blank=True, null=True)
     header = models.CharField(max_length=128, blank=True, null=True)
     ordre = models.SmallIntegerField(blank=True, null=True)

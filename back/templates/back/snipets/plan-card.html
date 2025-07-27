@@ -4,8 +4,8 @@
 {% if plan %}
     <div class="col">
         <div class="card mb-4 rounded-3 shadow-sm">
-            <div class="card-header py-3">
-                <h4 class="my-0 fw-normal">{{ plan.name }}</h4>
+            <div class="card-header py-3{% if plan.featured %} bg-success text-light{% endif %}">
+                <h4 class="my-0 fw-bold">{{ plan.name }}</h4>
             </div>
             <div class="card-body">
                 <h1 class="card-title pricing-card-title">{{ tag_new }}<small class="text-body-secondary fw-light">/{% trans "mois" %}</small></h1> 
@@ -28,7 +28,7 @@
                     <input type="hidden" name="tag" value="{{ tag }}">
                     <input type="hidden" name="tag_new" value="{{ tag_new }}">
                     <input type="hidden" name="period" value="{{ period }}">
-                    <button type="submit" class="w-100 btn btn-lg btn-outline-primary">{% trans "Souscrire" %}</button> 
+                    <button type="submit" class="w-100 btn btn-lg{% if plan.featured %} btn-success{% else %} btn-outline-primary{% endif %}">{% trans "Choisir" %}</button> 
                 </form>
             </div>
         </div>

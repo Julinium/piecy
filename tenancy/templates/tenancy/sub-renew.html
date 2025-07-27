@@ -13,11 +13,6 @@
     {% with headline=_("Séléction Abonnement") subtitle=_("Séléctionner l'Abonnement qui vous convient et procéder à son activation.") %}
         {% include "base/includes/compo-title.html" %}
     {% endwith %}
-    <!-- <div class="card mb-4 rounded-3 bg-success-subtle shadow-sm">
-        <div class="card-header py-3">
-            <h4 class="my-0 fw-normal">{% trans "Tous les nouveaux clients bénéficient de grandes réductions" %}</h4>
-        </div>
-    </div> -->
 
     {% include 'back/snipets/plan-cards.html' with plans=plans %}
 
@@ -49,6 +44,17 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="small text-muted">
+        <ul>
+            <li>
+                {% trans "Les prix affichés n'incluent pas de matŕiels" %}
+            </li>
+            <li>
+                {% trans "Les options sont facturées séparément." %}
+            </li>
+        </ul>
     </div>
 
     <div class="mt-4">

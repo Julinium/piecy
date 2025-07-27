@@ -194,15 +194,12 @@ def order(request):
             start_date = today
             sub = subs.last()
             if sub: start_date = sub.date_to + relativedelta(days=1)
-            end_date = start_date + relativedelta(months=1, days=1) if period == "monthly" else start_date + relativedelta(years=1, days=1)
+            end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
 
             ctx = {
                 "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
                 "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
                 "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                # "monthly_price" : monthly_price,
-                # "price"         : price,
-                # "price_normal"  : price_normal,
                 "periodicity"   : periodicity + " " + _("Mois"),
                 "plan"          : plan,
                 "start_date"    : start_date,
@@ -211,20 +208,10 @@ def order(request):
                 "discount_year" : discount_year,
                 "taxes_amount"  : Decimal(price * 0.2).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
                 "total_amount"  : Decimal(price * 1.2).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                # "taxes_amount"  : price * 0.2,
-                # "total_amount"  : price * 1.2,
             }
-            # messages.success(request, f"POST returned: {data}")
-            # messages.success(request, f"Extracted data: {str(ctx)}")
-            # return render(request, "tenancy/order.html", ctx)
+            
             return render(request, 'tenancy/order.html', ctx)
 
-        # if request.method == "POST":
-        #     data = ''
-        #     for key, value in request.POST.items():
-        #         data += f"\n{key}: {value}"
-        #     print(data)
-        #     return redirect('tenancy_summary')
 
         context = {}
         return render(request, 'tenancy/order.html', context)
