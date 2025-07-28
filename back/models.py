@@ -127,8 +127,9 @@ class Trial(models.Model):
     active = models.BooleanField(blank=True, null=True, default=True)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
-    tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
-    plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
+    tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True, editable=False)
+    plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True, editable=False)
+    date_ended = models.DateField(blank=True, null=True, editable=False)
 
     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)

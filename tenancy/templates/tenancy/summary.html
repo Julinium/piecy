@@ -30,194 +30,190 @@
     {% endif %}
 
     {% if tenant.active %}
-
-        <!-- No Running Subscription -->
-        {% if active_subscriptions.count == 0 %}
-            {% if trial_is_active %}
-                <div class="card mb-4 shadow shadow bg-warning-subtle">
-                    <div class="card-header fw-bold fs-5 text-center">
-                        {% trans "Essai Gratuit" %} <span class="fw-light small text-muted">- {% trans "Jours restant" %}: </span>{{ trial_remaining_days }}
-                    </div>
-                    <div class="card-body bg-warning-subtle">
-                        <p class="card-text">{% trans "Vous avez activé un Essai gratuit. Un Abonnement est nécessaire pour continuer à utiliser cette application." %}
-                            <span class="text-danger fw-bold">{% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !</span>
-                        </p>
-                        <div class="my-3">
-                            <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Essai gratuit' %}" aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
-                                <div class="progress-bar bg-success" style="width: {{ trial_percentage }}%"></div>
-                            </div>
-                        </div>
-                        <div class="">
-                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire un Abonnement" %}</a>
-                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
-                        </div>
+        {% if box == "S1R0" %}
+        <!-- Expired Subscription --> <!-- subscriptions latest_subscription -->
+            <div class="card mb-4 shadow shadow bg-danger-subtle">
+                <div class="card-header fw-bold fs-5 text-center">
+                    {% trans "ABONNEMENT EXPIRÉ" %}
+                </div>
+                <div class="card-body bg-danger-subtle">
+                    <p class="card-text">{% trans "Plan" %}: <span class="fw-bold">{{ latest_subscription.plan.name }}</span></p>
+                    <p class="card-text">
+                        {% trans "Votre Abonnement a expiré depuis le:" %} 
+                        <strong>{{ latest_subscription.date_to }}</strong>.
+                    </p>
+                    <p class="text-danger fw-bold">
+                        {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
+                    </p>
+                    <div class="">
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
-            {% else %}
-                <div class="card mb-4 shadow shadow bg-danger-subtle">
-                    <div class="card-header fw-bold fs-5 text-center text-danger">
-                        {% trans "PAS D'ABONNEMENT ACTIF" %}
-                    </div>
-                    <div class="card-body bg-danger-subtle">
-                        <p class="card-text">{% trans "Votre Entreprise n'a pas d'Abonnement actif en ce moment. Un Abonnement est nécessaire pour continuer à utiliser cette application." %}
-                            {% if not can_try %}<span class="text-danger">{% trans "Vous risquez de perdre vos données à jamais si vous restez sans Abonnement actif pour longtemps." %} !</span>{% endif %}
-                        </p>
-                        <div class="">
-                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-success">{% trans "Souscrire un Abonnement" %}</a>
-                            {% if can_try %}
-                                <a href="{% url 'tenancy_trial' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Essai Gratuit" %}</a>
-                            {% endif %}
-                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+            </div>
+        {% endif%}
+
+        {% if box == "S1R1" %}
+        <!-- Running Subscription --> <!-- subscriptions current_subscription subscription_remaining_days subscription_percentage styling_tint -->
+            <div class="card mb-4 shadow shadow bg-{{ styling_tint }}-subtle">
+                <div class="card-header fw-bold fs-5 text-center">
+                    {% trans "ABONNEMENT ACTIF" %}
+                </div>
+                <div class="card-body bg-{{ styling_tint }}-subtle">
+                    <p class="card-text">{% trans "Plan" %}: <span class="fw-bold">{{ current_subscription.plan.name }}</span></p>
+                    <p class="card-text">{% trans "Votre Abonnement est actif jusqu'au:" %} <strong>{{ current_subscription.date_to }}</strong>.
+                    </p>
+                    <div class="my-3">
+                        <div class="progress bg-danger" role="progressbar" aria-label="{% trans '{{ current_subscription.plan.name }}' %}" aria-valuenow="{{ subscription_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-success" style="width: {{ subscription_percentage }}%"></div>
                         </div>
                     </div>
+
+                    {% if not current_subscription.payment.verified %}
+                        <ul class="list-group mb-3">
+                            <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiment non confirmé !" %}</li>
+                        </ul>
+                    {% endif %}
+                    <div class="">
+                        {% if not current_subscription.payment.verified %}
+                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-primary">{% trans "Nous Contacter" %}</a>
+                        {% else %}
+                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
+                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endif%}
+
+        {% if box == "S0T0" %}
+        <!-- New client --> <!-- -- -->
+            <div class="card mb-4 shadow shadow bg-danger-subtle">
+                <div class="card-header fw-bold fs-5 text-center">
+                    {% trans "AUCUN ABONNEMENT ACTIF" %}
+                </div>
+                <div class="card-body bg-danger-subtle">
+                    <p class="card-text">
+                        {% trans "Vous n'avez pas d'Abonnement actif." %}
+                    </p>
+                    <p class="text-danger fw-bold">
+                        {% trans "Attention: Un Abonnement valide est requis pour utiliser cette application." %} !
+                    </p>
+                    <div class="">
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire" %}</a>
+                        <a href="{% url 'tenancy_trial' %}" class="me-2 mb-2 btn btn-success">{% trans "Essai Gratuit" %}</a>
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                    </div>
+                </div>
+            </div>
+        {% endif%}
+
+        {% if box == "S0T1R1" %}
+        <!-- Running Trial --> <!-- trials current_trial trial_remaining_days trial_percentage -->
+            <div class="card mb-4 shadow shadow bg-warning-subtle">
+                <div class="card-header fw-bold fs-5 text-center">
+                    {% trans "ESSAI GRATUIT" %}
+                </div>
+                <div class="card-body bg-warning-subtle">
+                    <p class="card-text">{% trans "Plan" %}: <span class="fw-bold">{{ current_trial.plan.name }}</span></p>
+                    <p class="card-text">
+                        {% trans "Votre Essai gratuit est actif jusqu'au:" %} 
+                        <strong>
+                            {{ current_trial.date_to }}
+                        </strong>.
+                    </p>
+                    <p class="text-danger fw-bold">
+                        {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
+                    </p>
+                    <div class="my-3">
+                        <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Essai gratuit' %}" aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-success" style="width: {{ trial_percentage }}%"></div>
+                        </div>
+                    </div>
+                    <div class="">
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire" %}</a>
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                    </div>
+                </div>
+            </div>
+        {% endif%}
+
+        {% if box == "S0T1R0" %}
+        <!-- Expired Trial --> <!-- trials latest_trial -->
+            <div class="card mb-4 shadow shadow bg-danger-subtle">
+                <div class="card-header fw-bold fs-5 text-center">
+                    {% trans "ESSAI GRATUIT EXPIRÉ" %}
+                </div>
+                <div class="card-body bg-danger-subtle">
+                    <p class="card-text">{% trans "Plan" %}: <span class="fw-bold">{{ latest_trial.plan.name }}</span></p>
+                    <p class="card-text">
+                        {% trans "Votre Essai gratuit a expiré depuis le:" %} <strong>{{ latest_trial.date_to }}</strong>.
+                    </p>
+                    <p class="text-danger fw-bold">
+                        {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
+                    </p>
+                    <div class="">
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire" %}</a>
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                    </div>
+                </div>
+            </div>
+        {% endif%}
+        
+
+        <!-- Payments history -->
+         {% if subscriptions %}
+            <br class="mt-4">
+            <div id="payments-history" class="mb-2">
+                <h4>{% trans "Derniers Paiments" %}</h4> 
+                <ul class="list-group">
+                    {% for sub in subscriptions %}
+                        {% if sub.payment %}
+                            {% if sub.payment.active %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div id="{{ payment.id }}">
+                                        <div>{{ sub.payment.reference }}</div>
+                                        <div>
+                                            <strong class="text-{% if sub.payment.verified %}success{% else %}danger{% endif %}">
+                                                {{ sub.payment.amount }}
+                                                <span>{{ sub.payment.currency }}</span> 
+                                            </strong>                                        
+                                        </div>
+                                    </div>
+                                    {% if sub.payment.verified %}
+                                        <span class="badge text-bg-success rounded-pill">{% trans "Vérifié"%}</span>
+                                    {% else %}
+                                        <span class="badge text-bg-danger rounded-pill">{% trans "Non Vérifié"%}</span>
+                                    {% endif %}
+                                </li>
+                            {% else %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="text-danger small">
+                                        {% trans "Élément supprimé ou désactivé" %}
+                                    </div>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% empty %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div class="text-danger small">
+                                {% trans "Aucun élément trouvé" %}
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% if request.user.is_authenticated and request.user.is_tenant_admin %}
+                <div id="admins-actions" class="mt-2 mb-4">
+                    <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique' %}</a>
                 </div>
             {% endif %}
         {% endif %}
 
-        <!-- Subscription status -->
-
-        {% if current_subscription %}
-            <div id="tenant-details" class="mb-4">
-                <h4>{% trans "Abonnement actif" %}</h4>
-
-                {% if current_subscription.is_trial %}
-
-                    <div class="card mb-4 shadow">
-                        <div class="card-header fw-bold fs-5 bg-danger text-light">
-                            <div>{{ current_subscription.plan.name }} - {% trans "Période d'essai" %}</div>                            
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item">
-                                    <small>{{ current_subscription.date_fm }}</small> - <strong>{{ current_subscription.date_to }}</strong> <br>
-                                    <small class="text-muted">{% trans 'Jours restant' %}</small> : <strong>{{ days_remaining }}</strong>
-                                </li>
-                            </ul>
-                            <!-- <div class="my-3">
-                                <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Avancement essai gratuit' %}" aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
-                                    <div class="progress-bar bg-success" style="width: {{ trial_percentage }}%"></div>
-                                </div>
-                            </div> -->
-                            
-                            <p class="card-text small text-muted">{% trans "Pour continuer à utiliser cette application et conserver vos données, merci de souscrire un abonnement." %}</p>
-                            {% if request.user.is_authenticated and request.user.is_tenant_admin %}
-                                <div id="sub-actions" >
-                                    <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire un Abonnement" %}</a>
-                                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter"%}</a>
-                                </div>
-                            {% else %}
-                                <p class="card-text">{% trans "Contacter votre administrateur en cas de besoin." %}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-
-                {% else %}
-
-                    <div class="card mb-4 shadow">
-                        <div class="card-header fw-bold fs-5 bg-{{ tint }}-subtle">
-                            <div class="d-flex justify-content-between">
-                                <div>
-                                    <div>{% trans 'Plan' %}: {{ current_subscription.plan.name }}.<span class="ms-4">{% trans "Jours restant" %}:  {{ days_remaining }}</span></div> 
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-group mb-3">
-                                <li class="list-group-item">
-                                    <small class="text-muted">{% trans 'Date début' %}</small><br>
-                                    <div>{{ current_subscription.date_fm }}</div>
-                                </li>
-                                <li class="list-group-item bg-{{ tint }}-subtle">
-                                    <small class="text-muted">{% trans 'Date fin' %}</small><br>
-                                    <strong>{{ current_subscription.date_to }}</strong>
-                                </li>
-                                {% if current_subscription.payment %}
-                                    <li class="list-group-item">
-                                        <small class="text-muted">{% trans 'Date Paiment' %}</small><br>
-                                        <div>{{ current_subscription.payment.date_made }}</div>
-                                    </li>
-                                    <li class="list-group-item">
-                                        <small class="text-muted">{% trans 'Référence Paiment' %}</small><br>
-                                        <div>{{ current_subscription.payment.reference }}</div>
-                                        <div>
-                                            {% if current_subscription.payment.verified %}
-                                                <small class="text-success fw-bold">
-                                                    {% trans 'Paiment Vérifié' %}
-                                                </small>
-                                            {% else %}
-                                                <small class="text-danger fw-bold">
-                                                    {% trans 'Paiment non Vérifié' %} !
-                                                </small>
-                                            {% endif %}
-                                        </div>
-                                    </li>
-                                {% else %}
-                                    <li class="list-group-item">
-                                        <small class="text-muted">{% trans 'Aucun Paiment trouvé pour cet Abonnement' %} !</small><br>
-                                    </li>
-                                {% endif %}
-
-                            </ul>
-                            {% if request.user.is_authenticated and request.user.is_tenant_admin %}
-                                <div id="sub-actions" >
-                                    <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans 'Renouveler' %}</a>
-                                    <a href="{% url 'tenancy_sub_upgrade' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Améliorer' %}</a>
-                                    <a href="{% url 'tenancy_sub_cancel' %}" class="me-2 mb-2 btn btn-outline-danger">{% trans 'Annuler' %}</a>
-                                </div>
-                            {% else %}
-                                <p class="card-text">{% trans "Contacter votre administrateur en cas de besoin." %}</p>
-                            {% endif %}
-                        </div>
-                    </div>
-                {% endif %} 
-            </div>
-        {% endif %}
-
-        <br class="mt-4">
-        <div id="tenant-details" class="mb-4">
-            <h4>{% trans "Mes dernières factures" %}</h4>            
-            <ul class="list-group">
-                {% for sub in active_subscriptions %}
-                    {% if sub.payment %}
-                        {% if sub.payment.active %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div id="{{ payment.id }}">
-                                    <div>{{ sub.payment.reference }}</div>
-                                    <div><strong>{{ sub.payment.amount }} {{ sub.payment.currency }}</strong></div>
-                                </div>
-                                {% if sub.payment.verified %}
-                                    <span class="badge text-bg-success rounded-pill">{% trans "Vérifié"%}</span>
-                                {% else %}
-                                    <span class="badge text-bg-warning rounded-pill">{% trans "Non Vérifié"%}</span>
-                                {% endif %}
-                            </li>
-                        {% else %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div class="text-danger small">
-                                    {% trans "Élément supprimé ou désactivé" %}
-                                </div>
-                            </li>
-                        {% endif %}
-                    {% endif %}
-                {% empty %}
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="text-danger small">
-                            {% trans "Aucun élément trouvé" %}
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-
-        {% if request.user.is_authenticated and request.user.is_tenant_admin %}
-            <div id="admins-actions" class="mt-2 mb-4">
-                <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique' %}</a>
-            </div>
-        {% endif %}
-
         <!-- Tenant Users -->
         <br class="mt-4">
-        <div id="tenant-admins" class="mb-4">
+        <div id="tenant-users" class="mb-4">
             <h4>{% trans "Utilisateurs" %}: {{ admins.count|add:users.count }}</h4>
             <ul class="list-group">
                 {% for admin in admins %}
