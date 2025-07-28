@@ -17,8 +17,8 @@
     {% if request.user.is_authenticated and request.user.is_tenant_admin %}
         <form method="POST" action="{% url 'tenancy_trial' %}">
             {% csrf_token %}
-            <ul class="list-group mb-3">
-                <li class="list-group-item bg-info-subtle">
+            <ul class="list-group mb-3 shadow-sm">
+                <li class="list-group-item bg-success-subtle">
                     <div class="row row-cols-1 row-cols-sm-2 text-center">
                         <div class="col col-md-6">
                             <small class="text-muted">{% trans 'Date début' %}</small><br>
