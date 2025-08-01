@@ -19,7 +19,7 @@
         <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
             <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
                 {% for plan in plans %}
-                    {% with plan=plan tag=plan.yearly_tag_month tag_new=plan.yearly_tag_month_new form_url="tenancy_order" period="yearly" %}
+                    {% with plan=plan form_url="tenancy_order" repetition=repetition form_url="tenancy_subscribe" periodicity="yearly" %}
                         {% include 'back/snipets/plan-card.html' %}
                     {% endwith %}
                 {% endfor %}
@@ -29,7 +29,7 @@
         <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
             <div class="row row-cols-1 row-cols-md-3 mb-3 text-center"> 
                 {% for plan in plans %}                    
-                    {% with plan=plan tag=plan.monthly_tag_month tag_new=plan.monthly_tag_month_new form_url="tenancy_order" period="monthly" %}
+                    {% with plan=plan form_url="tenancy_order" repetition=repetition form_url="tenancy_subscribe" periodicity="monthly" %}
                         {% include 'back/snipets/plan-card.html' %}
                     {% endwith %}
                 {% endfor %}

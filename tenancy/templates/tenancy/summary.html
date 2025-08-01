@@ -13,25 +13,24 @@
         {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
     {% endwith %}
 
-    {% if not tenant.active %}
-    <div class="card mb-4 shadow shadow">
-        <div class="card-header fw-bold fs-5 bg-danger text-center text-light">
-            {% trans "ENTREPRISE DÉSACTIVÉE" %}
-        </div>
-        <div class="card-body bg-danger-subtle">
-            <!-- <h5 class="card-title text-danger fw-bold">Coming soon !</h5> -->
-            <p class="card-text">{% trans 'Cette Entreprise est désactivée. Merci de contacter notre Service Clients pour résoudre ce problème' %}.</p>
-            <div class="">
-                <!-- <a href="#" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Plus de détails' %}</a> -->
-                <a href="#" class="me-2 mb-2 btn btn-primary">{% trans 'Nous Contacter' %}</a>
+    {% if not tenant.active %} <!-- TENANT INACTIVE -->
+        <div class="card mb-4 shadow shadow">
+            <div class="card-header fw-bold fs-5 bg-danger text-center text-light">
+                {% trans "ENTREPRISE DÉSACTIVÉE" %}
+            </div>
+            <div class="card-body bg-danger-subtle">
+                <!-- <h5 class="card-title text-danger fw-bold">Coming soon !</h5> -->
+                <p class="card-text">{% trans 'Cette Entreprise est désactivée. Merci de contacter notre Service Clients pour résoudre ce problème' %}.</p>
+                <div class="">
+                    <!-- <a href="#" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Plus de détails' %}</a> -->
+                    <a href="#" class="me-2 mb-2 btn btn-primary">{% trans 'Nous Contacter' %}</a>
+                </div>
             </div>
         </div>
-    </div>
     {% endif %}
 
     {% if tenant.active %}
-        {% if box == "S1R0" %}
-        <!-- Expired Subscription --> <!-- subscriptions latest_subscription -->
+        {% if box == "S1R0" %} <!-- Expired Subscription --> <!-- subscriptions latest_subscription -->
             <div class="card mb-4 shadow shadow bg-danger-subtle">
                 <div class="card-header fw-bold fs-5 text-center">
                     {% trans "ABONNEMENT EXPIRÉ" %}
@@ -46,15 +45,27 @@
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="">
-                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
-                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                        <!-- Renewal Form -->
+                         <form method="POST" action="{% url 'tenancy_subscribe' %}">
+                            {% csrf_token %}
+                            <!-- <input type="hidden" name="plan_id" value="{{ latest_subscription.plan.id }}"> -->
+                            <input type="hidden" name="subs_id" value="{{ latest_subscription.id }}">
+                            <input type="hidden" name="box" value="S1R0">
+                            <!-- <input type="hidden" name="stage" value="selection">
+                            <input type="hidden" name="tag" value="{{ tag }}">
+                            <input type="hidden" name="tag_new" value="{{ tag_new }}">
+                            <input type="hidden" name="period" value="{{ period }}"> -->
+                            <button type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</button>
+                            <span>
+                                <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                            </span>
+                         </form>
                     </div>
                 </div>
             </div>
         {% endif%}
 
-        {% if box == "S1R1" %}
-        <!-- Running Subscription --> <!-- subscriptions current_subscription subscription_remaining_days subscription_percentage styling_tint -->
+        {% if box == "S1R1" %} <!-- Running Subscription --> <!-- subscriptions current_subscription subscription_remaining_days subscription_percentage styling_tint -->
             <div class="card mb-4 shadow shadow bg-{{ styling_tint }}-subtle">
                 <div class="card-header fw-bold fs-5 text-center">
                     {% trans "ABONNEMENT ACTIF" %}
@@ -86,8 +97,7 @@
             </div>
         {% endif%}
 
-        {% if box == "S0T0" %}
-        <!-- New client --> <!-- -- -->
+        {% if box == "S0T0" %} <!-- New client --> <!-- -- -->
             <div class="card mb-4 shadow shadow bg-danger-subtle">
                 <div class="card-header fw-bold fs-5 text-center">
                     {% trans "AUCUN ABONNEMENT ACTIF" %}
@@ -100,7 +110,7 @@
                         {% trans "Attention: Un Abonnement valide est requis pour utiliser cette application." %} !
                     </p>
                     <div class="">
-                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire" %}</a>
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "S'abonner" %}</a>
                         <a href="{% url 'tenancy_trial' %}" class="me-2 mb-2 btn btn-success">{% trans "Essai Gratuit" %}</a>
                         <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
@@ -108,8 +118,7 @@
             </div>
         {% endif%}
 
-        {% if box == "S0T1R1" %}
-        <!-- Running Trial --> <!-- trials current_trial trial_remaining_days trial_percentage -->
+        {% if box == "S0T1R1" %} <!-- Running Trial --> <!-- trials current_trial trial_remaining_days trial_percentage -->
             <div class="card mb-4 shadow shadow bg-warning-subtle">
                 <div class="card-header fw-bold fs-5 text-center">
                     {% trans "ESSAI GRATUIT" %}
@@ -126,20 +135,20 @@
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="my-3">
-                        <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Essai gratuit' %}" aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress bg-danger" role="progressbar" aria-label="{% trans 'Essai gratuit' %}" 
+                            aria-valuenow="{{ trial_percentage }}" aria-valuemin="0" aria-valuemax="100">
                             <div class="progress-bar bg-success" style="width: {{ trial_percentage }}%"></div>
                         </div>
                     </div>
                     <div class="">
-                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire" %}</a>
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "S'abonner" %}</a>
                         <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
             </div>
         {% endif%}
 
-        {% if box == "S0T1R0" %}
-        <!-- Expired Trial --> <!-- trials latest_trial -->
+        {% if box == "S0T1R0" %} <!-- Expired Trial --> <!-- trials latest_trial -->
             <div class="card mb-4 shadow shadow bg-danger-subtle">
                 <div class="card-header fw-bold fs-5 text-center">
                     {% trans "ESSAI GRATUIT EXPIRÉ" %}
@@ -153,7 +162,7 @@
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="">
-                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Souscrire" %}</a>
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "S'abonner" %}</a>
                         <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
@@ -211,6 +220,7 @@
             {% endif %}
         {% endif %}
 
+
         <!-- Tenant Users -->
         <br class="mt-4">
         <div id="tenant-users" class="mb-4">
@@ -248,6 +258,7 @@
                 </div>
             {% endif %}
         </div>
+
 
         <!-- Tenant Details -->
         <br class="mt-4">

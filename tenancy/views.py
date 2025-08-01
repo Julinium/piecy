@@ -182,10 +182,63 @@ def trial(request):
 def subscribe(request):
     code, message = can_admin(request)
     if code == 200:
+        context = {}
+        subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
+        latest_subscription = subscriptions.last()
+        if not latest_subscription:
+            context["repetition"] = "new"
+
         plans = Plan.objects.filter(active=True)
-        context = {
-            "plans" : plans,
-        }
+        context["high_plans"] = plans
+
+        if latest_subscription:
+            plan_ordre = latest_subscription.plan.ordre
+            high_plans = plans.filter(ordre__gte=plan_ordre)
+            periodicity = "yearly"
+            start_date = today
+            if latest_subscription.date_to <= latest_subscription.date_fm + timedelta(days=31):
+                periodicity = "monthly"
+            if latest_subscription.date_to > today :
+                start_date = latest_subscription.date_to + relativedelta(days=1)
+            end_date = start_date + relativedelta(years=1)
+            if periodicity == "monthly":
+                end_date = start_date + relativedelta(months=1)
+
+            context["periodicity"]  = periodicity
+            context["plans"]        = plans
+            context["high_plans"]   = high_plans
+            context["start_date"]   = start_date
+            context["end_date"]     = end_date
+
+        if request.method == "POST":
+            subs_id = request.POST.get('subs_id', '')
+            if subs_id != "":
+                subscription = Subscription.objects.filter(active=True, id=subs_id).last()
+                if subscription:
+                    plan_ordre = subscription.plan.ordre
+                    # plans = Plan.objects.filter(active=True)
+                    high_plans = plans.filter(ordre__gte=plan_ordre)
+                    periodicity = "yearly"
+                    start_date = today
+                    if subscription.date_to <= subscription.date_fm + timedelta(days=31):
+                        periodicity = "monthly"
+                    if subscription.date_to > today :
+                        start_date = subscription.date_to + relativedelta(days=1)
+                    end_date = start_date + relativedelta(years=1)
+                    if periodicity == "monthly":
+                        end_date = start_date + relativedelta(months=1)
+
+                    context["periodicity"]  = periodicity
+                    context["plans"]        = plans
+                    context["high_plans"]   = high_plans
+                    context["start_date"]   = start_date
+                    context["end_date"]     = end_date
+
+                    return render(request, 'tenancy/subscribe.html', context)
+            return HttpResponse("Something went wrong !", status=503)
+
+        plans = Plan.objects.filter(active=True)
+        context["plans"] = plans
         return render(request, 'tenancy/subscribe.html', context)
 
     return HttpResponse(message, status=code)
@@ -194,6 +247,149 @@ def subscribe(request):
 
 @login_required(login_url="account_login")
 def order(request):
+    # TODO: Handle downgrading
+    # Expected params:
+        # Tenant <- user <- request
+        # Amount (before taxes ?)
+        # Plan -> Currency, ->
+        # Start and End date
+
+                            # <input type="hidden" name="subs_id" value="{{ latest_subscription.id }}">
+                            # <input type="hidden" name="box" value="S1R0">
+
+    code, message = can_admin(request)
+    if code == 200:
+        if request.method == "POST":
+            context = {}
+            box = request.POST.get('box', '')
+            if box == "S1R0":
+                subs_id = request.POST.get('subs_id', '')
+                subscription = Subscription.objects.filter(active=True, id=subs_id).last()
+                start_date = today
+                # if subscription:
+                #     if subscription.date_to:
+                        # Select period
+                        # Select eventually Plan
+
+
+                    # context["subscription"] = subscription
+
+
+
+
+
+            stage = request.POST.get('stage', '')
+            plan_id = request.POST.get('plan_id', '')
+            tag = request.POST.get('tag', '')
+            tag_new = request.POST.get('tag_new', '')
+            period = request.POST.get('period', '')
+
+            plan_uuid = uuid.UUID(plan_id, version=4)
+            plan = Plan.objects.filter(id=plan_uuid).first()
+            tenant=request.user.tenant
+
+            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=tenant).order_by('date_fm')
+            is_new = True if len(subs) == 0 else False
+
+            periodicity = "1" if period == "monthly" else "12"
+            monthly_price = int(tag_new) if is_new else  int(tag)
+
+            price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
+            discount_new = True if is_new else False
+            price = monthly_price if period == "monthly" else 12 * monthly_price
+            discount_year = False if period == "monthly" else True
+            
+            taxes_amount = Decimal(price * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            total_amount = Decimal(price + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            
+            start_date = today
+            sub = subs.last()
+            if sub: 
+                start_date = sub.date_to + relativedelta(days=1)
+            end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
+
+            if stage == "selection":
+                ctx = {
+                    "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                    "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                    "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
+                    "periodicity"   : periodicity + " " + _("Mois"),
+                    "plan"          : plan,
+                    "tag"           : tag,
+                    "tag_new"       : tag_new,
+                    "start_date"    : start_date,
+                    "end_date"      : end_date,
+                    "discount_new"  : discount_new,
+                    "discount_year" : discount_year,
+                    "taxes_amount"  : taxes_amount,
+                    "total_amount"  : total_amount,
+                }
+                return render(request, 'tenancy/order.html', ctx)
+
+            else:
+                payments = SystemPayment.objects.filter(date_made__year=today.year)
+                year = today.year % 100
+                day_of_year = today.timetuple().tm_yday
+                order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
+                paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
+                
+                payment = SystemPayment(
+                    order_no    = order_no,
+                    date_made   = today,
+                    amount      = total_amount,
+                    currency    = plan.currency,
+                    reference   = paymt_no,
+                    made_by     = request.user,
+                    note        = f"{tenant}-{plan.name}-{today}"
+                )
+                try:
+                    payment.save()
+                except Exception as xc:
+                    print(f"Error raised while creating System Payment: {str(xc)}")
+                
+                all_subscriptions  = Subscription.objects.filter(tenant=tenant)
+                subscriptions = all_subscriptions.filter(active=True)
+                active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
+                current_subscription = active_subscriptions.last()
+                if current_subscription:
+                    if current_subscription.is_trial:
+                        subscription = current_subscription
+                        subscription.date_fm = start_date
+                        subscription.date_to = end_date
+                        subscription.tenant  = tenant
+                        subscription.plan    = plan
+                        subscription.payment = payment
+                        subscription.is_trial = False
+                else:
+                    subscription = Subscription(
+                        date_fm = start_date,
+                        date_to = end_date,
+                        tenant  = tenant,
+                        plan    = plan,
+                        payment = payment
+                    )
+
+                try:
+                    subscription.save()
+                except Exception as xc:
+                    print(f"Error raised while creating Subscription: {str(xc)}")
+
+                pay_message = _("Merci de confirmer votre payment.")
+                messages.warning(request, f"{pay_message}")
+
+            return redirect("tenancy_summary")
+
+
+        context = {}
+        return render(request, 'tenancy/order.html', context)
+
+    return HttpResponse(message, status=code)
+
+
+
+
+@login_required(login_url="account_login")
+def x_order(request):
     # TODO: Handle downgrading
     code, message = can_admin(request)
     if code == 200:

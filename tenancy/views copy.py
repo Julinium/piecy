@@ -47,64 +47,82 @@ def can_admin(request) -> tuple[int, str]:
 def summary(request):
     code, message = can_admin(request)
     if code == 200:
-        tenant = request.user.tenant
+        tenant = request.user.tenant        
+        tenant_admins = tenant.workers.filter(is_tenant_admin = True)
+        tenant_users = tenant.workers.exclude(is_tenant_admin = True)
 
-        admins = tenant.workers.filter(is_tenant_admin = True)
-        users = tenant.workers.exclude(is_tenant_admin = True)
-
-        all_subscriptions  = Subscription.objects.filter(tenant=tenant)
-        subscriptions = all_subscriptions.filter(active=True)
-        active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-        current_subscription = active_subscriptions.last()
-        trial = Trial.objects.filter(active=True, tenant=tenant).last()
-        trial_is_active = False
-        trial_remaining_days = 0
-        if trial:
-            if trial.date_fm <= today <= trial.date_to: 
-                trial_is_active = True
-            delta = trial.date_to - today
-            trial_remaining_days = delta.days
-
-        trial_percentage = 0
-        if TRIAL_DAYS != 0: trial_percentage = min(100, int(100 * trial_remaining_days/TRIAL_DAYS))
-
-        can_try = False if subscriptions else True
-
-        days_remaining = 0
-        if current_subscription:
-            delta = current_subscription.date_to - today
-            days_remaining = delta.days
-            if current_subscription.is_trial: 
-                # messages.error(request, _("Période d'essai. Merci de souscrire un abonnement."))
-                messages.error(request, _("Jours d'essai restant") + f" : {days_remaining}")
-        # else:
-            # messages.error(request, _("Aucun abonnement actif. Contacter nous."))
-
-        tint = 'secondary'
-        if days_remaining >= SUB_DAYS_WARNING: tint = "success"
-        elif SUB_DAYS_DANGER <= days_remaining < 90: tint = "warning"
-        elif 0 <= days_remaining < SUB_DAYS_DANGER: tint = "danger"
-
-
-        # Subscription status
-        # General required action: None, Renew, Upgrade, 
-
-        context = { 
-            "tenant"               : tenant, 
-            "days_remaining"       : days_remaining, 
-            "trial_remaining_days" : trial_remaining_days,
-            "trial_percentage"     : trial_percentage, 
-            "active_subscriptions" : active_subscriptions, 
-            "current_subscription" : current_subscription, 
-            "can_try"              : can_try,
-            "trial"                : trial,
-            "trial_is_active"      : trial_is_active,
-            "tint"                 : tint, 
-            "admins"               : admins, 
-            "users"                : users
+        context = {
+            "tenant" : tenant,
+            "admins" : tenant_admins,
+            "users"  : tenant_users,
         }
 
+        subscriptions         = Subscription.objects.filter(tenant=tenant, active=True)
+        running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_subscription  = running_subscriptions.last()
+        
+        if subscriptions:
+            context ["box"] = "S1R0"
+            context ["subscriptions"] = subscriptions
+            subscription_remaining_days = 0
+            latest_subscription = subscriptions.latest('date_to')
+            context ["latest_subscription"] = latest_subscription
+
+            if current_subscription:
+                context ["box"] = "S1R1"
+                context ["current_subscription"] = current_subscription
+                delta = current_subscription.date_to - today
+                subscription_remaining_days = delta.days
+
+                subscription_duration = 0 
+                if current_subscription.date_fm and current_subscription.date_to:
+                    subscription_duration = current_subscription.date_to - current_subscription.date_fm
+
+                subscription_percentage = 0
+                if subscription_duration.days != 0: 
+                    subscription_percentage = min(100, int(100 * subscription_remaining_days/subscription_duration.days))
+                context["subscription_percentage"] = subscription_percentage
+
+            context ["subscription_remaining_days"] = subscription_remaining_days
+
+            styling_tint = 'secondary'
+            if subscription_remaining_days >= SUB_DAYS_WARNING:
+                styling_tint = "success"
+            elif SUB_DAYS_DANGER <= subscription_remaining_days < 90: 
+                styling_tint = "warning"
+            elif subscription_remaining_days < SUB_DAYS_DANGER: 
+                styling_tint = "danger"
+            context ["styling_tint"] = styling_tint
+
+            return render(request, 'tenancy/summary.html', context)
+
+        trials = Trial.objects.filter(tenant=tenant, active=True)
+        if not trials:
+            context ["box"] = "S0T0"
+            return render(request, 'tenancy/summary.html', context)
+
+        context["trials"] = trials
+        running_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_trial  = running_trials.last()
+
+        if current_trial:
+            context ["box"] = "S0T1R1"
+            context["current_trial"] = current_trial
+            delta = current_trial.date_to - today
+            trial_remaining_days = delta.days
+            context["trial_remaining_days"] = trial_remaining_days
+            trial_percentage = 0
+            if TRIAL_DAYS != 0: 
+                trial_percentage = min(100, int(100 * trial_remaining_days/TRIAL_DAYS))
+            context["trial_percentage"] = trial_percentage
+
+            return render(request, 'tenancy/summary.html', context)
+
+        latest_trial = trials.latest('date_to')
+        context ["latest_trial"] = latest_trial
+        context ["box"] = "S0T1R0"
         return render(request, 'tenancy/summary.html', context)
+
     return HttpResponse(message, status=code)
 
 
@@ -114,11 +132,26 @@ def trial(request):
     if code == 200:
         tenant = request.user.tenant
 
+        subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+        if subscriptions:
+            messages.warning(request, _("Vous ne pouvez plus activer un Essai gratuit !"))
+            return redirect('tenancy_summary')
+
+        trials = Trial.objects.filter(active=True, tenant=tenant)
+        if trials:
+            messages.warning(request, _("Vous avez déjà bénéficié d'un Essai gratuit !"))
+            return redirect('tenancy_summary')
+
         trial_date_start = today
         trial_date_end = today + timedelta(days=TRIAL_DAYS)
-        plan = Plan.objects.filter(active=True).order_by('ordre').first()
+        plans = Plan.objects.filter(active=True).order_by('ordre')
+        # plan = Plan.objects.filter(active=True).order_by('ordre').first()
+
 
         if request.method == "POST":
+            plan_id = request.POST.get('plan_id', '')
+            plan = Plan.objects.filter(id=plan_id).first()
+
             trial = Trial(
                     date_fm = trial_date_start,
                     date_to = trial_date_end,
@@ -137,7 +170,8 @@ def trial(request):
             context = {
                 'trial_date_start' : trial_date_start,
                 'trial_date_end'   : trial_date_end,
-                'plan'             : plan,
+                'plans'            : plans,
+                # 'plan'             : plan,
             }
             return render(request, 'tenancy/trial.html', context)
 

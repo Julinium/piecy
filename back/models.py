@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext as _
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
+from decimal import Decimal, ROUND_HALF_UP
 
 
 class Tenant(models.Model):
@@ -276,10 +277,49 @@ class Plan(models.Model):
     def yearly_tag_month_new(self):
         return int(max((12 -self.year_free_mth), 0) * self.monthly_price * self.first_time_disc/1200)
 
-    # @property
-    # def monthly_tag_year(self):
-    #     return int(12 * self.monthly_price)
 
+#######################
+    @property
+    def monthly_month_tag(self):
+        tag = self.monthly_price
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def monthly_month_tag_new(self):
+        tag = self.monthly_month_tag * Decimal(max(0, min(1, (1 - self.first_time_disc / 100))))
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def monthly_year_tag(self):
+        tag = 12 * self.monthly_price
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def monthly_year_tag_new(self):
+        tag = 12 * self.monthly_month_tag_new
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def yearly_year_tag(self):
+        tag = max((12 - self.year_free_mth), 0) * self.monthly_price
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def yearly_year_tag_new(self):
+        tag = self.yearly_year_tag * Decimal(max(0, min(1, (1 - self.first_time_disc / 100))))
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def yearly_month_tag(self):
+        tag = self.yearly_year_tag / 12
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+    @property
+    def yearly_month_tag_new(self):
+        tag = self.yearly_year_tag_new / 12
+        return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+######################
     # @property
     # def yearly_tag_year(self):
     #     return int(max((12 -self.year_free_mth), 0) * self.monthly_price)
