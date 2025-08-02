@@ -194,10 +194,19 @@ def subscribe(request):
 
 @login_required(login_url="account_login")
 def order(request):
-    # TODO: Handle downgrading
     code, message = can_admin(request)
     if code == 200:
         if request.method == "POST":
+            subscription_id = request.POST.get('subs_id', '')
+            stage = request.POST.get('stage', '')
+            box = request.POST.get('box', '')
+            
+            subscription_uuid = uuid.UUID(subscription_id, version=4)
+            latest_subscription = Subscription.objects.filter(active=True, id=subscription_uuid)
+
+
+###############################
+
             stage = request.POST.get('stage', '')
             plan_id = request.POST.get('plan_id', '')
             tag = request.POST.get('tag', '')
