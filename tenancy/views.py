@@ -259,13 +259,26 @@ def order(request):
 
     code, message = can_admin(request)
     if code == 200:
+        context = {}
         if request.method == "POST":
-            context = {}
+
+            subscription_id = request.POST.get('subscription_id', '')
+            stage = request.POST.get('stage', '')
             box = request.POST.get('box', '')
-            if box == "S1R0":
-                subs_id = request.POST.get('subs_id', '')
-                subscription = Subscription.objects.filter(active=True, id=subs_id).last()
-                start_date = today
+            
+            subscription_uuid = uuid.UUID(subscription_id, version=4)
+            latest_subscription = Subscription.objects.filter(active=True, id=subscription_uuid)
+
+
+###############################
+
+
+
+            # box = request.POST.get('box', '')
+            # if box == "S1R0":
+            #     subs_id = request.POST.get('subs_id', '')
+            #     subscription = Subscription.objects.filter(active=True, id=subs_id).last()
+            #     start_date = today
                 # if subscription:
                 #     if subscription.date_to:
                         # Select period
