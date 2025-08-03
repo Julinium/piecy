@@ -145,7 +145,6 @@ class Trial(models.Model):
         return f'TRIAL-{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
 
 
-
 class Subscription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
@@ -180,6 +179,7 @@ class Subscription(models.Model):
         istial = "TRIAL-" if self.is_trial else ""
         return f'{istial}{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
 
+
 class SystemPayment(models.Model):
     class Status(models.TextChoices):
         DRAFT    = 'D', _('Brouillon')
@@ -193,18 +193,21 @@ class SystemPayment(models.Model):
         ONLINE = 'O', _('Online')
         OTHER  = 'X', _('Other')
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active = models.BooleanField(blank=True, null=True, default=True)
-    status = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
-    order_no = models.CharField(max_length=32, blank=True, null=True)
-    verified = models.BooleanField(blank=True, null=True)
-    reference = models.CharField(max_length=32, blank=True, null=True)
-    mode = models.CharField(max_length=1, choices=Modes.choices, default=Modes.WIRE)
-    date_made = models.DateField(blank=True, null=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=4, blank=True, null=True, default="MAD")
-    made_by = models.CharField(max_length=64, blank=True, null=True)
-    note = models.CharField(max_length=64, blank=True, null=True)
+    id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active         = models.BooleanField(blank=True, null=True, default=True)
+    status         = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
+    order_no       = models.CharField(max_length=32, blank=True, null=True)
+    verified       = models.BooleanField(blank=True, null=True)
+    reference      = models.CharField(max_length=32, blank=True, null=True)
+    mode           = models.CharField(max_length=1, choices=Modes.choices, default=Modes.WIRE)
+    date_made      = models.DateField(blank=True, null=True)
+    objet          = models.CharField(max_length=128, blank=True, null=True, default= _("Abonnement Application Piecy"))
+    amount         = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    taxes_amount   = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    amount_ttc     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    currency       = models.CharField(max_length=4, blank=True, null=True, default="MAD")
+    made_by        = models.CharField(max_length=64, blank=True, null=True)
+    note           = models.CharField(max_length=64, blank=True, null=True)
 
     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
