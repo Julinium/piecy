@@ -61,7 +61,7 @@
                     <p class="text-danger">
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
-                    <div class="">
+                    <div class="text-center">
                         <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</a>
                         <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
@@ -109,26 +109,13 @@
                             <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiment non confirmé !" %}</li>
                         </ul>
                     {% endif %}
-                    <div class="">
+                    <div class="text-center">
                         {% if not current_subscription.payment.verified %}
                             <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-primary">{% trans "Nous Contacter" %}</a>
                         {% else %}
-                            <form method="POST" action="{% url 'tenancy_order' %}">
-                                {% csrf_token %}
-                                <!-- <input type="hidden" name="plan_id" value="{{ latest_subscription.plan.id }}"> -->
-                                <!-- <input type="hidden" name="subscription_id" value="{{ latest_subscription.id }}"> -->
-                                <!-- <input type="hidden" name="box" value="S1R1"> -->
-                                <!-- <input type="hidden" name="stage" value="renew"> -->
-                                <!-- <input type="hidden" name="tag" value="{{ tag }}"> -->
-                                <!-- <input type="hidden" name="tag_new" value="{{ tag_new }}"> -->
-                                <!-- <input type="hidden" name="period" value="{{ period }}"> -->
-                                <button type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</button>
-                                <span>
-                                    <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
-                                </span>
-                            </form>
-                            <!-- <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
-                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a> -->
+                            <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
+                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
+                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                         {% endif %}
                     </div>
                 </div>
