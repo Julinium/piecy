@@ -32,35 +32,38 @@
     {% if tenant.active %}
         {% if box == "S1R0" %} <!-- Expired Subscription --> <!-- subscriptions latest_subscription -->
             <div class="card mb-4 shadow shadow bg-danger-subtle">
-                <div class="card-header fw-bold fs-5 text-center">
+                <div class="card-header fw-bold fs-5 text-center text-danger">
                     {% trans "ABONNEMENT EXPIRÉ" %}
                 </div>
-                <div class="card-body bg-danger-subtle">
-                    <p class="card-text">{% trans "Plan" %}: <span class="fw-bold">{{ latest_subscription.plan.name }}</span></p>
-                    <p class="card-text">
-                        {% trans "Votre Abonnement a expiré depuis le:" %} 
-                        <strong>{{ latest_subscription.date_to }}</strong>.
-                    </p>
-                    <p class="text-danger fw-bold">
+                <div class="card-body bg-danger-subtle">                    
+                    <div class="mb-3">
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Plan de l'abonnement" %}</div>
+                            <div class="fw-bold">{{ latest_subscription.plan.name }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Périodicité de paiment" %}</div>
+                            <div class="fw-bold">{{ periodicity }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Début de l'abonnement" %}</div>
+                            <div class="fw-bold">{{ latest_subscription.date_fm }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Fin de l'abonnement" %}</div>
+                            <div class="fw-bold">{{ latest_subscription.date_to }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Jours restant" %}</div>
+                            <div class="fw-bold">{{ subscription_remaining_days }} {% trans "Jours" %}</div>
+                        </div>
+                    </div>
+                    <p class="text-danger">
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="">
                         <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</a>
-                        <!-- Renewal Form -->
-                         <!-- <form method="POST" action="{% url 'tenancy_order' %}"> -->
-                            <!-- {% csrf_token %} -->
-                            <!-- <input type="hidden" name="plan_id" value="{{ latest_subscription.plan.id }}"> -->
-                            <!-- <input type="hidden" name="subscription_id" value="{{ latest_subscription.id }}"> -->
-                            <!-- <input type="hidden" name="box" value="S1R0"> -->
-                            <!-- <input type="hidden" name="stage" value="reactivate"> -->
-                            <!-- <input type="hidden" name="tag" value="{{ tag }}"> -->
-                            <!-- <input type="hidden" name="tag_new" value="{{ tag_new }}"> -->
-                            <!-- <input type="hidden" name="period" value="{{ period }}"> -->
-                            <!-- <button type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</button> -->
-                            <!-- <span> -->
-                                <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
-                            <!-- </span> -->
-                         <!-- </form> -->
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
             </div>
@@ -72,9 +75,29 @@
                     {% trans "ABONNEMENT ACTIF" %}
                 </div>
                 <div class="card-body bg-{{ styling_tint }}-subtle">
-                    <p class="card-text">{% trans "Plan" %}: <span class="fw-bold">{{ current_subscription.plan.name }}</span></p>
-                    <p class="card-text">{% trans "Votre Abonnement est actif jusqu'au:" %} <strong>{{ current_subscription.date_to }}</strong>.
-                    </p>
+                    <div class="mb-3">
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Plan de l'abonnement" %}</div>
+                            <div class="fw-bold">{{ latest_subscription.plan.name }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Périodicité de paiment" %}</div>
+                            <div class="fw-bold">{{ periodicity }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Début de l'abonnement" %}</div>
+                            <div class="fw-bold">{{ latest_subscription.date_fm }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Fin de l'abonnement" %}</div>
+                            <div class="fw-bold">{{ latest_subscription.date_to }}</div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="small fw-light">{% trans "Jours restant" %}</div>
+                            <div class="fw-bold">{{ subscription_remaining_days }} {% trans "Jours" %}</div>
+                        </div>
+                    </div>
+
                     <div class="my-3">
                         <div class="progress bg-danger" role="progressbar" aria-label="{% trans '{{ current_subscription.plan.name }}' %}" aria-valuenow="{{ subscription_percentage }}" aria-valuemin="0" aria-valuemax="100">
                             <div class="progress-bar bg-success" style="width: {{ subscription_percentage }}%"></div>
@@ -121,7 +144,7 @@
                     <p class="card-text">
                         {% trans "Vous n'avez pas d'Abonnement actif." %}
                     </p>
-                    <p class="text-danger fw-bold">
+                    <p class="text-danger">
                         {% trans "Attention: Un Abonnement valide est requis pour utiliser cette application." %} !
                     </p>
                     <div class="">
@@ -146,7 +169,7 @@
                             {{ current_trial.date_to }}
                         </strong>.
                     </p>
-                    <p class="text-danger fw-bold">
+                    <p class="text-danger">
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="my-3">
@@ -173,7 +196,7 @@
                     <p class="card-text">
                         {% trans "Votre Essai gratuit a expiré depuis le:" %} <strong>{{ latest_trial.date_to }}</strong>.
                     </p>
-                    <p class="text-danger fw-bold">
+                    <p class="text-danger">
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="">

@@ -3,7 +3,7 @@
 <form method="POST"  action="{% url 'tenancy_order' %}">
     {% csrf_token %}
     <input type="hidden" name="order_no" value="{{ order_no }}">
-    <input type="hidden" name="objet" value="{{ objet }}">
-    <input type="hidden" name="total_amount" value="{{ total_amount }}">
+    <!-- <input type="hidden" name="objet" value="{{ objet }}"> -->
+    <!-- <input type="hidden" name="total_amount" value="{{ total_amount }}"> -->
     <button type="submit" class="btn btn-primary">{% trans "Confirmer" %}</button>
 </form>

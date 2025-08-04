@@ -60,12 +60,18 @@ def summary(request):
         subscriptions         = Subscription.objects.filter(tenant=tenant, active=True)
         running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription  = running_subscriptions.last()
-        
+
         if subscriptions:
             context ["box"] = "S1R0"
             context ["subscriptions"] = subscriptions
             subscription_remaining_days = 0
             latest_subscription = subscriptions.latest('date_to')
+            periodicity = _("Paiment Annuel")
+            duracity = latest_subscription.date_to - latest_subscription.date_fm
+            if duracity.days < 32:
+                periodicity = _("Paiment Mensuel")
+                
+            context ["periodicity"] = periodicity
             context ["latest_subscription"] = latest_subscription
 
             if current_subscription:
@@ -250,43 +256,116 @@ def order(request):
     code, message = can_admin(request)
     if code == 200:
         context = {}
-        if request.method == "POST":
-            pass
-        else:
-            tenant = request.user.tenant
+        tenant = request.user.tenant
 
-            subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
-            active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-            current_subscription = active_subscriptions.last()
+        subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+        active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_subscription = active_subscriptions.last()
 
-            if not current_subscription:
-                current_subscription = subscriptions.last()
+        if not current_subscription:
+            current_subscription = subscriptions.last()
 
-            if current_subscription:
+        if current_subscription:
 
-                start_date = today
-                periodicity = "yearly"
-                payments = SystemPayment.objects.filter(date_made__year=today.year)
+            start_date = today
+            periodicity = "yearly"
+            payments = SystemPayment.objects.filter(date_made__year=today.year)
+
+            sub_delta = current_subscription.date_to - current_subscription.date_fm
+            if sub_delta.days <= 31 : periodicity = "monthly"
+            if current_subscription.date_to > today: start_date = current_subscription.date_to + relativedelta(days=1)
+            end_date = start_date + relativedelta(months=1) if periodicity == "monthly" else start_date + relativedelta(years=1)
+            plan = current_subscription.plan
+
+            ht_amount    = plan.monthly_month_tag if periodicity == "monthly" else plan.yearly_year_tag
+            taxes_amount = Decimal(ht_amount * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+            total_amount = Decimal(ht_amount + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+            objet = _("Abonnement Annuel")
+            if periodicity == "monthly":
+                objet = _("Abonnement Mensuel")
+            objet += f" - {plan.name} - {start_date} - {end_date}"
+
+            if request.method == "POST":
+
+                order_no = request.POST.get('order_no', '')
+                # objet = request.POST.get('objet', '')
+                # total_amount = request.POST.get('total_amount', '')
+
+                #     payment = SystemPayment(
+                #         order_no  = order_no,
+                #         date_made = today,
+                #         objet     = objet,
+                #         amount    = total_amount,
+                #         currency  = plan.currency,
+                #         reference = paymt_no,
+                #         made_by   = request.user,
+                #         note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
+                #     )
+                #     try:
+                #         payment.save()
+                #     except Exception as xc:
+                #         print(f"Error raised while creating System Payment: {str(xc)}")
+
+                #     subscription = Subscription(
+                #         date_fm = start_date,
+                #         date_to = end_date,
+                #         tenant  = tenant,
+                #         plan    = plan,
+                #         payment = payment
+                #     )
+
+                #     try:
+                #         subscription.save()
+                #     except Exception as xc:
+                #         print(f"Error raised while creating Subscription: {str(xc)}")
+
+                #     pay_message = _("Merci de confirmer votre payment.")
+                #     messages.warning(request, f"{pay_message}")
+
+                wip_message = _("This feature is still under construction. Please try again later or contact us for details.")
+                messages.error(request, f"{wip_message}")
+                return redirect("tenancy_summary")
+            else:
+                # tenant = request.user.tenant
+
+                # subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+                # active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+                # current_subscription = active_subscriptions.last()
+
+                # if not current_subscription:
+                #     current_subscription = subscriptions.last()
+
+                # if current_subscription:
+
+                #     start_date = today
+                #     periodicity = "yearly"
+                #     payments = SystemPayment.objects.filter(date_made__year=today.year)
+                #     year = today.year % 100
+                #     day_of_year = today.timetuple().tm_yday
+                #     order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
+                #     paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
+
+                #     sub_delta = current_subscription.date_to - current_subscription.date_fm
+                #     if sub_delta.days <= 31 : periodicity = "monthly"
+                #     if current_subscription.date_to > today: start_date = current_subscription.date_to + relativedelta(days=1)
+                #     end_date = start_date + relativedelta(months=1) if periodicity == "monthly" else start_date + relativedelta(years=1)
+                #     plan = current_subscription.plan
+
+                #     ht_amount    = plan.monthly_month_tag if periodicity == "monthly" else plan.yearly_year_tag
+                #     taxes_amount = Decimal(ht_amount * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+                #     total_amount = Decimal(ht_amount + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+
+                #     objet = _("Abonnement Annuel")
+                #     if periodicity == "monthly":
+                #         objet = _("Abonnement Mensuel")
+                #     objet += f" - {plan.name} - {start_date} - {end_date}"
+
                 year = today.year % 100
                 day_of_year = today.timetuple().tm_yday
                 order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-                paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-
-                sub_delta = current_subscription.date_to - current_subscription.date_fm
-                if sub_delta.days <= 31 : periodicity = "monthly"
-                if current_subscription.date_to > today: start_date = current_subscription.date_to + relativedelta(days=1)
-                end_date = start_date + relativedelta(months=1) if periodicity == "monthly" else start_date + relativedelta(years=1)
-                plan = current_subscription.plan
-
-                ht_amount    = plan.monthly_month_tag if periodicity == "monthly" else plan.yearly_year_tag
-                taxes_amount = Decimal(ht_amount * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                total_amount = Decimal(ht_amount + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-
-                objet = _("Abonnement Annuel")
-                if periodicity == "monthly":
-                    objet = _("Abonnement Mensuel")
-                objet += f" - {plan.name} - {start_date} - {end_date}"
+                # paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
 
                 context["order_no"]     = order_no
                 context["objet"]        = objet
@@ -300,41 +379,10 @@ def order(request):
 
                 return render(request, 'tenancy/order.html', context)
 
-            #     payment = SystemPayment(
-            #         order_no  = order_no,
-            #         date_made = today,
-            #         objet     = objet,
-            #         amount    = total_amount,
-            #         currency  = plan.currency,
-            #         reference = paymt_no,
-            #         made_by   = request.user,
-            #         note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
-            #     )
-            #     try:
-            #         payment.save()
-            #     except Exception as xc:
-            #         print(f"Error raised while creating System Payment: {str(xc)}")
+        nosub_message = _("Previous Subscription not found")
+        messages.error(request, f"{nosub_message}")
 
-            #     subscription = Subscription(
-            #         date_fm = start_date,
-            #         date_to = end_date,
-            #         tenant  = tenant,
-            #         plan    = plan,
-            #         payment = payment
-            #     )
-
-            #     try:
-            #         subscription.save()
-            #     except Exception as xc:
-            #         print(f"Error raised while creating Subscription: {str(xc)}")
-
-            #     pay_message = _("Merci de confirmer votre payment.")
-            #     messages.warning(request, f"{pay_message}")
-
-            nosub_message = _("Previous Subscription not found")
-            messages.error(request, f"{nosub_message}")
-
-            return redirect("tenancy_summary")
+        return redirect("tenancy_summary")
 
             # context = {}
             # return render(request, 'tenancy/order.html', context)
