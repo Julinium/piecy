@@ -17,6 +17,7 @@ from back.models import SystemPayment, Plan, Subscription, Trial
 
 SUB_DAYS_WARNING = 90
 SUB_DAYS_DANGER = 30
+SUBS_HISTORY_COUNT = 10
 
 TRIAL_DAYS = 30
 
@@ -57,19 +58,19 @@ def summary(request):
             "users"  : tenant_users,
         }
 
-        subscriptions         = Subscription.objects.filter(tenant=tenant, active=True)
-        running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        subscriptions         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
+        running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
 
         if subscriptions:
             context ["box"] = "S1R0"
-            context ["subscriptions"] = subscriptions
+            context ["subscriptions"] = subscriptions[:SUBS_HISTORY_COUNT]
             subscription_remaining_days = 0
             latest_subscription = subscriptions.latest('date_to')
-            periodicity = _("Paiment Annuel")
+            periodicity = _("Paiement Annuel")
             duracity = latest_subscription.date_to - latest_subscription.date_fm
             if duracity.days < 32:
-                periodicity = _("Paiment Mensuel")
+                periodicity = _("Paiement Mensuel")
                 
             context ["periodicity"] = periodicity
             context ["latest_subscription"] = latest_subscription
@@ -241,6 +242,7 @@ def subscribe(request):
                     context["end_date"]     = end_date
 
                     return render(request, 'tenancy/subscribe.html', context)
+                
             return HttpResponse("Something went wrong !", status=503)
 
         plans = Plan.objects.filter(active=True)
@@ -292,80 +294,44 @@ def order(request):
                 # objet = request.POST.get('objet', '')
                 # total_amount = request.POST.get('total_amount', '')
 
-                #     payment = SystemPayment(
-                #         order_no  = order_no,
-                #         date_made = today,
-                #         objet     = objet,
-                #         amount    = total_amount,
-                #         currency  = plan.currency,
-                #         reference = paymt_no,
-                #         made_by   = request.user,
-                #         note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
-                #     )
-                #     try:
-                #         payment.save()
-                #     except Exception as xc:
-                #         print(f"Error raised while creating System Payment: {str(xc)}")
+                paymt_no = order_no.replace("O", "P", 1)
 
-                #     subscription = Subscription(
-                #         date_fm = start_date,
-                #         date_to = end_date,
-                #         tenant  = tenant,
-                #         plan    = plan,
-                #         payment = payment
-                #     )
+                payment = SystemPayment(
+                    order_no  = order_no,
+                    date_made = today,
+                    objet     = objet,
+                    amount    = total_amount,
+                    currency  = plan.currency,
+                    reference = paymt_no,
+                    made_by   = request.user,
+                    note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
+                )
+                try:
+                    payment.save()
+                except Exception as xc:
+                    print(f"Error raised while creating System Payment: {str(xc)}")
 
-                #     try:
-                #         subscription.save()
-                #     except Exception as xc:
-                #         print(f"Error raised while creating Subscription: {str(xc)}")
+                subscription = Subscription(
+                    date_fm = start_date,
+                    date_to = end_date,
+                    tenant  = tenant,
+                    plan    = plan,
+                    payment = payment
+                )
+                try:
+                    subscription.save()
+                except Exception as xc:
+                    print(f"Error raised while creating Subscription: {str(xc)}")
 
-                #     pay_message = _("Merci de confirmer votre payment.")
-                #     messages.warning(request, f"{pay_message}")
+                pay_message = _("Merci de confirmer votre paiement.")
+                messages.warning(request, f"{pay_message}")
 
-                wip_message = _("This feature is still under construction. Please try again later or contact us for details.")
-                messages.error(request, f"{wip_message}")
                 return redirect("tenancy_summary")
             else:
-                # tenant = request.user.tenant
-
-                # subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
-                # active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-                # current_subscription = active_subscriptions.last()
-
-                # if not current_subscription:
-                #     current_subscription = subscriptions.last()
-
-                # if current_subscription:
-
-                #     start_date = today
-                #     periodicity = "yearly"
-                #     payments = SystemPayment.objects.filter(date_made__year=today.year)
-                #     year = today.year % 100
-                #     day_of_year = today.timetuple().tm_yday
-                #     order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-                #     paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-
-                #     sub_delta = current_subscription.date_to - current_subscription.date_fm
-                #     if sub_delta.days <= 31 : periodicity = "monthly"
-                #     if current_subscription.date_to > today: start_date = current_subscription.date_to + relativedelta(days=1)
-                #     end_date = start_date + relativedelta(months=1) if periodicity == "monthly" else start_date + relativedelta(years=1)
-                #     plan = current_subscription.plan
-
-                #     ht_amount    = plan.monthly_month_tag if periodicity == "monthly" else plan.yearly_year_tag
-                #     taxes_amount = Decimal(ht_amount * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                #     total_amount = Decimal(ht_amount + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-
-                #     objet = _("Abonnement Annuel")
-                #     if periodicity == "monthly":
-                #         objet = _("Abonnement Mensuel")
-                #     objet += f" - {plan.name} - {start_date} - {end_date}"
 
                 year = today.year % 100
                 day_of_year = today.timetuple().tm_yday
                 order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-                # paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
 
                 context["order_no"]     = order_no
                 context["objet"]        = objet
@@ -384,252 +350,8 @@ def order(request):
 
         return redirect("tenancy_summary")
 
-            # context = {}
-            # return render(request, 'tenancy/order.html', context)
-
-###############################
-
-
-
-            # box = request.POST.get('box', '')
-            # if box == "S1R0":
-            #     subs_id = request.POST.get('subs_id', '')
-            #     subscription = Subscription.objects.filter(active=True, id=subs_id).last()
-            #     start_date = today
-                # if subscription:
-                #     if subscription.date_to:
-                        # Select period
-                        # Select eventually Plan
-
-
-                    # context["subscription"] = subscription
-
-
-
-
-
-        #     stage = request.POST.get('stage', '')
-        #     plan_id = request.POST.get('plan_id', '')
-        #     tag = request.POST.get('tag', '')
-        #     tag_new = request.POST.get('tag_new', '')
-        #     period = request.POST.get('period', '')
-
-        #     plan_uuid = uuid.UUID(plan_id, version=4)
-        #     plan = Plan.objects.filter(id=plan_uuid).first()
-        #     tenant=request.user.tenant
-
-        #     subs = Subscription.objects.filter(active=True, is_trial=False, tenant=tenant).order_by('date_fm')
-        #     is_new = True if len(subs) == 0 else False
-
-        #     periodicity = "1" if period == "monthly" else "12"
-        #     monthly_price = int(tag_new) if is_new else  int(tag)
-
-        #     price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
-        #     discount_new = True if is_new else False
-        #     price = monthly_price if period == "monthly" else 12 * monthly_price
-        #     discount_year = False if period == "monthly" else True
-            
-        #     taxes_amount = Decimal(price * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        #     total_amount = Decimal(price + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            
-        #     start_date = today
-        #     sub = subs.last()
-        #     if sub: 
-        #         start_date = sub.date_to + relativedelta(days=1)
-        #     end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
-
-        #     if stage == "selection":
-        #         ctx = {
-        #             "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-        #             "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-        #             "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-        #             "periodicity"   : periodicity + " " + _("Mois"),
-        #             "plan"          : plan,
-        #             "tag"           : tag,
-        #             "tag_new"       : tag_new,
-        #             "start_date"    : start_date,
-        #             "end_date"      : end_date,
-        #             "discount_new"  : discount_new,
-        #             "discount_year" : discount_year,
-        #             "taxes_amount"  : taxes_amount,
-        #             "total_amount"  : total_amount,
-        #         }
-        #         return render(request, 'tenancy/order.html', ctx)
-
-        #     else:
-        #         payments = SystemPayment.objects.filter(date_made__year=today.year)
-        #         year = today.year % 100
-        #         day_of_year = today.timetuple().tm_yday
-        #         order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-        #         paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-                
-        #         payment = SystemPayment(
-        #             order_no    = order_no,
-        #             date_made   = today,
-        #             amount      = total_amount,
-        #             currency    = plan.currency,
-        #             reference   = paymt_no,
-        #             made_by     = request.user,
-        #             note        = f"{tenant}-{plan.name}-{today}"
-        #         )
-        #         try:
-        #             payment.save()
-        #         except Exception as xc:
-        #             print(f"Error raised while creating System Payment: {str(xc)}")
-                
-        #         all_subscriptions  = Subscription.objects.filter(tenant=tenant)
-        #         subscriptions = all_subscriptions.filter(active=True)
-        #         active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
-        #         current_subscription = active_subscriptions.last()
-        #         if current_subscription:
-        #             if current_subscription.is_trial:
-        #                 subscription = current_subscription
-        #                 subscription.date_fm = start_date
-        #                 subscription.date_to = end_date
-        #                 subscription.tenant  = tenant
-        #                 subscription.plan    = plan
-        #                 subscription.payment = payment
-        #                 subscription.is_trial = False
-        #         else:
-        #             subscription = Subscription(
-        #                 date_fm = start_date,
-        #                 date_to = end_date,
-        #                 tenant  = tenant,
-        #                 plan    = plan,
-        #                 payment = payment
-        #             )
-
-        #         try:
-        #             subscription.save()
-        #         except Exception as xc:
-        #             print(f"Error raised while creating Subscription: {str(xc)}")
-
-        #         pay_message = _("Merci de confirmer votre payment.")
-        #         messages.warning(request, f"{pay_message}")
-
-        #     return redirect("tenancy_summary")
-
-
-        # context = {}
-        # return render(request, 'tenancy/order.html', context)
-
     return HttpResponse(message, status=code)
 
-
-
-
-@login_required(login_url="account_login")
-def x_order(request):
-    # TODO: Handle downgrading
-    code, message = can_admin(request)
-    if code == 200:
-        if request.method == "POST":
-            stage = request.POST.get('stage', '')
-            plan_id = request.POST.get('plan_id', '')
-            tag = request.POST.get('tag', '')
-            tag_new = request.POST.get('tag_new', '')
-            period = request.POST.get('period', '')
-
-            plan_uuid = uuid.UUID(plan_id, version=4)
-            plan = Plan.objects.filter(id=plan_uuid).first()
-            tenant=request.user.tenant
-
-            subs = Subscription.objects.filter(active=True, is_trial=False, tenant=tenant).order_by('date_fm')
-            is_new = True if len(subs) == 0 else False
-
-            periodicity = "1" if period == "monthly" else "12"
-            monthly_price = int(tag_new) if is_new else  int(tag)
-
-            price_normal = plan.monthly_price if period == "monthly" else 12 * plan.monthly_price
-            discount_new = True if is_new else False
-            price = monthly_price if period == "monthly" else 12 * monthly_price
-            discount_year = False if period == "monthly" else True
-            
-            taxes_amount = Decimal(price * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            total_amount = Decimal(price + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            
-            start_date = today
-            sub = subs.last()
-            if sub: 
-                start_date = sub.date_to + relativedelta(days=1)
-            end_date = start_date + relativedelta(months=1) if period == "monthly" else start_date + relativedelta(years=1)
-
-            if stage == "selection":
-                ctx = {
-                    "monthly_price" : Decimal(monthly_price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                    "price"         : Decimal(price).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                    "price_normal"  : Decimal(price_normal).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP),
-                    "periodicity"   : periodicity + " " + _("Mois"),
-                    "plan"          : plan,
-                    "tag"           : tag,
-                    "tag_new"       : tag_new,
-                    "start_date"    : start_date,
-                    "end_date"      : end_date,
-                    "discount_new"  : discount_new,
-                    "discount_year" : discount_year,
-                    "taxes_amount"  : taxes_amount,
-                    "total_amount"  : total_amount,
-                }
-                return render(request, 'tenancy/order.html', ctx)
-
-            else:
-                payments = SystemPayment.objects.filter(date_made__year=today.year)
-                year = today.year % 100
-                day_of_year = today.timetuple().tm_yday
-                order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-                paymt_no = f"SP-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
-                
-                payment = SystemPayment(
-                    order_no    = order_no,
-                    date_made   = today,
-                    amount      = total_amount,
-                    currency    = plan.currency,
-                    reference   = paymt_no,
-                    made_by     = request.user,
-                    note        = f"{tenant}-{plan.name}-{today}"
-                )
-                try:
-                    payment.save()
-                except Exception as xc:
-                    print(f"Error raised while creating System Payment: {str(xc)}")
-                
-                all_subscriptions  = Subscription.objects.filter(tenant=tenant)
-                subscriptions = all_subscriptions.filter(active=True)
-                active_subscriptions  = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to', 'is_trial')
-                current_subscription = active_subscriptions.last()
-                if current_subscription:
-                    if current_subscription.is_trial:
-                        subscription = current_subscription
-                        subscription.date_fm = start_date
-                        subscription.date_to = end_date
-                        subscription.tenant  = tenant
-                        subscription.plan    = plan
-                        subscription.payment = payment
-                        subscription.is_trial = False
-                else:
-                    subscription = Subscription(
-                        date_fm = start_date,
-                        date_to = end_date,
-                        tenant  = tenant,
-                        plan    = plan,
-                        payment = payment
-                    )
-
-                try:
-                    subscription.save()
-                except Exception as xc:
-                    print(f"Error raised while creating Subscription: {str(xc)}")
-
-                pay_message = _("Merci de confirmer votre payment.")
-                messages.warning(request, f"{pay_message}")
-
-            return redirect("tenancy_summary")
-
-
-        context = {}
-        return render(request, 'tenancy/order.html', context)
-
-    return HttpResponse(message, status=code)
 
 
 @login_required(login_url="account_login")

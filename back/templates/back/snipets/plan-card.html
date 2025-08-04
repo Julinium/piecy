@@ -89,7 +89,8 @@
                         {% if form_url != 'tenancy_trial' %}
                             <input type="hidden" name="stage" value="selection">
                             <input type="hidden" name="periodicity" value="{{ periodicity }}">
-                            <input type="hidden" name="tag" value='
+                            <input type="hidden" name="tag" 
+                                value='
                                 {% if periodicity == "yearly" %}
                                     {% if repetition == "new" %}
                                         {{ plan.yearly_year_tag_new }}
