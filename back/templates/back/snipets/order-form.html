@@ -2,11 +2,8 @@
 
 <form method="POST"  action="{% url 'tenancy_order' %}">
     {% csrf_token %}
-    <input type="hidden" name="stage" value="confirmation">    
-    <input type="hidden" name="plan_id" value="{{ plan.id }}">
+    <input type="hidden" name="order_no" value="{{ order_no }}">
+    <input type="hidden" name="objet" value="{{ objet }}">
     <input type="hidden" name="total_amount" value="{{ total_amount }}">
-    <input type="hidden" name="tag" value="{{ tag }}">
-    <input type="hidden" name="tag_new" value="{{ tag_new }}">
-    <!-- <input type="hidden" name="periodicity" value="{{ periodicity }}"> -->
     <button type="submit" class="btn btn-primary">{% trans "Confirmer" %}</button>
 </form>

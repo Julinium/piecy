@@ -244,7 +244,6 @@ def subscribe(request):
     return HttpResponse(message, status=code)
 
 
-
 @login_required(login_url="account_login")
 def order(request):
 
@@ -252,12 +251,16 @@ def order(request):
     if code == 200:
         context = {}
         if request.method == "POST":
-
-            tenant = request.user.tenant            
+            pass
+        else:
+            tenant = request.user.tenant
 
             subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
             active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-            current_subscription = active_subscriptions.last()            
+            current_subscription = active_subscriptions.last()
+
+            if not current_subscription:
+                current_subscription = subscriptions.last()
 
             if current_subscription:
 
@@ -288,6 +291,7 @@ def order(request):
                 context["order_no"]     = order_no
                 context["objet"]        = objet
                 context["periodicity"]  = periodicity
+                context["ht_amount"]    = Decimal(ht_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
                 context["total_amount"] = total_amount
                 context["taxes_amount"] = taxes_amount
                 context["plan"]         = plan
@@ -296,41 +300,44 @@ def order(request):
 
                 return render(request, 'tenancy/order.html', context)
 
-                payment = SystemPayment(
-                    order_no  = order_no,
-                    date_made = today,
-                    objet     = objet,
-                    amount    = total_amount,
-                    currency  = plan.currency,
-                    reference = paymt_no,
-                    made_by   = request.user,
-                    note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
-                )
-                try:
-                    payment.save()
-                except Exception as xc:
-                    print(f"Error raised while creating System Payment: {str(xc)}")
+            #     payment = SystemPayment(
+            #         order_no  = order_no,
+            #         date_made = today,
+            #         objet     = objet,
+            #         amount    = total_amount,
+            #         currency  = plan.currency,
+            #         reference = paymt_no,
+            #         made_by   = request.user,
+            #         note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
+            #     )
+            #     try:
+            #         payment.save()
+            #     except Exception as xc:
+            #         print(f"Error raised while creating System Payment: {str(xc)}")
 
-                subscription = Subscription(
-                    date_fm = start_date,
-                    date_to = end_date,
-                    tenant  = tenant,
-                    plan    = plan,
-                    payment = payment
-                )
+            #     subscription = Subscription(
+            #         date_fm = start_date,
+            #         date_to = end_date,
+            #         tenant  = tenant,
+            #         plan    = plan,
+            #         payment = payment
+            #     )
 
-                try:
-                    subscription.save()
-                except Exception as xc:
-                    print(f"Error raised while creating Subscription: {str(xc)}")
+            #     try:
+            #         subscription.save()
+            #     except Exception as xc:
+            #         print(f"Error raised while creating Subscription: {str(xc)}")
 
-                pay_message = _("Merci de confirmer votre payment.")
-                messages.warning(request, f"{pay_message}")
+            #     pay_message = _("Merci de confirmer votre payment.")
+            #     messages.warning(request, f"{pay_message}")
 
-                return redirect("tenancy_summary")
+            nosub_message = _("Previous Subscription not found")
+            messages.error(request, f"{nosub_message}")
 
-            context = {}
-            return render(request, 'tenancy/order.html', context)
+            return redirect("tenancy_summary")
+
+            # context = {}
+            # return render(request, 'tenancy/order.html', context)
 
 ###############################
 

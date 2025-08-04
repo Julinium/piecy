@@ -45,9 +45,10 @@
                         {% trans "Attention: sans Abonnement valide, vous risquez de perdre vos données définitivement" %} !
                     </p>
                     <div class="">
+                        <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</a>
                         <!-- Renewal Form -->
-                         <form method="POST" action="{% url 'tenancy_order' %}">
-                            {% csrf_token %}
+                         <!-- <form method="POST" action="{% url 'tenancy_order' %}"> -->
+                            <!-- {% csrf_token %} -->
                             <!-- <input type="hidden" name="plan_id" value="{{ latest_subscription.plan.id }}"> -->
                             <!-- <input type="hidden" name="subscription_id" value="{{ latest_subscription.id }}"> -->
                             <!-- <input type="hidden" name="box" value="S1R0"> -->
@@ -55,11 +56,11 @@
                             <!-- <input type="hidden" name="tag" value="{{ tag }}"> -->
                             <!-- <input type="hidden" name="tag_new" value="{{ tag_new }}"> -->
                             <!-- <input type="hidden" name="period" value="{{ period }}"> -->
-                            <button type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</button>
-                            <span>
+                            <!-- <button type="submit" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</button> -->
+                            <!-- <span> -->
                                 <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
-                            </span>
-                         </form>
+                            <!-- </span> -->
+                         <!-- </form> -->
                     </div>
                 </div>
             </div>
