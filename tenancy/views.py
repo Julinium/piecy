@@ -13,6 +13,7 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.http import HttpResponse
 # from django.utils.text import capfirst
 from back.models import SystemPayment, Plan, Subscription, Trial
+from accs.models import Utilisateur
 
 
 SUB_DAYS_WARNING = 90
@@ -382,8 +383,47 @@ def order(request):
 
 @login_required(login_url="account_login")
 def users(request):
-    context = {}
-    return render(request, 'tenancy/users.html', context)
+    code, message = can_admin(request)
+    if code == 200:
+        context = {}
+        tenant = request.user.tenant
+        users = Utilisateur.objects.filter(is_active=True, tenant=tenant)
+
+        context["users"] = users
+        return render(request, 'tenancy/users.html', context)
+
+    return HttpResponse(message, status=code)
+
+@login_required(login_url="account_login")
+def toggle_user(request, pk=None):
+    code, message = can_admin(request)
+    if code == 200:
+        tenant = request.user.tenant
+        admins = Utilisateur.objects.filter(is_active=True, is_tenant_admin=True, tenant=tenant)
+        if len(admins) < 1:
+            messages.error(request, _("Pas assez d'Utilisateurs."))
+            return redirect("tenancy_users")
+        if pk:
+            user_uuid = uuid.UUID(pk, version=4)
+            try:
+                passed_user = Utilisateur.objects.get(id=user_uuid)
+                if passed_user:
+                    passed_user.is_active = not passed_user.is_active
+                    passed_user.save()
+            except Exception as xc:
+                print(f"Error while updating user with id {pk}: {str(xc)}")
+
+            context = {}
+            # tenant = request.user.tenant
+            # users = Utilisateur.objects.filter(active=True, tenant=tenant)
+
+            # context["users"] = users
+            return render(request, 'tenancy/users.html', context)
+
+        return HttpResponse(_("Utilisateur non trouvé."), status=code)
+    return HttpResponse(message, status=code)
+
+
 
 
 @login_required(login_url="account_login")
