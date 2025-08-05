@@ -30,7 +30,7 @@
     {% endif %}
 
     {% if tenant.active %}
-        {% if box == "S1R0" %} <!-- Expired Subscription --> <!-- subscriptions latest_subscription -->
+        {% if box == "S1R0" %} <!-- Expired Subscription --> <!-- subscriptions latest_subscription subscription_remaining_days=0 -->
             <div class="card mb-4 shadow shadow bg-danger-subtle">
                 <div class="card-header fw-bold fs-5 text-center text-danger">
                     {% trans "ABONNEMENT EXPIRÉ" %}
@@ -63,6 +63,7 @@
                     </p>
                     <div class="text-center">
                         <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Réactiver" %}</a>
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
                         <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
@@ -236,13 +237,12 @@
                         </li>
                     {% endfor %}
                 </ul>
+                {% if request.user.is_authenticated and request.user.is_tenant_admin %}
+                    <div id="admins-actions" class="mt-2 mb-4">
+                        <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique' %}</a>
+                    </div>
+                {% endif %}
             </div>
-
-            {% if request.user.is_authenticated and request.user.is_tenant_admin %}
-                <div id="admins-actions" class="mt-2 mb-4">
-                    <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique' %}</a>
-                </div>
-            {% endif %}
         {% endif %}
 
 

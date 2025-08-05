@@ -43,12 +43,12 @@ def can_admin(request) -> tuple[int, str]:
     return 200, _("OK")
 
 
-
 @login_required(login_url="account_login")
 def summary(request):
     code, message = can_admin(request)
     if code == 200:
-        tenant = request.user.tenant        
+        # TODO: When Tenant has the highest Plan ?
+        tenant = request.user.tenant
         tenant_admins = tenant.workers.filter(is_tenant_admin = True)
         tenant_users = tenant.workers.exclude(is_tenant_admin = True)
 
@@ -189,6 +189,7 @@ def trial(request):
 def subscribe(request):
     code, message = can_admin(request)
     if code == 200:
+        tenant = request.user.tenant
         context = {}
         subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
         latest_subscription = subscriptions.last()
@@ -218,32 +219,56 @@ def subscribe(request):
             context["end_date"]     = end_date
 
         if request.method == "POST":
-            subs_id = request.POST.get('subs_id', '')
-            if subs_id != "":
-                subscription = Subscription.objects.filter(active=True, id=subs_id).last()
-                if subscription:
-                    plan_ordre = subscription.plan.ordre
-                    # plans = Plan.objects.filter(active=True)
-                    high_plans = plans.filter(ordre__gte=plan_ordre)
-                    periodicity = "yearly"
-                    start_date = today
-                    if subscription.date_to <= subscription.date_fm + timedelta(days=31):
-                        periodicity = "monthly"
-                    if subscription.date_to > today :
-                        start_date = subscription.date_to + relativedelta(days=1)
-                    end_date = start_date + relativedelta(years=1)
-                    if periodicity == "monthly":
-                        end_date = start_date + relativedelta(months=1)
+            plan_id = request.POST.get('plan_id', '')
+            if plan_id != "":
+                # messages.info(request, f"{plan_id}")
+                plan_uuid = uuid.UUID(plan_id, version=4)
+                selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
+                if latest_subscription:
+                    if selected_plan:
+                        if selected_plan.ordre < latest_subscription.plan.ordre:
+                            dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
+                            messages.error(request, f"{dgd_message}")
+                            return redirect("tenancy_summary")
 
-                    context["periodicity"]  = periodicity
-                    context["plans"]        = plans
-                    context["high_plans"]   = high_plans
-                    context["start_date"]   = start_date
-                    context["end_date"]     = end_date
+                        return redirect("tenancy_order")
+                        # plan_ordre = subscription.plan.ordre
+                        # high_plans = plans.filter(ordre__gte=plan_ordre)
+                        # periodicity = "yearly"
+                        # start_date = today
+                        # if subscription.date_to <= subscription.date_fm + timedelta(days=31):
+                        #     periodicity = "monthly"
+                        # if subscription.date_to > today :
+                        #     start_date = subscription.date_to + relativedelta(days=1)
+                        # end_date = start_date + relativedelta(years=1)
+                        # if periodicity == "monthly":
+                        #     end_date = start_date + relativedelta(months=1)
 
-                    return render(request, 'tenancy/subscribe.html', context)
-                
-            return HttpResponse("Something went wrong !", status=503)
+                        # context["periodicity"]  = periodicity
+                        # context["plans"]        = plans
+                        # context["high_plans"]   = high_plans
+                        # context["start_date"]   = start_date
+                        # context["end_date"]     = end_date
+
+                        # return render(request, 'tenancy/subscribe.html', context)
+
+                    sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
+                    messages.error(request, f"{sub_message}")
+                    return redirect("tenancy_summary")
+
+                # New subscription
+                periodicity = request.POST.get('periodicity', '')
+                ###########################
+
+                ###########################
+                plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
+                # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
+                messages.error(request, f"{plan_message}")
+                return redirect("tenancy_summary")
+
+            sel_message = _("Votre séléction n'est pas valide.")
+            messages.error(request, f"{sel_message}")
+            return redirect("tenancy_summary")
 
         plans = Plan.objects.filter(active=True)
         context["plans"] = plans
@@ -323,12 +348,11 @@ def order(request):
                 except Exception as xc:
                     print(f"Error raised while creating Subscription: {str(xc)}")
 
-                pay_message = _("Merci de confirmer votre paiement.")
+                pay_message = _("Abonnement activé. Merci de confirmer votre paiement.")
                 messages.warning(request, f"{pay_message}")
 
                 return redirect("tenancy_summary")
             else:
-
                 year = today.year % 100
                 day_of_year = today.timetuple().tm_yday
                 order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
@@ -345,7 +369,9 @@ def order(request):
 
                 return render(request, 'tenancy/order.html', context)
 
-        nosub_message = _("Previous Subscription not found")
+        # New Subscription.
+
+        nosub_message = _("Previous Subscription not found.")
         messages.error(request, f"{nosub_message}")
 
         return redirect("tenancy_summary")

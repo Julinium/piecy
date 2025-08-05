@@ -77,7 +77,7 @@
                         <li>{{ plan.max_users }} {% trans "Utilisateurs" %}</li>
                         <li>{{ plan.max_magasins }} {% trans "Magasins" %}</li>
                         <li>{{ plan.max_products }} {% trans "Produits" %}</li>
-                        <div class="mt-2 mb-1">+ {% trans "Options" %}</div>                    
+                        <div class="mt-2 mb-1 text-muted">+ {% trans "Options" %}:</div>
                         <li class="{% if not plan.vitrine %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Vitrine" %}</li>
                         <li class="{% if not plan.custom_domain %}text-secondary text-decoration-line-through{% endif %}">{% trans "Nom de domaine" %}</li>
                         <li class="{% if not plan.ecommerce %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Ecommerce" %}</li>
