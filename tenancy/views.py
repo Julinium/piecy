@@ -388,11 +388,51 @@ def users(request):
         context = {}
         tenant = request.user.tenant
         users = Utilisateur.objects.filter(is_active=True, tenant=tenant)
-
+        
         context["users"] = users
         return render(request, 'tenancy/users.html', context)
 
     return HttpResponse(message, status=code)
+
+
+
+@login_required(login_url="account_login")
+def add_tenant_user(request):
+    code, message = can_admin(request)
+    if code == 200:
+        context = {}
+        tenant = request.user.tenant
+        subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+        active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_subscription = active_subscriptions.last()
+        all_users = Utilisateur.objects.filter(tenant=tenant)
+        
+        if current_subscription:
+            plan = current_subscription.plan
+            max_users = plan.max_users
+            
+            if max_users >= len(all_users):
+                messages.error(request, _("Aucun abonnement actif trouvé."))
+                return redirect('tenancy_users')
+
+            if request.method == "POST":
+                pass
+            else:
+                # Subscription
+                # Plan
+                # Users / Max_users
+
+                # tenant = request.user.tenant
+
+                context["users"] = users
+            return render(request, 'tenancy/add_user.html', context)
+
+        messages.error(request, _("Aucun abonnement actif trouvé."))
+        return redirect('tenancy_users')
+
+    return HttpResponse(message, status=code)
+
+
 
 @login_required(login_url="account_login")
 def toggle_user(request, pk=None):

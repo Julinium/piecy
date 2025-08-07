@@ -1,0 +1,38 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Créer un Utilisateur" %}
+{% endblock title %}
+
+{% block content %}
+<div class="text-center">
+    <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
+    <h2 class="p-1 my-3">{% translate "Créer un Utilisateur" %}</h2>
+    <div class="my-3">
+        <form method="POST" action="{% url 'tenancy_add_user' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="username" class="form-label">{% trans "Nom d'utilisateur" %}</label>
+                <input class="form-control" type="text" name="username" id="username" placeholder="{% trans 'Nom d\'utilisateur' %}">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">{% trans "Email" %}</label>
+                <input class="form-control" type="email" name="email" id="email" placeholder="{% trans 'Email' %}">
+            </div>
+            <div class="mb-3">
+                <label for="password1" class="form-label">{% trans "Mot de passe" %}</label>
+                <input class="form-control" type="password" name="password1" id="password1">
+            </div>
+            <div class="mb-3">
+                <label for="password2" class="form-label">{% trans "Mot de passe" %} - {% trans "Confirmation" %}</label>
+                <input class="form-control" type="password" name="password2" id="password2">
+            </div>
+            <p>{% trans "Un email sera envoyé à l'adresse email saisie pour confirmation." %}</p>
+            <p>{% trans "Il est recommendé au nouvel utilisateur de modifier son mot de passe juste après sa première connexion." %}</p>
+            <button type="submit" class="btn btn-primary">{% trans 'Créer' %}</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
