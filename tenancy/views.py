@@ -388,7 +388,7 @@ def users(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
-        tenant_users = Utilisateur.objects.filter(tenant=tenant)
+        tenant_users = Utilisateur.objects.filter(tenant=tenant).order_by("-is_active", "-is_tenant_admin", "-last_login", "username")
         
         context["users"] = tenant_users
         return render(request, 'tenancy/users.html', context)
@@ -519,6 +519,9 @@ def disadminize_user(request, user_id=None):
             try:
                 passed_user = Utilisateur.objects.get(id=user_uuid)
                 if passed_user:
+                    if passed_user == request.user :
+                        messages.error(request, _("Vous ne pouvez pas rendre votre propre compte Non-Admin."))
+                        return redirect('tenancy_users')
                     passed_user.is_tenant_admin = False
                     passed_user.save()
             except Exception as xc:
@@ -540,6 +543,9 @@ def adminize_user(request, user_id=None):
             try:
                 passed_user = Utilisateur.objects.get(id=user_uuid)
                 if passed_user:
+                    if passed_user == request.user :
+                        messages.error(request, _("Vous ne pouvez pas rendre votre propre compte Admin."))
+                        return redirect('tenancy_users')
                     passed_user.is_tenant_admin = True
                     passed_user.save()
             except Exception as xc:

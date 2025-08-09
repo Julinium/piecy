@@ -16,24 +16,38 @@
             <div class="list-group-item">
                 <a class="btn w-100 m-0 p-0" data-bs-toggle="collapse" href="#user-{{ user.username }}" role="button" aria-expanded="false" aria-controls="user-{{ user.username }}">
                     <div class="d-flex align-items-center">
-                        <img class="img-fluid pe-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 4rem;" alt="X">
+                        <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="X">
                         <div class="w-100 d-flex justify-content-between">
                             <div class="text-start">
-                                <div class="fw-bold">{% if user != request.user %}<span class="badge bg-primary me-2">{% trans "Vous" %}</span>{% endif %}{{ user.username }}</div>
+                                <div class="{% if not user.is_active %}text-secondary{% else %}fw-bold{% endif %}">{{ user.username }}</div>
                                 <div class="text-muted">{{ user.email }}</div>
                             </div>
                             <div>
+                                {% if user == request.user %}<span class="badge bg-success">{% trans "Vous" %}</span>{% endif %}
                                 {% if user.is_tenant_admin %}<span class="badge bg-danger">{% trans "Admin" %}</span>{% endif %}
                                 {% if not user.is_active %}<span class="badge bg-secondary">{% trans "Désactivé" %}</span>{% endif %}
                             </div>
                         </div>
                     </div>
                 </a>
-                {% if user != request.user %}
-                    <div class="collapse py-2" id="user-{{ user.username }}">
-                        {% if not user.is_tenant_admin %}
+                <div class="collapse py-2" id="user-{{ user.username }}">
+                    <div id="user-details" class="mt-2">
+                        <div class="fw-light small">{% trans "Prénom et Nom" %}: <span class="fw-bold">{{ user.first_name }} {{ user.last_name }}</span></div>
+                        <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span></div>
+                    </div>
+                    {% if user != request.user %}
+                        <div id="user-actions" class="mt-2">
+                            {% if not user.is_tenant_admin %}
+                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-warning btn-sm">
+                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Admin" %}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-success btn-sm">
+                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Non-Admin" %}
+                                </a>
+                            {% endif %}
                             {% if user.is_active %}
-                                <a href="{% url 'disable_user' user.id %}" class="btn btn-warning btn-sm">
+                                <a href="{% url 'disable_user' user.id %}" class="btn btn-secondary btn-sm">
                                 <i class="bi bi-slash-circle"></i> Disable
                                 </a>
                             {% else %}
@@ -41,22 +55,9 @@
                                     <i class="bi bi-check-circle"></i> Enable
                                 </a>
                             {% endif %}
-                            <a href="{% url 'adminize_user' user.id %}" class="btn btn-success btn-sm">
-                                <i class="bi bi-check-circle"></i> {% trans "Rendre Admin" %}
-                            </a>
-                            <!-- <a href="{% url 'delete_user' user.id %}" 
-                                class="btn btn-danger btn-sm"
-                                onclick="return confirm('Are you sure you want to delete this user?');">
-                                <i class="bi bi-trash"></i> Delete
-                            </a> -->
-                        {% else %}
-                            <!-- <span class="text-muted">—</span> -->
-                            <a href="{% url 'disadminize_user' user.id %}" class="btn btn-success btn-sm">
-                                <i class="bi bi-check-circle"></i> {% trans "Rendre Non-Admin" %}
-                            </a>
-                        {% endif %}
-                    </div>
-                {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
             </div>
         {% empty %}
             <div class="list-group-item">{% trans "Aucun Utilisateur trouvé" %}</div>
