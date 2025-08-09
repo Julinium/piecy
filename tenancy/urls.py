@@ -16,6 +16,7 @@ urlpatterns = [
     path('add_user/', views.add_tenant_user, name='tenancy_add_user'),
     path("users/<str:user_id>/disable/", views.disable_user, name="disable_user"),
     path("users/<str:user_id>/enable/", views.enable_user, name="enable_user"),
-    # path("users/<str:user_id>/update/", views.update_user, name="update_user"),
+    path("users/<str:user_id>/adminize/", views.adminize_user, name="adminize_user"),
+    path("users/<str:user_id>/disadminize/", views.disadminize_user, name="disadminize_user"),
     path("users/<str:user_id>/delete/", views.delete_user, name="delete_user"),
 ]

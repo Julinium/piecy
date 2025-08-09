@@ -510,6 +510,48 @@ def delete_user(request, user_id=None):
     return HttpResponse(message, status=code)
 
 
+@login_required(login_url="account_login")
+def disadminize_user(request, user_id=None):
+    code, message = can_admin(request)
+    if code == 200:
+        if user_id:
+            user_uuid = uuid.UUID(user_id, version=4)
+            try:
+                passed_user = Utilisateur.objects.get(id=user_uuid)
+                if passed_user:
+                    passed_user.is_tenant_admin = False
+                    passed_user.save()
+            except Exception as xc:
+                print(f"Error while enabling user with id {user_id}: {str(xc)}")
+            messages.success(request, _("Utilisateur rendu Non-Admin."))
+
+            return redirect('tenancy_users')
+
+        return HttpResponse(_("Utilisateur non trouvé."), status=code)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def adminize_user(request, user_id=None):
+    code, message = can_admin(request)
+    if code == 200:
+        if user_id:
+            user_uuid = uuid.UUID(user_id, version=4)
+            try:
+                passed_user = Utilisateur.objects.get(id=user_uuid)
+                if passed_user:
+                    passed_user.is_tenant_admin = True
+                    passed_user.save()
+            except Exception as xc:
+                print(f"Error while enabling user with id {user_id}: {str(xc)}")
+            messages.success(request, _("Utilisateur rendu Non-Admin."))
+
+            return redirect('tenancy_users')
+
+        return HttpResponse(_("Utilisateur non trouvé."), status=code)
+    return HttpResponse(message, status=code)
+
+
 
 
 @login_required(login_url="account_login")
