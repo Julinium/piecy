@@ -7,9 +7,12 @@
 {% endblock title %}
 
 {% block content %}
-<div class="text-center">
-    <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
-    <h2 class="p-1 my-3">{% translate "Créer un Utilisateur" %}</h2>
+    {% with avatar=tenant.logo headline=tenant.name subtitle=tenant.owner %}
+        {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
+    {% endwith %}
+<div class="text-center mb-3">
+    <h3 class="p-1 my-3">{% translate "Créer un Utilisateur" %}</h3>
+</div>
     <div class="my-3">
         <form method="post">
             {% csrf_token %}
@@ -25,7 +28,7 @@
                     {% endfor %}
                 </div>
             {% endfor %}
-            <button type="submit">{% trans 'Créer' %}</button>
+            <button type="submit" class="btn btn-primary">{% trans 'Créer Nouvel Utilisateur' %}</button>
         </form>
 
         <!-- <form method="POST" action="{% url 'tenancy_add_user' %}">
@@ -51,5 +54,4 @@
             <button type="submit" class="btn btn-primary">{% trans 'Créer' %}</button>
         </form> -->
     </div>
-</div>
 {% endblock content %}

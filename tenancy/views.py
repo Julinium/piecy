@@ -388,8 +388,21 @@ def users(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
+        context["tenant"] = tenant
         tenant_users = Utilisateur.objects.filter(tenant=tenant).order_by("-is_active", "-is_tenant_admin", "-last_login", "username")
         
+        max_users = 0
+        subscriptions         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
+        running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
+        current_subscription  = running_subscriptions.last()
+        if current_subscription:
+            plan = current_subscription.plan
+            if plan:
+                max_users = plan.max_users
+        
+        context["current_subscription"] = current_subscription
+        context["max_users"] = max_users
+        context["users_count"] = len(tenant_users)
         context["users"] = tenant_users
         return render(request, 'tenancy/users.html', context)
 
@@ -403,6 +416,7 @@ def add_tenant_user(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
+        context["tenant"] = tenant
         subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
         active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
@@ -428,9 +442,10 @@ def add_tenant_user(request):
                 else:
                     messages.error(request, _("Merci de rectifier les erreurs dans le formulaire."))
             else:
-                form = CustomUserCreationForm()
+                form = CustomUserCreationForm(tenant = tenant)
+                context["form"] = form
 
-            return render(request, "tenancy/add_user.html", {"form": form})
+            return render(request, "tenancy/add_user.html", context)
 
             #     context["users"] = users
             # return render(request, 'tenancy/add_user.html', context)

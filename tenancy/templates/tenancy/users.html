@@ -7,10 +7,13 @@
 {% endblock title %}
 
 {% block content %}
-    <div class="text-center">
-        <img class="img-fluid p-2" src="{% static 'images/brand.svg' %}" style="max-width: 20rem;" alt="Goal">
-        <h2 class="p-1 my-3">{% translate "Utilisateurs de l'Entreprise" %}</h2>
+    {% with avatar=tenant.logo headline=tenant.name subtitle=tenant.owner %}
+        {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
+    {% endwith %}
+    <div class="text-center mb-3">
+        <h3 class="p-1 my-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>        
     </div>
+
     <div class="list-group mb-3">
         {% for user in users %}
             <div class="list-group-item">
@@ -63,9 +66,14 @@
             <div class="list-group-item">{% trans "Aucun Utilisateur trouvé" %}</div>
         {% endfor %}
     </div>
-
-    <div id="users-actions" class="text-end mb-3">
-        <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">{% trans "Nouveau" %}</a>
+    <div class="hstack gap-1 mb-3">
+        <div class="p-2 ms-auto">
+            <div class="fw-bold">{{ users_count }} {% trans "Utilisateurs" %} / {{ max_users }} ({% trans "Plan" %}: {{ current_subscription.plan.name }})</div>
+        </div>
+        <div class="p-2">
+            <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">{% trans "Nouveau" %}</a>
+        </div>
     </div>
+
     
 {% endblock content %}
