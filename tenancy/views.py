@@ -11,9 +11,10 @@ from django.contrib import messages
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.http import HttpResponse
-# from django.utils.text import capfirst
-from back.models import SystemPayment, Plan, Subscription, Trial
-from accs.models import Utilisateur
+
+from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur
+
+from .forms import CustomUserCreationForm
 
 
 SUB_DAYS_WARNING = 90
@@ -387,9 +388,9 @@ def users(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
-        users = Utilisateur.objects.filter(is_active=True, tenant=tenant)
+        tenant_users = Utilisateur.objects.filter(tenant=tenant)
         
-        context["users"] = users
+        context["users"] = tenant_users
         return render(request, 'tenancy/users.html', context)
 
     return HttpResponse(message, status=code)
@@ -411,54 +412,99 @@ def add_tenant_user(request):
             plan = current_subscription.plan
             max_users = plan.max_users
             
-            if max_users >= len(all_users):
-                messages.error(request, _("Aucun abonnement actif trouvé."))
-                return redirect('tenancy_users')
+            if max_users <= len(all_users):
+                messages.error(request, _("Nombre maximum d'utilisateur atteint pour votre Plan."))
+                return redirect('tenancy_summary')
 
             if request.method == "POST":
-                pass
+                form = CustomUserCreationForm(request.POST)
+                if form.is_valid():
+                    new_user = form.save(commit=False)
+                    new_user.tenant = tenant
+                    new_user.save()
+                    # form.save()
+                    messages.success(request, _("Utilisateur ajouté.") + " \n" + _("Reste à confirmer l'adresse email."))
+                    return redirect("tenancy_users")  # assumes you have a login URL named "login"
+                else:
+                    messages.error(request, _("Merci de rectifier les erreurs dans le formulaire."))
             else:
-                # Subscription
-                # Plan
-                # Users / Max_users
+                form = CustomUserCreationForm()
 
-                # tenant = request.user.tenant
+            return render(request, "tenancy/add_user.html", {"form": form})
 
-                context["users"] = users
-            return render(request, 'tenancy/add_user.html', context)
+            #     context["users"] = users
+            # return render(request, 'tenancy/add_user.html', context)
 
         messages.error(request, _("Aucun abonnement actif trouvé."))
-        return redirect('tenancy_users')
+        return redirect('tenancy_summary')
 
     return HttpResponse(message, status=code)
 
 
-
 @login_required(login_url="account_login")
-def toggle_user(request, pk=None):
+def enable_user(request, user_id=None):
     code, message = can_admin(request)
     if code == 200:
-        tenant = request.user.tenant
-        admins = Utilisateur.objects.filter(is_active=True, is_tenant_admin=True, tenant=tenant)
-        if len(admins) < 1:
-            messages.error(request, _("Pas assez d'Utilisateurs."))
-            return redirect("tenancy_users")
-        if pk:
-            user_uuid = uuid.UUID(pk, version=4)
+        if user_id:
+            user_uuid = uuid.UUID(user_id, version=4)
             try:
                 passed_user = Utilisateur.objects.get(id=user_uuid)
                 if passed_user:
-                    passed_user.is_active = not passed_user.is_active
+                    passed_user.is_active = True
                     passed_user.save()
             except Exception as xc:
-                print(f"Error while updating user with id {pk}: {str(xc)}")
+                print(f"Error while enabling user with id {user_id}: {str(xc)}")
+            messages.success(request, _("Utilisateur activé."))
 
-            context = {}
-            # tenant = request.user.tenant
-            # users = Utilisateur.objects.filter(active=True, tenant=tenant)
+            return redirect('tenancy_users')
 
-            # context["users"] = users
-            return render(request, 'tenancy/users.html', context)
+        return HttpResponse(_("Utilisateur non trouvé."), status=code)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def disable_user(request, user_id=None):
+    code, message = can_admin(request)
+    if code == 200:
+        if user_id:
+            user_uuid = uuid.UUID(user_id, version=4)
+            try:
+                passed_user = Utilisateur.objects.get(id=user_uuid)
+                if passed_user:
+                    if passed_user == request.user :
+                        messages.error(request, _("Vous ne pouvez pas désactiver votre propre compte."))
+                        return redirect('tenancy_users')
+                    passed_user.is_active = False
+                    passed_user.save()
+            except Exception as xc:
+                print(f"Error while disabling user with id {user_id}: {str(xc)}")
+            messages.success(request, _("Utilisateur désactivé."))
+
+            return redirect('tenancy_users')
+
+        return HttpResponse(_("Utilisateur non trouvé."), status=code)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def delete_user(request, user_id=None):
+    code, message = can_admin(request)
+    if code == 200:
+        if user_id:
+            user_uuid = uuid.UUID(user_id, version=4)
+            try:
+                passed_user = Utilisateur.objects.get(id=user_uuid)
+                if passed_user:
+                    if passed_user == request.user :
+                        messages.error(request, _("Vous ne pouvez pas supprimer votre propre compte."))
+                        return redirect('tenancy_users')
+                    passed_user.is_active = False
+                    passed_user.save()
+            except Exception as xc:
+                print(f"Error while disabling user with id {user_id}: {str(xc)}")
+            messages.warning(request, _("Utilisateur désactivé."))
+
+            return redirect('tenancy_users')
 
         return HttpResponse(_("Utilisateur non trouvé."), status=code)
     return HttpResponse(message, status=code)

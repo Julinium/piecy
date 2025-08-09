@@ -13,4 +13,9 @@ urlpatterns = [
     path('subscribe/', views.subscribe, name='tenancy_subscribe'),
     path('sub-upgrade/', views.sub_upgrade, name='tenancy_sub_upgrade'),
     path('users/', views.users, name='tenancy_users'),
+    path('add_user/', views.add_tenant_user, name='tenancy_add_user'),
+    path("users/<str:user_id>/disable/", views.disable_user, name="disable_user"),
+    path("users/<str:user_id>/enable/", views.enable_user, name="enable_user"),
+    # path("users/<str:user_id>/update/", views.update_user, name="update_user"),
+    path("users/<str:user_id>/delete/", views.delete_user, name="delete_user"),
 ]
