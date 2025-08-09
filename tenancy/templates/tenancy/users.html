@@ -16,7 +16,7 @@
             <div class="list-group-item">
                 <a class="btn w-100 m-0 p-0" data-bs-toggle="collapse" href="#user-{{ user.username }}" role="button" aria-expanded="false" aria-controls="user-{{ user.username }}">
                     <div class="d-flex align-items-center">
-                        <div class="pe-2">[IMG]</div>
+                        <img class="img-fluid pe-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 4rem;" alt="X">
                         <div class="w-100 d-flex justify-content-between">
                             <div class="text-start">
                                 <div class="fw-bold">{{ user.username }}</div>
