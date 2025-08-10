@@ -12,7 +12,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.http import HttpResponse
 
-from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur
+from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur, Tenant
 
 from .forms import CustomUserCreationForm
 
@@ -415,12 +415,12 @@ def add_tenant_user(request):
     code, message = can_admin(request)
     if code == 200:
         context = {}
-        tenant = request.user.tenant
-        context["tenant"] = tenant
-        subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+        tenant_out = request.user.tenant
+        context["tenant"] = tenant_out
+        subscriptions = Subscription.objects.filter(active=True, tenant=tenant_out)
         active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
-        all_users = Utilisateur.objects.filter(tenant=tenant)
+        all_users = Utilisateur.objects.filter(tenant=tenant_out)
         
         if current_subscription:
             plan = current_subscription.plan
@@ -434,7 +434,10 @@ def add_tenant_user(request):
                 form = CustomUserCreationForm(request.POST)
                 if form.is_valid():
                     new_user = form.save(commit=False)
-                    new_user.tenant = tenant
+                    tenant_in = request.POST.get('tenant', None)
+                    tenant_uuid = uuid.UUID(tenant_in, version=4)
+                    tenant = Tenant.objects.filter(id=tenant_uuid).last()
+                    new_user.tenant = tenant_out
                     new_user.save()
                     # form.save()
                     messages.success(request, _("Utilisateur ajouté.") + " \n" + _("Reste à confirmer l'adresse email."))
@@ -442,7 +445,7 @@ def add_tenant_user(request):
                 else:
                     messages.error(request, _("Merci de rectifier les erreurs dans le formulaire."))
             else:
-                form = CustomUserCreationForm(tenant = tenant)
+                form = CustomUserCreationForm(tenant = tenant_out.id)
                 context["form"] = form
 
             return render(request, "tenancy/add_user.html", context)
