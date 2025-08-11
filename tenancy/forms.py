@@ -1,7 +1,7 @@
 # import uuid
 # from django import forms
 # from django.contrib.auth.forms import UserCreationForm
-# from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _
 # from back.models import Utilisateur, Tenant
 
 # forms.py
@@ -11,20 +11,24 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class CustomUserCreationForm(forms.ModelForm):
-    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
-    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+    password1 = forms.CharField(label="Password", widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('Mot de passe')}))
+    password2 = forms.CharField(label="Confirm Password", widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': _('Confirmation Mot de passe')}))
 
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username', 'email', 'is_active', 'is_tenant_admin']  # tenant excluded
 
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control'}),
-            'username': forms.TextInput(attrs={'class': 'form-control'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control'}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'is_tenant_admin': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+
+            # <input type="email" class="form-control" id="floatingInputValue" placeholder="name@example.com" value="test@example.com">
+            # <label for="floatingInputValue">Input with value</label>
+
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'id': 'first_name_input', 'placeholder': _('Prénom')}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'id': 'last_name_input', 'placeholder': _('Nom')}),
+            'username': forms.TextInput(attrs={'class': 'form-control', 'id': 'username_input', 'placeholder': _('Nom Utilisateur')}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'id': 'email_input', 'placeholder': _('Email')}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'is_active_input'}),
+            'is_tenant_admin': forms.CheckboxInput(attrs={'class': 'form-check-input', 'id': 'is_tenant_admin_input'}),
         }
 
     def clean_password2(self):
