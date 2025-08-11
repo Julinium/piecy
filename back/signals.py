@@ -8,10 +8,12 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
     if created:
         create_tenant = False
         if not instance.is_superuser:
-            if instance.created_by:
-                creator = Utilisateur.objects.filter(id=instance.created_by).first()
-                if not creator.tenant: create_tenant = True
-            else: create_tenant = True
+            if not instance.created_by: 
+                create_tenant = True
+                # creator = Utilisateur.objects.filter(id=instance.created_by).first()
+                # if not creator.tenant: create_tenant = True
+                # pass
+            # else: create_tenant = True
         
         if create_tenant :
             biz_name = instance.last_name if instance.last_name else  instance.username 

@@ -12,6 +12,16 @@
     {% endwith %}
     <div class="text-center mb-3">
         <h3 class="p-1 my-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>        
+        <div class="gap-1">
+            {% for i in ""|center:max_users %}
+                {% if forloop.counter <= users_count %}
+                    <span class="badge pill bg-danger px-1">&nbsp;</span>
+                {% else %}
+                    <span class="badge pill border border-success text-success px-1">&nbsp;</span>
+                {% endif %}
+            {% endfor %}
+            <span class="ms-2">{{ users_count }} / {{ max_users }}</span>
+        </div>
     </div>
 
     <div class="list-group mb-3">
@@ -35,11 +45,13 @@
                 </a>
                 <div class="collapse py-2" id="user-{{ user.username }}">
                     <div id="user-details" class="mt-2">
-                        <div class="fw-light small">{% trans "Prénom et Nom" %}: <span class="fw-bold">{{ user.first_name }} {{ user.last_name }}</span></div>
-                        <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span></div>
+                        <div class="fw-light small">{% trans "Prénom" %}: <span class="fw-bold">{{ user.first_name }}</span></div>
+                        <div class="fw-light small">{% trans "Nom" %}: <span class="fw-bold">{{ user.last_name }}</span></div>
+                        <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span>{% if user.last_login %} : {{ user.last_login|timesince }}{% endif %}</div>
+                        <div class="fw-light small">{% trans "Date création" %}: <span class="fw-bold">{{ user.created_on }}</span>{% if user.created_on %} : {{ user.created_on|timesince }}{% endif %}</div>
                     </div>
                     {% if user != request.user %}
-                        <div id="user-actions" class="mt-2">
+                        <div id="user-actions" class="my-2">
                             {% if not user.is_tenant_admin %}
                                 <a href="{% url 'adminize_user' user.id %}" class="btn btn-warning btn-sm">
                                     <i class="bi bi-check-circle"></i> {% trans "Rendre Admin" %}
@@ -66,13 +78,18 @@
             <div class="list-group-item">{% trans "Aucun Utilisateur trouvé" %}</div>
         {% endfor %}
     </div>
-    <div class="hstack gap-1 mb-3">
-        <div class="p-2 ms-auto">
+        <!-- <div class="p-2 ms-auto">
             <div class="fw-bold">{{ users_count }} {% trans "Utilisateurs" %} / {{ max_users }} ({% trans "Plan" %}: {{ current_subscription.plan.name }})</div>
-        </div>
-        <div class="p-2">
-            <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">{% trans "Nouveau" %}</a>
-        </div>
+        </div> -->
+    <div class="hstack gap-2 mb-3">
+        {% if users_count < max_users %}
+            <div class="p-2 ms-auto">
+                <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">{% trans "Nouveau" %}</a>
+            </div>
+        {% else %}
+            {% trans "Pour ajouter un Utilisateur, merci d'amélioer votre Abonnemnt" %}
+            <a href="{% url 'tenancy_summary' %}" class="btn btn-primary ms-auto">{% trans "Amélioer l'Abonnemnt" %}</a>
+        {% endif %}
     </div>
 
     

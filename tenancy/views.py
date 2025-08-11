@@ -410,6 +410,34 @@ def users(request):
 
 
 
+# views.py
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect
+from django.http import HttpResponseForbidden
+from .forms import CustomUserCreationForm
+
+# @login_required
+# def create_tenant_user(request):
+#     admin_user = request.user
+#     if not admin_user.is_tenant_admin:
+#         return HttpResponseForbidden("You do not have permission to create users for this tenant.")
+
+#     if request.method == "POST":
+#         form = TenantUserCreationForm(request.POST)
+#         if form.is_valid():
+#             new_user = form.save(commit=False)
+#             new_user.tenant = admin_user.tenant  # set tenant to admin's tenant
+#             new_user.save()
+#             return redirect('user_list')  # or wherever you want
+#     else:
+#         form = TenantUserCreationForm()
+
+#     return render(request, "users/create_tenant_user.html", {"form": form})
+
+
+
+
+
 @login_required(login_url="account_login")
 def add_tenant_user(request):
     code, message = can_admin(request)
@@ -428,35 +456,79 @@ def add_tenant_user(request):
             
             if max_users <= len(all_users):
                 messages.error(request, _("Nombre maximum d'utilisateur atteint pour votre Plan."))
-                return redirect('tenancy_summary')
+                return redirect('tenancy_users')
 
             if request.method == "POST":
                 form = CustomUserCreationForm(request.POST)
                 if form.is_valid():
                     new_user = form.save(commit=False)
-                    tenant_in = request.POST.get('tenant', None)
-                    tenant_uuid = uuid.UUID(tenant_in, version=4)
-                    tenant = Tenant.objects.filter(id=tenant_uuid).last()
-                    new_user.tenant = tenant_out
+                    new_user.tenant = request.user.tenant
+                    new_user.created_by = request.user.id
                     new_user.save()
-                    # form.save()
-                    messages.success(request, _("Utilisateur ajouté.") + " \n" + _("Reste à confirmer l'adresse email."))
-                    return redirect("tenancy_users")  # assumes you have a login URL named "login"
+                    messages.success(request, _("Utilisateur ajouté."))
                 else:
-                    messages.error(request, _("Merci de rectifier les erreurs dans le formulaire."))
+                    messages.error(request, _("Données invalides. Utilisateur non ajouté."))
+                return redirect("tenancy_users")
+
             else:
-                form = CustomUserCreationForm(tenant = tenant_out.id)
+                form = CustomUserCreationForm()
                 context["form"] = form
 
             return render(request, "tenancy/add_user.html", context)
-
-            #     context["users"] = users
-            # return render(request, 'tenancy/add_user.html', context)
 
         messages.error(request, _("Aucun abonnement actif trouvé."))
         return redirect('tenancy_summary')
 
     return HttpResponse(message, status=code)
+
+
+# @login_required(login_url="account_login")
+# def x_add_tenant_user(request):
+#     code, message = can_admin(request)
+#     if code == 200:
+#         context = {}
+#         tenant_out = request.user.tenant
+#         context["tenant"] = tenant_out
+#         subscriptions = Subscription.objects.filter(active=True, tenant=tenant_out)
+#         active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+#         current_subscription = active_subscriptions.last()
+#         all_users = Utilisateur.objects.filter(tenant=tenant_out)
+        
+#         if current_subscription:
+#             plan = current_subscription.plan
+#             max_users = plan.max_users
+            
+#             if max_users <= len(all_users):
+#                 messages.error(request, _("Nombre maximum d'utilisateur atteint pour votre Plan."))
+#                 return redirect('tenancy_summary')
+
+#             if request.method == "POST":
+#                 form = CustomUserCreationForm(request.POST)
+#                 if form.is_valid():
+#                     new_user = form.save(commit=False)
+#                     tenant_in = request.POST.get('tenant', None)
+#                     tenant_uuid = uuid.UUID(tenant_in, version=4)
+#                     tenant = Tenant.objects.filter(id=tenant_uuid).last()
+#                     new_user.tenant = tenant_out
+#                     new_user.save()
+#                     # form.save()
+#                     messages.success(request, _("Utilisateur ajouté.") + " \n" + _("Reste à confirmer l'adresse email."))
+#                     return redirect("tenancy_users")  # assumes you have a login URL named "login"
+#                 else:
+#                     messages.error(request, _("Merci de rectifier les erreurs dans le formulaire."))
+#             else:
+#                 form = CustomUserCreationForm(tenant = tenant_out.id)
+#                 context["form"] = form
+
+#             return render(request, "tenancy/add_user.html", context)
+
+#             #     context["users"] = users
+#             # return render(request, 'tenancy/add_user.html', context)
+
+#         messages.error(request, _("Aucun abonnement actif trouvé."))
+#         return redirect('tenancy_summary')
+
+#     return HttpResponse(message, status=code)
 
 
 @login_required(login_url="account_login")
