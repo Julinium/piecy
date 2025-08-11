@@ -11,29 +11,22 @@
         {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
     {% endwith %}
     <div class="text-center mb-3">
-        <h3 class="p-1 mt-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>        
-        <div class="gap-1 w-100 border rounded-2 p-1 {% if users_count < max_users %} border-success{% else %} border-danger bg-danger-subtle{% endif %}">
-            {% for i in ""|center:max_users %}
-                {% if forloop.counter <= users_count %}
-                    <span class="badge pill bg-danger px-1">&nbsp;</span>
-                {% else %}
-                    <span class="badge pill border border-success text-success px-1">&nbsp;</span>
-                {% endif %}
-            {% endfor %}
-            <span class="ms-2">{{ users_count }} / {{ max_users }}</span>
-        </div>
+        <h3 class="p-1 mt-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>
     </div>
 
     <div class="list-group mb-3">
         {% for user in users %}
-            <div class="list-group-item">
+            <div class="list-group-item {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
                 <a class="btn w-100 m-0 p-0" data-bs-toggle="collapse" href="#user-{{ user.username }}" role="button" aria-expanded="false" aria-controls="user-{{ user.username }}">
                     <div class="d-flex align-items-center">
                         <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="X">
                         <div class="w-100 d-flex justify-content-between">
                             <div class="text-start">
-                                <div class="{% if not user.is_active %}text-secondary{% else %}fw-bold{% endif %}">{{ user.username }}</div>
-                                <div class="text-muted">{{ user.email }}</div>
+                                <div class="fw-bold {% if not user.is_active %}text-decoration-line-through{% endif %}">{{ user.username }}</div>
+                                <div class="text-muted small">
+                                    {% if user.first_name %}{{ user.first_name }}{% else %}-{% endif %}
+                                    {% if user.last_name %}{{ user.last_name }}{% else %}-{% endif %}
+                                </div>
                             </div>
                             <div>
                                 {% if user == request.user %}<span class="badge bg-success">{% trans "Vous" %}</span>{% endif %}
@@ -45,8 +38,9 @@
                 </a>
                 <div class="collapse py-2" id="user-{{ user.username }}">
                     <div id="user-details" class="mt-2">
-                        <div class="fw-light small">{% trans "Prénom" %}: <span class="fw-bold">{{ user.first_name }}</span></div>
-                        <div class="fw-light small">{% trans "Nom" %}: <span class="fw-bold">{{ user.last_name }}</span></div>
+                        {% if user != request.user %}
+                            <a href="mailto:{{ user.email }}" class="btn btn-outline-primary my-2">{{ user.email }}</a>
+                        {% endif %}
                         <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span>{% if user.last_login %} : {{ user.last_login|timesince }}{% endif %}</div>
                         <div class="fw-light small">{% trans "Date création" %}: <span class="fw-bold">{{ user.created_on }}</span>{% if user.created_on %} : {{ user.created_on|timesince }}{% endif %}</div>
                     </div>
@@ -78,17 +72,22 @@
             <div class="list-group-item">{% trans "Aucun Utilisateur trouvé" %}</div>
         {% endfor %}
     </div>
-        <!-- <div class="p-2 ms-auto">
-            <div class="fw-bold">{{ users_count }} {% trans "Utilisateurs" %} / {{ max_users }} ({% trans "Plan" %}: {{ current_subscription.plan.name }})</div>
-        </div> -->
+    
     <div class="hstack gap-2 mb-3">
+        <div class="gap-1 p-1 ps-3 w-100 border rounded-2 {% if users_count < max_users %} border-success{% else %} border-danger bg-danger-subtle{% endif %}">
+            {% for i in ""|center:max_users %}
+                {% if forloop.counter <= users_count %}
+                    <span class="badge pill border border-danger bg-danger px-1"> </span>
+                {% else %}
+                    <span class="badge pill border border-success text-success px-1"> </span>
+                {% endif %}
+            {% endfor %}
+            <span class="ms-2 fw-bold">{{ users_count }}/{{ max_users }}</span>
+        </div>
         {% if users_count < max_users %}
-            <div class="p-2 ms-auto">
-                <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">{% trans "Nouveau" %}</a>
-            </div>
+            <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary ms-auto">{% trans "Nouveau" %}</a>
         {% else %}
-            <div class="small text-muted">{% trans "Pour ajouter un Utilisateur, merci d'amélioer votre Abonnemnt" %}</div>
-            <a href="{% url 'tenancy_summary' %}" class="btn btn-primary ms-auto">{% trans "Amélioer l'Abonnemnt" %}</a>
+            <a href="{% url 'tenancy_summary' %}" class="btn btn-primary ms-auto">{% trans "Amélioer" %}</a>
         {% endif %}
     </div>
 

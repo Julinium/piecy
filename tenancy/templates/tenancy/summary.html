@@ -77,25 +77,25 @@
                 </div>
                 <div class="card-body bg-{{ styling_tint }}-subtle">
                     <div class="mb-3">
-                        <div class="mb-2">
+                        <div class="hstack gap-2 border-bottom border-secondary">
                             <div class="small fw-light">{% trans "Plan de l'abonnement" %}</div>
-                            <div class="fw-bold">{{ latest_subscription.plan.name }}</div>
+                            <div class="fw-bold ms-auto text-end">{{ latest_subscription.plan.name }}</div>
                         </div>
-                        <div class="mb-2">
+                        <div class="hstack gap-2 border-bottom border-secondary">
                             <div class="small fw-light">{% trans "Périodicité de paiment" %}</div>
-                            <div class="fw-bold">{{ periodicity }}</div>
+                            <div class="fw-bold ms-auto text-end">{{ periodicity }}</div>
                         </div>
-                        <div class="mb-2">
+                        <!-- <div class="hstack gap-2 border-bottom border-secondary">
                             <div class="small fw-light">{% trans "Début de l'abonnement" %}</div>
-                            <div class="fw-bold">{{ latest_subscription.date_fm }}</div>
-                        </div>
-                        <div class="mb-2">
+                            <div class="fw-bold ms-auto text-end">{{ latest_subscription.date_fm }}</div>
+                        </div> -->
+                        <div class="hstack gap-2 border-bottom border-secondary">
                             <div class="small fw-light">{% trans "Fin de l'abonnement" %}</div>
-                            <div class="fw-bold">{{ latest_subscription.date_to }}</div>
+                            <div class="fw-bold ms-auto text-end">{{ latest_subscription.date_to }}</div>
                         </div>
-                        <div class="mb-2">
+                        <div class="hstack gap-2 border-bottom border-secondary">
                             <div class="small fw-light">{% trans "Jours restant" %}</div>
-                            <div class="fw-bold">{{ subscription_remaining_days }} {% trans "Jours" %}</div>
+                            <div class="fw-bold ms-auto text-end">{{ subscription_remaining_days }} {% trans "Jours" %}</div>
                         </div>
                     </div>
 
@@ -105,19 +105,27 @@
                         </div>
                     </div>
 
-                    {% if not current_subscription.payment.verified %}
+                    {% if not current_subscription.payment %}
                         <ul class="list-group mb-3">
-                            <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non confirmé !" %}</li>
+                            <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non trouvé !" %}</li>
                         </ul>
+                    {% else %}
+                        {% if not current_subscription.payment.verified %}
+                            <ul class="list-group mb-3">
+                                <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non confirmé !" %}</li>
+                            </ul>
+                        {% endif %}
                     {% endif %}
                     <div class="text-center">
-                        {% if not current_subscription.payment.verified %}
-                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-primary">{% trans "Nous Contacter" %}</a>
+                        {% if not current_subscription.payment %}
+                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-primary">{% trans "Ajouter Paiement" %}</a>
                         {% else %}
-                            <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
-                            <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
-                            <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+                            {% if current_subscription.payment.verified %}
+                                <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
+                                <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
+                            {% endif %}
                         {% endif %}
+                        <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
                     </div>
                 </div>
             </div>
