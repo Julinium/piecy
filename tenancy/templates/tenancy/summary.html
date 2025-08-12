@@ -203,12 +203,45 @@
             </div>
         {% endif%}
         
+        <br class="mt-3">
 
-        <!-- Payments history -->
-         {% if subscriptions %}
-            <br class="mt-4">
+        <div class="hstack gap-2 mb-3">
+            <div class="w-100 border rounded-2 text-start p-2 ps-2">
+                <span class="ms-1 fw-bold">{{ payments_count }}</span>
+                <span class="ms-1">{% trans "Paiements" %}</span>
+            </div>
+            <a href="{% url 'tenancy_history' %}" class="btn btn-outline-primary ms-auto p-2">{% trans "Historique" %}</a>
+        </div>
+
+        <div class="hstack gap-2 mb-3">
+            <div class="w-100 border rounded-2 text-start p-2 ps-2
+                btn-outline{% if users_count < max_users %}-success{% else %}-danger bg-danger-subtle{% endif %}">
+                <!-- {% for i in ""|center:max_users %}
+                    {% if forloop.counter <= users_count %}
+                        <span class="badge pill border border-danger bg-danger px-1"> </span>
+                    {% else %}
+                        <span class="badge pill border border-success text-success px-1"> </span>
+                    {% endif %}
+                {% endfor %} -->
+                <span class="ms-1 fw-bold">{{ users_count }}/{{ max_users }}</span>
+                <span class="ms-1">{% trans "Utilisateurs" %}</span>
+            </div>
+            <a href="{% url 'tenancy_users' %}" class="btn btn-outline-primary ms-auto p-2">{% trans "Gestion" %}</a>
+        </div>
+
+        <br class="mt-3">
+        <div class="hstack gap-2 mb-3">
+            <div class="w-100 border rounded-2 text-start p-2 ps-2">
+                <!-- <span class="ms-1 fw-bold">{{ payments_count }}</span> -->
+                <span class="ms-1">{% trans "Détails Entreprise" %}</span>
+            </div>
+            <a href="{% url 'tenancy_details' %}" class="btn btn-outline-primary ms-auto p-2">{% trans "Modifier" %}</a>
+        </div>
+
+        <!-- {% if subscriptions %}
+            <br class="mt-3">
             <div id="payments-history" class="mb-2">
-                <h4>{% trans "Derniers Paiments" %}</h4> 
+                <h4>{% trans "Derniers Paiements" %}</h4> 
                 <ul class="list-group">
                     {% for sub in subscriptions %}
                         {% if sub.payment %}
@@ -251,11 +284,11 @@
                     </div>
                 {% endif %}
             </div>
-        {% endif %}
+        {% endif %} -->
 
 
         <!-- Tenant Users -->
-        <br class="mt-4">
+        <!-- <br class="mt-3">
         <div id="tenant-users" class="mb-4">
             <h4>{% trans "Utilisateurs" %}: {{ admins.count|add:users.count }}</h4>
             <ul class="list-group">
@@ -290,13 +323,13 @@
                     <a href="{% url 'tenancy_users' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Gestion des Utilisateurs' %}</a>
                 </div>
             {% endif %}
-        </div>
+        </div> -->
 
 
         <!-- Tenant Details -->
-        <br class="mt-4">
+        <!-- <br class="mt-3"> -->
         <div id="tenant-details" class="mb-4">
-            <h4>{% trans "Détails de l'Entreprise" %}</h4>
+            <!-- <h4>{% trans "Détails de l'Entreprise" %}</h4> -->
 
             <ul class="list-group">
                 <li class="list-group-item">
@@ -312,12 +345,20 @@
                     <strong>{{ tenant.city }} - {{ tenant.country }}</strong>
                 </li>
             </ul>
-            {% if request.user.is_authenticated and request.user.is_tenant_admin %}
+            <!-- {% if request.user.is_authenticated and request.user.is_tenant_admin %}
                 <div id="tenant-actions" class="mt-2">
                     <a href="{% url 'tenancy_details' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Modifier les détails' %}</a>
                 </div>
-            {% endif %}
+            {% endif %} -->
         </div>
+
+        <!-- <br class="mt-3">
+
+        <div id="tenant-users" class="mb-4 text-center">
+            <a href="{% url 'tenancy_history' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Historique Paiements' %}</a>
+            <a href="{% url 'tenancy_users' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Gestion Utilisateurs' %}</a>
+            <a href="{% url 'tenancy_details' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans 'Modifier Détails Entreprise' %}</a>
+        </div> -->
     {% endif %}
 
 {% endblock content %}

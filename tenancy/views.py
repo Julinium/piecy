@@ -53,18 +53,39 @@ def summary(request):
         tenant = request.user.tenant
         tenant_admins = tenant.workers.filter(is_tenant_admin = True)
         tenant_users = tenant.workers.exclude(is_tenant_admin = True)
+        payments_count = 0
 
         context = {
             "tenant" : tenant,
             "admins" : tenant_admins,
             "users"  : tenant_users,
+            "payments_count"  : payments_count,
         }
+
+        context["users_count"] = len(tenant_users) + len(tenant_admins)
 
         subscriptions         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
         running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
 
+        ##############
+        trials = Trial.objects.filter(active=True, tenant=tenant)
+        active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_trial = active_trials.last()
+
+        max_users = 0
+        if current_subscription:
+            max_users = current_subscription.plan.max_users
+
+        else:
+            if current_trial:
+                max_users = current_trial.plan.max_users
+        context["max_users"] = max_users
+        ##############
+        payments_count = 0
         if subscriptions:
+            payments_count = subscriptions.filter(payment__isnull=False).count()
+            context ["payments_count"] = payments_count
             context ["box"] = "S1R0"
             context ["subscriptions"] = subscriptions[:SUBS_HISTORY_COUNT]
             subscription_remaining_days = 0
@@ -394,10 +415,18 @@ def users(request):
         subscriptions         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
         running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
+
+        trials = Trial.objects.filter(active=True, tenant=tenant)
+        active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_trial = active_trials.last()
+
         if current_subscription:
-            plan = current_subscription.plan
-            if plan:
-                max_users = plan.max_users
+            max_users = current_subscription.plan.max_users
+
+        else:
+            if current_trial:
+                max_users = current_trial.plan.max_users
+
         
         context["current_subscription"] = current_subscription
         context["max_users"] = max_users
@@ -409,7 +438,7 @@ def users(request):
 
 
 @login_required(login_url="account_login")
-def add_tenant_user(request):
+def add_user(request):
     code, message = can_admin(request)
     if code == 200:
         context = {}
@@ -419,11 +448,23 @@ def add_tenant_user(request):
         active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_subscription = active_subscriptions.last()
         all_users = Utilisateur.objects.filter(tenant=tenant_out)
-        
+
+        trials = Trial.objects.filter(active=True, tenant=tenant_out)
+        active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+        current_trial = active_trials.last()
+
+        can_add = False
+        max_users = 0
+
         if current_subscription:
-            plan = current_subscription.plan
-            max_users = plan.max_users
-            
+            max_users = current_subscription.plan.max_users
+
+        else:
+            if current_trial:
+                max_users = current_trial.plan.max_users
+
+        if max_users > 0:
+
             if max_users <= len(all_users):
                 messages.error(request, _("Nombre maximum d'utilisateur atteint pour votre Plan."))
                 return redirect('tenancy_users')
@@ -446,11 +487,10 @@ def add_tenant_user(request):
 
             return render(request, "tenancy/add_user.html", context)
 
-        messages.error(request, _("Aucun abonnement actif trouvé."))
+        messages.error(request, _("Vous ne pouvez pas ajouter un Utilisateur."))
         return redirect('tenancy_summary')
 
     return HttpResponse(message, status=code)
-
 
 
 @login_required(login_url="account_login")
