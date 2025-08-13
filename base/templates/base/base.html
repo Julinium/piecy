@@ -30,7 +30,11 @@
         <div class="container mt-4">
             <div class="row justify-content-center">
                 <div class="col col-md col-lg-10 col-xl-8">
-                    {% include 'base/includes/messages.html' %}
+                    {% if MESSAGES_DISPLAY == "Modals" %}
+                        {% include 'base/includes/messages-modals.html' %}
+                    {% else %}
+                        {% include 'base/includes/messages.html' %}
+                    {% endif %}
                     {% block content %}{% endblock content %}
                     <!-- <div class="py-5"></div> -->
                 </div>

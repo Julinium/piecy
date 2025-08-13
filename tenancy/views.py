@@ -27,6 +27,9 @@ today = now().date()
 
 
 def can_admin(request) -> tuple[int, str]:
+    """
+    Checks wether or not logged in user can perform administrative tasks.
+    """
     user = request.user
     if not user:
         return 404, _("User not found")
@@ -45,11 +48,27 @@ def can_admin(request) -> tuple[int, str]:
     return 200, _("OK")
 
 
+def is_deletable(request, user=None):
+    """
+    Checks if a give user instance can be safely deleted
+    """
+    # deletable = False
+    reason = _("Intégrité des données")
+    if user:
+        if request.user:
+            if request.user != user:
+                if not user.last_login:
+                    # TODO: Check user related objects/instances in database.
+                    return True, ""
+                else:
+                    reason = _("Déjà connecté")
+    return False, reason
+
+
 @login_required(login_url="account_login")
 def summary(request):
     code, message = can_admin(request)
     if code == 200:
-        # TODO: When Tenant has the highest Plan ?
         tenant = request.user.tenant
         tenant_admins = tenant.workers.filter(is_tenant_admin = True)
         tenant_users = tenant.workers.exclude(is_tenant_admin = True)
@@ -68,7 +87,6 @@ def summary(request):
         running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
 
-        ##############
         trials = Trial.objects.filter(active=True, tenant=tenant)
         active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_trial = active_trials.last()
@@ -81,7 +99,7 @@ def summary(request):
             if current_trial:
                 max_users = current_trial.plan.max_users
         context["max_users"] = max_users
-        ##############
+
         payments_count = 0
         if subscriptions:
             payments_count = subscriptions.filter(payment__isnull=False).count()
@@ -409,10 +427,12 @@ def users(request):
         context = {}
         tenant = request.user.tenant
         context["tenant"] = tenant
-        tenant_users = Utilisateur.objects.filter(tenant=tenant).order_by("-is_active", "-is_tenant_admin", "-last_login", "username")
-        
+        tenant_users = Utilisateur.objects.filter(tenant=tenant).order_by(
+            "-is_active", "-is_tenant_admin", "-last_login", "username"
+            )
+
         max_users = 0
-        subscriptions         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
+        subscriptions = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
         running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
 
@@ -427,7 +447,6 @@ def users(request):
             if current_trial:
                 max_users = current_trial.plan.max_users
 
-        
         context["current_subscription"] = current_subscription
         context["max_users"] = max_users
         context["users_count"] = len(tenant_users)
@@ -453,7 +472,6 @@ def add_user(request):
         active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
         current_trial = active_trials.last()
 
-        can_add = False
         max_users = 0
 
         if current_subscription:
@@ -481,9 +499,8 @@ def add_user(request):
                     messages.error(request, _("Données invalides. Utilisateur non ajouté."))
                 return redirect("tenancy_users")
 
-            else:
-                form = CustomUserCreationForm()
-                context["form"] = form
+            form = CustomUserCreationForm()
+            context["form"] = form
 
             return render(request, "tenancy/add_user.html", context)
 
@@ -538,23 +555,31 @@ def disable_user(request, user_id=None):
     return HttpResponse(message, status=code)
 
 
+
 @login_required(login_url="account_login")
 def delete_user(request, user_id=None):
+    if request.method != "POST":
+        return HttpResponse("Method not allowed", status=403)
     code, message = can_admin(request)
     if code == 200:
         if user_id:
             user_uuid = uuid.UUID(user_id, version=4)
             try:
                 passed_user = Utilisateur.objects.get(id=user_uuid)
+                passed_username = passed_user.username
                 if passed_user:
                     if passed_user == request.user :
                         messages.error(request, _("Vous ne pouvez pas supprimer votre propre compte."))
                         return redirect('tenancy_users')
-                    passed_user.is_active = False
-                    passed_user.save()
+                    deletable, reason = is_deletable(request, passed_user)
+                    if deletable :
+                        passed_user.delete()
+                    else:
+                        messages.error(request, passed_username + " : " + _("Vous ne pouvez pas supprimer cet Utilisateur") + ". " + _("Raison") + ": " + reason)
+                        return redirect('tenancy_users')
             except Exception as xc:
                 print(f"Error while disabling user with id {user_id}: {str(xc)}")
-            messages.warning(request, _("Utilisateur désactivé" + " : " + passed_user.username))
+            messages.warning(request, _("Utilisateur supprimeé") + " : " + passed_username)
 
             return redirect('tenancy_users')
 

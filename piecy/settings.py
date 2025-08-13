@@ -89,7 +89,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'base.context_processors.available_languages',
+                'base.context_processors.main_data',
             ],
         },
     },
@@ -229,3 +229,5 @@ ACCOUNT_EMAIL_VERIFICATION_BY_CODE_ENABLED = True
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_MAX_ATTEMPTS = 5
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_TIMEOUT = 900
 # ACCOUNT_EMAIL_NOTIFICATIONS = True
+
+MESSAGES_DISPLAY = 'Modals' 

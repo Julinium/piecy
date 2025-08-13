@@ -1,0 +1,68 @@
+{% load i18n %}
+
+{% if messages %}
+<div class="modal fade" id="messagesModal" tabindex="-1" aria-labelledby="messagesModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="messagesModalLabel">{% trans "Messages" %}</h5>
+                {% if messages|length > 1 %}
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                {% endif %}
+            </div>
+            <div class="modal-body gap-1">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-2" role="alert" id="alert-{{ forloop.counter }}">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">{% trans "Fermer" %}</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Check if the modal exists (indicating messages are present)
+        const modalElement = document.getElementById('messagesModal');
+        if (modalElement) {
+            // const messagesModal = new bootstrap.Modal(modalElement, { backdrop: 'static' });
+            const messagesModal = new bootstrap.Modal(modalElement);
+            messagesModal.show();
+
+            // Monitor alert dismissals and close modal when all alerts are gone
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                alert.addEventListener('closed.bs.alert', function () {
+                    // Check if any alerts are still visible
+                    const remainingAlerts = document.querySelectorAll('.alert-dismissible.show');
+                    if (remainingAlerts.length === 0) {
+                        messagesModal.hide();
+                    }
+                });
+            });
+        }
+    });
+</script>
+
+    <!-- Custom CSS to handle modal overlap -->
+    <!-- <style>
+        .modal.fade .modal-dialog {
+            transform: translate(0, 0);
+        }
+        .modal.show .modal-dialog {
+            transform: translate(0, 0);
+        }
+        .modal-backdrop {
+            /* Ensure only one backdrop is used */
+            z-index: 1040 !important;
+        }
+        .modal {
+            z-index: 1050 !important;
+        }
+    </style> -->

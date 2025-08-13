@@ -1,4 +1,11 @@
 from django.conf import settings
 
-def available_languages(request):
-    return {'LANGUAGES': settings.LANGUAGES}
+def main_data(request=None):
+    context = {}
+    LANGUAGES = settings.LANGUAGES
+    MESSAGES_DISPLAY = settings.MESSAGES_DISPLAY
+    
+    context['LANGUAGES'] = LANGUAGES
+    context['MESSAGES_DISPLAY'] = MESSAGES_DISPLAY
+
+    return context

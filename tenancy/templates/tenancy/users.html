@@ -13,68 +13,9 @@
     <div class="text-center mb-3">
         <h3 class="p-1 mt-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>
     </div>
-
-    <div class="list-group mb-3">
-        {% for user in users %}
-            <div class="list-group-item {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
-                <a class="btn w-100 m-0 p-0" data-bs-toggle="collapse" href="#user-{{ user.username }}" role="button" aria-expanded="false" aria-controls="user-{{ user.username }}">
-                    <div class="d-flex align-items-center">
-                        <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="X">
-                        <div class="w-100 d-flex justify-content-between">
-                            <div class="text-start">
-                                <div class="fw-bold {% if not user.is_active %}text-decoration-line-through{% endif %}">{{ user.username }}</div>
-                                <div class="text-muted small">
-                                    {% if user.first_name %}{{ user.first_name }}{% else %}-{% endif %}
-                                    {% if user.last_name %}{{ user.last_name }}{% else %}-{% endif %}
-                                </div>
-                            </div>
-                            <div>
-                                {% if user == request.user %}<span class="badge bg-success">{% trans "Vous" %}</span>{% endif %}
-                                {% if user.is_tenant_admin %}<span class="badge bg-danger">{% trans "Admin" %}</span>{% endif %}
-                                {% if not user.is_active %}<span class="badge bg-secondary">{% trans "Désactivé" %}</span>{% endif %}
-                            </div>
-                        </div>
-                    </div>
-                </a>
-                <div class="collapse py-2" id="user-{{ user.username }}">
-                    <div id="user-details" class="mt-2">
-                        {% if user != request.user %}
-                            <a href="mailto:{{ user.email }}" class="btn btn-outline-primary my-2">{{ user.email }}</a>
-                        {% endif %}
-                        <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span>{% if user.last_login %} : {{ user.last_login|timesince }}{% endif %}</div>
-                        <div class="fw-light small">{% trans "Date création" %}: <span class="fw-bold">{{ user.created_on }}</span>{% if user.created_on %} : {{ user.created_on|timesince }}{% endif %}</div>
-                    </div>
-                    {% if user != request.user %}
-                        <div id="user-actions" class="my-2">
-                            {% if not user.is_tenant_admin %}
-                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-warning btn-sm">
-                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Admin" %}
-                                </a>
-                            {% else %}
-                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-success btn-sm">
-                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Non-Admin" %}
-                                </a>
-                            {% endif %}
-                            {% if user.is_active %}
-                                <a href="{% url 'disable_user' user.id %}" class="btn btn-secondary btn-sm">
-                                <i class="bi bi-slash-circle"></i> Disable
-                                </a>
-                            {% else %}
-                                <a href="{% url 'enable_user' user.id %}" class="btn btn-success btn-sm">
-                                    <i class="bi bi-check-circle"></i> Enable
-                                </a>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-        {% empty %}
-            <div class="list-group-item">{% trans "Aucun Utilisateur trouvé" %}</div>
-        {% endfor %}
-    </div>
     
-    <div class="hstack gap-2 mb-3">
-        <div class="gap-1 p-1 ps-3 w-100 border rounded-2 {% if users_count < max_users %} border-success{% else %} border-danger bg-danger-subtle{% endif %}">
+    <div class="hstack gap-2 mb-3 p-2 border rounded-2 shadow shadow-sm">
+        <div class="gap-1 ps-3 w-100 {% if users_count < max_users %} border-success{% else %} border-danger bg-danger-subtle{% endif %}">
             {% for i in ""|center:max_users %}
                 {% if forloop.counter <= users_count %}
                     <span class="badge pill border border-danger bg-danger px-1"> </span>
@@ -90,6 +31,101 @@
             <a href="{% url 'tenancy_summary' %}" class="btn btn-primary ms-auto">{% trans "Amélioer" %}</a>
         {% endif %}
     </div>
+
+    <div class="list-group mb-3">
+        {% for user in users %}
+            <div class="list-group-item p-0 {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
+                <a class="btn w-100" data-bs-toggle="collapse" href="#{{ user.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
+                    <div class="d-flex align-items-center">
+                        <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="X">
+                        <div class="w-100 d-flex justify-content-between">
+                            <div class="text-start">
+                                <div>
+                                    <span class="fw-bold">{{ user.username }}</span>
+                                    <span>
+                                        {% if user == request.user %}<span class="badge bg-success ms-auto">{% trans "Vous" %}</span>{% endif %}
+                                        {% if user.is_tenant_admin %}<span class="badge bg-warning ms-auto">{% trans "Admin" %}</span>{% endif %}
+                                        {% if not user.is_active %}<span class="badge bg-danger ms-auto">{% trans "Désactivé" %}</span>{% endif %}
+                                    </span>
+                                    <span class="small text-muted ms-1">{{ user.email }}</span>
+                                </div>
+                                
+                                <div class="text-muted small">
+                                    {% if user.first_name %}{{ user.first_name }}{% else %}-{% endif %}
+                                    {% if user.last_name %}{{ user.last_name }}{% else %}-{% endif %}
+                                </div>
+                            </div>
+                            <div class="px-2">...</div>
+                        </div>
+                    </div>
+                </a>
+                <div class="collapse p-3" id="{{ user.id }}">
+                    <div id="user-details" class="my-2">
+                        <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span>{% if user.last_login %} : {{ user.last_login|timesince }}{% endif %}</div>
+                        <div class="fw-light small">{% trans "Date création" %}: <span class="fw-bold">{{ user.created_on }}</span>{% if user.created_on %} : {{ user.created_on|timesince }}{% endif %}</div>
+                    </div>
+                    {% if user != request.user %}
+                        <div id="user-actions" class="text-end">
+                            <a href="mailto:{{ user.email }}" class="btn btn-outline-primary mt-2 mx-1">{% trans "Contacter" %}</a>
+                            {% if not user.is_tenant_admin %}
+                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Admin" %}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Non-Admin" %}
+                                </a>
+                            {% endif %}
+                            {% if user.is_active %}
+                                <a href="{% url 'disable_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
+                                <i class="bi bi-slash-circle"></i> {% trans "Désactiver" %}
+                                </a>
+                            {% else %}
+                                <a href="{% url 'enable_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-check-circle"></i> {% trans "Activer" %}
+                                </a>
+                                <button type="button" class="btn btn-outline-danger mt-2 mx-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ user.id }}">
+                                    <i class="bi bi-check-circle"></i> {% trans "Supprimer" %}
+                                </button>
+                                <!-- Delete Confirmation Modal -->
+                                <div class="modal fade text-start" id="modal-{{ user.id }}" tabindex="-1" aria-labelledby="modal-{{ user.id }}-Label" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title fw-bold" id="modal-{{ user.id }}-Label">{% trans "Confirmation" %}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">                                                
+                                                <div>
+                                                    {% trans "Supprimer définitivement" %} 
+                                                    <span class="fw-bold text-danger ms-auto">{{ user.username }}</span> ({{ user.email }}) ?
+                                                    <!-- <span class="text-danger small ms-auto">{% trans "Cette opération n'est pas réversible." %}</span> -->
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
+                                                <form id="deleteForm" method="post" action="{% url 'delete_user' user.id %}">
+                                                    {% csrf_token %}
+                                                    <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% empty %}
+            <div class="list-group-item">{% trans "Aucun Utilisateur trouvé" %}</div>
+        {% endfor %}
+    </div>
+
+    <!-- Button to trigger the modal -->
+    <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+        Delete
+    </button> -->
 
     
 {% endblock content %}
