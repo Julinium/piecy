@@ -15,7 +15,7 @@
     </div>
     
     <div class="hstack gap-2 mb-3 p-2 border rounded-2 shadow shadow-sm">
-        <div class="gap-1 ps-3 w-100 {% if users_count < max_users %} border-success{% else %} border-danger bg-danger-subtle{% endif %}">
+        <div class="gap-1 ps-2 {% if users_count < max_users %}border-success{% else %}border-danger bg-danger-subtle{% endif %}">
             {% for i in ""|center:max_users %}
                 {% if forloop.counter <= users_count %}
                     <span class="badge pill border border-danger bg-danger px-1"> </span>
@@ -25,27 +25,33 @@
             {% endfor %}
             <span class="ms-2 fw-bold">{{ users_count }}/{{ max_users }}</span>
         </div>
-        {% if users_count < max_users %}
-            <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary ms-auto">{% trans "Nouveau" %}</a>
-        {% else %}
-            <a href="{% url 'tenancy_summary' %}" class="btn btn-primary ms-auto">{% trans "Amélioer" %}</a>
-        {% endif %}
+        <div class="p-2 ms-auto">
+            {% if users_count < max_users %}
+                <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">
+                    <i class="bi bi-person-plus-fill"></i> {% trans "Nouveau" %}
+                </a>
+            {% else %}
+                <a href="{% url 'tenancy_summary' %}" class="btn btn-primary">
+                    <i class="bi bi-arrow-up-square"></i> {% trans "Amélioer" %}
+                </a>
+            {% endif %}
+        </div>
     </div>
 
     <div class="list-group mb-3">
         {% for user in users %}
             <div class="list-group-item p-0 {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
-                <a class="btn w-100" data-bs-toggle="collapse" href="#{{ user.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
+                <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ user.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
                     <div class="d-flex align-items-center">
                         <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="X">
                         <div class="w-100 d-flex justify-content-between">
                             <div class="text-start">
                                 <div>
-                                    <span class="fw-bold">{{ user.username }}</span>
+                                    <span class="fw-bold fs-4">{{ user.username }}</span>
                                     <span>
                                         {% if user == request.user %}<span class="badge bg-success ms-auto">{% trans "Vous" %}</span>{% endif %}
-                                        {% if user.is_tenant_admin %}<span class="badge bg-warning ms-auto">{% trans "Admin" %}</span>{% endif %}
                                         {% if not user.is_active %}<span class="badge bg-danger ms-auto">{% trans "Désactivé" %}</span>{% endif %}
+                                        {% if user.is_tenant_admin %}<span class="badge bg-warning ms-auto">{% trans "Admin" %}</span>{% endif %}
                                     </span>
                                     <span class="small text-muted ms-1">{{ user.email }}</span>
                                 </div>
@@ -59,60 +65,68 @@
                         </div>
                     </div>
                 </a>
-                <div class="collapse p-3" id="{{ user.id }}">
+                <div class="collapse p-3 pt-0" id="{{ user.id }}">
                     <div id="user-details" class="my-2">
                         <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span>{% if user.last_login %} : {{ user.last_login|timesince }}{% endif %}</div>
                         <div class="fw-light small">{% trans "Date création" %}: <span class="fw-bold">{{ user.created_on }}</span>{% if user.created_on %} : {{ user.created_on|timesince }}{% endif %}</div>
                     </div>
                     {% if user != request.user %}
                         <div id="user-actions" class="text-end">
-                            <a href="mailto:{{ user.email }}" class="btn btn-outline-primary mt-2 mx-1">{% trans "Contacter" %}</a>
+                            <a href="mailto:{{ user.email }}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                <i class="bi bi-send"></i>
+                                <span class="ms-1"> {% trans "Contacter" %}</span>
+                            </a>
                             {% if not user.is_tenant_admin %}
-                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
-                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Admin" %}
+                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-plus-square"></i>
+                                    <span class="ms-1"> {% trans "Admin" %}</span>
                                 </a>
                             {% else %}
-                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
-                                    <i class="bi bi-check-circle"></i> {% trans "Rendre Non-Admin" %}
+                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-dash-square"></i>
+                                    <span class="ms-1"> {% trans "Non-Admin" %}</span>
                                 </a>
                             {% endif %}
                             {% if user.is_active %}
-                                <a href="{% url 'disable_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
-                                <i class="bi bi-slash-circle"></i> {% trans "Désactiver" %}
+                                <a href="{% url 'disable_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-x-square"></i>
+                                    <span class="ms-1"> {% trans "Désactiver" %}</span>
                                 </a>
                             {% else %}
-                                <a href="{% url 'enable_user' user.id %}" class="btn btn-outline-primary mt-2 mx-1">
-                                    <i class="bi bi-check-circle"></i> {% trans "Activer" %}
+                                <a href="{% url 'enable_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                    <i class="bi bi-check-circle"></i>
+                                    <span class="ms-1"> {% trans "Activer" %}</span>
                                 </a>
-                                <button type="button" class="btn btn-outline-danger mt-2 mx-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ user.id }}">
-                                    <i class="bi bi-check-circle"></i> {% trans "Supprimer" %}
-                                </button>
-                                <!-- Delete Confirmation Modal -->
-                                <div class="modal fade text-start" id="modal-{{ user.id }}" tabindex="-1" aria-labelledby="modal-{{ user.id }}-Label" aria-hidden="true">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title fw-bold" id="modal-{{ user.id }}-Label">{% trans "Confirmation" %}</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            {% endif %}
+                            <button type="button" class="btn btn-md btn-outline-danger mt-2 mx-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ user.id }}">
+                                <i class="bi bi-trash3"></i>
+                                <span class="ms-1"> {% trans "Supprimer" %}</span>
+                            </button>
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade text-start" id="modal-{{ user.id }}" tabindex="-1" aria-labelledby="modal-{{ user.id }}-Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title fw-bold" id="modal-{{ user.id }}-Label">{% trans "Confirmation" %}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">                                                
+                                            <div>
+                                                {% trans "Supprimer définitivement" %} 
+                                                <span class="fw-bold text-danger ms-auto">{{ user.username }}</span> ({{ user.email }}) ?
+                                                <!-- <span class="text-danger small ms-auto">{% trans "Cette opération n'est pas réversible." %}</span> -->
                                             </div>
-                                            <div class="modal-body">                                                
-                                                <div>
-                                                    {% trans "Supprimer définitivement" %} 
-                                                    <span class="fw-bold text-danger ms-auto">{{ user.username }}</span> ({{ user.email }}) ?
-                                                    <!-- <span class="text-danger small ms-auto">{% trans "Cette opération n'est pas réversible." %}</span> -->
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
-                                                <form id="deleteForm" method="post" action="{% url 'delete_user' user.id %}">
-                                                    {% csrf_token %}
-                                                    <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
-                                                </form>
-                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
+                                            <form id="deleteForm" method="post" action="{% url 'delete_user' user.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
-                            {% endif %}
+                            </div>
                         </div>
                     {% endif %}
                 </div>

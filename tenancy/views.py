@@ -636,7 +636,6 @@ def adminize_user(request, user_id=None):
 
 
 
-
 @login_required(login_url="account_login")
 def details(request):
     context = {}

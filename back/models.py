@@ -69,26 +69,28 @@ class Tenant(models.Model):
     #     super().delete(*args, **kwargs)
 
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, username, email, password=None, **extra_fields):
-        if not username:
-            raise ValueError("The Username must be set")
-        if not email:
-            raise ValueError("The Email must be set")
-
-        email = self.normalize_email(email)
-        user = self.model(username=username, email=email, **extra_fields)
-        user.set_password(password)
-        user.save()
-        return user
-
-    def create_superuser(self, username, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
-        return self.create_user(username, email, password, **extra_fields)
-
 
 class Utilisateur(AbstractBaseUser, PermissionsMixin):
+
+    class CustomUserManager(BaseUserManager):
+        def create_user(self, username, email, password=None, **extra_fields):
+            if not username:
+                raise ValueError("The Username must be set")
+            if not email:
+                raise ValueError("The Email must be set")
+
+            email = self.normalize_email(email)
+            user = self.model(username=username, email=email, **extra_fields)
+            user.set_password(password)
+            user.save()
+            return user
+
+        def create_superuser(self, username, email, password=None, **extra_fields):
+            extra_fields.setdefault("is_staff", True)
+            extra_fields.setdefault("is_superuser", True)
+            return self.create_user(username, email, password, **extra_fields)
+
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     username = models.CharField(max_length=150, unique=True)
@@ -162,18 +164,7 @@ class Subscription(models.Model):
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'subscription'    
-    
-    # def save(self, *args, **kwargs):
-    #     if self.is_trial:
-    #         try:
-    #             tenant = Tenant.objects.filter(tenant=self.tenant).first()
-    #             if tenant: 
-    #                 tenant.can_try = False
-    #                 tenant.save()
-    #         except Exception as xc:
-    #             print(f'Error while updating Tenant: {str(xc)}')
-    #     super().save(*args, **kwargs)
+        db_table = 'subscription'
 
     def __str__(self):
         istial = "TRIAL-" if self.is_trial else ""
@@ -281,7 +272,6 @@ class Plan(models.Model):
         return int(max((12 -self.year_free_mth), 0) * self.monthly_price * self.first_time_disc/1200)
 
 
-#######################
     @property
     def monthly_month_tag(self):
         tag = self.monthly_price
@@ -322,10 +312,6 @@ class Plan(models.Model):
         tag = self.yearly_year_tag_new / 12
         return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
 
-######################
-    # @property
-    # def yearly_tag_year(self):
-    #     return int(max((12 -self.year_free_mth), 0) * self.monthly_price)
 
 
 class Registre(models.Model):
