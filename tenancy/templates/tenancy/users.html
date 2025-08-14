@@ -89,7 +89,7 @@
                             {% endif %}
                             {% if user.is_active %}
                                 <a href="{% url 'disable_user' user.id %}" class="btn btn-sm btn-outline-secondary mt-2 mx-1">
-                                    <i class="bi bi-x-square"></i>
+                                    <i class="bi bi-ban"></i>
                                     <span class="ms-1"> {% trans "Désactiver" %}</span>
                                 </a>
                             {% else %}
