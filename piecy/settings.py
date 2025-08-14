@@ -99,15 +99,12 @@ WSGI_APPLICATION = 'piecy.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 # DATABASES = {
 #     "default": {
 #         "ENGINE":   DB_ENGINE,
@@ -122,25 +119,18 @@ DATABASES = {
 
 
 # Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
-    # {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
-    # {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 10,}},
-    # {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
-    # {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator', 'OPTIONS': {'min_length': 10,}},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',},
 ]
 
 
 # Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'fr'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -215,7 +205,7 @@ LOGIN_REDIRECT_URL = 'base_home'
 LOGOUT_REDIRECT_URL = LOGIN_URL
 ACCOUNT_LOGIN_METHODS = {'username', 'email'}
 ACCOUNT_CHANGE_EMAIL = False
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*']
+ACCOUNT_SIGNUP_FIELDS = ['first_name', 'last_name', 'email*', 'username*', 'password1*', 'password2*']
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_EMAIL_SUBJECT_PREFIX = 'Mode - 777'
 ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = 'age'
@@ -230,4 +220,4 @@ ACCOUNT_EMAIL_VERIFICATION_BY_CODE_MAX_ATTEMPTS = 5
 ACCOUNT_EMAIL_VERIFICATION_BY_CODE_TIMEOUT = 900
 # ACCOUNT_EMAIL_NOTIFICATIONS = True
 
-MESSAGES_DISPLAY = 'Modals' 
+MESSAGES_DISPLAY = 'Modals'

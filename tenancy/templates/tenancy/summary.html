@@ -213,18 +213,10 @@
             <a href="{% url 'tenancy_history' %}" class="btn btn-outline-primary ms-auto">{% trans "Historique" %}</a>
         </div>
 
-        <div class="hstack gap-2 mb-3 p-2 border rounded-2">
-            <div class="w-100 text-start ps-2
-                btn-outline{% if users_count < max_users %}-success{% else %}-danger bg-danger-subtle{% endif %}">
+        <div class="hstack gap-2 mb-3 p-2 border rounded-2 btn-outline{% if users_count >= max_users %}-danger bg-danger-subtle{% endif %}">
+            <div class="w-100 text-start ps-2">
                 <span class="ms-1 fw-bold">{{ users_count }}/{{ max_users }}</span>
                 <span class="ms-1">{% trans "Utilisateurs" %}</span>
-                <!-- {% for i in ""|center:max_users %}
-                    {% if forloop.counter <= users_count %}
-                        <span class="badge pill border border-danger bg-danger px-1"> </span>
-                    {% else %}
-                        <span class="badge pill border border-success text-success px-1"> </span>
-                    {% endif %}
-                {% endfor %} -->
             </div>
             <a href="{% url 'tenancy_users' %}" class="btn btn-outline-primary ms-auto">{% trans "Gestion" %}</a>
         </div>

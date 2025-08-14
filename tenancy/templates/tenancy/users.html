@@ -14,8 +14,8 @@
         <h3 class="p-1 mt-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>
     </div>
     
-    <div class="hstack gap-2 mb-3 p-2 border rounded-2 shadow shadow-sm">
-        <div class="gap-1 ps-2 {% if users_count < max_users %}border-success{% else %}border-danger bg-danger-subtle{% endif %}">
+    <div class="hstack gap-2 mb-3 p-2 border rounded-2 shadow shadow-sm {% if users_count >= max_users %}bg-danger-subtle{% else %}bg-success-subtle{% endif %}">
+        <div class="gap-1 ps-2">
             {% for i in ""|center:max_users %}
                 {% if forloop.counter <= users_count %}
                     <span class="badge pill border border-danger bg-danger px-1"> </span>
@@ -27,7 +27,7 @@
         </div>
         <div class="p-2 ms-auto">
             {% if users_count < max_users %}
-                <a href="{% url 'tenancy_add_user' %}" class="btn btn-primary">
+                <a href="{% url 'tenancy_add_user' %}" class="btn btn-success">
                     <i class="bi bi-person-plus-fill"></i> {% trans "Nouveau" %}
                 </a>
             {% else %}
@@ -72,33 +72,33 @@
                     </div>
                     {% if user != request.user %}
                         <div id="user-actions" class="text-end">
-                            <a href="mailto:{{ user.email }}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                            <a href="mailto:{{ user.email }}" class="btn btn-sm btn-outline-primary mt-2 mx-1">
                                 <i class="bi bi-send"></i>
                                 <span class="ms-1"> {% trans "Contacter" %}</span>
                             </a>
                             {% if not user.is_tenant_admin %}
-                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
-                                    <i class="bi bi-plus-square"></i>
+                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-sm btn-outline-warning mt-2 mx-1">
+                                    <i class="bi bi-person-up"></i>
                                     <span class="ms-1"> {% trans "Admin" %}</span>
                                 </a>
                             {% else %}
-                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
-                                    <i class="bi bi-dash-square"></i>
+                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-sm btn-outline-warning mt-2 mx-1">
+                                    <i class="bi bi-person-down"></i>
                                     <span class="ms-1"> {% trans "Non-Admin" %}</span>
                                 </a>
                             {% endif %}
                             {% if user.is_active %}
-                                <a href="{% url 'disable_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                <a href="{% url 'disable_user' user.id %}" class="btn btn-sm btn-outline-secondary mt-2 mx-1">
                                     <i class="bi bi-x-square"></i>
                                     <span class="ms-1"> {% trans "Désactiver" %}</span>
                                 </a>
                             {% else %}
-                                <a href="{% url 'enable_user' user.id %}" class="btn btn-md btn-outline-primary mt-2 mx-1">
+                                <a href="{% url 'enable_user' user.id %}" class="btn btn-sm btn-outline-success mt-2 mx-1">
                                     <i class="bi bi-check-circle"></i>
                                     <span class="ms-1"> {% trans "Activer" %}</span>
                                 </a>
                             {% endif %}
-                            <button type="button" class="btn btn-md btn-outline-danger mt-2 mx-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ user.id }}">
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-2 mx-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ user.id }}">
                                 <i class="bi bi-trash3"></i>
                                 <span class="ms-1"> {% trans "Supprimer" %}</span>
                             </button>

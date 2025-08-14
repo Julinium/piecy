@@ -3,7 +3,7 @@
 const navbar = document.querySelector('.navbar');
 
 window.addEventListener('scroll', () => {
-    const classes_shrunk = ['shadow', 'bg-warning-subtle', 'py-0', 'my-0']
+    const classes_shrunk = ['shadow', 'bg-secondary-subtle', 'py-0', 'my-0']
     const classes_expand = ['pt-3', 'mb-5']
 
     if (window.scrollY > 0) { // Adjust scroll threshold as needed

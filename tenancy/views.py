@@ -7,6 +7,7 @@ from datetime import timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
 from django.contrib import messages
+from django.db.models import Case, When, Value, BooleanField
 
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -427,9 +428,13 @@ def users(request):
         context = {}
         tenant = request.user.tenant
         context["tenant"] = tenant
-        tenant_users = Utilisateur.objects.filter(tenant=tenant).order_by(
-            "-is_active", "-is_tenant_admin", "-last_login", "username"
-            )
+        tenant_users = Utilisateur.objects.filter(tenant=tenant).annotate(
+            is_current_user=Case(When(
+                pk=request.user.pk, 
+                then=Value(True)
+            ), default=Value(False), output_field=BooleanField(), )).order_by(
+                "-is_current_user", "-is_active", "-is_tenant_admin", "-last_login", "username"
+                )
 
         max_users = 0
         subscriptions = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
