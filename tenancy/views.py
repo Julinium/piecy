@@ -103,8 +103,8 @@ def summary(request):
 
         payments_count = 0
         if subscriptions:
-            payments_count = subscriptions.filter(payment__isnull=False).count()
-            context ["payments_count"] = payments_count
+            # payments_count = subscriptions.filter(payment__isnull=False).count()
+            # context ["payments_count"] = payments_count
             context ["box"] = "S1R0"
             context ["subscriptions"] = subscriptions[:SUBS_HISTORY_COUNT]
             subscription_remaining_days = 0

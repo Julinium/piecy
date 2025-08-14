@@ -3,15 +3,15 @@
 
 <div class="d-flex-row text-center py-3">
     
-    <!-- <div id="header-avatar">
-        <img class="img-fluid p-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 8rem;" alt="X">
-    </div> -->
+    <div id="header-avatar">
+        <img class="img-fluid p-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 4rem;" alt="X">
+    </div>
 
     {% if headline %}
         <div id="header-headline" class="">
-            <h2>
+            <h4>
                     {{ headline }}
-            </h2>
+            </h4>
         </div>
     {% endif %}
 

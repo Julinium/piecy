@@ -1,9 +1,15 @@
 import uuid #, os
 from django.db import models
+from django.utils import timezone
+from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext as _
+
+# from django.conf import settings
+# from django.db import models
+# from decimal import Decimal
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-from decimal import Decimal, ROUND_HALF_UP
 
 
 class Tenant(models.Model):
@@ -67,7 +73,6 @@ class Tenant(models.Model):
     # def delete(self, *args, **kwargs):
     #     print("Deleting object")
     #     super().delete(*args, **kwargs)
-
 
 
 class Utilisateur(AbstractBaseUser, PermissionsMixin):
@@ -150,12 +155,12 @@ class Trial(models.Model):
 class Subscription(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active = models.BooleanField(blank=True, null=True, default=True)
-    is_trial = models.BooleanField(blank=True, null=True, default=False)
+    # is_trial = models.BooleanField(blank=True, null=True, default=False)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
-    payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
+    # payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
 
     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
@@ -167,51 +172,89 @@ class Subscription(models.Model):
         db_table = 'subscription'
 
     def __str__(self):
-        istial = "TRIAL-" if self.is_trial else ""
-        return f'{istial}{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
+        return f'{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
 
 
-class SystemPayment(models.Model):
-    class Status(models.TextChoices):
-        DRAFT    = 'D', _('Brouillon')
-        DONE     = 'P', _('Effectué')
-        CANCELED = 'X', _('Annulé')
+# class SystemPayment(models.Model):
+#     class Status(models.TextChoices):
+#         DRAFT    = 'D', _('Brouillon')
+#         DONE     = 'P', _('Effectué')
+#         CANCELED = 'X', _('Annulé')
 
-    class Modes(models.TextChoices):
-        CASH   = 'C', _('Espèces')
-        WIRE   = 'W', _('Virement')
-        CHECK  = 'K', _('Chèque')
-        ONLINE = 'O', _('Online')
-        OTHER  = 'X', _('Other')
+#     class Modes(models.TextChoices):
+#         CASH   = 'C', _('Espèces')
+#         WIRE   = 'W', _('Virement')
+#         CHECK  = 'K', _('Chèque')
+#         ONLINE = 'O', _('Online')
+#         OTHER  = 'X', _('Autre')
 
-    id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active         = models.BooleanField(blank=True, null=True, default=True)
-    status         = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
-    order_no       = models.CharField(max_length=32, blank=True, null=True)
-    verified       = models.BooleanField(blank=True, null=True)
-    reference      = models.CharField(max_length=32, blank=True, null=True)
-    mode           = models.CharField(max_length=1, choices=Modes.choices, default=Modes.WIRE)
-    date_made      = models.DateField(blank=True, null=True)
-    objet          = models.CharField(max_length=128, blank=True, null=True, default= _("Abonnement Application Piecy"))
-    amount         = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    taxes_amount   = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    amount_ttc     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    currency       = models.CharField(max_length=4, blank=True, null=True, default="MAD")
-    made_by        = models.CharField(max_length=64, blank=True, null=True)
-    note           = models.CharField(max_length=64, blank=True, null=True)
+#     id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     active         = models.BooleanField(blank=True, null=True, default=True)
+#     status         = models.CharField(max_length=1, choices=Status.choices, default=Status.DRAFT)
+#     order_no       = models.CharField(max_length=32, blank=True, null=True)
+#     commande       = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True, related_name="payments")
+#     verified       = models.BooleanField(blank=True, null=True)
+#     reference      = models.CharField(max_length=32, blank=True, null=True)
+#     mode           = models.CharField(max_length=1, choices=Modes.choices, default=Modes.WIRE)
+#     date_made      = models.DateField(blank=True, null=True)
+#     objet          = models.CharField(max_length=128, blank=True, null=True, default= _("Abonnement Application Piecy"))
+#     amount         = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+#     taxes_amount   = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+#     amount_ttc     = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+#     currency       = models.CharField(max_length=4, blank=True, null=True, default="MAD")
+#     made_by        = models.CharField(max_length=64, blank=True, null=True)
+#     note           = models.CharField(max_length=64, blank=True, null=True)
 
-    owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
-    created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
-    created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
-    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
+#     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
+#     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+#     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+#     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+#     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
-    class Meta:
-        db_table = 'system_payment'
+#     class Meta:
+#         db_table = 'system_payment'
 
-    def __str__(self):
-        prefix = "VERIF" if self.verified else "UNVERIF"
-        return f'{prefix}#{self.amount}{self.currency}#-{self.made_by}-{self.date_made}-{self.reference}'
+#     def __str__(self):
+#         prefix = "V" if self.verified else "U"
+#         return f'{prefix}#{self.amount}{self.currency}#-{self.made_by}-{self.date_made}-{self.reference}'
+
+
+# class SystemOrder(models.Model):
+#     id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     active         = models.BooleanField(blank=True, null=True, default=True)
+#     order_no       = models.CharField(max_length=32, blank=True, null=True)
+#     order_date     = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+
+#     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
+#     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+#     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+#     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+#     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
+    
+#     class Meta:
+#         db_table = 'system_order'
+
+#     # def __str__(self):
+#     #     prefix = "V" if self.verified else "U"
+#     #     return f'{prefix}#{self.amount}{self.currency}#-{self.made_by}-{self.date_made}-{self.reference}'
+
+
+# class SystemOrderLine(models.Model):
+#     id             = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+#     active         = models.BooleanField(blank=True, null=True, default=True)
+
+#     owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
+#     created_by = models.UUIDField(verbose_name=_("Créé par"), blank=True, null=True)
+#     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
+#     edited_by = models.UUIDField(verbose_name=_("Modifié par"), blank=True, null=True)
+#     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
+    
+#     class Meta:
+#         db_table = 'system_order_line'
+
+#     # def __str__(self):
+#     #     prefix = "V" if self.verified else "U"
+#     #     return f'{prefix}#{self.amount}{self.currency}#-{self.made_by}-{self.date_made}-{self.reference}'
 
 
 class Plan(models.Model):
@@ -311,6 +354,134 @@ class Plan(models.Model):
     def yearly_month_tag_new(self):
         tag = self.yearly_year_tag_new / 12
         return Decimal(tag).quantize(Decimal("0"), rounding=ROUND_HALF_UP)
+
+
+##################################
+class SystemOrder(models.Model):
+    STATUS_CHOICES = [
+        ("pending",   _("Attente paiement")),
+        ("partial",   _("Partiellement payé")),
+        ("paid",      _("Payé")),
+        ("cancelled", _("Annulé")),
+    ]
+
+    customer = models.ForeignKey(
+        Tenant,
+        on_delete=models.CASCADE,
+        related_name="orders"
+    )
+
+    order_number = models.CharField(max_length=20, unique=True)
+    order_date   = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    status       = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    created_at   = models.DateTimeField(default=timezone.now)
+    updated_at   = models.DateTimeField(auto_now=True)
+    notes        = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 's_order'
+
+    def __str__(self):
+        return f"Order #{self.order_number} - {self.customer.name}"
+
+    @property
+    def total_amount(self):
+        return sum(item.total_price for item in self.items.all())
+
+    @property
+    def amount_paid(self):
+        return self.payments.aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+
+    @property
+    def amount_due(self):
+        return self.total_amount - self.amount_paid
+
+    def update_status(self):
+        paid = self.amount_paid
+        if paid == 0:
+            self.status = "pending"
+        elif paid < self.total_amount:
+            self.status = "partial"
+        elif paid >= self.total_amount:
+            self.status = "paid"
+        self.save()
+
+
+class SystemOrderItem(models.Model):
+    order = models.ForeignKey(
+        SystemOrder,
+        on_delete=models.CASCADE,
+        related_name="items"
+    )
+    product_name = models.CharField(max_length=255)  # could be linked to a Product model if you have one
+    unit_price = models.DecimalField(max_digits=10, decimal_places=2)
+    unit_currency = models.CharField(max_length=8, default="MAD")
+    quantity = models.PositiveIntegerField(default=1)
+    tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20)  # e.g., 15 for 15%
+
+    class Meta:
+        db_table = 's_order_item'
+
+    @property
+    def total_price(self):
+        return self.unit_price * self.quantity
+    
+    @property
+    def tax_amount(self):
+        return (self.unit_price * self.quantity) * (self.tax_rate / Decimal("100"))
+
+    @property
+    def total_price_with_tax(self):
+        return (self.unit_price * self.quantity) + self.tax_amount
+
+    def __str__(self):
+        return self.product_name
+
+
+class SystemPayment(models.Model):
+    METHOD_CHOICES = [
+        ("cash",          _("Cash")),
+        ("bank_transfer", _("Bank Transfer")),
+        ("mobile_money",  _("Eléctronique")),
+        ("cheque",        _("Chèque")),
+        ("other",         _("Autre")),
+    ]
+
+    STATUS_CHOICES = [
+        ("pending",   _("Pending")),
+        ("confirmed", _("Confirmed")),
+        ("failed",    _("Failed")),
+    ]
+
+    order = models.ForeignKey(
+        SystemOrder,
+        on_delete=models.CASCADE,
+        related_name="payments"
+    )
+
+    reference = models.CharField(max_length=20, unique=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    method = models.CharField(max_length=20, choices=METHOD_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    transaction_reference = models.CharField(max_length=100, blank=True)
+    paid_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    notes = models.TextField(blank=True)
+
+    class Meta:
+        db_table = 's_payment'
+
+    def __str__(self):
+        return f"{self.reference}-#{self.amount}#-{self.order.order_number}"
+
+    def confirm(self):
+        """Mark the payment as confirmed and update order status."""
+        self.status = "confirmed"
+        self.paid_at = timezone.now()
+        self.save()
+        self.order.update_status()
+##################################
+
 
 
 

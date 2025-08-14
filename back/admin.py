@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
-from .models import Plan, Tenant, SystemPayment, Subscription, Trial
+from .models import Plan, Tenant, Subscription, Trial
 
 User = get_user_model()
 
@@ -118,8 +118,8 @@ class PlanAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-class SystemPaymentAdmin(admin.ModelAdmin):
-    model = SystemPayment
+# class SystemPaymentAdmin(admin.ModelAdmin):
+#     model = SystemPayment
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
@@ -133,6 +133,6 @@ class TrialAdmin(admin.ModelAdmin):
 
 admin.site.register(Tenant, TenantAdmin)
 admin.site.register(Plan, PlanAdmin)
-admin.site.register(SystemPayment, SystemPaymentAdmin)
+# admin.site.register(SystemPayment, SystemPaymentAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Trial, TrialAdmin)

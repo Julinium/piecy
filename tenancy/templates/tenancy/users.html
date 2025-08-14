@@ -7,11 +7,11 @@
 {% endblock title %}
 
 {% block content %}
-    {% with avatar=tenant.logo headline=tenant.name subtitle=tenant.owner %}
+    {% with avatar=tenant.logo %}
         {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
     {% endwith %}
     <div class="text-center mb-3">
-        <h3 class="p-1 mt-3">{% translate "Utilisateurs de l'Entreprise" %}</h3>
+        <h3 class="p-2 mb-3">{% translate "Utilisateurs" %}</h3>
     </div>
     
     <div class="hstack gap-2 mb-3 p-2 border rounded-2 shadow shadow-sm {% if users_count >= max_users %}bg-danger-subtle{% else %}bg-success-subtle{% endif %}">
@@ -47,7 +47,7 @@
                         <div class="w-100 d-flex justify-content-between">
                             <div class="text-start">
                                 <div>
-                                    <span class="fw-bold fs-4">{{ user.username }}</span>
+                                    <span class="fs-4">{{ user.username }}</span>
                                     <span>
                                         {% if user == request.user %}<span class="badge bg-success ms-auto">{% trans "Vous" %}</span>{% endif %}
                                         {% if not user.is_active %}<span class="badge bg-danger ms-auto">{% trans "Désactivé" %}</span>{% endif %}
