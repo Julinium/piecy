@@ -43,7 +43,7 @@
             <div class="list-group-item p-0 {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
                 <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ user.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
                     <div class="d-flex align-items-center">
-                        <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="X">
+                        <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt="">
                         <div class="w-100 d-flex justify-content-between">
                             <div class="text-start">
                                 <div>
@@ -113,7 +113,7 @@
                                         <div class="modal-body">                                                
                                             <div>
                                                 {% trans "Supprimer définitivement" %} 
-                                                <span class="fw-bold text-danger ms-auto">{{ user.username }}</span> ({{ user.email }}) ?
+                                                <span class="fw-bold text-danger ms-auto">{{ user.username }}</span><span class="fw-bold ms-2"><i class="bi bi-envelope"></i> {{ user.email }}</span> ?
                                                 <!-- <span class="text-danger small ms-auto">{% trans "Cette opération n'est pas réversible." %}</span> -->
                                             </div>
                                         </div>

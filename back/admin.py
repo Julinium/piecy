@@ -54,32 +54,6 @@ class TenantAdmin(admin.ModelAdmin):
 class PlanAdmin(admin.ModelAdmin):
     model = Plan
 
-    #######################
-    active = models.BooleanField(blank=True, null=True, default=True)
-    name = models.CharField(max_length=16, blank=True, null=True)
-    header = models.CharField(max_length=128, blank=True, null=True)
-    ordre = models.SmallIntegerField(blank=True, null=True)
-    # cta = models.CharField(max_length=128, blank=True, null=True, default=_('Free quote'))
-    
-    year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
-    first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)
-    monthly_price = models.DecimalField(max_digits=10, decimal_places=2)
-
-    custom_domain = models.BooleanField(blank=True, null=True)
-    mailbox = models.BooleanField(blank=True, null=True)
-    ecommerce = models.BooleanField(blank=True, null=True)
-    vitrine = models.BooleanField(blank=True, null=True)
-
-    max_users = models.SmallIntegerField(blank=True, null=True)
-    max_clients = models.SmallIntegerField(blank=True, null=True)
-    max_products = models.SmallIntegerField(blank=True, null=True)
-    max_pdfs = models.SmallIntegerField(blank=True, null=True)
-    max_excels = models.SmallIntegerField(blank=True, null=True)
-
-    note = models.CharField(max_length=256, blank=True, null=True)
-    #######################
-
-
     list_display = ("name", "active", "monthly_price", 'header')
     # fieldsets = (
     #     ("Basics", {"fields": ("active", "name", "owner")}),
@@ -90,7 +64,7 @@ class PlanAdmin(admin.ModelAdmin):
 
     # add_fieldsets = fieldsets
 
-    readonly_fields = ('owned_by', 'created_by', 'get_created_by', 'created_on', 'edited_by', 'get_edited_by', 'edited_on')
+    readonly_fields = ('created_by', 'get_created_by', 'created_on', 'edited_by', 'get_edited_by', 'edited_on')
 
     formfield_overrides = {
         models.BooleanField: {'widget': forms.CheckboxInput},
@@ -118,8 +92,42 @@ class PlanAdmin(admin.ModelAdmin):
         super().save_model(request, obj, form, change)
 
 
-# class SystemPaymentAdmin(admin.ModelAdmin):
-#     model = SystemPayment
+class UserAdmin(admin.ModelAdmin):
+    model = User
+    list_display = ("username", "tenant", "email", "is_active", "last_login")
+    # list_display = ("username", 'tenant', "active", "email", 'last_login')
+    readonly_fields = ('created_by', 'created_on', 'edited_by', 'edited_on', 'tenant', "username", "verified")
+
+    fieldsets = (
+        ("Basics",   {"fields": ("is_active", "is_tenant_admin", "username", "tenant")}),
+        ("Personal", {"fields": ("first_name", "last_name", "email", "verified", "phone")}),
+        # ("Security", {"fields": ("verified")}),
+        # ("Advanced", {"fields": ("is_staff", "is_superuser", "groups", "user_permissions")}),
+    )
+    
+    add_fieldsets = (
+        # (None, {
+        #     # "classes": ("wide",),
+        #     "fields": ("username", "email", "password1", "password2", "", "")}
+        # ),
+        ("Basics",   {"fields": ("is_active", "tenant", "is_tenant_admin", "username", "password1", "password2")}),
+        ("Personal", {"fields": ("first_name", "last_name", "email", "phone")}),
+        
+    )
+
+    search_fields = ("username", "email", "last_name")
+    # ordering = ("username", "tenant",)
+    ordering = ('-is_active', '-tenant', 'created_on', 'last_login', 'is_tenant_admin',)
+
+    formfield_overrides = {
+        models.BooleanField: {'widget': forms.CheckboxInput},
+    }
+
+    def get_readonly_fields(self, request, obj=None):
+        if obj:  # Editing an existing instance
+            # return ('created_by', 'created_on', 'edited_by', 'edited_on', 'tenant', "username")
+            return self.readonly_fields
+        return []  # No read-only fields for new instances
 
 
 class SubscriptionAdmin(admin.ModelAdmin):
@@ -133,6 +141,6 @@ class TrialAdmin(admin.ModelAdmin):
 
 admin.site.register(Tenant, TenantAdmin)
 admin.site.register(Plan, PlanAdmin)
-# admin.site.register(SystemPayment, SystemPaymentAdmin)
+admin.site.register(User, UserAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Trial, TrialAdmin)

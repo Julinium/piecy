@@ -2,17 +2,19 @@
 
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="dashDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-search"></i> {% translate 'Admin' %}
+        <i class="bi bi-bank"></i> {% translate 'Entreprise' %}
     </a>
     <ul class="dropdown-menu" aria-labelledby="dashDropdown">
-        <li><a class="dropdown-item" href="{% url 'tenancy_dashboard' %}"><i class="bi bi-hourglass-split"></i> {% translate 'Dashboard' %}</a></li>
+        <li><a class="dropdown-item" href="{% url 'tenancy_summary' %}"><i class="bi bi-speedometer2"></i> {% translate 'Dashboard' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{% url 'tenancy_summary' %}"><i class="bi bi-menu-app-fill"></i> {% translate 'Entreprise' %}</a></li>
+        <li><a class="dropdown-item text-secondary" href="{% url 'base_coming' %}"><i class="bi bi-cash-stack"></i> {% translate 'Abonnement' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="{% url 'base_coming' %}"><i class="bi bi-bookmark-heart-fill"></i> {% translate 'Réglages' %}</a></li>
+        <li><a class="dropdown-item" href="{% url 'tenancy_users' %}"><i class="bi bi-people"></i> {% translate 'Utilisateurs' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" aria-disabled="true" href="{% url 'base_coming' %}"><i class="bi bi-cart4"></i> {% translate 'Rapports' %}</a></li>
+        <!-- <li><a class="dropdown-item" href="{% url 'tenancy_summary' %}"><i class="bi bi-menu-app-fill"></i> {% translate 'Entreprise' %}</a></li>
+        <li><hr class="dropdown-divider"></li> -->
+        <li><a class="dropdown-item" href="{% url 'base_coming' %}"><i class="bi bi-sliders"></i> {% translate 'Réglages' %}</a></li>
         <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" aria-disabled="true" href="{% url 'base_coming' %}"><i class="bi bi-cart4"></i> {% translate 'Support' %}</a></li>
+        <li><a class="dropdown-item" aria-disabled="true" href="{% url 'base_coming' %}"><i class="bi bi-headset"></i> {% translate 'Support' %}</a></li>
     </ul>
 </li>
