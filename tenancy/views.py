@@ -13,7 +13,7 @@ from decimal import Decimal, ROUND_HALF_UP
 
 from django.http import HttpResponse
 
-from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur, Tenant
+from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur, Tenant, SystemOrder
 
 from .forms import CustomUserCreationForm
 
@@ -181,6 +181,23 @@ def users(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
+
+        # from myapp.models import MyModel
+        # import uuid
+        # for obj in SystemOrder.objects.all():
+        #     obj.id = uuid.uuid4()
+        #     obj.save(update_fields=['id'])
+
+        # SystemOrder.objects.all().delete()
+        # for order in orders:
+        #     print("=========================================-")
+        #     order
+        from django.db import connection
+
+        with connection.cursor() as cursor:
+            cursor.execute("DROP TABLE s_order_item;")
+            cursor.execute("DROP TABLE s_order;")
+
         context["tenant"] = tenant
         tenant_users = Utilisateur.objects.filter(tenant=tenant).annotate(
             is_current_user=Case(When(
@@ -534,6 +551,21 @@ def subscribe(request):
         plans = Plan.objects.filter(active=True)
         context["plans"] = plans
         return render(request, 'tenancy/subscribe.html', context)
+
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def orders(request):
+
+    code, message = can_admin(request)
+    if code == 200:
+        context = {}
+        tenant = request.user.tenant
+        orders = SystemOrder.objects.filter(customer=tenant)
+        context['orders'] = orders
+
+        return render(request, 'tenancy/orders.html', context)
 
     return HttpResponse(message, status=code)
 

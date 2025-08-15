@@ -284,16 +284,18 @@ class SystemOrder(models.Model):
         ("cancelled", _("Annulé")),
     ]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(
         Tenant,
         on_delete=models.CASCADE,
         related_name="orders"
     )
 
-    order_number = models.CharField(max_length=20, unique=True)
-    order_date   = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    status       = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    notes        = models.TextField(blank=True)
+    order_number  = models.CharField(max_length=20, unique=True)
+    order_date    = models.DateTimeField(blank=True, null=True, auto_now_add=True)
+    status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    order_currency = models.CharField(max_length=8, default="MAD")
+    notes          = models.TextField(blank=True)
     # created_at   = models.DateTimeField(default=timezone.now)
     # updated_at   = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_s_orders", blank=True, null=True)
@@ -309,7 +311,11 @@ class SystemOrder(models.Model):
 
     @property
     def total_amount(self):
-        return sum(item.total_price for item in self.items.all())
+        return sum(item.total_price_with_tax for item in self.items.all())
+
+    # @property
+    # def total_amount_with_tax(self):
+    #     return sum(item.total_price_with_tax for item in self.items.all())
 
     @property
     def amount_paid(self):
@@ -331,6 +337,7 @@ class SystemOrder(models.Model):
 
 
 class SystemOrderItem(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(
         SystemOrder,
         on_delete=models.CASCADE,
@@ -338,7 +345,7 @@ class SystemOrderItem(models.Model):
     )
     product_name = models.CharField(max_length=255)  # could be linked to a Product model if you have one
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    unit_currency = models.CharField(max_length=8, default="MAD")
+    # unit_currency = models.CharField(max_length=8, default="MAD")
     quantity = models.PositiveIntegerField(default=1)
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20)  # e.g., 15 for 15%
     # created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), blank=True, null=True)
@@ -380,6 +387,7 @@ class SystemPayment(models.Model):
         ("failed",    _("Failed")),
     ]
 
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(
         SystemOrder,
         on_delete=models.CASCADE,
@@ -412,8 +420,6 @@ class SystemPayment(models.Model):
         self.save()
         self.order.update_status()
 ##################################
-
-
 
 
 class Registre(models.Model):

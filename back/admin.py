@@ -2,7 +2,7 @@ from django.contrib import admin
 from django import forms
 from django.db import models
 from django.contrib.auth import get_user_model
-from .models import Plan, Tenant, Subscription, Trial
+from .models import Plan, Tenant, Subscription, Trial, SystemOrder, SystemOrderItem, SystemPayment
 
 User = get_user_model()
 
@@ -138,9 +138,37 @@ class TrialAdmin(admin.ModelAdmin):
     model = Trial
 
 
+# class SystemOrderAdmin(admin.ModelAdmin):
+#     model = SystemOrder
+
+class SystemOrderItemInline(admin.TabularInline):  # or admin.StackedInline
+    model = SystemOrderItem
+    extra = 1  # how many empty forms to show
+    # autocomplete_fields = ['product']  # optional if FK to Product
+    # show_change_link = True             # optional: link to detail page
+
+@admin.register(SystemOrder)
+class SystemOrderAdmin(admin.ModelAdmin):
+    list_display = ("order_number", "customer", 'total_amount', "status")
+    inlines = [SystemOrderItemInline]
+
+
+
+
+class SystemOrderItemAdmin(admin.ModelAdmin):
+    model = SystemOrderItem
+
+
+class SystemPaymentAdmin(admin.ModelAdmin):
+    model = SystemPayment
+
+
 
 admin.site.register(Tenant, TenantAdmin)
 admin.site.register(Plan, PlanAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Trial, TrialAdmin)
+# admin.site.register(SystemOrder, SystemOrderAdmin)
+admin.site.register(SystemOrderItem, SystemOrderItemAdmin)
+admin.site.register(SystemPayment, SystemPaymentAdmin)
