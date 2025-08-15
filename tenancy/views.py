@@ -182,22 +182,6 @@ def users(request):
         context = {}
         tenant = request.user.tenant
 
-        # from myapp.models import MyModel
-        # import uuid
-        # for obj in SystemOrder.objects.all():
-        #     obj.id = uuid.uuid4()
-        #     obj.save(update_fields=['id'])
-
-        # SystemOrder.objects.all().delete()
-        # for order in orders:
-        #     print("=========================================-")
-        #     order
-        from django.db import connection
-
-        with connection.cursor() as cursor:
-            cursor.execute("DROP TABLE s_order_item;")
-            cursor.execute("DROP TABLE s_order;")
-
         context["tenant"] = tenant
         tenant_users = Utilisateur.objects.filter(tenant=tenant).annotate(
             is_current_user=Case(When(
@@ -562,8 +546,8 @@ def orders(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
-        orders = SystemOrder.objects.filter(customer=tenant)
-        context['orders'] = orders
+        s_orders = SystemOrder.objects.filter(customer=tenant)
+        context['orders'] = s_orders
 
         return render(request, 'tenancy/orders.html', context)
 
