@@ -307,6 +307,7 @@ class SystemOrder(models.Model):
 
     class Meta:
         db_table = 's_order'
+        # ordering =['-amount_due', 'order_date', '-total_amount_with_tax']
 
     def __str__(self):
         return f"Order #{self.order_number} - {self.customer.name}"

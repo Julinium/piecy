@@ -545,8 +545,9 @@ def orders(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
-        s_orders = SystemOrder.objects.filter(customer=tenant)
-        context['orders'] = s_orders
+        s_orders = SystemOrder.objects.filter(customer=tenant).order_by('-order_date')
+        context['orders'] = sorted(s_orders, key=lambda order: order.amount_due)
+        # context['orders'] = s_orders
 
         return render(request, 'tenancy/orders.html', context)
 
