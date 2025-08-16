@@ -44,11 +44,11 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
 @receiver(post_save, sender=SystemPayment)
 def s_payment_created_or_updated(sender, instance, created, **kwargs):
     if instance:
-        if instance.status == "confirmed":
-            instance.order.update_status()
+        # if instance.status == "confirmed":
+        instance.order.update_status()
 
 @receiver(post_delete, sender=Utilisateur)
 def s_payment_deleted(sender, instance, **kwargs):
     if instance:
-        if instance.status == "confirmed":
-            instance.order.update_status()
+        # if instance.status == "confirmed":
+        instance.order.update_status()

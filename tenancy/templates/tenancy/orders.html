@@ -19,16 +19,38 @@
             <div class="list-group-item p-0 {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
                 <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ order.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
                     <div class="d-flex align-items-center">
+                        <i class="bi 
+                            {% if order.status == 'pending' %}
+                                bi-exclamation-circle text-warning
+                            {% elif order.status == 'partial' %}
+                                bi-exclamation-circle text-warning
+                            {% elif order.status == 'paid' %}
+                                bi-check-circle text-success
+                            {% else %}
+                                bi-x-circle text-danger
+                            {% endif %}
+                         fs-3"></i>
                         <!-- <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt=""> -->
-                        <div class="w-100 d-flex justify-content-between">
+                        <div class="w-100 d-flex justify-content-between ms-3">
                             <div class="text-start">
                                 <div>
-                                    <span class="fs-4">{{ order.order_number }}</span>
-                                    <span class="small text-muted ms-1">{{ order.order_date.date }}</span>
+                                    <span class="badge
+                                        {% if order.status == 'pending' %}
+                                            bg-warning
+                                        {% elif order.status == 'partial' %}
+                                            bg-warning
+                                        {% elif order.status == 'paid' %}
+                                            bg-success
+                                        {% else %}
+                                            bg-danger
+                                        {% endif %}
+                                     py-2">{{ order.get_status_display }}</span>
+                                    <span class="fw-bold fs-5 ms-2">{{ order.total_amount_with_tax }}</span>
+                                    <span class="small text-muted">{{ order.order_currency }}</span>
                                 </div>
                                 <div class="text-muted small">
-                                    <span class="fs-4 fw-bold text-primary">{{ order.total_amount_with_tax }}{{ order.order_currency }}</span>
-                                    <span class="badge bg-success ms-auto">{{ order.get_status_display }}</span>
+                                    <span class="small">{{ order.order_number }}</span>
+                                    <span class="small text-muted ms-1">{{ order.order_date.date }}</span>
                                 </div>
                             </div>
                             <div class="px-2">...</div>
@@ -43,7 +65,7 @@
                                 <div class="list-group-item">
                                     <!-- {{ item.total_price_with_tax }} = {{ item.quantity }} x {{ item.unit_price }} + {{ item.tax_rate }}% : {{ item.product_name }} -->
                                     <div class="d-flex justify-content-between align-items-center">
-                                        <div class="fw-bold">{{ item.quantity }} x {{ item.product_name }}</div>
+                                        <div class="fw-bold">{{ item.product_name }}</div>
                                         <div class="fw-bold">{{ item.total_price_with_tax }}</div>
                                     </div>
                                     <div class="d-flex justify-content-between align-items-center ps-4">
@@ -88,11 +110,6 @@
                                     <div class="fw-light small">{{ order.total_tax_amount }}</div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div id="order-payments">
-                        <h4>{% trans "Paiements" %}</h4>
-                        <div id="order-details" class="list-group mb-3">
                             <div class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="">{% trans "Montant payé" %}</div>
@@ -106,6 +123,23 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div id="order-payments">
+                        <h4>{% trans "Paiements" %}</h4>
+                        <!-- <div id="order-details" class="list-group mb-3">
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="">{% trans "Montant payé" %}</div>
+                                    <div class="fw-bold">{{ order.amount_paid }}</div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="">{% trans "Reste à payer" %}</div>
+                                    <div class="fw-bold">{{ order.amount_due }}</div>
+                                </div>
+                            </div>
+                        </div> -->
                         <div class="list-group mb-3">
                             {% for p in order.payments.all %}
                                 <div class="list-group-item">

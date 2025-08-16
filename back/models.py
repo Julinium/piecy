@@ -425,7 +425,7 @@ class SystemPayment(models.Model):
         db_table = 's_payment'
 
     def __str__(self):
-        return f"{self.reference}-#{self.amount}#-{self.order.order_number}"
+        return f"{self.reference}-#{self.amount}#-{self.order.order_number}-{self.status}"
 
     def confirm(self):
         """Mark the payment as confirmed and update order status."""
