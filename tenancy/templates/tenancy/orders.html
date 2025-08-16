@@ -24,28 +24,98 @@
                             <div class="text-start">
                                 <div>
                                     <span class="fs-4">{{ order.order_number }}</span>
-                                    <span>
-                                        <!-- {% if not user.is_active %}<span class="badge bg-danger ms-auto">{% trans "Désactivé" %}</span>{% endif %}
-                                        {% if user.is_tenant_admin %}<span class="badge bg-warning ms-auto">{% trans "Admin" %}</span>{% endif %} -->
-                                    </span>
                                     <span class="small text-muted ms-1">{{ order.order_date.date }}</span>
                                 </div>
                                 <div class="text-muted small">
-                                    <span class="fs-4 fw-bold text-primary">{{ order.total_amount }}{{ order.order_currency }}</span>
+                                    <span class="fs-4 fw-bold text-primary">{{ order.total_amount_with_tax }}{{ order.order_currency }}</span>
                                     <span class="badge bg-success ms-auto">{{ order.get_status_display }}</span>
-                                    <!-- <span class="fs-4 text-success">{{ order.amount_paid }}</span>/<span class="fs-4 fw-bold text-primary">{{ order.total_amount }}</span> | <span class="fs-4 fw-bold text-danger">{{ order.amount_due }}</span> -->
-                                    <!-- {% if user.first_name %}{{ user.first_name }}{% else %}-{% endif %}
-                                    {% if user.last_name %}{{ user.last_name }}{% else %}-{% endif %} -->
                                 </div>
                             </div>
                             <div class="px-2">...</div>
                         </div>
                     </div>
                 </a>
-                <div class="collapse p-3 pt-0" id="{{ user.id }}">
-                    <div id="user-details" class="my-2">
-                        <div class="fw-light small">{% trans "Dernière connexion" %}: <span class="fw-bold">{{ user.last_login }}</span>{% if user.last_login %} : {{ user.last_login|timesince }}{% endif %}</div>
-                        <div class="fw-light small">{% trans "Date création" %}: <span class="fw-bold">{{ user.created_on }}</span>{% if user.created_on %} : {{ user.created_on|timesince }}{% endif %}</div>
+                <div class="collapse p-3 pt-0" id="{{ order.id }}">
+                    <div id="order-items">
+                        <h4>{% trans "Détails de la commande" %}</h4>
+                        <div class="list-group mb-3">
+                            {% for item in order.items.all %}
+                                <div class="list-group-item">
+                                    <!-- {{ item.total_price_with_tax }} = {{ item.quantity }} x {{ item.unit_price }} + {{ item.tax_rate }}% : {{ item.product_name }} -->
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="fw-bold">{{ item.quantity }} x {{ item.product_name }}</div>
+                                        <div class="fw-bold">{{ item.total_price_with_tax }}</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center ps-4">
+                                        <div class="fw-light small">{% trans "Prix unitaire" %}</div>
+                                        <div class="fw-light small">{{ item.unit_price }}</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center ps-4">
+                                        <div class="fw-light small">{% trans "Quantité" %}</div>
+                                        <div class="fw-light small">{{ item.quantity }}</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center ps-4">
+                                        <div class="fw-light small">{% trans "Prix sans taxes" %}</div>
+                                        <div class="fw-light small">{{ item.total_price }}</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center ps-4">
+                                        <div class="fw-light small">{% trans "Taux Taxes" %}</div>
+                                        <div class="fw-light small">{{ item.tax_rate }}%</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center ps-4">
+                                        <div class="fw-light small">{% trans "Montant Taxes" %}</div>
+                                        <div class="fw-light small">{{ item.tax_amount }}</div>
+                                    </div>
+                                    <!-- <div class="d-flex justify-content-between align-items-center ps-4">
+                                        <div class="fw-light small">{% trans "Total ligne" %}</div>
+                                        <div class="fw-bold">{{ item.total_price_with_tax }}</div>
+                                    </div> -->
+                                </div>
+                            {% empty %}
+                                <div class="text-danger">{% trans "Aucun élément trouvé" %}</div>
+                            {% endfor %}
+                            <div class="list-group-item bg-secondary-subtle">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="fw-bold fs-5">{% trans "Total TTC" %}</div>
+                                    <div class="fw-bold fs-5">{{ order.total_amount_with_tax }}</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center ps-4">
+                                    <div class="fw-light small">{% trans "Total HT" %}</div>
+                                    <div class="fw-light small">{{ order.total_amount }}</div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center ps-4">
+                                    <div class="fw-light small">{% trans "Total taxes" %}</div>
+                                    <div class="fw-light small">{{ order.total_tax_amount }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="order-payments">
+                        <h4>{% trans "Paiements" %}</h4>
+                        <div id="order-details" class="list-group mb-3">
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="">{% trans "Montant payé" %}</div>
+                                    <div class="fw-bold">{{ order.amount_paid }}</div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="">{% trans "Reste à payer" %}</div>
+                                    <div class="fw-bold">{{ order.amount_due }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group mb-3">
+                            {% for p in order.payments.all %}
+                                <div class="list-group-item">
+                                    <span class="badge bg-secondary">{{ p.get_status_display }}</span>
+                                    {{ p.amount }} | {{ p.reference }} | {{ p.get_method_display }} @ {{ p.paid_at }}
+                                </div>
+                            {% empty %}
+                                <div class="text-danger">{% trans "Aucun Paiement trouvé" %}</div>
+                            {% endfor %}
+                        </div>
                     </div>
                     {% if user != request.user %}
                         <div id="user-actions" class="text-end">
@@ -112,11 +182,6 @@
             <div class="list-group-item">{% trans "Aucune Commande trouvée" %}</div>
         {% endfor %}
     </div>
-
-    <!-- Button to trigger the modal -->
-    <!-- <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-        Delete
-    </button> -->
 
     
 {% endblock content %}

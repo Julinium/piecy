@@ -4,6 +4,8 @@ from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext as _
 
+from decimal import Decimal, ROUND_HALF_UP
+
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
@@ -311,27 +313,36 @@ class SystemOrder(models.Model):
 
     @property
     def total_amount(self):
-        return sum(item.total_price_with_tax for item in self.items.all())
+        s = sum(item.total_price for item in self.items.all())
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-    # @property
-    # def total_amount_with_tax(self):
-    #     return sum(item.total_price_with_tax for item in self.items.all())
+    @property
+    def total_tax_amount(self):
+        s = sum(item.tax_amount for item in self.items.all())
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    @property
+    def total_amount_with_tax(self):
+        s = sum(item.total_price_with_tax for item in self.items.all())
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
     def amount_paid(self):
-        return self.payments.aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+        s = self.payments.filter(status="confirmed").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
     def amount_due(self):
-        return self.total_amount - self.amount_paid
+        s = self.total_amount_with_tax - self.amount_paid
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     def update_status(self):
         paid = self.amount_paid
         if paid == 0:
             self.status = "pending"
-        elif paid < self.total_amount:
+        elif paid < self.total_amount_with_tax:
             self.status = "partial"
-        elif paid >= self.total_amount:
+        elif paid >= self.total_amount_with_tax:
             self.status = "paid"
         self.save()
 
@@ -345,7 +356,6 @@ class SystemOrderItem(models.Model):
     )
     product_name = models.CharField(max_length=255)  # could be linked to a Product model if you have one
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
-    # unit_currency = models.CharField(max_length=8, default="MAD")
     quantity = models.PositiveIntegerField(default=1)
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20)  # e.g., 15 for 15%
     # created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), blank=True, null=True)
@@ -358,15 +368,18 @@ class SystemOrderItem(models.Model):
 
     @property
     def total_price(self):
-        return self.unit_price * self.quantity
+        s = self.unit_price * self.quantity
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
     
     @property
     def tax_amount(self):
-        return (self.unit_price * self.quantity) * (self.tax_rate / Decimal("100"))
+        s = (self.unit_price * self.quantity) * (self.tax_rate / Decimal("100"))
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
     def total_price_with_tax(self):
-        return (self.unit_price * self.quantity) + self.tax_amount
+        s = (self.unit_price * self.quantity) + self.tax_amount
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     def __str__(self):
         return self.product_name

@@ -315,7 +315,6 @@ def disable_user(request, user_id=None):
     return HttpResponse(message, status=code)
 
 
-
 @login_required(login_url="account_login")
 def delete_user(request, user_id=None):
     if request.method != "POST":
@@ -548,6 +547,21 @@ def orders(request):
         tenant = request.user.tenant
         s_orders = SystemOrder.objects.filter(customer=tenant)
         context['orders'] = s_orders
+
+        return render(request, 'tenancy/orders.html', context)
+
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def order_create(request):
+
+    code, message = can_admin(request)
+    if code == 200:
+        context = {}
+        tenant = request.user.tenant
+        # s_orders = SystemOrder.objects.filter(customer=tenant)
+        # context['orders'] = s_orders
 
         return render(request, 'tenancy/orders.html', context)
 

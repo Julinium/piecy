@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.contrib import messages
 from django.utils.translation import gettext as _
 
-from .models import Utilisateur, Tenant
+from .models import Utilisateur, Tenant, SystemPayment, SystemOrder
 
 BIZ_NAME_PREFIX = _("Pièces Auto")
 BIZ_NAME_SUFFIX = _("s.a.r.l")
@@ -39,3 +39,16 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
 # @receiver(post_delete, sender=Utilisateur)
 # def utilisateur_deleted(sender, instance, **kwargs):
 #     print(f"Object deleted: {instance}")
+
+
+@receiver(post_save, sender=SystemPayment)
+def s_payment_created_or_updated(sender, instance, created, **kwargs):
+    if instance:
+        if instance.status == "confirmed":
+            instance.order.update_status()
+
+@receiver(post_delete, sender=Utilisateur)
+def s_payment_deleted(sender, instance, **kwargs):
+    if instance:
+        if instance.status == "confirmed":
+            instance.order.update_status()
