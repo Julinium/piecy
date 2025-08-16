@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'allauth.account.middleware.AccountMiddleware',
+    'django_currentuser.middleware.ThreadLocalUserMiddleware',
 ]
 
 SITE_ID = 1

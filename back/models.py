@@ -3,13 +3,22 @@ from django.db import models
 from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext as _
+from django_currentuser.middleware import get_current_user
 
 from decimal import Decimal, ROUND_HALF_UP
 
 # from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
-# User = get_user_model()
+
+def get_current_user_default():
+    """
+    Retrieves the current user from the request context.
+    """
+
+    user = get_current_user()
+    return user if user and user.is_authenticated else None
+
 
 class Tenant(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -143,9 +152,9 @@ class Trial(models.Model):
     date_ended = models.DateField(blank=True, null=True, editable=False)
 
     # owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_trials", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_trials", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_trials", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_trials", blank=True, null=True)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -166,9 +175,9 @@ class Subscription(models.Model):
     # payment = models.ForeignKey('SystemPayment', on_delete=models.RESTRICT, blank=True, null=True)
 
     # owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_subscriptions", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_subscriptions", blank=True, null=True)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -207,9 +216,9 @@ class Plan(models.Model):
     note = models.CharField(max_length=256, blank=True, null=True)
 
     # owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_plans", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_plans", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_plans", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_plans", blank=True, null=True)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -279,6 +288,7 @@ class Plan(models.Model):
 
 ##################################
 class SystemOrder(models.Model):
+
     STATUS_CHOICES = [
         ("pending",   _("Attente paiement")),
         ("partial",   _("Partiellement payé")),
@@ -300,9 +310,9 @@ class SystemOrder(models.Model):
     notes          = models.TextField(blank=True)
     # created_at   = models.DateTimeField(default=timezone.now)
     # updated_at   = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_s_orders", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_orders", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_s_orders", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_orders", blank=True, null=True)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -347,6 +357,15 @@ class SystemOrder(models.Model):
             self.status = "paid"
         self.save()
 
+    # class MyModel(models.Model):
+    #     created_by = models.ForeignKey(
+    #         User,
+    #         on_delete=models.SET_NULL,
+    #         null=True,
+    #         blank=True,
+    #         default=get_current_user_default
+    #     )
+
 
 class SystemOrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -359,9 +378,9 @@ class SystemOrderItem(models.Model):
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20)  # e.g., 15 for 15%
-    # created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), blank=True, null=True)
+    # created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), blank=True, null=True)
     # created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    # edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), blank=True, null=True)
+    # edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), blank=True, null=True)
     # edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -416,9 +435,9 @@ class SystemPayment(models.Model):
     paid_at = models.DateTimeField(null=True, blank=True)
     # created_at = models.DateTimeField(default=timezone.now)
     notes = models.TextField(blank=True)
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_s_payments", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_payments", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_s_payments", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_payments", blank=True, null=True)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -447,9 +466,9 @@ class Registre(models.Model):
     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
     # owned_by = models.UUIDField(verbose_name=_("Appartient à"), blank=True, null=True, editable=False)
-    # created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Créé par"), blank=True, null=True)
+    # created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), blank=True, null=True)
     # created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    # edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, verbose_name=_("Modifié par"), blank=True, null=True)
+    # edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), blank=True, null=True)
     # edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
