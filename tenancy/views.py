@@ -565,10 +565,18 @@ def order_payments(request, order_id=None):
             context = {}
             order_uuid = uuid.UUID(order_id, version=4)
             passed_order = SystemOrder.objects.filter(id=order_uuid).last()
-            # orders = SystemPayment.objects.all()
+            # payments = passed_order.payments.all()
+            pending_payments = passed_order.payments.filter(status='pending')
+            confirmed_payments = passed_order.payments.filter(status='confirmed')
+            failed_payments = passed_order.payments.filter(status='failed')
+            payments = failed_payments | pending_payments | confirmed_payments
+            
             context["order"] = passed_order
-            # context["orders"] = orders
-            context["order_id"] = order_id
+            context["payments"] = payments
+            # context["pending_payments"] = pending_payments
+            # context["confirmed_payments"] = confirmed_payments
+            # context["failed_payments"] = failed_payments
+            # context["order_id"] = order_id
             return render(request, 'tenancy/order-payments.html', context)
         return HttpResponse(_("Commande non trouvée."), status=code)
     return HttpResponse(message, status=code)

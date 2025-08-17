@@ -23,10 +23,12 @@
                 <div class="small text-muted">{% trans "Montant confirmé payé" %}</div>
                 <div class="fw-bold text-success">{{ order.amount_paid }}<span class="fw-light small ms-2">{{ order.order_currency }}</span></div>
             </div>
-            <div class="d-flex justify-content-between align-items-center">
-                <div class="small text-muted">{% trans "Reste à payer ou confirmer" %}</div>
-                <div class="fw-bold text-danger">{{ order.amount_due }}<span class="fw-light small ms-2">{{ order.order_currency }}</span></div>
-            </div>
+            {% if order.amount_due > 0 %}
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="small text-muted">{% trans "Reste à payer ou confirmer" %}</div>
+                    <div class="fw-bold text-danger">{{ order.amount_due }}<span class="fw-light small ms-2">{{ order.order_currency }}</span></div>
+                </div>
+            {% endif %}
             <div class="d-flex justify-content-between align-items-center">
                 <div class="small text-muted">{% trans "Status Commande" %}</div>
                 <div class="fw-bold">{{ order.get_status_display }}</div>

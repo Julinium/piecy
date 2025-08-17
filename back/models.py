@@ -415,9 +415,9 @@ class SystemPayment(models.Model):
     ]
 
     STATUS_CHOICES = [
-        ("pending",   _("Pending")),
-        ("confirmed", _("Confirmed")),
-        ("failed",    _("Failed")),
+        ("pending",   _("Attente")),
+        ("confirmed", _("Confirmé")),
+        ("failed",    _("Echoué")),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
