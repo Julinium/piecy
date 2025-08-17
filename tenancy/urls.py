@@ -21,4 +21,5 @@ urlpatterns = [
     path("users/<str:user_id>/delete/", views.delete_user, name="delete_user"),
     # tenancy_orders
     path('orders/', views.orders, name='tenancy_orders'),
+    path('order-payments/<str:order_id>', views.order_payments, name='tenancy_order_payments'),
 ]

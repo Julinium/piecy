@@ -408,7 +408,7 @@ class SystemOrderItem(models.Model):
 class SystemPayment(models.Model):
     METHOD_CHOICES = [
         ("cash",          _("Cash")),
-        ("bank_transfer", _("Bank Transfer")),
+        ("bank_transfer", _("Transfert bancaire")),
         ("mobile_money",  _("Eléctronique")),
         ("cheque",        _("Chèque")),
         ("other",         _("Autre")),
@@ -442,6 +442,7 @@ class SystemPayment(models.Model):
 
     class Meta:
         db_table = 's_payment'
+        ordering = ['order', '-paid_at']
 
     def __str__(self):
         return f"{self.reference}-#{self.amount}#-{self.order.order_number}-{self.status}"

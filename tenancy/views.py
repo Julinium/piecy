@@ -557,6 +557,24 @@ def orders(request):
 
 
 @login_required(login_url="account_login")
+def order_payments(request, order_id=None):
+
+    code, message = can_admin(request)
+    if code == 200:
+        if order_id:
+            context = {}
+            order_uuid = uuid.UUID(order_id, version=4)
+            passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+            # orders = SystemPayment.objects.all()
+            context["order"] = passed_order
+            # context["orders"] = orders
+            context["order_id"] = order_id
+            return render(request, 'tenancy/order-payments.html', context)
+        return HttpResponse(_("Commande non trouvée."), status=code)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
 def order_create(request):
 
     code, message = can_admin(request)

@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block title %}
-    {% trans "Utilisateurs Entreprise" %}
+    {% trans "Commandes Entreprise" %}
 {% endblock title %}
 
 {% block content %}
@@ -11,7 +11,7 @@
         {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
     {% endwith %}
     <div class="text-center mb-3">
-        <h3 class="p-2 mb-3">{% translate "Commandes" %}</h3>
+        <h3 class="p-2 mb-3">{% translate "Commandes Entreprise" %}</h3>
     </div>
 
     <div class="list-group mb-3">
@@ -21,7 +21,7 @@
                     <div class="d-flex align-items-center">
                         <i class="bi 
                             {% if order.status == 'pending' %}
-                                bi-exclamation-circle text-warning
+                                bi-hourglass-top text-warning
                             {% elif order.status == 'partial' %}
                                 bi-exclamation-circle text-warning
                             {% elif order.status == 'paid' %}
@@ -30,7 +30,6 @@
                                 bi-x-circle text-danger
                             {% endif %}
                          fs-3"></i>
-                        <!-- <img class="img-fluid me-2" {% if avatar %}src="{% static avatar %}"{% else %}src="{% static 'images/icon.png' %}"{% endif %} style="max-width: 3rem;" alt=""> -->
                         <div class="w-100 d-flex justify-content-between ms-3">
                             <div class="text-start">
                                 <div>
@@ -58,9 +57,25 @@
                     </div>
                 </a>
                 <div class="collapse p-3 pt-0" id="{{ order.id }}">
+                    {% if order.amount_due > 0 %}
+                        <div class="d-flex align-items-center">
+                            <div class="mt-3">
+                                <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-outline-primary">
+                                    <i class="bi bi-cash-coin"></i>
+                                    <span class="ms-1"> {% trans "Liste Paiements" %}</span>
+                                </a>
+                                {% if not order.payments.all %}
+                                    <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-primary ms-2">
+                                        <i class="bi bi-cash-coin"></i>
+                                        <span class="ms-1"> {% trans "Ajouter Paiement" %}</span>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
                     <div class="mb-3">
                         <br class="mt-3">
-                        <h4 class="mt-4"><span><i class="bi bi-list-ul me-2"></i></span>{% trans "Détails de la commande" %}</h4>
+                        <h4><span><i class="bi bi-list-ul me-2"></i></span>{% trans "Détails de la commande" %}</h4>
                         <div class="list-group">
                             {% for item in order.items.all %}
                                 <div class="list-group-item">
@@ -108,9 +123,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
+                    <div class="">
                         <br class="mt-3">
-                        <h4 class="mt-4"><span><i class="bi bi-wallet2 me-2"></i></span>{% trans "Status de Paiement" %}</h4>
+                        <h4><span><i class="bi bi-wallet2 me-2"></i></span>{% trans "Status de Paiement" %}</h4>
                         <div id="order-details" class="list-group mb-3">
                             <div class="list-group-item">
                                 <div class="d-flex justify-content-between align-items-center">
@@ -125,80 +140,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="mb-3">
-                        <br class="mt-3">
-                        <h4 class="mt-4"><span><i class="bi bi-cash-coin me-2"></i></span>{% trans "Détails des Paiements" %}</h4>
-                        <div class="list-group mb-3">
-                            {% for p in order.payments.all %}
-                                <div class="list-group-item">
-                                    <span class="badge bg-secondary">{{ p.get_status_display }}</span>
-                                    {{ p.amount }} | {{ p.reference }} | {{ p.get_method_display }} @ {{ p.paid_at }}
-                                </div>
-                            {% empty %}
-                                <div class="text-danger">{% trans "Aucun Paiement trouvé" %}</div>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    {% if user != request.user %}
                         <div id="user-actions" class="text-end">
-                            <a href="mailto:{{ user.email }}" class="btn btn-sm btn-outline-primary mt-2 mx-1">
-                                <i class="bi bi-send"></i>
-                                <span class="ms-1"> {% trans "Contacter" %}</span>
+                            <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-outline-primary mt-2 mx-1">
+                                <i class="bi bi-cash-coin"></i>
+                                <span class="ms-1"> {% trans "Paiements Commande" %}</span>
                             </a>
-                            {% if not user.is_tenant_admin %}
-                                <a href="{% url 'adminize_user' user.id %}" class="btn btn-sm btn-outline-warning mt-2 mx-1">
-                                    <i class="bi bi-person-up"></i>
-                                    <span class="ms-1"> {% trans "Admin" %}</span>
-                                </a>
-                            {% else %}
-                                <a href="{% url 'disadminize_user' user.id %}" class="btn btn-sm btn-outline-warning mt-2 mx-1">
-                                    <i class="bi bi-person-down"></i>
-                                    <span class="ms-1"> {% trans "Non-Admin" %}</span>
-                                </a>
-                            {% endif %}
-                            {% if user.is_active %}
-                                <a href="{% url 'disable_user' user.id %}" class="btn btn-sm btn-outline-secondary mt-2 mx-1">
-                                    <i class="bi bi-ban"></i>
-                                    <span class="ms-1"> {% trans "Désactiver" %}</span>
-                                </a>
-                            {% else %}
-                                <a href="{% url 'enable_user' user.id %}" class="btn btn-sm btn-outline-success mt-2 mx-1">
-                                    <i class="bi bi-check-circle"></i>
-                                    <span class="ms-1"> {% trans "Activer" %}</span>
-                                </a>
-                            {% endif %}
-                            <button type="button" class="btn btn-sm btn-outline-danger mt-2 mx-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ user.id }}">
-                                <i class="bi bi-trash3"></i>
-                                <span class="ms-1"> {% trans "Supprimer" %}</span>
-                            </button>
-                            <!-- Delete Confirmation Modal -->
-                            <div class="modal fade text-start" id="modal-{{ user.id }}" tabindex="-1" aria-labelledby="modal-{{ user.id }}-Label" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title fw-bold" id="modal-{{ user.id }}-Label">{% trans "Confirmation" %}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">                                                
-                                            <div>
-                                                {% trans "Supprimer définitivement" %} 
-                                                <span class="fw-bold text-danger ms-auto">{{ user.username }}</span><span class="fw-bold ms-2"><i class="bi bi-envelope"></i> {{ user.email }}</span> ?
-                                                <!-- <span class="text-danger small ms-auto">{% trans "Cette opération n'est pas réversible." %}</span> -->
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
-                                            <form id="deleteForm" method="post" action="{% url 'delete_user' user.id %}">
-                                                {% csrf_token %}
-                                                <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-                    {% endif %}
+                    </div>
                 </div>
             </div>
         {% empty %}

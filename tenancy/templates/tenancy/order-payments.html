@@ -1,0 +1,104 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Paiements Commande Entreprise" %}
+{% endblock title %}
+
+{% block content %}
+    {% with avatar=tenant.logo %}
+        {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
+    {% endwith %}
+    <div class="text-center mb-3">
+        <h3 class="p-2 mb-3">{% translate "Paiements Commande Entreprise" %}</h3>
+    </div>
+    <div class="list-group my-3">
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small text-muted">{% trans "Montant Commande" %}</div>
+                <div class="fw-bold">{{ order.total_amount_with_tax }}<span class="fw-light small ms-2">{{ order.order_currency }}</span></div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small text-muted">{% trans "Montant confirmé payé" %}</div>
+                <div class="fw-bold text-success">{{ order.amount_paid }}<span class="fw-light small ms-2">{{ order.order_currency }}</span></div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small text-muted">{% trans "Reste à payer ou confirmer" %}</div>
+                <div class="fw-bold text-danger">{{ order.amount_due }}<span class="fw-light small ms-2">{{ order.order_currency }}</span></div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small text-muted">{% trans "Status Commande" %}</div>
+                <div class="fw-bold">{{ order.get_status_display }}</div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small text-muted">{% trans "Numéro Commande" %}</div>
+                <div class="fw-bold">{{ order.order_number }}</div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small text-muted">{% trans "Date Commande" %}</div>
+                <div class="fw-bold">{{ order.order_date|date }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="list-group mb-3">
+        {% for payment in order.payments.all %}
+            <div class="list-group-item p-0 {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
+                <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ payment.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
+                    <div id="p-line" class="d-flex align-items-center">
+                        <i class="bi 
+                            {% if payment.status == 'pending' %}
+                                bi-hourglass-top text-warning
+                            {% elif payment.status == 'confirmed' %}
+                                bi-check-circle text-success
+                            {% else %}
+                                bi-x-circle text-danger
+                            {% endif %}
+                        fs-5"></i>
+                        <div id="p-main-data" class="w-100 d-flex justify-content-between ms-3">
+                            <div id="p-left-side">
+                                <div id="p-line-1">
+                                    <span class="fw-bold">{{ payment.amount }}</span>
+                                    <span class="fw-light text-muted small">{{ payment.payment_currency }}</span>
+                                    <span class="text-muted small ms-2"><i class="bi bi-ticket-perforated"></i></span>
+                                    <span class="fw-thin text-muted small">{{ payment.reference }}</span>
+                                </div>
+                                <div id="p-line-2">
+                                    <span class="text-muted small"><i class="bi bi-clock"></i></span>
+                                    <span class="text-muted small">{{ payment.paid_at }}</span>
+                                </div>
+                            </div>
+                            <div id="p-right-side">
+                                <span class="badge
+                                    {% if payment.status == 'pending' %}
+                                        bg-warning
+                                    {% elif payment.status == 'confirmed' %}
+                                        bg-success
+                                    {% else %}
+                                        bg-danger
+                                    {% endif %}
+                                ">{{ payment.get_status_display }}</span>
+                            </div>                                            
+                        </div>
+                    </div>
+                </a>
+                <div class="collapse p-3 pt-0" id="{{ payment.id }}">
+                    <div class="mb-3">
+                        <div>Details</div>
+                        <div id="payment-actions" class="text-end">
+                            <a href="#" class="btn btn-sm btn-outline-primary mt-2 mx-1">
+                                <i class="bi bi-send"></i>
+                                <span class="ms-1"> {% trans "Action template" %}</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="list-group-item">{% trans "Aucun Paiement trouvé" %}</div>
+        {% endfor %}
+    </div>
+
+    
+{% endblock content %}
