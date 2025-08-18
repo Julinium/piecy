@@ -573,9 +573,9 @@ def order_payments(request, order_id=None):
             
             context["order"] = passed_order
             context["payments"] = payments
-            # context["pending_payments"] = pending_payments
-            # context["confirmed_payments"] = confirmed_payments
-            # context["failed_payments"] = failed_payments
+            context["pending_payments"] = pending_payments
+            context["confirmed_payments"] = confirmed_payments
+            context["failed_payments"] = failed_payments
             # context["order_id"] = order_id
             return render(request, 'tenancy/order-payments.html', context)
         return HttpResponse(_("Commande non trouvée."), status=code)

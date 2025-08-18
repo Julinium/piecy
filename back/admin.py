@@ -45,9 +45,9 @@ class TenantAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change or not obj.created_by:
-            obj.created_by = request.user.id
+            obj.created_by = request.user
         else:
-            obj.edited_by = request.user.id
+            obj.edited_by = request.user
         super().save_model(request, obj, form, change)
 
 
@@ -86,9 +86,9 @@ class PlanAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         if not change or not obj.created_by:
-            obj.created_by = request.user.id
+            obj.created_by = request.user
         else:
-            obj.edited_by = request.user.id
+            obj.edited_by = request.user
         super().save_model(request, obj, form, change)
 
 
