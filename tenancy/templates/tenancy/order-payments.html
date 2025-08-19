@@ -14,53 +14,24 @@
         <h3 class="p-2 mb-3">{% translate "Paiements Commande Entreprise" %}</h3>
     </div>
 
-    <div class="list-group mb-3">
-        <!-- {% for failed_payment in failed_payments %}
-            {% include "tenancy/snippets/payment-line.html" with order=order %}
-        {% endfor %}
-        {% for pending_payment in pending_payments %}
-            {% include "tenancy/snippets/payment-line.html" with order=order %}
-        {% endfor %}
-        {% for confirmed_payment in confirmed_payments %}
-            {% include "tenancy/snippets/payment-line.html" with order=order %}
-        {% endfor %} -->
+    {% if order.amount_due_to_pay > 0 %}
+        <div id="user-actions" class="text-center mb-3">
+            <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-primary">
+                <i class="bi bi-coin"></i>
+                <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></span></span>
+            </a>
+        </div>
+    {% endif %}
 
+    {% include "tenancy/snippets/order-payments-summary.html" with order=order %}
+    
+
+    <div class="list-group mb-3">
         {% for payment in order.payments.all %}
             {% include "tenancy/snippets/payment-line.html" with order=order %}
         {% empty %}
             <div class="list-group-item">{% trans "Aucun Paiement trouvé" %}</div>
         {% endfor %}
-    </div>
-
-    <div class="list-group my-3 shadow">
-        <div class="list-group-item">
-            <div class="d-flex justify-content-between align-items-center border-bottom mt-2">
-                <div class="small text-muted">{% trans "Montant Commande" %}</div>
-                <div class="fw-bold text-end">{{ order.total_amount_with_tax }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom mt-2">
-                <div class="small text-muted">{% trans "Montant confirmé payé" %}</div>
-                <div class="fw-bold text-end text-success">{{ order.amount_paid_confirmed }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></div>
-            </div>
-            {% if order.amount_due > 0 %}
-                <div class="d-flex justify-content-between align-items-center border-bottom mt-2">
-                    <div class="small text-muted">{% trans "Reste à payer ou confirmer" %}</div>
-                    <div class="fw-bold text-end text-danger">{{ order.amount_due }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></div>
-                </div>
-            {% endif %}
-            <div class="d-flex justify-content-between align-items-center border-bottom mt-2">
-                <div class="small text-muted">{% trans "Status Commande" %}</div>
-                <div class="fw-bold text-end">{{ order.get_status_display }}</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom mt-2">
-                <div class="small text-muted">{% trans "Numéro Commande" %}</div>
-                <div class="text-end small">{{ order.order_number }}</div>
-            </div>
-            <div class="d-flex justify-content-between align-items-center border-bottom mt-2">
-                <div class="small text-muted">{% trans "Date Commande" %}</div>
-                <div class="text-end small">{{ order.order_date|date }}</div>
-            </div>
-        </div>
     </div>
     
 {% endblock content %}
