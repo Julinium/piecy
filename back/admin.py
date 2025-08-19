@@ -55,14 +55,6 @@ class PlanAdmin(admin.ModelAdmin):
     model = Plan
 
     list_display = ("name", "active", "monthly_price", 'header')
-    # fieldsets = (
-    #     ("Basics", {"fields": ("active", "name", "owner")}),
-    #     ("Contact", {"fields": ("email", "phone", "whatsapp", "address")}),
-    #     ("Advanced", {"fields": ("domain", "slug", "channel", "note")}),
-    #     ("History", {"fields": ('get_created_by', 'created_on', 'get_edited_by', 'edited_on')}),
-    # )
-
-    # add_fieldsets = fieldsets
 
     readonly_fields = ('created_by', 'get_created_by', 'created_on', 'edited_by', 'get_edited_by', 'edited_on')
 
@@ -95,7 +87,6 @@ class PlanAdmin(admin.ModelAdmin):
 class UserAdmin(admin.ModelAdmin):
     model = User
     list_display = ("username", "tenant", "email", "is_active", "last_login")
-    # list_display = ("username", 'tenant', "active", "email", 'last_login')
     readonly_fields = ('created_by', 'created_on', 'edited_by', 'edited_on', 'tenant', "username", "verified")
 
     fieldsets = (
@@ -116,7 +107,6 @@ class UserAdmin(admin.ModelAdmin):
     )
 
     search_fields = ("username", "email", "last_name")
-    # ordering = ("username", "tenant",)
     ordering = ('-is_active', '-tenant', 'created_on', 'last_login', 'is_tenant_admin',)
 
     formfield_overrides = {
@@ -124,8 +114,7 @@ class UserAdmin(admin.ModelAdmin):
     }
 
     def get_readonly_fields(self, request, obj=None):
-        if obj:  # Editing an existing instance
-            # return ('created_by', 'created_on', 'edited_by', 'edited_on', 'tenant', "username")
+        if obj:
             return self.readonly_fields
         return []  # No read-only fields for new instances
 
@@ -138,21 +127,16 @@ class TrialAdmin(admin.ModelAdmin):
     model = Trial
 
 
-# class SystemOrderAdmin(admin.ModelAdmin):
-#     model = SystemOrder
-
 class SystemOrderItemInline(admin.TabularInline):  # or admin.StackedInline
     model = SystemOrderItem
-    extra = 1  # how many empty forms to show
-    # autocomplete_fields = ['product']  # optional if FK to Product
-    # show_change_link = True             # optional: link to detail page
+    extra = 1
 
-@admin.register(SystemOrder)
+
 class SystemOrderAdmin(admin.ModelAdmin):
-    list_display = ("order_number", "customer", 'total_amount', "status")
+    model = SystemOrder
+    list_display = ("order_number", 'total_amount_with_tax', "customer", "status")
+    list_filter = ('status',)
     inlines = [SystemOrderItemInline]
-
-
 
 
 class SystemOrderItemAdmin(admin.ModelAdmin):
@@ -161,6 +145,19 @@ class SystemOrderItemAdmin(admin.ModelAdmin):
 
 class SystemPaymentAdmin(admin.ModelAdmin):
     model = SystemPayment
+    list_display = ('reference', 'amount', 'status', 'paid_at')
+    list_filter = ('status', 'paid_at')
+
+    actions = ['set_status_confirmed', 'set_status_pending', 'set_status_failed']
+    def set_status_confirmed(self, request, queryset):
+        queryset.update(status='confirmed')
+    set_status_confirmed.short_description = "Confirm Selected"
+    def set_status_pending(self, request, queryset):
+        queryset.update(status='pending')
+    set_status_pending.short_description = "Unconfirm Selected"
+    def set_status_failed(self, request, queryset):
+        queryset.update(status='failed')
+    set_status_failed.short_description = "Fail Selected"
 
 
 
@@ -169,6 +166,6 @@ admin.site.register(Plan, PlanAdmin)
 admin.site.register(User, UserAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Trial, TrialAdmin)
-# admin.site.register(SystemOrder, SystemOrderAdmin)
+admin.site.register(SystemOrder, SystemOrderAdmin)
 admin.site.register(SystemOrderItem, SystemOrderItemAdmin)
 admin.site.register(SystemPayment, SystemPaymentAdmin)
