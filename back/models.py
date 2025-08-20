@@ -263,10 +263,10 @@ class Plan(models.Model):
 class SystemOrder(models.Model):
 
     STATUS_CHOICES = [
-        ("pending",   _("Attente")),
-        ("partial",   _("Partiel")),
-        ("paid",      _("Payé")),
-        ("cancelled", _("Annulé")),
+        ("pending",   _("Attente Paiement")),
+        ("partial",   _("Paiement Partiel")),
+        ("paid",      _("Payée")),
+        ("cancelled", _("Annulée")),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
