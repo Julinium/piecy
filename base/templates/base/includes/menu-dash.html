@@ -2,9 +2,9 @@
 
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" id="dashDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="bi bi-bank"></i> {% translate 'Entreprise' %}
+        <i class="bi bi-gear-wide"></i>
     </a>
-    <ul class="dropdown-menu" aria-labelledby="dashDropdown">
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dashDropdown">
         <li><a class="dropdown-item" href="{% url 'tenancy_summary' %}"><i class="bi bi-speedometer2"></i> {% translate 'Dashboard' %}</a></li>
         <li><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="{% url 'tenancy_orders' %}"><i class="bi bi-cart"></i> {% translate 'Commandes' %}</a></li>

@@ -5,8 +5,12 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 <li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-        <img height="20" src="{% static 'flags/' %}{{ LANGUAGE_CODE }}.svg" alt="{{ LANGUAGE_CODE|upper }}">
+    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" 
+    role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <img 
+            style="border-radius: 50%; width: 20px; height: 20px; object-fit: cover;"
+            src="{% static 'flags/' %}{{ LANGUAGE_CODE }}.svg" 
+            alt="{{ LANGUAGE_CODE|upper }}">
     </a>
     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
         {% for code, name in LANGUAGES %}            
