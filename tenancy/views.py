@@ -399,7 +399,7 @@ def orders(request):
     if code == 200:
         context = {}
         tenant = request.user.tenant
-        s_orders = SystemOrder.objects.filter(customer=tenant)
+        s_orders = SystemOrder.objects.filter(active=True, customer=tenant)
         for o in s_orders:
             o.update_status()
         context['orders'] = s_orders
@@ -418,7 +418,7 @@ def order_payments(request, order_id=None):
             context = {}
             order_uuid = uuid.UUID(order_id, version=4)
             passed_order = SystemOrder.objects.filter(id=order_uuid).last()
-            payments = passed_order.payments.all()
+            payments = passed_order.payments.filter(active=True)
             
             context["order"] = passed_order
             context["payments"] = payments
@@ -529,16 +529,45 @@ def delete_order_payment(request, payment_id=None):
                     messages.error(request, _("Paiement confrmé non supprimable"))
                 else:
                     try:
-                        numero = passed_payment.numero
-                        passed_payment.delete()
-                        messages.success(request, _("Paiement supprimé") + f": {numero}")
+                        # numero = passed_payment.numero
+                        passed_payment.active = False
+                        passed_payment.save()
+                        messages.success(request, _("Paiement supprimé") + f": {passed_payment.numero}")
                     except:
                         messages.error(request, _("Paiement non supprimé"))
                 return redirect("tenancy_order_payments", order_id=passed_payment.order.id)
-        return HttpResponse(_("Paiement non trouvée."), status=403)
+        return HttpResponse(_("Paiement non trouvé."), status=403)
     return HttpResponse(message, status=code)
 
 
+@login_required(login_url="account_login")
+def delete_order(request, order_id=None):
+    if request.method != "POST":
+        return HttpResponse("Method not allowed", status=403)
+
+    code, message = can_admin(request)
+    if code == 200:
+        if order_id:
+            context = {}
+            order_uuid = uuid.UUID(order_id, version=4)
+            passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+            if passed_order:
+                if passed_order.order.customer != request.user.tenant:
+                    return HttpResponse(_("Erreur d'intégrité"), status=403)
+                
+                if passed_order.status == "C" or passed_order.status == "P":
+                    messages.error(request, _("Commande avec paiements non supprimable"))
+                else:
+                    try:
+                        numero = passed_order.numero
+                        passed_order.active = False
+                        passed_order.save()
+                        messages.success(request, _("Commande supprimée") + f": {passed_order.numero}")
+                    except:
+                        messages.error(request, _("Commande non supprimée"))
+                return redirect("tenancy_orders")
+        return HttpResponse(_("Commande non trouvée."), status=403)
+    return HttpResponse(message, status=code)
 
 
 

@@ -45,29 +45,33 @@
         </a>
         <div class="collapse p-3 pt-0" id="{{ payment.id }}">
             <div class="mb-3">
-                <div id="more-info" class="mb-3">
-                    <div>
-                        <span class="small text-muted">{% trans "Référence" %} : </span>
-                        <span>{{ payment.reference }}</span>
-                    </div>
-                    <div>
-                        <span class="small text-muted">{% trans "Méthode" %} : </span>
-                        <span>{{ payment.get_method_display }}</span>
-                    </div>
-                    <div>
-                        <span class="small text-muted">{% trans "Date paiement" %} : </span>
-                        <span>{{ payment.paid_at }}</span>
-                    </div>
-                    <div>
-                        <span class="small text-muted">{% trans "Notes" %} : </span>
-                        <span>{{ payment.notes }}</span>
-                    </div>
-                </div>
+
+
+                <table class="table mb-3">
+                    <tbody>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Référence" %}</td>
+                            <td class="text-start small py-1">{% if payment.reference %}{{ payment.reference }}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Méthode" %}</td>
+                            <td class="text-start small py-1">{% if payment.method %}{{ payment.get_method_display }}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Date paiement" %}</td>
+                            <td class="text-start small py-1">{% if payment.paid_at %}{{ payment.paid_at }}{% else %}-{% endif %}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Notes" %}</td>
+                            <td class="text-start small py-1">{% if payment.notes %}{{ payment.notes }}{% else %}-{% endif %}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <div id="payment-actions" class="d-flex justify-content-end">
                     <a href="{% url 'base_coming' %}" class="btn btn-sm ms-2 btn-outline-primary">
                         <i class="bi bi-printer"></i>
-                        <span class="ms-1"> {% trans "Imprimer" %}</span>
+                        <span class="ms-1"> (Coming later) {% trans "Imprimer" %}</span>
                     </a>
 
                     {% if payment.status == 'W' %}
@@ -83,7 +87,6 @@
                                 <i class="bi bi-trash-fill"></i>
                                 <span class="ms-1"> {% trans "Supprimer" %}</span>
                             </button>
-                            <!-- Delete Confirmation Modal -->
                             <div class="modal fade text-start" id="modal-{{ payment.id }}" tabindex="-1" aria-labelledby="modal-{{ payment.id }}-Label" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

@@ -22,6 +22,7 @@
             </a>
         </div>
     {% endif %}
+
     
     {% include "tenancy/snippets/order-payments-summary.html" with order=order %}
     
@@ -29,7 +30,7 @@
     <br class="mt-2">
     
     <div class="list-group mb-3">
-        {% for payment in order.payments.all %}
+        {% for payment in payments %}
             {% include "tenancy/snippets/payment-line.html" with order=order %}
         {% empty %}
             <div class="list-group-item">{% trans "Aucun Paiement trouvé" %}</div>

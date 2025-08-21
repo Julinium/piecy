@@ -314,12 +314,12 @@ class SystemOrder(models.Model):
 
     @property
     def amount_paid_confirmed(self):
-        s = self.payments.filter(status="C").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+        s = self.payments.filter(active=True, status="C").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
     def amount_paid_pending(self):
-        s = self.payments.filter(status="W").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+        s = self.payments.filter(active=True, status="W").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
@@ -330,6 +330,11 @@ class SystemOrder(models.Model):
     @property
     def amount_due_to_pay(self):
         s = self.total_amount_with_tax - self.amount_paid_confirmed - self.amount_paid_pending
+        return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+    @property
+    def amount_overpaid(self):
+        s = - self.amount_due_to_pay if self.amount_due_to_pay < 0 else 0
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     def update_status(self):

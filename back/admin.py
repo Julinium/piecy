@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django import forms
 from django.db import models
+from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
 from .models import Plan, Tenant, Subscription, Trial, SystemOrder, SystemOrderItem, SystemPayment
 
@@ -31,11 +32,11 @@ class TenantAdmin(admin.ModelAdmin):
     
     def get_created_by(self, obj):
         return self._get_username(obj.created_by)
-    get_created_by.short_description = 'Created by'
+    get_created_by.short_description = _('Created by')
 
     def get_edited_by(self, obj):
         return self._get_username(obj.edited_by)
-    get_edited_by.short_description = 'Edited by'
+    get_edited_by.short_description = _('Edited by')
 
     def _get_username(self, user_id):
         try:
@@ -134,7 +135,7 @@ class SystemOrderItemInline(admin.TabularInline):  # or admin.StackedInline
 
 class SystemOrderAdmin(admin.ModelAdmin):
     model = SystemOrder
-    list_display = ("numero", 'total_amount_with_tax', "customer", "status")
+    list_display = ("numero", 'total_amount_with_tax', 'active', "customer", "status")
     list_filter = ('status',)
     inlines = [SystemOrderItemInline]
 
@@ -145,19 +146,30 @@ class SystemOrderItemAdmin(admin.ModelAdmin):
 
 class SystemPaymentAdmin(admin.ModelAdmin):
     model = SystemPayment
-    list_display = ('numero', 'amount', 'status', 'order', 'paid_at')
-    list_filter = ('status', 'paid_at')
+    list_display = ('numero', 'amount', 'status', 'active', 'order', 'paid_at')
+    list_filter = ('active', 'status', 'paid_at')
 
-    actions = ['set_status_confirmed', 'set_status_pending', 'set_status_failed']
+    actions = ['set_status_confirmed', 'set_status_pending', 'set_active', 'set_inactive', 'set_status_failed']
+    
     def set_status_confirmed(self, request, queryset):
         queryset.update(status='C')
-    set_status_confirmed.short_description = "Confirm Selected"
+    set_status_confirmed.short_description = _("Confirm Selected")
+
     def set_status_pending(self, request, queryset):
         queryset.update(status='W')
-    set_status_pending.short_description = "Unconfirm Selected"
+    set_status_pending.short_description = _("Unconfirm Selected")
+
+    def set_active(self, request, queryset):
+        queryset.update(active=True)
+    set_active.short_description = _("Activate Selected")
+
+    def set_inactive(self, request, queryset):
+        queryset.update(active=False)
+    set_inactive .short_description = _("Deactivate Selected")
+
     def set_status_failed(self, request, queryset):
         queryset.update(status='A')
-    set_status_failed.short_description = "Fail Selected"
+    set_status_failed.short_description = _("Fail Selected")
 
 
 

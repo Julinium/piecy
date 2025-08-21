@@ -14,16 +14,26 @@
         <h3 class="p-2 mb-3">{% translate "Commandes Entreprise" %}</h3>
     </div>
 
-    <div class="list-group mb-3">
         {% for order in orders %}
-            {% include "tenancy/snippets/order-line.html" with order=order %}
+            <div class="list-group mb-3 border-start border-4
+                {% if order.status == 'W' %}
+                    border-warning
+                {% elif order.status == 'P' %}
+                    border-warning
+                {% elif order.status == 'C' %}
+                    border-success
+                {% else %}
+                    border-danger
+                {% endif %}
+                ">
+                {% include "tenancy/snippets/order-line.html" with order=order %}
+            </div>
         {% empty %}
             <div class="list-group-item small">
                 <span class="text-danger"><i class="bi bi-cone-striped"></i></span>
                 <span class="ms-1 small">{% trans "Aucune Commande trouvée" %}</span>
             </div>
         {% endfor %}
-    </div>
 
     
 {% endblock content %}

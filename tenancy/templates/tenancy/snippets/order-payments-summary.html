@@ -31,28 +31,36 @@
             </div>
         </div>
     {% endif %}
-    <div class="list-group-item">
-        <!-- <div class="d-flex justify-content-center align-items-center">
-            <div class="text-end small">
-                <span class="">{{ order.numero }}</span>
-                <span><i class="bi bi-clock"></i></span>
-                <span class="">{{ order.order_date|date }}</span>
+
+    {% if order.amount_overpaid > 0 %}
+
+        <div class="list-group-item text-bg-success">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="small">{% trans "Montant sur-payé" %}</div>
+                <div class="fw-bold text-end">{{ order.amount_overpaid }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></div>
             </div>
+        </div>
+
+
+        <!-- <div id="user-actions" class="text-center mb-3">
+            <a href="{% url 'tenancy_add_order_payment' order.id %}" class="btn btn-success">
+                <i class="bi bi-coin"></i>
+                <span class="ms-1"> {% trans "Dépayer" %} <span class="fw-bold">{{ order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></span></span>
+            </a>
         </div> -->
+    {% endif %}
+    <div class="list-group-item">
 
-
-                        <div id="p-line-2" class="list-inline text-center">
-                            <div class="list-inline-item">
-                                <span class="text-muted small"><i class="bi bi-folder2"></i></span>
-                                <span class="text-muted small">{{ order.numero }}</span>
-                            </div>
-                            <div class="list-inline-item">
-                                <span class="text-muted small"><i class="bi bi-clock"></i></span>
-                                <span class="text-muted small">{{ order.order_date|date }}</span>
-                            </div>
-                        </div>
-
-
+        <div id="p-line-2" class="list-inline text-center">
+            <div class="list-inline-item">
+                <span class="text-muted small"><i class="bi bi-folder2"></i></span>
+                <span class="text-muted small">{{ order.numero }}</span>
+            </div>
+            <div class="list-inline-item">
+                <span class="text-muted small"><i class="bi bi-clock"></i></span>
+                <span class="text-muted small">{{ order.order_date|date }}</span>
+            </div>
+        </div>
 
     </div>
 </div>
