@@ -2,7 +2,6 @@ import uuid
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.utils.translation import gettext as _
-# from datetime import date, datetime, timedelta, timezone
 from datetime import timedelta, datetime
 from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
@@ -10,12 +9,11 @@ from django.contrib import messages
 from django.db.models import Case, When, Value, BooleanField
 
 from decimal import Decimal, ROUND_HALF_UP
-
 from django.http import HttpResponse
 
 from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur, Tenant, SystemOrder
 
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, SystemPaymentForm
 
 
 SUB_DAYS_WARNING = 90
@@ -262,7 +260,7 @@ def add_user(request):
             form = CustomUserCreationForm()
             context["form"] = form
 
-            return render(request, "tenancy/add_user.html", context)
+            return render(request, "tenancy/add-user.html", context)
 
         messages.error(request, _("Vous ne pouvez pas ajouter un Utilisateur."))
         return redirect('tenancy_summary')
@@ -392,6 +390,156 @@ def adminize_user(request, user_id=None):
 
         return HttpResponse(_("Utilisateur non trouvé."), status=code)
     return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def orders(request):
+
+    code, message = can_admin(request)
+    if code == 200:
+        context = {}
+        tenant = request.user.tenant
+        s_orders = SystemOrder.objects.filter(customer=tenant)
+        for o in s_orders:
+            o.update_status()
+        context['orders'] = s_orders
+
+        return render(request, 'tenancy/orders.html', context)
+
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def order_payments(request, order_id=None):
+
+    code, message = can_admin(request)
+    if code == 200:
+        if order_id:
+            context = {}
+            order_uuid = uuid.UUID(order_id, version=4)
+            passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+            payments = passed_order.payments.all()
+            
+            context["order"] = passed_order
+            context["payments"] = payments
+            return render(request, 'tenancy/order-payments.html', context)
+        return HttpResponse(_("Commande non trouvée."), status=code)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def add_order_payment(request, order_id=None):
+
+    code, message = can_admin(request)
+    if code == 200:
+        if order_id:
+            context = {}
+            order_uuid = uuid.UUID(order_id, version=4)
+            passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+
+            if passed_order:
+                if request.method == "POST":
+                    form = SystemPaymentForm(request.POST)
+                    if form.is_valid():
+                        payment = form.save(commit=False)
+                        # if payment.pk is None:
+                        payment.order = passed_order
+                        payment.created_by = request.user
+                        payment.status = 'W'
+                        payment.save()
+                        messages.success(request, _("Paiement ajouté") + " : " + payment.numero)
+                    else:
+                        messages.error(request, _("Données invalides. Paiement non ajouté."))
+                    
+                    return redirect("tenancy_order_payments", order_id=order_id)
+
+                initial_data = {
+                    'amount': passed_order.amount_due_to_pay,
+                    'paid_at': now(),
+                    'notes': _("Commande") + f" {passed_order.numero}",
+                    }
+                form = SystemPaymentForm(initial=initial_data)
+                context["form"] = form
+                context["order"] = passed_order
+
+                return render(request, "tenancy/order-payment-form.html", context)
+            
+        return HttpResponse(_("Commande non trouvée."), status=404)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def edit_order_payment(request, payment_id=None):
+
+    code, message = can_admin(request)
+    if code == 200:
+        if payment_id:
+            context = {}
+            # order_uuid = uuid.UUID(order_id, version=4)
+            # passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+            payment_uuid = uuid.UUID(payment_id, version=4)
+            passed_payment = SystemPayment.objects.filter(id=payment_uuid).last()
+
+            if passed_payment:
+                if request.method == "POST":
+                    form = SystemPaymentForm(request.POST, instance=passed_payment)
+                    if form.is_valid():
+                        payment = form.save(commit=False)
+                        # if payment.pk is None:
+                        # payment.order = passed_payment.order
+                        payment.edited_by = request.user
+                        payment.status = 'W'
+                        payment.save()
+                        messages.success(request, _("Paiement modifié") + " : " + payment.numero)
+                    else:
+                        messages.error(request, _("Données invalides. Paiement non modifié."))
+                    
+                    return redirect("tenancy_order_payments", order_id=passed_payment.order.id)
+
+                # initial_data = {
+                #     'amount': passed_order.amount_due_to_pay,
+                #     'paid_at': now(),
+                #     'notes': _("Commande") + f" {passed_order.numero}",
+                #     }
+                form = SystemPaymentForm(instance=passed_payment)
+                context["form"] = form
+                context["order"] = passed_payment.order
+
+                return render(request, "tenancy/order-payment-form.html", context)
+            
+        return HttpResponse(_("Commande non trouvée."), status=404)
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def delete_order_payment(request, payment_id=None):
+    if request.method != "POST":
+        return HttpResponse("Method not allowed", status=403)
+
+    code, message = can_admin(request)
+    if code == 200:
+        if payment_id:
+            context = {}
+            payment_uuid = uuid.UUID(payment_id, version=4)
+            passed_payment = SystemPayment.objects.filter(id=payment_uuid).last()
+            if passed_payment:
+                if passed_payment.order.customer != request.user.tenant:
+                    return HttpResponse(_("Erreur d'intégrité"), status=403)
+                if passed_payment.status == "C":
+                    messages.error(request, _("Paiement confrmé non supprimable"))
+                else:
+                    try:
+                        numero = passed_payment.numero
+                        passed_payment.delete()
+                        messages.success(request, _("Paiement supprimé") + f": {numero}")
+                    except:
+                        messages.error(request, _("Paiement non supprimé"))
+                return redirect("tenancy_order_payments", order_id=passed_payment.order.id)
+        return HttpResponse(_("Paiement non trouvée."), status=403)
+    return HttpResponse(message, status=code)
+
+
+
 
 
 @login_required(login_url="account_login")
@@ -539,58 +687,12 @@ def subscribe(request):
 
 
 @login_required(login_url="account_login")
-def orders(request):
-
-    code, message = can_admin(request)
-    if code == 200:
-        context = {}
-        tenant = request.user.tenant
-        s_orders = SystemOrder.objects.filter(customer=tenant).order_by('-order_date')
-        context['orders'] = sorted(s_orders, key=lambda order: order.amount_due)
-        for o in s_orders:
-            o.update_status()
-        # context['orders'] = s_orders
-
-        return render(request, 'tenancy/orders.html', context)
-
-    return HttpResponse(message, status=code)
-
-
-@login_required(login_url="account_login")
-def order_payments(request, order_id=None):
-
-    code, message = can_admin(request)
-    if code == 200:
-        if order_id:
-            context = {}
-            order_uuid = uuid.UUID(order_id, version=4)
-            passed_order = SystemOrder.objects.filter(id=order_uuid).last()
-            # payments = passed_order.payments.all()
-            pending_payments = passed_order.payments.filter(status='pending')
-            confirmed_payments = passed_order.payments.filter(status='confirmed')
-            failed_payments = passed_order.payments.filter(status='failed')
-            payments = failed_payments | pending_payments | confirmed_payments
-            
-            context["order"] = passed_order
-            context["payments"] = payments
-            context["pending_payments"] = pending_payments
-            context["confirmed_payments"] = confirmed_payments
-            context["failed_payments"] = failed_payments
-            # context["order_id"] = order_id
-            return render(request, 'tenancy/order-payments.html', context)
-        return HttpResponse(_("Commande non trouvée."), status=code)
-    return HttpResponse(message, status=code)
-
-
-@login_required(login_url="account_login")
 def order_create(request):
 
     code, message = can_admin(request)
     if code == 200:
         context = {}
         tenant = request.user.tenant
-        # s_orders = SystemOrder.objects.filter(customer=tenant)
-        # context['orders'] = s_orders
 
         return render(request, 'tenancy/orders.html', context)
 
@@ -697,7 +799,6 @@ def order(request):
         return redirect("tenancy_summary")
 
     return HttpResponse(message, status=code)
-
 
 
 @login_required(login_url="account_login")

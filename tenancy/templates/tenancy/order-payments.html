@@ -16,7 +16,7 @@
 
     {% if order.amount_due_to_pay > 0 %}
         <div id="user-actions" class="text-center mb-3">
-            <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-primary">
+            <a href="{% url 'tenancy_add_order_payment' order.id %}" class="btn btn-primary">
                 <i class="bi bi-coin"></i>
                 <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></span></span>
             </a>

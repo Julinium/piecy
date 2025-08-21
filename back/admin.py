@@ -134,7 +134,7 @@ class SystemOrderItemInline(admin.TabularInline):  # or admin.StackedInline
 
 class SystemOrderAdmin(admin.ModelAdmin):
     model = SystemOrder
-    list_display = ("order_number", 'total_amount_with_tax', "customer", "status")
+    list_display = ("numero", 'total_amount_with_tax', "customer", "status")
     list_filter = ('status',)
     inlines = [SystemOrderItemInline]
 
@@ -145,18 +145,18 @@ class SystemOrderItemAdmin(admin.ModelAdmin):
 
 class SystemPaymentAdmin(admin.ModelAdmin):
     model = SystemPayment
-    list_display = ('reference', 'amount', 'status', 'paid_at')
+    list_display = ('numero', 'amount', 'status', 'order', 'paid_at')
     list_filter = ('status', 'paid_at')
 
     actions = ['set_status_confirmed', 'set_status_pending', 'set_status_failed']
     def set_status_confirmed(self, request, queryset):
-        queryset.update(status='confirmed')
+        queryset.update(status='C')
     set_status_confirmed.short_description = "Confirm Selected"
     def set_status_pending(self, request, queryset):
-        queryset.update(status='pending')
+        queryset.update(status='W')
     set_status_pending.short_description = "Unconfirm Selected"
     def set_status_failed(self, request, queryset):
-        queryset.update(status='failed')
+        queryset.update(status='A')
     set_status_failed.short_description = "Fail Selected"
 
 

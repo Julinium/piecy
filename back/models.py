@@ -4,6 +4,8 @@ from django.utils import timezone
 from decimal import Decimal, ROUND_HALF_UP
 from django.utils.translation import gettext as _
 from django_currentuser.middleware import get_current_user
+from django.utils.timezone import now
+from datetime import date
 
 from decimal import Decimal, ROUND_HALF_UP
 
@@ -148,7 +150,7 @@ class Subscription(models.Model):
     date_to = models.DateField(blank=True, null=True)
     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
-    commande = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
+    order = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
@@ -263,22 +265,23 @@ class Plan(models.Model):
 class SystemOrder(models.Model):
 
     STATUS_CHOICES = [
-        ("pending",   _("Attente Paiement")),
-        ("partial",   _("Paiement Partiel")),
-        ("paid",      _("Payée")),
-        ("cancelled", _("Annulée")),
+        ("W", _("Attente Paiement")),
+        ("P", _("Paiement Partiel")),
+        ("C", _("Payée")),
+        ("A", _("Annulée")),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
     customer = models.ForeignKey(
         Tenant,
         on_delete=models.CASCADE,
         related_name="orders"
     )
 
-    order_number  = models.CharField(max_length=20, unique=True)
+    numero = models.CharField(max_length=20, unique=True, editable=False)
     order_date    = models.DateTimeField(blank=True, null=True, auto_now_add=True)
-    status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    status        = models.CharField(max_length=20, choices=STATUS_CHOICES, default="W")
     order_currency = models.CharField(max_length=8, default="MAD")
     notes          = models.TextField(blank=True)
     
@@ -289,9 +292,10 @@ class SystemOrder(models.Model):
 
     class Meta:
         db_table = 's_order'
+        ordering = ['-status', '-created_on']
 
     def __str__(self):
-        return f"Order #{self.order_number} - {self.customer.name}"
+        return self.numero # return f"{self.numero} - {self.customer.name} #{self.total_amount_with_tax}"
 
     @property
     def total_amount(self):
@@ -310,12 +314,12 @@ class SystemOrder(models.Model):
 
     @property
     def amount_paid_confirmed(self):
-        s = self.payments.filter(status="confirmed").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+        s = self.payments.filter(status="C").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
     def amount_paid_pending(self):
-        s = self.payments.filter(status="pending").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
+        s = self.payments.filter(status="W").aggregate(total=models.Sum("amount"))["total"] or Decimal("0.00")
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
     @property
@@ -328,24 +332,40 @@ class SystemOrder(models.Model):
         s = self.total_amount_with_tax - self.amount_paid_confirmed - self.amount_paid_pending
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
-    # @property
-    # def amount_due_to_confirm(self):
-    #     s = self.total_amount_with_tax - self.amount_paid_confirmed - self.amount_paid_pending
-    #     return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
     def update_status(self):
         paid = self.amount_paid_confirmed
         if paid == 0:
-            self.status = "pending"
+            if self.amount_paid_pending > 0:
+                self.status = "P"
+            else:
+                self.status = "W"
         elif paid < self.total_amount_with_tax:
-            self.status = "partial"
+            self.status = "P"
         elif paid >= self.total_amount_with_tax:
-            self.status = "paid"
+            self.status = "C"
         self.save()
+    
+    def save(self, *args, **kwargs):
+        if not self.numero:
+            today = timezone.now().date()
+            year_str = today.strftime('%y')
+            jan_first = date(today.year, 1, 1)
+            days_elapsed = (today - jan_first).days + 1 
+            date_str = f'{year_str}{days_elapsed:03d}'
+            last_order = SystemOrder.objects.filter(created_on__year=today.year).order_by('created_on').last()
+    
+            if last_order:
+                last_seq = int(last_order.numero[-6:])
+                new_seq = last_seq + 1
+            else:
+                new_seq = 1
+            self.numero = f'SO{date_str}{new_seq:06d}'
+        super().save(*args, **kwargs)
 
 
 class SystemOrderItem(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
     order = models.ForeignKey(
         SystemOrder,
         on_delete=models.CASCADE,
@@ -388,25 +408,30 @@ class SystemPayment(models.Model):
     ]
 
     STATUS_CHOICES = [
-        ("pending",   _("Attente")),
-        ("confirmed", _("Confirmé")),
-        ("failed",    _("Echoué")),
+        # ("pending",   _("Attente Confirmation")),
+        # ("confirmed", _("Confirmé")),
+        # ("failed",    _("Echoué")),
+        ("W", _("Attente Confirmation")),
+        ("C", _("Confirmé")),
+        ("A", _("Echoué")),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active = models.BooleanField(blank=True, null=True, default=True)
     order = models.ForeignKey(
         SystemOrder,
+        verbose_name=_("Commande"),
         on_delete=models.CASCADE,
         related_name="payments"
     )
 
-    reference = models.CharField(max_length=20, unique=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    method = models.CharField(max_length=20, choices=METHOD_CHOICES)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    transaction_reference = models.CharField(max_length=100, blank=True)
-    paid_at = models.DateTimeField(null=True, blank=True)
-    notes = models.TextField(blank=True)
+    numero = models.CharField(verbose_name=_("Numéro"), max_length=20, unique=True, editable=False)
+    amount = models.DecimalField(verbose_name=_("Montant"), max_digits=10, decimal_places=2)
+    method = models.CharField(verbose_name=_("Méthode"), max_length=20, choices=METHOD_CHOICES, default="bank_transfer")
+    status = models.CharField(verbose_name=_("Status"), max_length=20, choices=STATUS_CHOICES, default="W")
+    reference = models.CharField(verbose_name=_("Référence"), max_length=100, blank=True)
+    paid_at = models.DateTimeField(verbose_name=_("Payé le"), null=True, blank=True, default=timezone.now)
+    notes = models.TextField(verbose_name=_("Notes"), blank=True)
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_payments", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_payments", blank=True, null=True)
@@ -414,17 +439,34 @@ class SystemPayment(models.Model):
 
     class Meta:
         db_table = 's_payment'
-        ordering = ['order', '-paid_at']
+        ordering = ['-status', 'order', '-paid_at']
 
     def __str__(self):
-        return f"{self.reference}-#{self.amount}#-{self.order.order_number}-{self.status}"
+        return f"{self.numero}-#{self.amount}#-{self.status}-{self.order.numero}"
 
     def confirm(self):
         """Mark the payment as confirmed and update order status."""
-        self.status = "confirmed"
+        self.status = "C"
         self.paid_at = timezone.now()
         self.save()
         self.order.update_status()
+
+    def save(self, *args, **kwargs):
+        if not self.numero:
+            today = timezone.now().date()   
+            year_str = today.strftime('%y')
+            jan_first = date(today.year, 1, 1)
+            days_elapsed = (today - jan_first).days + 1
+            date_str = f'{year_str}{days_elapsed:03d}'
+            last_payment = SystemPayment.objects.filter(created_on__year=today.year).order_by('created_on').last()
+    
+            if last_payment:
+                last_seq = int(last_payment.numero[-6:])
+                new_seq = last_seq + 1
+            else:
+                new_seq = 1
+            self.numero = f'SP{date_str}{new_seq:06d}'
+        super().save(*args, **kwargs)
 
 
 class Registre(models.Model):

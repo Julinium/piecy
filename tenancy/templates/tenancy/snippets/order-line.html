@@ -3,12 +3,12 @@
 <div class="list-group-item p-0 {% if not forloop.counter|divisibleby:2 %} bg-light{% endif %}">
     <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ order.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
         <div class="d-flex align-items-center">
-            <i class="bi 
-                {% if order.status == 'pending' %}
+            <i class="bi
+                {% if order.status == 'W' %}
                     bi-hourglass-bottom text-warning
-                {% elif order.status == 'partial' %}
-                    bi-exclamation-circle text-warning
-                {% elif order.status == 'paid' %}
+                {% elif order.status == 'P' %}
+                    bi-diamond-half text-warning
+                {% elif order.status == 'C' %}
                     bi-check-circle text-success
                 {% else %}
                     bi-x-circle text-danger
@@ -18,11 +18,11 @@
                 <div class="text-start">
                     <div>
                         <span class="badge
-                            {% if order.status == 'pending' %}
+                            {% if order.status == 'W' %}
                                 bg-warning
-                            {% elif order.status == 'partial' %}
+                            {% elif order.status == 'P' %}
                                 bg-warning
-                            {% elif order.status == 'paid' %}
+                            {% elif order.status == 'C' %}
                                 bg-success
                             {% else %}
                                 bg-danger
@@ -33,7 +33,7 @@
                     </div>
                     <div class="text-muted small">
                         <span><i class="bi bi-folder2"></i></span>
-                        <span class="small">{{ order.order_number }}</span>
+                        <span class="small">{{ order.numero }}</span>
                         <span class="ms-1"><i class="bi bi-clock"></i></span>
                         <span class="small text-muted">{{ order.order_date.date }}</span>
                     </div>
@@ -47,7 +47,7 @@
         {% if order.amount_due > 0 %}
             <div class="d-flex align-items-center">
                 {% if order.amount_due_to_pay > 0 %}
-                    <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-primary me-2 mt-2">
+                    <a href="{% url 'tenancy_add_order_payment' order.id %}" class="btn btn-primary me-2 mt-2">
                         <i class="bi bi-coin"></i>
                         <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></span></span>
                     </a>

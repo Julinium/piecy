@@ -5,9 +5,9 @@
         <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ payment.id }}" role="button" aria-expanded="true" aria-controls="{{ user.id }}">
             <div id="p-line" class="d-flex align-items-center">
                 <i class="bi 
-                    {% if payment.status == 'pending' %}
+                    {% if payment.status == 'W' %}
                         bi-hourglass-top text-warning
-                    {% elif payment.status == 'confirmed' %}
+                    {% elif payment.status == 'C' %}
                         bi-check-circle text-success
                     {% else %}
                         bi-x-circle text-danger
@@ -21,15 +21,15 @@
                                 <span class="fw-light text-muted small">{{ order.order_currency }}</span>
                             </div>
                             <div class="list-inline-item">
-                                <span class="badge{% if payment.status == 'pending' %} bg-warning{% elif payment.status == 'confirmed' %} bg-success{% else %} bg-danger{% endif %}">
+                                <span class="badge{% if payment.status == 'W' %} bg-warning{% elif payment.status == 'C' %} bg-success{% else %} bg-danger{% endif %}">
                                     {{ payment.get_status_display }}
                                 </span>
                             </div>
                         </div>
-                        <div id="p-line-2" class="list-inline">
+                        <div id="p-line-2" class="list-inline text-start">
                             <div class="list-inline-item">
                                 <span class="text-muted small"><i class="bi bi-folder2"></i></span>
-                                <span class="text-muted small">{{ payment.reference }}</span>
+                                <span class="text-muted small">{{ payment.numero }}</span>
                             </div>
                             <div class="list-inline-item">
                                 <span class="text-muted small"><i class="bi bi-clock"></i></span>
@@ -45,19 +45,82 @@
         </a>
         <div class="collapse p-3 pt-0" id="{{ payment.id }}">
             <div class="mb-3">
-                <div>Details</div>
-                <div>...</div>
-                <div id="payment-actions" class="text-end mt-2">
-                    <a href="#" class="btn btn-sm btn-outline-primary mt-2 mx-1">
-                        <i class="bi bi-send"></i>
-                        <span class="ms-1"> {% trans "Action template" %}</span>
+                <div id="more-info" class="mb-3">
+                    <div>
+                        <span class="small text-muted">{% trans "Référence" %} : </span>
+                        <span>{{ payment.reference }}</span>
+                    </div>
+                    <div>
+                        <span class="small text-muted">{% trans "Méthode" %} : </span>
+                        <span>{{ payment.get_method_display }}</span>
+                    </div>
+                    <div>
+                        <span class="small text-muted">{% trans "Date paiement" %} : </span>
+                        <span>{{ payment.paid_at }}</span>
+                    </div>
+                    <div>
+                        <span class="small text-muted">{% trans "Notes" %} : </span>
+                        <span>{{ payment.notes }}</span>
+                    </div>
+                </div>
+
+                <div id="payment-actions" class="d-flex justify-content-end">
+                    <a href="{% url 'base_coming' %}" class="btn btn-sm ms-2 btn-outline-primary">
+                        <i class="bi bi-printer"></i>
+                        <span class="ms-1"> {% trans "Imprimer" %}</span>
                     </a>
-                    {% if payment.status == 'failed' %}
-                        <a href="#" class="btn btn-sm btn-danger mt-2 mx-1">
-                            <i class="bi bi-send"></i>
-                            <span class="ms-1"> {% trans "Supprimer" %}</span>
+
+                    {% if payment.status == 'W' %}
+                        <a href="{% url 'tenancy_edit_order_payment' payment.id %}" class="btn btn-sm ms-2 btn-outline-primary">
+                            <i class="bi bi-pencil-square"></i>
+                            <span class="ms-1"> {% trans "Modifier" %}</span>
                         </a>
                     {% endif %}
+
+                    {% if payment.status != 'C' %}
+                        <div id="paymentDeletion">
+                            <button type="button" class="btn btn-sm ms-2 btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#modal-{{ payment.id }}">
+                                <i class="bi bi-trash-fill"></i>
+                                <span class="ms-1"> {% trans "Supprimer" %}</span>
+                            </button>
+                            <!-- Delete Confirmation Modal -->
+                            <div class="modal fade text-start" id="modal-{{ payment.id }}" tabindex="-1" aria-labelledby="modal-{{ payment.id }}-Label" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title fw-bold" id="modal-{{ payment.id }}-Label">{% trans "Confirmation" %}</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div>
+                                                {% trans "Supprimer définitivement ce Paiement" %}:
+                                            </div>
+                                            <div class="clearfix">
+                                                <span class="text-muted small float-start">{% trans "Numéro" %}</span>
+                                                <span class="fw-bold float-end">{{ payment.numero }}</span>
+                                            </div>
+                                            <div class="clearfix">
+                                                <span class="text-muted small float-start">{% trans "Montant" %}</span>
+                                                <span class="fw-bold float-end">{{ payment.amount }}</span>
+                                            </div>
+                                            <div class="clearfix">
+                                                <span class="text-muted small float-start">{% trans "Status" %}</span>
+                                                <span class="fw-bold float-end">{{ payment.get_status_display }}</span>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
+                                            <form id="deleteForm" method="POST" action="{% url 'tenancy_delete_order_payment' payment.id %}">
+                                                {% csrf_token %}
+                                                <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                 </div>
             </div>
         </div>

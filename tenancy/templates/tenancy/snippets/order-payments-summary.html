@@ -32,24 +32,27 @@
         </div>
     {% endif %}
     <div class="list-group-item">
-        <div class="d-flex justify-content-center align-items-center">
+        <!-- <div class="d-flex justify-content-center align-items-center">
             <div class="text-end small">
-                <span class="">{{ order.order_number }}</span>
+                <span class="">{{ order.numero }}</span>
                 <span><i class="bi bi-clock"></i></span>
                 <span class="">{{ order.order_date|date }}</span>
             </div>
-        </div>
+        </div> -->
+
+
+                        <div id="p-line-2" class="list-inline text-center">
+                            <div class="list-inline-item">
+                                <span class="text-muted small"><i class="bi bi-folder2"></i></span>
+                                <span class="text-muted small">{{ order.numero }}</span>
+                            </div>
+                            <div class="list-inline-item">
+                                <span class="text-muted small"><i class="bi bi-clock"></i></span>
+                                <span class="text-muted small">{{ order.order_date|date }}</span>
+                            </div>
+                        </div>
+
+
+
     </div>
-    <!-- <div class="list-group-item">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="small text-muted">{% trans "Numéro Commande" %}</div>
-            <div class="text-end small">{{ order.order_number }}</div>
-        </div>
-    </div>
-    <div class="list-group-item">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="small text-muted">{% trans "Date Commande" %}</div>
-            <div class="text-end small">{{ order.order_date|date }}</div>
-        </div>
-    </div> -->
 </div>
