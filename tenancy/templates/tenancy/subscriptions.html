@@ -1,0 +1,31 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Abonnements Entreprise" %}
+{% endblock title %}
+
+{% block content %}
+    {% with avatar=tenant.logo %}
+        {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
+    {% endwith %}
+    <div class="text-center mb-3">
+        <h3 class="p-2 mb-3">{% translate "Abonnements Entreprise" %}</h3>
+    </div>
+
+        {% for subscription in page_obj %}
+            <div class="list-group mb-3 border-start border-4 border-secondary">
+                {% include "tenancy/snippets/subscription-line.html" with subscription=subscription %}
+            </div>
+        {% empty %}
+            <div class="list-group-item small">
+                <span class="text-danger"><i class="bi bi-cone-striped"></i></span>
+                <span class="ms-1 small">{% trans "Aucun Abonnement trouvée" %}</span>
+            </div>
+        {% endfor %}
+
+        {% include 'base/pagination.html' %}
+
+    
+{% endblock content %}

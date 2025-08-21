@@ -29,12 +29,22 @@
 
     <br class="mt-2">
     
-    <div class="list-group mb-3">
-        {% for payment in payments %}
+    {% for payment in page_obj %}
+        <div class="list-group mb-3 shadow-sm border-start border-4
+                {% if payment.status == 'W' %}
+                    border-warning
+                {% elif payment.status == 'C' %}
+                    border-success
+                {% else %}
+                    border-danger
+                {% endif %}
+                ">
             {% include "tenancy/snippets/payment-line.html" with order=order %}
-        {% empty %}
-            <div class="list-group-item">{% trans "Aucun Paiement trouvé" %}</div>
-        {% endfor %}
-    </div>
+        </div>
+    {% empty %}
+        <div class="list-group-item">{% trans "Aucun Paiement trouvé" %}</div>
+    {% endfor %}
+
+    {% include 'base/pagination.html' %}
     
 {% endblock content %}

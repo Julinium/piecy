@@ -7,6 +7,7 @@ from dateutil.relativedelta import relativedelta
 from django.utils.timezone import now
 from django.contrib import messages
 from django.db.models import Case, When, Value, BooleanField
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from decimal import Decimal, ROUND_HALF_UP
 from django.http import HttpResponse
@@ -19,6 +20,7 @@ from .forms import CustomUserCreationForm, SystemPaymentForm
 SUB_DAYS_WARNING = 90
 SUB_DAYS_DANGER = 30
 SUBS_HISTORY_COUNT = 10
+ITEMS_PER_PAGE = 10
 
 TRIAL_DAYS = 30
 
@@ -397,13 +399,23 @@ def orders(request):
 
     code, message = can_admin(request)
     if code == 200:
+
         context = {}
         tenant = request.user.tenant
         s_orders = SystemOrder.objects.filter(active=True, customer=tenant)
         for o in s_orders:
             o.update_status()
-        context['orders'] = s_orders
-
+        
+        paginator = Paginator(s_orders, ITEMS_PER_PAGE)
+        page_number = request.GET.get('page') 
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+        
+        context['page_obj'] = page_obj
         return render(request, 'tenancy/orders.html', context)
 
     return HttpResponse(message, status=code)
@@ -421,14 +433,26 @@ def order_payments(request, order_id=None):
             payments = passed_order.payments.filter(active=True)
             
             context["order"] = passed_order
-            context["payments"] = payments
+            # context["payments"] = payments
+
+            paginator = Paginator(payments, ITEMS_PER_PAGE)
+            page_number = request.GET.get('page') 
+            try:
+                page_obj = paginator.page(page_number)
+            except PageNotAnInteger:
+                page_obj = paginator.page(1)
+            except EmptyPage:
+                page_obj = paginator.page(paginator.num_pages)
+            
+            context['page_obj'] = page_obj
             return render(request, 'tenancy/order-payments.html', context)
+            
         return HttpResponse(_("Commande non trouvée."), status=code)
     return HttpResponse(message, status=code)
 
 
 @login_required(login_url="account_login")
-def add_order_payment(request, order_id=None):
+def add_order_payment(request, order_id=None, redirect_url=None):
 
     code, message = can_admin(request)
     if code == 200:
@@ -442,7 +466,6 @@ def add_order_payment(request, order_id=None):
                     form = SystemPaymentForm(request.POST)
                     if form.is_valid():
                         payment = form.save(commit=False)
-                        # if payment.pk is None:
                         payment.order = passed_order
                         payment.created_by = request.user
                         payment.status = 'W'
@@ -450,7 +473,6 @@ def add_order_payment(request, order_id=None):
                         messages.success(request, _("Paiement ajouté") + " : " + payment.numero)
                     else:
                         messages.error(request, _("Données invalides. Paiement non ajouté."))
-                    
                     return redirect("tenancy_order_payments", order_id=order_id)
 
                 initial_data = {
@@ -567,6 +589,32 @@ def delete_order(request, order_id=None):
                 return redirect("tenancy_orders")
         return HttpResponse(_("Commande non trouvée."), status=403)
     return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def subscriptions(request):
+
+    code, message = can_admin(request)
+    if code == 200:
+
+        context = {}
+        tenant = request.user.tenant
+        subs = Subscription.objects.filter(active=True, tenant=tenant)
+        
+        paginator = Paginator(subs, ITEMS_PER_PAGE)
+        page_number = request.GET.get('page') 
+        try:
+            page_obj = paginator.page(page_number)
+        except PageNotAnInteger:
+            page_obj = paginator.page(1)
+        except EmptyPage:
+            page_obj = paginator.page(paginator.num_pages)
+
+        context['page_obj'] = page_obj
+        return render(request, 'tenancy/subscriptions.html', context)
+
+    return HttpResponse(message, status=code)
+
 
 
 

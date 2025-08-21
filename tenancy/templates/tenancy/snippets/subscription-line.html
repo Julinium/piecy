@@ -1,43 +1,41 @@
 {% load i18n %}
+<!-- plan, order, tenant, date_fm, date_to -->
 
 <div class="list-group-item p-0 shadow">
-    <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ order.id }}" role="button" aria-expanded="true" aria-controls="{{ order.id }}">
+    <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ subscription.id }}" role="button" aria-expanded="true" aria-controls="{{ subscription.id }}">
         <div class="d-flex align-items-center">
-            <i class="bi {% if order.status == 'W' %} bi-hourglass-bottom text-secondary{% elif order.status == 'P' %} bi-diamond-half text-warning{% elif order.status == 'C' %} bi-check-circle text-success{% else %} bi-x-circle text-danger {% endif %} fs-3"></i>
+            <i class="bi {% if subscription.order.status == 'W' %} bi-hourglass-bottom text-secondary{% elif subscription.order.status == 'P' %} bi-diamond-half text-warning{% elif subscription.order.status == 'C' %} bi-check-circle text-success{% else %} bi-x-circle text-danger {% endif %} fs-3"></i>
             <div class="w-100 d-flex justify-content-between ms-3">
                 <div class="text-start">
                     <div>
-                        <span class="badge {% if order.status == 'W' %} bg-secondary{% elif order.status == 'P' %} bg-warning{% elif order.status == 'C' %} bg-success{% else %} bg-danger{% endif %} py-2">{{ order.get_status_display }}</span>
-                        <span class="fw-bold fs-5 ms-2">{{ order.total_amount_with_tax }}</span>
-                        <span class="small text-muted">{{ order.order_currency }}</span>
-                        {% if order.amount_overpaid > 0 %}
-                            <span class="badge bg-warning py-2">{% trans "Surpayé" %}: {{ order.amount_overpaid }}<span class="small fw-light">{{ order.order_currency }}</span></span>
-                        {% endif %}
+                        <span class="badge {% if subscription.order.status == 'W' %} bg-secondary{% elif subscription.order.status == 'P' %} bg-warning{% elif subscription.order.status == 'C' %} bg-success{% else %} bg-danger{% endif %} py-2">{{ subscription.order.get_status_display }}</span>
+                        <span class="fw-bold fs-5 ms-2">{{ subscription.plan.name }}</span>
+                        <span class="small text-muted">{{ subscription.order.get_status_display }}</span>
                     </div>
                     <div class="text-muted small">
                         <span><i class="bi bi-folder2"></i></span>
-                        <span class="small">{{ order.numero }}</span>
+                        <span class="small">{{ subscription.numero }}</span>
                         <span class="ms-1"><i class="bi bi-clock"></i></span>
-                        <span class="small text-muted">{{ order.order_date.date }}</span>
+                        <span class="small text-muted">{{ subscription.order_date.date }}</span>
                     </div>
                 </div>
                 <div class="px-2">...</div>
             </div>
         </div>
     </a>
-    <div class="collapse" id="{{ order.id }}">
+    <div class="collapse" id="{{ subscription.id }}">
         
         <div id="order-actions-top" class="d-flex align-items-center my-1 px-3">
 
-            {% if order.amount_due_to_pay > 0 %}
-                <a href="{% url 'tenancy_add_order_payment' order.id %}" class="btn btn-primary me-2 my-1">
+            {% if subscription.amount_due_to_pay > 0 %}
+                <a href="{% url 'tenancy_add_order_payment' subscription.id %}" class="btn btn-primary me-2 my-1">
                     <i class="bi bi-coin"></i>
-                    <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></span></span>
+                    <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ subscription.amount_due_to_pay }}<span class="fw-light small ms-1">{{ subscription.order_currency }}</span></span></span>
                 </a>
             {% endif %}
 
-            {% if order.has_active_payments %}
-                <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-outline-primary me-2 my-1">
+            {% if subscription.has_active_payments %}
+                <a href="{% url 'tenancy_order_payments' subscription.id %}" class="btn btn-outline-primary me-2 my-1">
                     <i class="bi bi-cash-coin"></i>
                     <span class="ms-1"> {% trans "Paiements" %}</span>
                 </a>
@@ -48,17 +46,17 @@
                 <span class="ms-1"> {% trans "Imprimer" %}</span>
             </a>
 
-            {% if not order.has_active_payments %}
+            {% if not subscription.has_active_payments %}
                 <div id="orderDeletion">
-                    <button type="button" class="btn btn-outline-danger me-2 my-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ order.id }}">
+                    <button type="button" class="btn btn-outline-danger me-2 my-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ subscription.id }}">
                         <i class="bi bi-trash-fill"></i>
                         <span class="ms-1"> {% trans "Supprimer" %}</span>
                     </button>
-                    <div class="modal fade text-start" id="modal-{{ order.id }}" tabindex="-1" aria-labelledby="modal-{{ order.id }}-Label" aria-hidden="true">
+                    <div class="modal fade text-start" id="modal-{{ subscription.id }}" tabindex="-1" aria-labelledby="modal-{{ subscription.id }}-Label" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title fw-bold" id="modal-{{ order.id }}-Label">{% trans "Confirmation" %}</h5>
+                                    <h5 class="modal-title fw-bold" id="modal-{{ subscription.id }}-Label">{% trans "Confirmation" %}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
@@ -67,20 +65,20 @@
                                     </div>
                                     <div class="clearfix">
                                         <span class="text-muted small float-start">{% trans "Numéro" %}</span>
-                                        <span class="fw-bold float-end">{{ order.numero }}</span>
+                                        <span class="fw-bold float-end">{{ subscription.numero }}</span>
                                     </div>
                                     <div class="clearfix">
                                         <span class="text-muted small float-start">{% trans "Montant" %}</span>
-                                        <span class="fw-bold float-end">{{ order.total_amount_with_tax }}</span>
+                                        <span class="fw-bold float-end">{{ subscription.total_amount_with_tax }}</span>
                                     </div>
                                     <div class="clearfix">
                                         <span class="text-muted small float-start">{% trans "Status" %}</span>
-                                        <span class="fw-bold float-end">{{ order.get_status_display }}</span>
+                                        <span class="fw-bold float-end">{{ subscription.get_status_display }}</span>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
-                                    <form id="deleteForm" method="POST" action="{% url 'tenancy_delete_order' order.id %}">
+                                    <form id="deleteForm" method="POST" action="{% url 'base_coming' %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
                                     </form>
@@ -100,23 +98,23 @@
 
         
         <div id="order-details">
-            {% for item in order.items.all %}
+            {% for item in subscription.items.all %}
                 <div class="list-group-item border-start-0 border-end-0">
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="fw-bold">{{ item.quantity }} x {{ item.product_name }}</div>
-                        <div class="fw-bold">{{ item.total_price_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                        <div class="fw-bold">{{ item.total_price_with_tax }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center ps-4">
                         <div class="fw-light small">{% trans "Prix unitaire" %}</div>
-                        <div class="fw-light small">{{ item.unit_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                        <div class="fw-light small">{{ item.unit_price }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center ps-4">
                         <div class="fw-light small">{% trans "Prix sans taxes" %}</div>
-                        <div class="fw-light small">{{ item.total_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                        <div class="fw-light small">{{ item.total_price }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center ps-4">
                         <div class="fw-light small">{% trans "Taxes" %} {{ item.tax_rate }}%</div>
-                        <div class="fw-light small">{{ item.tax_amount }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                        <div class="fw-light small">{{ item.tax_amount }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                     </div>
                 </div>
             {% empty %}
@@ -125,18 +123,18 @@
                     <span class="ms-1 small">{% trans "Aucun élément trouvé" %}</span>
                 </div>
             {% endfor %}
-            <div class="list-group-item {% if order.status == 'W' %} bg-secondary{% elif order.status == 'P' %} bg-warning{% elif order.status == 'C' %} bg-success{% else %} bg-danger{% endif %}-subtle border-start-0 border-end-0">
+            <div class="list-group-item {% if subscription.order.status == 'W' %} bg-secondary{% elif subscription.order.status == 'P' %} bg-warning{% elif subscription.order.status == 'C' %} bg-success{% else %} bg-danger{% endif %}-subtle border-start-0 border-end-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="fw-bold fs-5">{% trans "Total TTC" %}</div>
-                    <div class="fw-bold fs-5">{{ order.total_amount_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                    <div class="fw-bold fs-5">{{ subscription.total_amount_with_tax }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center ps-4">
                     <div class="fw-light small">{% trans "Total HT" %}</div>
-                    <div class="fw-light small">{{ order.total_amount }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                    <div class="fw-light small">{{ subscription.total_amount }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center ps-4">
                     <div class="fw-light small">{% trans "Total taxes" %}</div>
-                    <div class="fw-light small">{{ order.total_tax_amount }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                    <div class="fw-light small">{{ subscription.total_tax_amount }} <span class="fw-light text-muted small">{{ subscription.order_currency }}</span></div>
                 </div>
             </div>
         </div>

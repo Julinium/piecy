@@ -44,7 +44,7 @@
             </div>
         </a>
         <div class="collapse p-3 pt-0" id="{{ payment.id }}">
-            <div class="mb-3">
+            <div class="">
 
 
                 <table class="table mb-3">
@@ -68,14 +68,14 @@
                     </tbody>
                 </table>
 
-                <div id="payment-actions" class="d-flex justify-content-end">
-                    <a href="{% url 'base_coming' %}" class="btn btn-sm ms-2 btn-outline-primary">
+                <div id="payment-actions" class="d-flex justify-content-start">
+                    <a href="#" class="btn btn-sm me-2 btn-outline-primary disabled">
                         <i class="bi bi-printer"></i>
-                        <span class="ms-1"> (Coming later) {% trans "Imprimer" %}</span>
+                        <span class="ms-1">{% trans "Imprimer" %}</span>
                     </a>
 
                     {% if payment.status == 'W' %}
-                        <a href="{% url 'tenancy_edit_order_payment' payment.id %}" class="btn btn-sm ms-2 btn-outline-primary">
+                        <a href="{% url 'tenancy_edit_order_payment' payment.id %}" class="btn btn-sm me-2 btn-outline-primary">
                             <i class="bi bi-pencil-square"></i>
                             <span class="ms-1"> {% trans "Modifier" %}</span>
                         </a>
@@ -83,7 +83,7 @@
 
                     {% if payment.status != 'C' %}
                         <div id="paymentDeletion">
-                            <button type="button" class="btn btn-sm ms-2 btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#modal-{{ payment.id }}">
+                            <button type="button" class="btn btn-sm me-2 btn-outline-danger"  data-bs-toggle="modal" data-bs-target="#modal-{{ payment.id }}">
                                 <i class="bi bi-trash-fill"></i>
                                 <span class="ms-1"> {% trans "Supprimer" %}</span>
                             </button>

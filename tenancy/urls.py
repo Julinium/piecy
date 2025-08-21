@@ -26,6 +26,7 @@ urlpatterns = [
     path('order-payments/<str:order_id>/add', views.add_order_payment, name='tenancy_add_order_payment'),
     path('order-payment/<str:payment_id>/delete', views.delete_order_payment, name='tenancy_delete_order_payment'),
     path('order-payment/<str:payment_id>/edit', views.edit_order_payment, name='tenancy_edit_order_payment'),
+    path('subscriptions/', views.subscriptions, name='tenancy_subscriptions'),
 
     # path('edit_order_payment/<str:payment_id>', views.order_payment_form, name='tenancy_edit_order_payment'),
 ]

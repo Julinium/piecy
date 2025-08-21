@@ -14,10 +14,10 @@
         <h3 class="p-2 mb-3">{% translate "Commandes Entreprise" %}</h3>
     </div>
 
-        {% for order in orders %}
+        {% for order in page_obj %}
             <div class="list-group mb-3 border-start border-4
                 {% if order.status == 'W' %}
-                    border-warning
+                    border-secondary
                 {% elif order.status == 'P' %}
                     border-warning
                 {% elif order.status == 'C' %}
@@ -34,6 +34,8 @@
                 <span class="ms-1 small">{% trans "Aucune Commande trouvée" %}</span>
             </div>
         {% endfor %}
+
+        {% include 'base/pagination.html' %}
 
     
 {% endblock content %}

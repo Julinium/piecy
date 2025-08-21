@@ -148,6 +148,7 @@ class Subscription(models.Model):
     active = models.BooleanField(blank=True, null=True, default=True)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
+    # date_to_effective = models.DateField(blank=True, null=True)
     tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
     order = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
