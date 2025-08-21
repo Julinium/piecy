@@ -554,8 +554,7 @@ def delete_order(request, order_id=None):
             if passed_order:
                 if passed_order.customer != request.user.tenant:
                     return HttpResponse(_("Erreur d'intégrité"), status=403)
-                
-                if passed_order.status == "C" or passed_order.status == "P":
+                if passed_order.has_active_payments or passed_order.status == "C" or passed_order.status == "P":
                     messages.error(request, _("Commande avec paiements non supprimable"))
                 else:
                     try:
