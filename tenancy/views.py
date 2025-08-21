@@ -552,7 +552,7 @@ def delete_order(request, order_id=None):
             order_uuid = uuid.UUID(order_id, version=4)
             passed_order = SystemOrder.objects.filter(id=order_uuid).last()
             if passed_order:
-                if passed_order.order.customer != request.user.tenant:
+                if passed_order.customer != request.user.tenant:
                     return HttpResponse(_("Erreur d'intégrité"), status=403)
                 
                 if passed_order.status == "C" or passed_order.status == "P":

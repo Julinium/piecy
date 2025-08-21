@@ -337,6 +337,10 @@ class SystemOrder(models.Model):
         s = - self.amount_due_to_pay if self.amount_due_to_pay < 0 else 0
         return Decimal(s).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
 
+    @property
+    def has_active_payments(self):
+        return len(self.payments.filter(active=True)) > 0
+
     def update_status(self):
         paid = self.amount_paid_confirmed
         if paid == 0:
