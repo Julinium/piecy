@@ -393,7 +393,6 @@ def adminize_user(request, user_id=None):
         return HttpResponse(_("Utilisateur non trouvé."), status=code)
     return HttpResponse(message, status=code)
 
-
 @login_required(login_url="account_login")
 def orders(request):
 
@@ -599,10 +598,10 @@ def subscriptions(request):
 
         context = {}
         tenant = request.user.tenant
-        subs = Subscription.objects.filter(active=True, tenant=tenant)
+        subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         
         paginator = Paginator(subs, ITEMS_PER_PAGE)
-        page_number = request.GET.get('page') 
+        page_number = request.GET.get('page')
         try:
             page_obj = paginator.page(page_number)
         except PageNotAnInteger:

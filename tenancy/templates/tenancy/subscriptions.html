@@ -15,8 +15,8 @@
     </div>
 
         {% for subscription in page_obj %}
-            <div class="list-group mb-3 border-start border-4 border-secondary">
-                {% include "tenancy/snippets/subscription-line.html" with subscription=subscription %}
+            <div class="list-group mb-3 border-start border-4 border-{{ subscription.teint }}">
+                {% include "tenancy/snippets/subscription-line.html" with sub=subscription order=subscription.order %}
             </div>
         {% empty %}
             <div class="list-group-item small">

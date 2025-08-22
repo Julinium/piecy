@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="list-group-item p-0 shadow">
+<div class="list-group-item p-0 shadow-sm">
     <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ order.id }}" role="button" aria-expanded="true" aria-controls="{{ order.id }}">
         <div class="d-flex align-items-center">
             <i class="bi {% if order.status == 'W' %} bi-hourglass-bottom text-secondary{% elif order.status == 'P' %} bi-diamond-half text-warning{% elif order.status == 'C' %} bi-check-circle text-success{% else %} bi-x-circle text-danger {% endif %} fs-3"></i>

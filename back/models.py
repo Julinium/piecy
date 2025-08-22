@@ -163,6 +163,61 @@ class Subscription(models.Model):
 
     def __str__(self):
         return f'{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
+    
+    @property
+    def days_span(self):
+        delta = self.date_to - self.date_fm
+        return 1 + delta.days
+    
+    @property
+    def progress_percent(self, date=now().date()):
+        delta = self.date_fm - date
+        if delta.days > 0:
+            return 100
+        if self.days_span == 0:
+            return 0
+        delta = self.date_to - date
+        pp = max(0, min(100, 100 * delta.days/self.days_span))
+
+        return int(pp)
+
+        # return Decimal(pp).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        # return max(100, min(0, delta.days/self.days_span))
+    
+    @property
+    def days_to_end(self, date=now().date()):
+        delta = self.date_to - date
+        return delta.days
+    
+    @property
+    def status(self, date=now().date()):
+        if not self.order:
+            return _("Brouillon")
+        if not self.order.active:
+            return _("Désactivé")
+        delta = self.date_fm - date
+        if delta.days > 0:
+            return _("Future")
+        delta = self.date_to - date
+        if delta.days >= 0:
+            return _("Courant")
+        else:
+            return _("Expiré")
+    
+    @property
+    def teint(self, date=now().date()):
+        if not self.order:
+            return "danger"
+        if not self.order.active:
+            return "danger"
+        delta = self.date_fm - date
+        if delta.days > 0:
+            return "warning"
+        delta = self.date_to - date
+        if delta.days >= 0:
+            return "success"
+        else:
+            return "secondary"
 
 
 class Plan(models.Model):

@@ -20,3 +20,4 @@ def add_class(field, css):
 @register.filter
 def attr(obj, attr_name):
     return getattr(obj, attr_name, '')
+
