@@ -601,6 +601,8 @@ def subscriptions(request):
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         for sub in subs:
             sub.update_status()
+        running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
+        current_subscription  = running_subscriptions.last()
         
         paginator = Paginator(subs, ITEMS_PER_PAGE)
         page_number = request.GET.get('page')
@@ -612,6 +614,7 @@ def subscriptions(request):
             page_obj = paginator.page(paginator.num_pages)
 
         context['page_obj'] = page_obj
+        context['rub'] = current_subscription
         return render(request, 'tenancy/subscriptions.html', context)
 
     return HttpResponse(message, status=code)

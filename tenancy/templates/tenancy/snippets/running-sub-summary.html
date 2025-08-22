@@ -1,0 +1,61 @@
+{% load i18n %}
+
+{% if rub %}
+    <div class="card mb-4 shadow shadow bg-{{ rub.teint }}-subtle">
+        <div class="card-header fw-bold text-bg-{{ rub.teint }} text-center">
+            {{ rub.plan.name }}
+        </div>
+        <div class="card-body bg-{{ styling_tint }}-subtle">
+            <div class="mb-3">
+                <div class="hstack gap-2 border-bottom border-secondary">
+                    <div class="small fw-light">{% trans "Plan de l'abonnement" %}</div>
+                    <div class="fw-bold ms-auto text-end">{{ rub.plan.name }}</div>
+                </div>
+                <div class="hstack gap-2 border-bottom border-secondary">
+                    <div class="small fw-light">{% trans "Fin de l'abonnement" %}</div>
+                    <div class="fw-bold ms-auto text-end">{{ rub.date_to }}</div>
+                </div>
+            </div>
+
+            <div class="my-3">
+                <div class="progress bg-danger" role="progressbar" aria-valuenow="{{ rub.progress_percent }}" aria-valuemin="0" aria-valuemax="100" style="height: 4px;">
+                    <div class="progress-bar bg-success" style="width: {{ rub.progress_percent }}%;"></div>
+                </div>
+            </div>
+
+            {% if not current_subscription.payment %}
+                <ul class="list-group mb-3">
+                    <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non trouvé !" %}</li>
+                </ul>
+            {% else %}
+                {% if not current_subscription.payment.verified %}
+                    <ul class="list-group mb-3">
+                        <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non confirmé !" %}</li>
+                    </ul>
+                {% endif %}
+            {% endif %}
+            <div class="text-center">
+                {% if not current_subscription.payment %}
+                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-primary">{% trans "Ajouter Paiement" %}</a>
+                {% else %}
+                    {% if current_subscription.payment.verified %}
+                        <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
+                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
+                    {% endif %}
+                {% endif %}
+                <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Nous Contacter" %}</a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="card mb-4 shadow shadow bg-danger-subtle">
+        <div class="card-header fw-bold text-bg-danger text-center">
+            {% trans "Pas d'Abonnement Actif" %}
+        </div>
+        <div class="card-body bg-danger-subtle">
+            <div class="mb-3">
+                {% trans "Merci de souscrire à un abonnement." %}
+            </div>
+        </div>
+     </div>
+{% endif %}

@@ -6,7 +6,6 @@ from django.utils.translation import gettext as _
 from django_currentuser.middleware import get_current_user
 from django.utils.timezone import now
 from datetime import date
-
 from decimal import Decimal, ROUND_HALF_UP
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
@@ -182,18 +181,23 @@ class Subscription(models.Model):
         return 1 + delta.days
 
     @property
+    def days_run(self):
+        """ Number of elapsed days from start date to d_date."""
+
+        d_date=now().date()
+        delta = self.date_to - d_date
+        if delta.days <= 0:
+            return self.days_span
+        delta = d_date - self.date_fm
+        if delta.days <= 0:
+            return 0        
+        return delta.days
+
+    @property
     def progress_percent(self):
         """ Percentage of remaining days (from d_date to end date) divided by total days span."""
 
-        d_date=now().date()
-        delta = self.date_fm - d_date
-        if delta.days > 0:
-            return 100
-        if self.days_span == 0:
-            return 0
-        delta = self.date_to - d_date
-        pp = max(0, min(100, 100 * delta.days/self.days_span))
-        return int(pp)
+        return 100 - int(max(0, min(100, 100 * self.days_run/self.days_span)))
 
     @property
     def days_to_end(self):
@@ -207,22 +211,40 @@ class Subscription(models.Model):
     def usable(self):
         """ Whether subscription can be used or not."""
 
+        is_running = self.days_run >= 0 and self.days_run <= self.days_span
+        if not is_running:
+            return False
+
+        max_free = max(15, int(self.days_span/10))
+        small_progress = self.days_run <= max_free
+
+        if not self.order:
+            return small_progress
+        if not self.order.active:
+            return False
+        if self.order.status == "A":
+            return False
+        if self.order.status == "C":
+            return True
+        return small_progress
+
+    @property
+    def teint(self):
+        """ Return a string indicating the right color to use in bootstrap styling."""
+
         d_date=now().date()
-        valid = False
-        if self.order:
-            if not self.order.active:
-                self.status = "9-cancelled"
-            else:
-                delta = self.date_fm - d_date
-                if delta.days > 0:
-                    self.status = "2-future"
-                else:
-                    delta = self.date_to - d_date
-                    if delta.days >= 0:
-                        self.status = "1-running"
-                    else:
-                        self.status = "5-expired"
-        return valid
+        if not self.order:
+            return "secondary"
+        if not self.order.active:
+            return "danger"
+        delta = self.date_fm - d_date
+        if delta.days > 0:
+            return "warning"
+        delta = self.date_to - d_date
+        if delta.days >= 0:
+            return "success"
+        else:
+            return "secondary"
 
     def update_status(self):
         """ Updates the status field."""
@@ -243,24 +265,6 @@ class Subscription(models.Model):
                     else:
                         self.status = "5-expired"
         self.save()
-    
-    @property
-    def teint(self):
-        """ Return a string indicating the right color to use in bootstrap styling."""
-
-        d_date=now().date()
-        if not self.order:
-            return "danger"
-        if not self.order.active:
-            return "danger"
-        delta = self.date_fm - d_date
-        if delta.days > 0:
-            return "warning"
-        delta = self.date_to - d_date
-        if delta.days >= 0:
-            return "success"
-        else:
-            return "secondary"
 
 
 class Plan(models.Model):
@@ -452,7 +456,7 @@ class SystemOrder(models.Model):
         elif paid >= self.total_amount_with_tax:
             self.status = "C"
         self.save()
-    
+
     def save(self, *args, **kwargs):
         if not self.numero:
             today = timezone.now().date()
@@ -461,7 +465,7 @@ class SystemOrder(models.Model):
             days_elapsed = (today - jan_first).days + 1 
             date_str = f'{year_str}{days_elapsed:03d}'
             last_order = SystemOrder.objects.filter(created_on__year=today.year).order_by('created_on').last()
-    
+
             if last_order:
                 last_seq = int(last_order.numero[-6:])
                 new_seq = last_seq + 1
@@ -540,6 +544,7 @@ class SystemPayment(models.Model):
     reference = models.CharField(verbose_name=_("Référence"), max_length=100, blank=True)
     paid_at = models.DateTimeField(verbose_name=_("Payé le"), null=True, blank=True, default=timezone.now)
     notes = models.TextField(verbose_name=_("Notes"), blank=True)
+
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_payments", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
     edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_payments", blank=True, null=True)

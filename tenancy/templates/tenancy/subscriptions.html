@@ -13,19 +13,22 @@
     <div class="text-center mb-3">
         <h3 class="p-2 mb-3">{% translate "Abonnements Entreprise" %}</h3>
     </div>
+    <div id="sub-status" class="mb-3">
+        {% include "tenancy/snippets/running-sub-summary.html" with rub=rub %}
+    </div>
 
-        {% for subscription in page_obj %}
-            <div class="list-group mb-3 border-start border-4 border-{{ subscription.teint }}">
-                {% include "tenancy/snippets/subscription-line.html" with sub=subscription order=subscription.order %}
-            </div>
-        {% empty %}
-            <div class="list-group-item small">
-                <span class="text-danger"><i class="bi bi-cone-striped"></i></span>
-                <span class="ms-1 small">{% trans "Aucun Abonnement trouvée" %}</span>
-            </div>
-        {% endfor %}
+    {% for subscription in page_obj %}
+        <div class="list-group mb-3 border-start border-4 border-{{ subscription.teint }}">
+            {% include "tenancy/snippets/subscription-line.html" with sub=subscription order=subscription.order %}
+        </div>
+    {% empty %}
+        <div class="list-group-item small">
+            <span class="text-danger"><i class="bi bi-cone-striped"></i></span>
+            <span class="ms-1 small">{% trans "Aucun Abonnement trouvée" %}</span>
+        </div>
+    {% endfor %}
 
-        {% include 'base/pagination.html' %}
+    {% include 'base/pagination.html' %}
 
     
 {% endblock content %}

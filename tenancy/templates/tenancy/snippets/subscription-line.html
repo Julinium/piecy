@@ -15,7 +15,6 @@
                         <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
                         {% if sub.days_to_end >= 0 %}
                             {% if sub.status != "2-future" %}
-                                
                                 <span class="badge bg-{{ sub.teint }} py-2"><span class="me-1"><i class="bi bi-hourglass-bottom"></i></span>{{ sub.days_to_end }} {% trans "Jours" %}</span>
                             {% endif %}
                         {% endif %}
