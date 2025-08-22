@@ -167,67 +167,96 @@ class Subscription(models.Model):
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
+        """ Meta class"""
         db_table = 'subscription'
+        ordering = ['-active', 'status', 'date_to']
 
     def __str__(self):
         return f'{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
-    
+
     @property
     def days_span(self):
+        """ Days between end and start dates."""
+
         delta = self.date_to - self.date_fm
         return 1 + delta.days
-    
+
     @property
-    def progress_percent(self, date=now().date()):
-        delta = self.date_fm - date
+    def progress_percent(self):
+        """ Percentage of remaining days (from d_date to end date) divided by total days span."""
+
+        d_date=now().date()
+        delta = self.date_fm - d_date
         if delta.days > 0:
             return 100
         if self.days_span == 0:
             return 0
-        delta = self.date_to - date
+        delta = self.date_to - d_date
         pp = max(0, min(100, 100 * delta.days/self.days_span))
-
         return int(pp)
 
-        # return Decimal(pp).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-        # return max(100, min(0, delta.days/self.days_span))
-    
     @property
-    def days_to_end(self, date=now().date()):
-        delta = self.date_to - date
+    def days_to_end(self):
+        """ Number of days from d_date to end date, maxed by total days span."""
+
+        d_date=now().date()
+        delta = self.date_to - d_date
         return min(delta.days, self.days_span)
 
-    # @property
-    def update_status(self, date=now().date()):
+    @property
+    def usable(self):
+        """ Whether subscription can be used or not."""
+
+        d_date=now().date()
+        valid = False
+        if self.order:
+            if not self.order.active:
+                self.status = "9-cancelled"
+            else:
+                delta = self.date_fm - d_date
+                if delta.days > 0:
+                    self.status = "2-future"
+                else:
+                    delta = self.date_to - d_date
+                    if delta.days >= 0:
+                        self.status = "1-running"
+                    else:
+                        self.status = "5-expired"
+        return valid
+
+    def update_status(self):
+        """ Updates the status field."""
+
+        d_date=now().date()
         self.status = "0-draft"
         if self.order:
             if not self.order.active:
                 self.status = "9-cancelled"
             else:
-                delta = self.date_fm - date
+                delta = self.date_fm - d_date
                 if delta.days > 0:
                     self.status = "2-future"
                 else:
-                    delta = self.date_to - date
+                    delta = self.date_to - d_date
                     if delta.days >= 0:
                         self.status = "1-running"
                     else:
                         self.status = "5-expired"
         self.save()
     
-    # def save(self, *args, **kwargs):
-    #     super().save(self, *args, **kwargs)
-    
     @property
-    def teint(self, date=now().date()):
+    def teint(self):
+        """ Return a string indicating the right color to use in bootstrap styling."""
+
+        d_date=now().date()
         if not self.order:
             return "danger"
         if not self.order.active:
             return "danger"
-        delta = self.date_fm - date
+        delta = self.date_fm - d_date
         if delta.days > 0:
             return "warning"
-        delta = self.date_to - date
+        delta = self.date_to - d_date
         if delta.days >= 0:
             return "success"
         else:
