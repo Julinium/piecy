@@ -599,6 +599,8 @@ def subscriptions(request):
         context = {}
         tenant = request.user.tenant
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
+        for sub in subs:
+            sub.update_status()
         
         paginator = Paginator(subs, ITEMS_PER_PAGE)
         page_number = request.GET.get('page')

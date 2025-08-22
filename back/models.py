@@ -144,14 +144,22 @@ class Trial(models.Model):
 
 
 class Subscription(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active = models.BooleanField(blank=True, null=True, default=True)
+    STATUS_CHOICES = [
+        ("0-draft", _("Brouillon")),
+        ("1-running", _("Courant")),
+        ("2-future", _("À venir")),
+        ("5-expired", _("Expiré")),
+        ("9-cancelled", _("Annulé")),
+    ]
+
+    id  = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active  = models.BooleanField(blank=True, null=True, default=True)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
-    # date_to_effective = models.DateField(blank=True, null=True)
-    tenant = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
-    plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
-    order = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
+    status  = models.CharField(max_length=20, choices=STATUS_CHOICES, default="0-draft")
+    tenant  = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
+    plan    = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
+    order   = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
 
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
@@ -187,22 +195,28 @@ class Subscription(models.Model):
     @property
     def days_to_end(self, date=now().date()):
         delta = self.date_to - date
-        return delta.days
+        return min(delta.days, self.days_span)
+
+    # @property
+    def update_status(self, date=now().date()):
+        self.status = "0-draft"
+        if self.order:
+            if not self.order.active:
+                self.status = "9-cancelled"
+            else:
+                delta = self.date_fm - date
+                if delta.days > 0:
+                    self.status = "2-future"
+                else:
+                    delta = self.date_to - date
+                    if delta.days >= 0:
+                        self.status = "1-running"
+                    else:
+                        self.status = "5-expired"
+        self.save()
     
-    @property
-    def status(self, date=now().date()):
-        if not self.order:
-            return _("Brouillon")
-        if not self.order.active:
-            return _("Désactivé")
-        delta = self.date_fm - date
-        if delta.days > 0:
-            return _("Future")
-        delta = self.date_to - date
-        if delta.days >= 0:
-            return _("Courant")
-        else:
-            return _("Expiré")
+    # def save(self, *args, **kwargs):
+    #     super().save(self, *args, **kwargs)
     
     @property
     def teint(self, date=now().date()):

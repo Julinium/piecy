@@ -7,27 +7,41 @@
             {% if order %}
                 <i class="bi {% if order.status == 'W' %} bi-hourglass-bottom{% elif order.status == 'P' %} bi-diamond-half{% elif order.status == 'C' %} bi-check-circle{% else %} bi-x-circle {% endif %} text-{{ sub.teint }} fs-3"></i>
             {% else %}
-                <i class="bi bi-dash-circle-dotted text-{{ sub.teint }} fs-3"></i>
+                <i class="bi bi-plus-circle-dotted text-{{ sub.teint }} fs-3"></i>
             {% endif %}
             <div class="w-100 d-flex justify-content-between ms-3">
                 <div class="text-start">
                     <div>
-                        <span class="badge bg-{{ sub.teint }} py-2">{{ sub.status }}</span>
+                        <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
                         {% if sub.days_to_end >= 0 %}
-                            <span class="badge bg-{{ sub.teint }} py-2">{{ sub.days_to_end }} {% trans "Jours" %}</span>
+                            {% if sub.status != "2-future" %}
+                                
+                                <span class="badge bg-{{ sub.teint }} py-2"><span class="me-1"><i class="bi bi-hourglass-bottom"></i></span>{{ sub.days_to_end }} {% trans "Jours" %}</span>
+                            {% endif %}
                         {% endif %}
-                        <span class="fw-bold fs-5 ms-2">{% trans "Plan" %}: {{ sub.plan.name }}</span>
+                        <span class="fs-5 ms-2">
+                            <!-- <span class="fw-light small">{% trans "Plan" %}</span> -->
+                            <span class="fw-bold">{{ sub.plan.name }}</span>
+                            <span class="fw-bold">{{ sub.days_span }}</span>
+                            <span class="fw-light small">{% trans "Jours" %}</span>
+                        </span>
                     </div>
-                    <div class="text-muted small">
+                    <div class="text-muted small mt-1">
                         <span><i class="bi bi-calendar-range"></i></span>
                         <span class="small">{{ sub.date_fm }}</span>
                         <span class=""><i class="bi bi-dash-lg"></i></span>
                         <span class="small text-muted">{{ sub.date_to }}</span>
                     </div>
                 </div>
-                <div class="px-2">...</div>
+                <div class="ps-2">...</div>
             </div>
         </div>
+        {% if sub.status == "1-running" or sub.status == "0-draft" %}
+            <div class="progress bg-danger mt-2" role="progressbar" aria-valuenow="{{ sub.progress_percent }}" aria-valuemin="0" aria-valuemax="100" style="height: 4px;">
+                <div class="progress-bar bg-success" style="width: {{ sub.progress_percent }}%;"></div>
+            </div>
+        {% endif %}
+
     </a>
 
     <div class="collapse" id="{{ sub.id }}">
@@ -145,8 +159,5 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="progress" role="progressbar" aria-valuenow="{{ sub.progress_percent }}" aria-valuemin="0" aria-valuemax="100" style="height: 4px;">
-        <div class="progress-bar" style="width: {{ sub.progress_percent }}%;"></div>
     </div>
 </div>
