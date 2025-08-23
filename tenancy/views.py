@@ -421,6 +421,30 @@ def orders(request):
 
 
 @login_required(login_url="account_login")
+def order_details(request, order_id=None):
+    # if request.method != "POST":
+    #     return HttpResponse("Method not allowed", status=403)
+
+    code, message = can_admin(request)
+    if code == 200:
+        if order_id:
+            context = {}
+            order_uuid = uuid.UUID(order_id, version=4)
+            passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+            if passed_order:
+                if passed_order.customer != request.user.tenant:
+                    return HttpResponse(_("Erreur d'intégrité"), status=403)
+                context["order"] = passed_order
+                context["tenant"] = request.user.tenant
+            return render(request, 'tenancy/order-details.html', context)
+        return HttpResponse(_("Commande non trouvée."), status=403)
+    return HttpResponse(message, status=code)
+
+
+
+
+
+@login_required(login_url="account_login")
 def order_payments(request, order_id=None):
 
     code, message = can_admin(request)

@@ -1,0 +1,73 @@
+{% load i18n %}
+
+<div id="order-actions-top" class="d-flex align-items-center mt-1 mb-2 px-3">
+    {% if details %}
+        <div class="list-inline-item">
+            <a href="{% url 'tenancy_order_details' order.id %}" class="btn btn-outline-primary my-1">
+                <i class="bi bi-cash-coin"></i>
+                <span class="ms-1"> {% trans "Détails" %}</span>
+            </a>
+        </div>
+    {% endif %}
+    {% if order.amount_due_to_pay > 0 %}
+        <a href="{% url 'tenancy_add_order_payment' order.id %}" class="btn btn-primary me-2 my-1">
+            <i class="bi bi-coin"></i>
+            <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ order.order_currency }}</span></span></span>
+        </a>
+    {% endif %}
+
+    {% if order.has_active_payments %}
+        <a href="{% url 'tenancy_order_payments' order.id %}" class="btn btn-outline-primary me-2 my-1">
+            <i class="bi bi-cash-coin"></i>
+            <span class="ms-1"> {% trans "Paiements" %}</span>
+        </a>
+    {% endif %}
+
+    <a href="#" class="btn btn-outline-primary me-2 my-1 disabled">
+        <i class="bi bi-printer"></i>
+        <span class="ms-1"> {% trans "Imprimer" %}</span>
+    </a>
+
+    {% if not order.has_active_payments %}
+        <div id="orderDeletion">
+            <button type="button" class="btn btn-outline-danger me-2 my-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ order.id }}">
+                <i class="bi bi-trash-fill"></i>
+                <span class="ms-1"> {% trans "Supprimer" %}</span>
+            </button>
+            <div class="modal fade text-start" id="modal-{{ order.id }}" tabindex="-1" aria-labelledby="modal-{{ order.id }}-Label" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="modal-{{ order.id }}-Label">{% trans "Confirmation" %}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div>
+                                {% trans "Supprimer définitivement cete Commande" %}:
+                            </div>
+                            <div class="clearfix">
+                                <span class="text-muted small float-start">{% trans "Numéro" %}</span>
+                                <span class="fw-bold float-end">{{ order.numero }}</span>
+                            </div>
+                            <div class="clearfix">
+                                <span class="text-muted small float-start">{% trans "Montant" %}</span>
+                                <span class="fw-bold float-end">{{ order.total_amount_with_tax }}</span>
+                            </div>
+                            <div class="clearfix">
+                                <span class="text-muted small float-start">{% trans "Status" %}</span>
+                                <span class="fw-bold float-end">{{ order.get_status_display }}</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{% trans "Annuler" %}</button>
+                            <form id="deleteForm" method="POST" action="{% url 'tenancy_delete_order' order.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">{% trans "Supprimer" %}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>

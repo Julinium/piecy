@@ -22,6 +22,7 @@ urlpatterns = [
     # tenancy_orders #
     path('orders/', views.orders, name='tenancy_orders'),
     path('orders/<str:order_id>/delete', views.delete_order, name='tenancy_delete_order'),
+    path('orders/<str:order_id>/details', views.order_details, name='tenancy_order_details'),
     path('order-payments/<str:order_id>', views.order_payments, name='tenancy_order_payments'),
     path('order-payments/<str:order_id>/add', views.add_order_payment, name='tenancy_add_order_payment'),
     path('order-payment/<str:payment_id>/delete', views.delete_order_payment, name='tenancy_delete_order_payment'),

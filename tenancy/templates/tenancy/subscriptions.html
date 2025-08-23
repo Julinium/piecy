@@ -16,7 +16,7 @@
     <div id="sub-status" class="mb-3">
         {% include "tenancy/snippets/running-sub-summary.html" with rub=rub %}
     </div>
-
+    <br class="mt-3">
     {% for subscription in page_obj %}
         <div class="list-group mb-3 border-start border-4 border-{{ subscription.teint }}">
             {% include "tenancy/snippets/subscription-line.html" with sub=subscription order=subscription.order %}

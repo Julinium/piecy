@@ -234,7 +234,7 @@ class Subscription(models.Model):
 
         d_date=now().date()
         if not self.order:
-            return "secondary"
+            return "warning"
         if not self.order.active:
             return "danger"
         delta = self.date_fm - d_date
