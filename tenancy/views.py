@@ -26,6 +26,14 @@ TRIAL_DAYS = 30
 
 today = now().date()
 
+strapus = {
+    "X": "secondary",
+    "W": "warning",
+    "P": "info",
+    "C": "success",
+    "A": "danger",
+    }
+
 
 def can_admin(request) -> tuple[int, str]:
     """
@@ -399,7 +407,9 @@ def orders(request):
     code, message = can_admin(request)
     if code == 200:
 
-        context = {}
+        context = {
+            "strapus": strapus,
+            }
         tenant = request.user.tenant
         s_orders = SystemOrder.objects.filter(active=True, customer=tenant)
         for o in s_orders:
@@ -422,13 +432,13 @@ def orders(request):
 
 @login_required(login_url="account_login")
 def order_details(request, order_id=None):
-    # if request.method != "POST":
-    #     return HttpResponse("Method not allowed", status=403)
 
     code, message = can_admin(request)
     if code == 200:
         if order_id:
-            context = {}
+            context = {
+                "strapus": strapus,
+                }
             order_uuid = uuid.UUID(order_id, version=4)
             passed_order = SystemOrder.objects.filter(id=order_uuid).last()
             if passed_order:
@@ -450,13 +460,12 @@ def order_payments(request, order_id=None):
     code, message = can_admin(request)
     if code == 200:
         if order_id:
-            context = {}
+            context = {"strapus": strapus }
             order_uuid = uuid.UUID(order_id, version=4)
             passed_order = SystemOrder.objects.filter(id=order_uuid).last()
             payments = passed_order.payments.filter(active=True)
             
             context["order"] = passed_order
-            # context["payments"] = payments
 
             paginator = Paginator(payments, ITEMS_PER_PAGE)
             page_number = request.GET.get('page') 
@@ -480,7 +489,9 @@ def add_order_payment(request, order_id=None, redirect_url=None):
     code, message = can_admin(request)
     if code == 200:
         if order_id:
-            context = {}
+            context = {
+                # "strapus": strapus,
+                }
             order_uuid = uuid.UUID(order_id, version=4)
             passed_order = SystemOrder.objects.filter(id=order_uuid).last()
 
@@ -519,9 +530,9 @@ def edit_order_payment(request, payment_id=None):
     code, message = can_admin(request)
     if code == 200:
         if payment_id:
-            context = {}
-            # order_uuid = uuid.UUID(order_id, version=4)
-            # passed_order = SystemOrder.objects.filter(id=order_uuid).last()
+            context = {
+                # "strapus": strapus,
+                }
             payment_uuid = uuid.UUID(payment_id, version=4)
             passed_payment = SystemPayment.objects.filter(id=payment_uuid).last()
 
@@ -530,8 +541,6 @@ def edit_order_payment(request, payment_id=None):
                     form = SystemPaymentForm(request.POST, instance=passed_payment)
                     if form.is_valid():
                         payment = form.save(commit=False)
-                        # if payment.pk is None:
-                        # payment.order = passed_payment.order
                         payment.edited_by = request.user
                         payment.status = 'W'
                         payment.save()
@@ -541,11 +550,6 @@ def edit_order_payment(request, payment_id=None):
                     
                     return redirect("tenancy_order_payments", order_id=passed_payment.order.id)
 
-                # initial_data = {
-                #     'amount': passed_order.amount_due_to_pay,
-                #     'paid_at': now(),
-                #     'notes': _("Commande") + f" {passed_order.numero}",
-                #     }
                 form = SystemPaymentForm(instance=passed_payment)
                 context["form"] = form
                 context["order"] = passed_payment.order
@@ -620,7 +624,9 @@ def subscriptions(request):
     code, message = can_admin(request)
     if code == 200:
 
-        context = {}
+        context = {
+            "strapus": strapus,
+            }
         tenant = request.user.tenant
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         for sub in subs:

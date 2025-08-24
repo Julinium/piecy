@@ -11,6 +11,15 @@ from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
+strapus = {
+    "X": "secondary",
+    "W": "warning",
+    "P": "warning",
+    "C": "success",
+    "A": "danger",
+    }
+
+
 def get_current_user_default():
     """
     Retrieves the current user from the request context.
@@ -143,19 +152,27 @@ class Trial(models.Model):
 
 
 class Subscription(models.Model):
+    # STATUS_CHOICES = [
+    #     ("0-draft", _("Brouillon")),
+    #     ("1-running", _("Courant")),
+    #     ("2-future", _("À venir")),
+    #     ("5-expired", _("Expiré")),
+    #     ("9-cancelled", _("Annulé")),
+    # ]
+
     STATUS_CHOICES = [
-        ("0-draft", _("Brouillon")),
-        ("1-running", _("Courant")),
-        ("2-future", _("À venir")),
-        ("5-expired", _("Expiré")),
-        ("9-cancelled", _("Annulé")),
+        ("X", _("Brouillon")),
+        ("W", _("Attente Paiement")),
+        ("P", _("Paiement Partiel")),
+        ("C", _("Payé")),
+        ("A", _("Annulé")),
     ]
 
     id  = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active  = models.BooleanField(blank=True, null=True, default=True)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
-    status  = models.CharField(max_length=20, choices=STATUS_CHOICES, default="0-draft")
+    status  = models.CharField(max_length=20, choices=STATUS_CHOICES, default="X")
     tenant  = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
     plan    = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
     order   = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
@@ -210,61 +227,63 @@ class Subscription(models.Model):
     @property
     def usable(self):
         """ Whether subscription can be used or not."""
-
-        is_running = self.days_run >= 0 and self.days_run <= self.days_span
-        if not is_running:
+        if self.window != 0:
             return False
-
         max_free = max(15, int(self.days_span/10))
-        small_progress = self.days_run <= max_free
-
-        if not self.order:
-            return small_progress
-        if not self.order.active:
-            return False
-        if self.order.status == "A":
-            return False
-        if self.order.status == "C":
-            return True
-        return small_progress
+        return self.days_run <= max_free
 
     @property
     def teint(self):
         """ Return a string indicating the right color to use in bootstrap styling."""
 
+        return strapus[self.status]
+
+    @property
+    def window(self):
+        """
+        Checks if subscription is past, running or upcoming.
+        -1 = Past, 0 = Running, 1 = Upcoming and None = Undefined.
+        """
+        
         d_date=now().date()
-        if not self.order:
-            return "warning"
-        if not self.order.active:
-            return "danger"
-        delta = self.date_fm - d_date
-        if delta.days > 0:
-            return "warning"
-        delta = self.date_to - d_date
-        if delta.days >= 0:
-            return "success"
-        else:
-            return "secondary"
+        if not self.date_fm or not self.date_to:
+            return None
+        if self.date_fm > d_date:
+            return -1
+        if self.date_to < d_date:
+            return 1
+        return 0
 
     def update_status(self):
         """ Updates the status field."""
-
+        
         d_date=now().date()
-        self.status = "0-draft"
+        self.status = "X"
         if self.order:
-            if not self.order.active:
-                self.status = "9-cancelled"
-            else:
-                delta = self.date_fm - d_date
-                if delta.days > 0:
-                    self.status = "2-future"
-                else:
-                    delta = self.date_to - d_date
-                    if delta.days >= 0:
-                        self.status = "1-running"
-                    else:
-                        self.status = "5-expired"
+            if self.order.active:
+                self.status = self.order.status
         self.save()
+
+
+    # def x_update_status(self):
+    #     """ Updates the status field."""
+
+    #     d_date=now().date()
+    #     self.status = "0-draft"
+    #     if self.order:
+    #         if not self.order.active:
+    #             self.status = "9-cancelled"
+    #         else:
+    #             delta = self.date_fm - d_date
+    #             if delta.days > 0:
+    #                 self.status = "2-future"
+    #             else:
+    #                 delta = self.date_to - d_date
+    #                 if delta.days >= 0:
+    #                     self.status = "1-running"
+    #                 else:
+    #                     self.status = "5-expired"
+    #     self.save()
 
 
 class Plan(models.Model):

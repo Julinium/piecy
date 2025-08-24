@@ -2,17 +2,14 @@
 
 {% if rub %}
     <div class="card mb-4 shadow shadow bg-{{ rub.teint }}-subtle">
-        <div class="card-header fw-bold text-bg-{{ rub.teint }} text-center">
-            {% if rub.status == "0-draft" %}
-                <span class="fs-5 fw-bold badge bg-danger p-1 m-0"><i class="bi bi-exclamation-octagon"></i></span>                
-            {% endif %}
-            <span class="small fw-light">{% trans "Abonnement" %}</span>
-            <span>{{ rub.plan.name }}</span>
-            <span>{{ rub.days_span }}</span>
-            <span class="small fw-light">{% trans "Jours" %}</span>
+        <div class="card-header text-bg-{{ rub.teint }}">
+            <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
+            <span class="fw-bold ">{{ rub.plan.name }}</span>
+            <span class="fw-bold ">{{ rub.days_span }}</span>
+            <span class="small">{% trans "Jours" %}</span>
         </div>
-        <div class="card-body bg-info-subtle small">
-            <div id="summary-info" class="d-none">
+        <div class="card-body small">
+            <div id="summary-info" class="d-block mb-2">
                 <div class="row">
                     <div class="col-12 col-md-6 mb-2">
                         <div class="hstack gap-2 border-bottom border-secondary">
@@ -53,55 +50,45 @@
             </div>
 
 
-            {% if rub.status == "0-draft" %}
-                <div class="mb-3">
-                    <li class="list-group-item text-danger fw-bold ms-0">
-                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                        <span>{% trans "Abonnement non payé" %}</span>
-                    </li>
-                </div>
-            {% endif %}
-            {% if rub.status == "9-cancelled" %}
-                <div class="mb-3">
-                    <li class="list-group-item text-danger fw-bold">
-                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                        <span>{% trans "Abonnement désactivé" %}</span>
-                    </li>
-                </div>
-            {% endif %}
-            {% if not rub.usable %}
-                <div class="mb-3">
-                    <li class="list-group-item text-danger fw-bold">
-                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                        <span>{% trans "Abonnement suspendu" %}</span>
-                    </li>
-                </div>
-            {% endif %}
-
-
-            <!-- {% if not current_subscription.payment %}
-                <ul class="list-group mb-3">
-                    <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non trouvé !" %}</li>
-                </ul>
-            {% else %}
-                {% if not current_subscription.payment.verified %}
-                    <ul class="list-group mb-3">
-                        <li class="list-group-item text-bg-danger fw-bold">{% trans "Paiement non confirmé !" %}</li>
-                    </ul>
-                {% endif %}
-            {% endif %}
-            <div class="text-center">
-                {% if not current_subscription.payment %}
-                    <a href="{% url 'base_contact' %}" class="me-2 mb-2 btn btn-primary">{% trans "Ajouter Paiement" %}</a>
-                {% else %}
-                    {% if current_subscription.payment.verified %}
-                        <a href="{% url 'tenancy_order' %}" class="me-2 mb-2 btn btn-primary">{% trans "Renouveler" %}</a>
-                        <a href="{% url 'tenancy_subscribe' %}" class="me-2 mb-2 btn btn-outline-primary">{% trans "Améliorer" %}</a>
+            <div class="card mb-2">
+                <div class="card-header text-bg-danger">
+                    {% if rub.status == "W" %}
+                        <div class="">
+                            <li class="list-group-item text-bg-danger fw-bold">
+                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                                <span>{% trans "Abonnement non payé" %}</span>
+                            </li>
+                        </div>
                     {% endif %}
-                {% endif %}
-            </div> -->
+                    {% if rub.status == "P" %}
+                        <div class="">
+                            <li class="list-group-item text-bg-danger fw-bold">
+                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                                <span>{% trans "Abonnement non payé ou paiement non confirmé" %}</span>
+                            </li>
+                        </div>
+                    {% endif %}
+                    {% if rub.status == "A" %}
+                        <div class="">
+                            <li class="list-group-item text-bg-danger fw-bold">
+                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                                <span>{% trans "Abonnement désactivé" %}</span>
+                            </li>
+                        </div>
+                    {% endif %}
+                    {% if not rub.usable %}
+                        <div class="">
+                            <li class="list-group-item text-bg-danger fw-bold">
+                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                                <span>{% trans "Abonnement suspendu" %}</span>
+                            </li>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
             <div class="list-inline">
-                {% if rub.status == "0-draft" %}
+                {% if rub.status == "X" %}
                     <div class="list-inline-item">
                         <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
                             <i class="bi bi-cash-coin"></i>
@@ -109,7 +96,15 @@
                         </a>
                     </div>
                 {% endif %}
-                {% if rub.status == "1-running" %}
+                {% if rub.status == "W" or rub.status == "P" %}
+                    <div class="list-inline-item">
+                        <a href="{% url 'tenancy_order_payments' rub.order.id %}" class="btn btn-primary mt-1">
+                            <i class="bi bi-coin"></i>
+                            <span class="ms-1">{% trans "Paiement" %}</span>
+                        </a>
+                    </div>
+                {% endif %}
+                {% if rub.status == "C" %}
                     <div class="list-inline-item">
                         <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
                             <i class="bi bi-arrow-repeat"></i>
@@ -117,6 +112,12 @@
                         </a>
                     </div>
                 {% endif %}
+                <div class="list-inline-item">
+                    <a href="{% url 'tenancy_orders' %}" class="btn btn-outline-primary mt-1">
+                        <i class="bi bi-clock-history"></i>
+                        <span class="ms-1">{% trans "Historique" %}</span>
+                    </a>
+                </div>
                 <div class="list-inline-item">
                     <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-headset"></i>
@@ -140,6 +141,12 @@
                     <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
                         <i class="bi bi-plus-circle"></i>
                         <span class="ms-1">{% trans "S'abonner" %}</span>
+                    </a>
+                </div>
+                <div class="list-inline-item">
+                    <a href="{% url 'tenancy_orders' %}" class="btn btn-outline-primary mt-1">
+                        <i class="bi bi-clock-history"></i>
+                        <span class="ms-1">{% trans "Historique" %}</span>
                     </a>
                 </div>
                 <div class="list-inline-item">

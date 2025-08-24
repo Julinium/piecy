@@ -26,10 +26,8 @@
         </div>
     </a>
     <div class="collapse" id="{{ order.id }}">
-        
-        {% include "tenancy/snippets/order-actions.html" with order=order details="show" %}
-        
-        <!-- {% include "tenancy/snippets/order-items.html" with order=order %} -->
-    
+        <div class=" px-3">
+            {% include "tenancy/snippets/order-actions.html" with order=order details="show" %}
+        </div>
     </div>
 </div>

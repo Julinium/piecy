@@ -22,13 +22,13 @@
             </a>
         </div>
     {% endif %}
-    
+
     <div>
         {% include "tenancy/snippets/order-payments-summary.html" with order=order %}
     </div>
-    
+
     <br class="mt-2">
-    
+
     <div class="list-group card p-0">
         {% include "tenancy/snippets/order-items.html" with order=order %}
     </div>

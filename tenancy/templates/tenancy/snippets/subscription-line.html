@@ -1,7 +1,6 @@
 {% load i18n %}
-<!-- plan, order, tenant, date_fm, date_to -->
 
-<div class="list-group-item p-0 {% if sub == rub %}shadow bg-info-subtle{% else %}shadow-sm{% endif %}">
+<div class="list-group-item p-0 {% if sub == rub %}shadow{% else %}shadow-sm{% endif %} {% if not sub.usable %} bg-secondary-subtle{% endif %}">
     <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ sub.id }}" role="button" aria-expanded="true" aria-controls="{{ sub.id }}">
         <div class="d-flex align-items-center">
             {% if order %}
@@ -12,14 +11,16 @@
             <div class="w-100 d-flex justify-content-between ms-3">
                 <div class="text-start">
                     <div>
+                        {% if sub == rub %}
+                            <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
+                        {% endif %}
                         <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
                         {% if sub.days_to_end >= 0 %}
-                            {% if sub.status != "2-future" %}
+                            {% if sub.window != 1 %}
                                 <span class="badge bg-{{ sub.teint }} py-2"><span class="me-1"><i class="bi bi-hourglass-bottom"></i></span>{{ sub.days_to_end }} {% trans "Jours" %}</span>
                             {% endif %}
                         {% endif %}
                         <span class="fs-5 ms-2">
-                            <!-- <span class="fw-light small">{% trans "Plan" %}</span> -->
                             <span class="fw-bold">{{ sub.plan.name }}</span>
                             <span class="fw-bold">{{ sub.days_span }}</span>
                             <span class="fw-light small">{% trans "Jours" %}</span>
@@ -35,7 +36,7 @@
                 <div class="ps-2">...</div>
             </div>
         </div>
-        {% if sub.status == "1-running" or sub.status == "0-draft" %}
+        {% if sub.usable %}
             <div class="progress bg-danger mt-2" role="progressbar" aria-valuenow="{{ sub.progress_percent }}" aria-valuemin="0" aria-valuemax="100" style="height: 4px;">
                 <div class="progress-bar bg-success" style="width: {{ sub.progress_percent }}%;"></div>
             </div>
@@ -44,33 +45,6 @@
     </a>
 
     <div class="collapse" id="{{ sub.id }}">
-
-        <!-- <div class="list-inline">
-            {% if rub.status == "0-draft" %}
-                <div class="list-inline-item">
-                    <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
-                        <i class="bi bi-cash-coin"></i>
-                        <span class="ms-1">{% trans "Commander" %}</span>
-                    </a>
-                </div>
-            {% endif %}
-            {% if rub.status == "1-running" %}
-                <div class="list-inline-item">
-                    <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
-                        <i class="bi bi-arrow-repeat"></i>
-                        <span class="ms-1">{% trans "Renouveler" %}</span>
-                    </a>
-                </div>
-            {% endif %}
-            <div class="list-inline-item">
-                <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
-                    <i class="bi bi-headset"></i>
-                    <span class="ms-1">{% trans "Support" %}</span>
-                </a>
-            </div>
-        </div> -->
-
-
         
         <div id="order-actions-top" class="list-inline mb-3 px-3">
 
@@ -83,7 +57,7 @@
                 </div>
             {% endif %}
 
-            {% if sub.status == "0-draft" %}
+            {% if sub.status == "X" %}
                 <div class="list-inline-item">
                     <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
                         <i class="bi bi-cash-coin"></i>
@@ -91,7 +65,7 @@
                     </a>
                 </div>
             {% endif %}
-            {% if sub.status == "1-running" %}
+            {% if sub.status == "C" %}
                 <div class="list-inline-item">
                     <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-arrow-repeat"></i>
@@ -106,7 +80,7 @@
                 </a>
             </div>
 
-            {% if sub.status == "9-cancelled" or sub.status == "0-draft" %}
+            {% if sub.status == "A" or sub.status == "X" %}
                 <div class="list-inline-item">
                     <div id="orderDeletion">
                         <button type="button" class="btn btn-outline-danger my-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ sub.id }}">
@@ -150,49 +124,6 @@
                     </div>
                 </div>
             {% endif %}
-
         </div>
-
-        <!-- <div id="order-details">
-            {% for item in sub.items.all %}
-                <div class="list-group-item border-start-0 border-end-0">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div class="fw-bold">{{ item.quantity }} x {{ item.product_name }}</div>
-                        <div class="fw-bold">{{ item.total_price_with_tax }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center ps-4">
-                        <div class="fw-light small">{% trans "Prix unitaire" %}</div>
-                        <div class="fw-light small">{{ item.unit_price }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center ps-4">
-                        <div class="fw-light small">{% trans "Prix sans taxes" %}</div>
-                        <div class="fw-light small">{{ item.total_price }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center ps-4">
-                        <div class="fw-light small">{% trans "Taxes" %} {{ item.tax_rate }}%</div>
-                        <div class="fw-light small">{{ item.tax_amount }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                    </div>
-                </div>
-            {% empty %}
-                <div class="list-group-item small border-start-0 border-end-0">
-                    <span class="text-danger"><i class="bi bi-cone-striped"></i></span>
-                    <span class="ms-1 small">{% trans "Aucun élément trouvé" %}</span>
-                </div>
-            {% endfor %}
-            <div class="list-group-item bg-{{ sub.teint }}-subtle border-start-0 border-end-0">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="fw-bold fs-5">{% trans "Total TTC" %}</div>
-                    <div class="fw-bold fs-5">{{ sub.total_amount_with_tax }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center ps-4">
-                    <div class="fw-light small">{% trans "Total HT" %}</div>
-                    <div class="fw-light small">{{ sub.total_amount }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                </div>
-                <div class="d-flex justify-content-between align-items-center ps-4">
-                    <div class="fw-light small">{% trans "Total taxes" %}</div>
-                    <div class="fw-light small">{{ sub.total_tax_amount }} <span class="fw-light text-muted small">{{ order_currency }}</span></div>
-                </div>
-            </div>
-        </div> -->
     </div>
 </div>
