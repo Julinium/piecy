@@ -2,16 +2,18 @@
 
 {% if rub %}
     <div class="card mb-4 shadow shadow bg-{{ rub.teint }}-subtle">
-        <div class="card-header text-bg-{{ rub.teint }}">
-            <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
+        <div class="card-header text-center text-bg-{{ rub.teint }} py-0">
+            <!-- <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
             <span class="fw-bold ">{{ rub.plan.name }}</span>
             <span class="fw-bold ">{{ rub.days_span }}</span>
-            <span class="small">{% trans "Jours" %}</span>
+            <span class="small">{% trans "Jours" %}</span> -->
+            <span class="fw-bold fs-4">{{ rub.days_to_end }}</span>
+            <span class="small">{% trans "Jours Restant" %}</span>
         </div>
-        <div class="card-body small">
+        <div class="card-body small pb-0">
 
             <div id="rub-summary-info">
-                <div class="d-block mb-2">
+                <!-- <div class="d-block mb-2">
                     <div class="row">
                         <div class="col-12 col-md-6 mb-2">
                             <div class="hstack gap-2 border-bottom border-secondary">
@@ -43,7 +45,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
 
             <div id="rub-progress">
@@ -90,7 +92,7 @@
             </div>
 
             <div id="rub-actions">
-                <div class="list-inline">
+                <div class="list-inline mb-3">
                     {% if rub.status == "X" %}
                         <div class="list-inline-item">
                             <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">

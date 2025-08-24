@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="list-group-item p-0 {% if sub == rub %}shadow{% else %}shadow-sm{% endif %} {% if not sub.usable %} bg-secondary-subtle{% endif %}">
+<div class="list-group-item p-0 {% if sub == rub %}shadow{% else %}shadow-sm{% endif %}">
     <a class="btn w-100 py-3" data-bs-toggle="collapse" href="#{{ sub.id }}" role="button" aria-expanded="true" aria-controls="{{ sub.id }}">
         <div class="d-flex align-items-center">
             {% if order %}
@@ -20,13 +20,15 @@
                         {% if sub.window == 1 %}
                             <span class="badge bg-warning py-2">{% trans "Avenir" %}</span>
                         {% endif %}
-                        <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
-                        {% if sub.days_to_end >= 0 %}
+                        <!-- {% if sub.window != -1 %}
+                            <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
+                        {% endif %} -->
+                        {% if sub.days_to_end > 0 %}
                             {% if sub.window != 1 %}
                                 <span class="badge bg-{{ sub.teint }} py-2"><span class="me-1"><i class="bi bi-hourglass-bottom"></i></span>{{ sub.days_to_end }} {% trans "Jours" %}</span>
                             {% endif %}
                         {% endif %}
-                        <span class="fs-5 ms-2">
+                        <span class="fs-5 ms-2 {% if not sub.usable %} text-secondary{% endif %}">
                             <span class="fw-bold">{{ sub.plan.name }}</span>
                             <span class="fw-bold">{{ sub.days_span }}</span>
                             <span class="fw-light small">{% trans "Jours" %}</span>
@@ -56,7 +58,7 @@
 
             {% if sub.order %}
                 <div class="list-inline-item">
-                    <a href="{% url 'tenancy_order_details' sub.order.id %}" class="btn btn-outline-primary my-1">
+                    <a href="{% url 'tenancy_order_details' sub.order.id %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-cash-coin"></i>
                         <span class="ms-1"> {% trans "Commande" %}</span>
                     </a>
@@ -80,7 +82,7 @@
                 </div>
             {% endif %}
             <div class="list-inline-item">
-                <a href="#" class="btn btn-outline-primary my-1 disabled">
+                <a href="#" class="btn btn-outline-primary mt-1 disabled">
                     <i class="bi bi-printer"></i>
                     <span class="ms-1"> {% trans "Imprimer" %}</span>
                 </a>
@@ -89,7 +91,7 @@
             {% if sub.status == "A" or sub.status == "X" %}
                 <div class="list-inline-item">
                     <div id="orderDeletion">
-                        <button type="button" class="btn btn-outline-danger my-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ sub.id }}">
+                        <button type="button" class="btn btn-outline-danger mt-1"  data-bs-toggle="modal" data-bs-target="#modal-{{ sub.id }}">
                             <i class="bi bi-trash-fill"></i>
                             <span class="ms-1"> {% trans "Supprimer" %}</span>
                         </button>
@@ -133,59 +135,47 @@
         </div>
 
         <div id="sub-summary-info">
-            <table class="table-sm table-striped mx-3">
-                <tbody>
-                    <tr class="border-bottom">
-                        <td>
-                            <span class="small text-muted">{% trans "Plan" %}</span>
-                        </td>
-                        <td>
-                            <span class="ms-2">{{ sub.plan.name }}</span>
-                        </td>
-                    </tr>
-                    <tr class="border-bottom">
-                        <td>
-                            <span class="small text-muted">{% trans "Restant" %}</span>
-                        </td>
-                        <td>
-                            <span class="ms-2">{{ sub.days_to_end }}</span>
-                            <span>{% trans "Jours" %}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="mb-2 px-3">                
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Plan" %}</div>
-                            <div class="">{{ sub.plan.name }}</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Restant" %}</div>
-                            <div>
-                                <span class="fw-bold">{{ sub.days_to_end }}</span>
-                                <span>{% trans "Jours" %}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Date Début" %}</div>
-                            <div class="">{{ sub.date_fm }}</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Date Fin" %}</div>
-                            <div class="">{{ sub.date_to }}</div>
-                        </div>
-                    </div>
-                </div>
+            <div class="px-3">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Etat" %}</td>
+                            <td class="text-start small py-1">{{ sub.get_status_display }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Plan" %}</td>
+                            <td class="text-start small py-1">{{ sub.plan.name }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Durée" %}</td>
+                            <td class="text-start small py-1">{{ sub.days_span }} {% trans "Jours" %}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Ecoulé" %}</td>
+                            <td class="text-start small py-1">{{ sub.days_run }} {% trans "Jours" %}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Restant" %}</td>
+                            <td class="text-start small py-1">{{ sub.days_to_end }} {% trans "Jours" %}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Début" %}</td>
+                            <td class="text-start small py-1">{{ sub.date_fm }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Fin" %}</td>
+                            <td class="text-start small py-1">{{ sub.date_to }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "N° Commande" %}</td>
+                            <td class="text-start small py-1">{{ sub.order.numero }}</td>
+                        </tr>
+                        <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Date Commande" %}</td>
+                            <td class="text-start small py-1">{{ sub.order.order_date|date }}</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

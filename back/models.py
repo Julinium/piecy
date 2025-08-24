@@ -222,7 +222,7 @@ class Subscription(models.Model):
 
         d_date=now().date()
         delta = self.date_to - d_date
-        return min(delta.days, self.days_span)
+        return max(0, min(delta.days, self.days_span))
 
     @property
     def usable(self):
