@@ -9,122 +9,127 @@
             <span class="small">{% trans "Jours" %}</span>
         </div>
         <div class="card-body small">
-            <div id="summary-info" class="d-block mb-2">
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Plan" %}</div>
-                            <div class="">{{ rub.plan.name }}</div>
+
+            <div id="rub-summary-info">
+                <div class="d-block mb-2">
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="hstack gap-2 border-bottom border-secondary">
+                                <div class="small fw-light">{% trans "Plan" %}</div>
+                                <div class="">{{ rub.plan.name }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="hstack gap-2 border-bottom border-secondary">
+                                <div class="small fw-light">{% trans "Restant" %}</div>
+                                <div>
+                                    <span class="fw-bold">{{ rub.days_to_end }}</span>
+                                    <span>{% trans "Jours" %}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Restant" %}</div>
-                            <div>
-                                <span class="fw-bold">{{ rub.days_to_end }}</span>
-                                <span>{% trans "Jours" %}</span>
+                    <div class="row">
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="hstack gap-2 border-bottom border-secondary">
+                                <div class="small fw-light">{% trans "Date Début" %}</div>
+                                <div class="">{{ rub.date_fm }}</div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6 mb-2">
+                            <div class="hstack gap-2 border-bottom border-secondary">
+                                <div class="small fw-light">{% trans "Date Fin" %}</div>
+                                <div class="">{{ rub.date_to }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Date Début" %}</div>
-                            <div class="">{{ rub.date_fm }}</div>
-                        </div>
-                    </div>
-                    <div class="col-12 col-md-6 mb-2">
-                        <div class="hstack gap-2 border-bottom border-secondary">
-                            <div class="small fw-light">{% trans "Date Fin" %}</div>
-                            <div class="">{{ rub.date_to }}</div>
-                        </div>
+            </div>
+
+            <div id="rub-progress">
+                <div class="mb-3">
+                    <div class="progress bg-danger" role="progressbar" aria-valuenow="{{ rub.progress_percent }}" aria-valuemin="0" aria-valuemax="100">
+                        <div class="progress-bar bg-success" style="width: {{ rub.progress_percent }}%;"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="mb-3">
-                <div class="progress bg-danger" role="progressbar" aria-valuenow="{{ rub.progress_percent }}" aria-valuemin="0" aria-valuemax="100">
-                    <div class="progress-bar bg-success" style="width: {{ rub.progress_percent }}%;"></div>
-                </div>
-            </div>
-
-
-            <div class="card mb-2">
-                <div class="card-header text-bg-danger">
-                    {% if rub.status == "W" %}
-                        <div class="">
-                            <li class="list-group-item text-bg-danger fw-bold">
-                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                                <span>{% trans "Abonnement non payé" %}</span>
-                            </li>
-                        </div>
-                    {% endif %}
-                    {% if rub.status == "P" %}
-                        <div class="">
-                            <li class="list-group-item text-bg-danger fw-bold">
-                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                                <span>{% trans "Abonnement non payé ou paiement non confirmé" %}</span>
-                            </li>
-                        </div>
-                    {% endif %}
-                    {% if rub.status == "A" %}
-                        <div class="">
-                            <li class="list-group-item text-bg-danger fw-bold">
-                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                                <span>{% trans "Abonnement désactivé" %}</span>
-                            </li>
-                        </div>
-                    {% endif %}
-                    {% if not rub.usable %}
-                        <div class="">
-                            <li class="list-group-item text-bg-danger fw-bold">
-                                <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                                <span>{% trans "Abonnement suspendu" %}</span>
-                            </li>
-                        </div>
-                    {% endif %}
-                </div>
-            </div>
-
-            <div class="list-inline">
-                {% if rub.status == "X" %}
-                    <div class="list-inline-item">
-                        <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
-                            <i class="bi bi-cash-coin"></i>
-                            <span class="ms-1">{% trans "Commander" %}</span>
-                        </a>
+            <div id="rub-messages">
+                {% if rub.status == "W" %}
+                    <div class="list-group mb-2">
+                        <li class="list-group-item text-bg-danger fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement non payé" %}</span>
+                        </li>
                     </div>
                 {% endif %}
-                {% if rub.status == "W" or rub.status == "P" %}
-                    <div class="list-inline-item">
-                        <a href="{% url 'tenancy_order_payments' rub.order.id %}" class="btn btn-primary mt-1">
-                            <i class="bi bi-coin"></i>
-                            <span class="ms-1">{% trans "Paiement" %}</span>
-                        </a>
+                {% if rub.status == "P" %}
+                    <div class="list-group mb-2">
+                        <li class="list-group-item text-bg-danger fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement non payé ou paiement non confirmé" %}</span>
+                        </li>
                     </div>
                 {% endif %}
-                {% if rub.status == "C" %}
-                    <div class="list-inline-item">
-                        <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
-                            <i class="bi bi-arrow-repeat"></i>
-                            <span class="ms-1">{% trans "Renouveler" %}</span>
-                        </a>
+                {% if rub.status == "A" %}
+                    <div class="list-group mb-2">
+                        <li class="list-group-item text-bg-danger fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement désactivé" %}</span>
+                        </li>
                     </div>
                 {% endif %}
-                <div class="list-inline-item">
-                    <a href="{% url 'tenancy_orders' %}" class="btn btn-outline-primary mt-1">
-                        <i class="bi bi-clock-history"></i>
-                        <span class="ms-1">{% trans "Historique" %}</span>
-                    </a>
-                </div>
-                <div class="list-inline-item">
-                    <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
-                        <i class="bi bi-headset"></i>
-                        <span class="ms-1">{% trans "Support" %}</span>
-                    </a>
+                {% if not rub.usable %}
+                    <div class="list-group mb-2">
+                        <li class="list-group-item text-bg-danger fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement suspendu" %}</span>
+                        </li>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="rub-actions">
+                <div class="list-inline">
+                    {% if rub.status == "X" %}
+                        <div class="list-inline-item">
+                            <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
+                                <i class="bi bi-cash-coin"></i>
+                                <span class="ms-1">{% trans "Commander" %}</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if rub.status == "W" or rub.status == "P" %}
+                        <div class="list-inline-item">
+                            <a href="{% url 'tenancy_order_payments' rub.order.id %}" class="btn btn-primary mt-1">
+                                <i class="bi bi-coin"></i>
+                                <span class="ms-1">{% trans "Paiement" %}</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if rub.status == "C" %}
+                        <div class="list-inline-item">
+                            <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
+                                <i class="bi bi-arrow-repeat"></i>
+                                <span class="ms-1">{% trans "Renouveler" %}</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                    <div class="list-inline-item">
+                        <a href="{% url 'tenancy_orders' %}" class="btn btn-outline-primary mt-1">
+                            <i class="bi bi-clock-history"></i>
+                            <span class="ms-1">{% trans "Historique" %}</span>
+                        </a>
+                    </div>
+                    <div class="list-inline-item">
+                        <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
+                            <i class="bi bi-headset"></i>
+                            <span class="ms-1">{% trans "Support" %}</span>
+                        </a>
+                    </div>
                 </div>
             </div>
+
         </div>
     </div>
 {% else %}

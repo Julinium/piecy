@@ -401,6 +401,7 @@ def adminize_user(request, user_id=None):
         return HttpResponse(_("Utilisateur non trouvé."), status=code)
     return HttpResponse(message, status=code)
 
+
 @login_required(login_url="account_login")
 def orders(request):
 
@@ -630,6 +631,7 @@ def subscriptions(request):
         tenant = request.user.tenant
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         for sub in subs:
+            # sub.order.update_status()
             sub.update_status()
         running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()

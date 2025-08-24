@@ -229,8 +229,10 @@ class Subscription(models.Model):
         """ Whether subscription can be used or not."""
         if self.window != 0:
             return False
-        max_free = max(15, int(self.days_span/10))
-        return self.days_run <= max_free
+        if self.status != "C":
+            max_free = max(15, int(self.days_span/10))
+            return self.days_run <= max_free
+        return True
 
     @property
     def teint(self):
@@ -249,9 +251,9 @@ class Subscription(models.Model):
         if not self.date_fm or not self.date_to:
             return None
         if self.date_fm > d_date:
-            return -1
-        if self.date_to < d_date:
             return 1
+        if self.date_to < d_date:
+            return -1
         return 0
 
     def update_status(self):
@@ -261,6 +263,7 @@ class Subscription(models.Model):
         self.status = "X"
         if self.order:
             if self.order.active:
+                self.order.update_status()
                 self.status = self.order.status
         self.save()
 
