@@ -19,6 +19,12 @@ strapus = {
     "A": "danger",
     }
 
+# If a subscription is unpaid/unconfirmed, it can still be usable for a certain grace time.
+# This time is set to a percentage of the subscription duration within a range.
+GRACE_DAYS_MIN = 15     # Min grace days.
+GRACE_DAYS_MAX = 30     # Max grace days.
+GRACE_DAYS_100 = 10     # Grace percentage. Example: 8.22 gives 30 days for a 365 days subscription.
+
 
 def get_current_user_default():
     """
@@ -152,14 +158,7 @@ class Trial(models.Model):
 
 
 class Subscription(models.Model):
-    # STATUS_CHOICES = [
-    #     ("0-draft", _("Brouillon")),
-    #     ("1-running", _("Courant")),
-    #     ("2-future", _("À venir")),
-    #     ("5-expired", _("Expiré")),
-    #     ("9-cancelled", _("Annulé")),
-    # ]
-
+    
     STATUS_CHOICES = [
         ("X", _("Brouillon")),
         ("W", _("Attente Paiement")),
@@ -225,13 +224,16 @@ class Subscription(models.Model):
         return max(0, min(delta.days, self.days_span))
 
     @property
+    def days_grace(self):
+        return max(GRACE_DAYS_MIN, min(GRACE_DAYS_MAX, int(self.days_span/Decimal(GRACE_DAYS_100))))
+
+    @property
     def usable(self):
         """ Whether subscription can be used or not."""
         if self.window != 0:
             return False
         if self.status != "C":
-            max_free = max(15, int(self.days_span/10))
-            return self.days_run <= max_free
+            return self.days_run <= self.days_grace
         return True
 
     @property
@@ -266,27 +268,6 @@ class Subscription(models.Model):
                 self.order.update_status()
                 self.status = self.order.status
         self.save()
-
-
-    # def x_update_status(self):
-    #     """ Updates the status field."""
-
-    #     d_date=now().date()
-    #     self.status = "0-draft"
-    #     if self.order:
-    #         if not self.order.active:
-    #             self.status = "9-cancelled"
-    #         else:
-    #             delta = self.date_fm - d_date
-    #             if delta.days > 0:
-    #                 self.status = "2-future"
-    #             else:
-    #                 delta = self.date_to - d_date
-    #                 if delta.days >= 0:
-    #                     self.status = "1-running"
-    #                 else:
-    #                     self.status = "5-expired"
-    #     self.save()
 
 
 class Plan(models.Model):
@@ -420,7 +401,7 @@ class SystemOrder(models.Model):
         ordering = ['-status', '-created_on']
 
     def __str__(self):
-        return self.numero # return f"{self.numero} - {self.customer.name} #{self.total_amount_with_tax}"
+        return self.numero
 
     @property
     def total_amount(self):
@@ -542,9 +523,6 @@ class SystemPayment(models.Model):
     ]
 
     STATUS_CHOICES = [
-        # ("pending",   _("Attente Confirmation")),
-        # ("confirmed", _("Confirmé")),
-        # ("failed",    _("Echoué")),
         ("W", _("Attente Confirmation")),
         ("C", _("Confirmé")),
         ("A", _("Echoué")),
@@ -574,7 +552,7 @@ class SystemPayment(models.Model):
 
     class Meta:
         db_table = 's_payment'
-        ordering = ['-status', 'order', '-paid_at']
+        ordering = ['-status', 'active', '-paid_at', 'order']
 
     def __str__(self):
         return f"{self.numero}-#{self.amount}#-{self.status}-{self.order.numero}"

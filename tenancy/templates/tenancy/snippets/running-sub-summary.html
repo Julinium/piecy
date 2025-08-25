@@ -2,35 +2,47 @@
 
 {% if rub %}
     <div id="rub-messages">
-        {% if rub.status == "W" %}
+
+        {% if rub.usable %}
+            {% if rub.status == "W" %}
+                <div class="list-group mb-3 shadow-sm">
+                    <li class="list-group-item text-bg-warning fw-bold">
+                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                        <span>{% trans "Abonnement non payé" %}.</span>
+                        {% if rub.days_grace > 0 %}
+                            <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours avant suspension" %}.</span>
+                        {% endif %}
+                    </li>
+                </div>
+            {% endif %}
+            {% if rub.status == "P" %}
+                <div class="list-group mb-3 shadow-sm">
+                    <li class="list-group-item text-bg-warning fw-bold">
+                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                        <span>{% trans "Abonnement non payé ou paiement non confirmé" %}.</span>
+                        {% if rub.days_grace > 0 %}
+                            <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours avant suspension" %}.</span>
+                            <!-- <span class="ms-2 fw-light small">{{ rub.days_run }} {% trans "jours écoulés" %}.</span> -->
+                        {% endif %}
+                    </li>
+                </div>
+            {% endif %}
+            {% if rub.status == "A" %}
+                <div class="list-group mb-3 shadow-sm">
+                    <li class="list-group-item text-bg-danger fw-bold">
+                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                        <span>{% trans "Abonnement désactivé" %}.</span>
+                    </li>
+                </div>
+            {% endif %}
+        {% else %}
             <div class="list-group mb-3 shadow-sm">
                 <li class="list-group-item text-bg-danger fw-bold">
                     <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                    <span>{% trans "Abonnement non payé" %}</span>
-                </li>
-            </div>
-        {% endif %}
-        {% if rub.status == "P" %}
-            <div class="list-group mb-3 shadow-sm">
-                <li class="list-group-item text-bg-danger fw-bold">
-                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                    <span>{% trans "Abonnement non payé ou paiement non confirmé" %}</span>
-                </li>
-            </div>
-        {% endif %}
-        {% if rub.status == "A" %}
-            <div class="list-group mb-3 shadow-sm">
-                <li class="list-group-item text-bg-danger fw-bold">
-                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                    <span>{% trans "Abonnement désactivé" %}</span>
-                </li>
-            </div>
-        {% endif %}
-        {% if not rub.usable %}
-            <div class="list-group mb-3 shadow-sm">
-                <li class="list-group-item text-bg-danger fw-bold">
-                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                    <span>{% trans "Abonnement suspendu" %}</span>
+                    <span>{% trans "Abonnement suspendu" %}.</span>
+                    {% if rub.days_grace > 0 %}
+                        <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours écoulés sans paiement" %}.</span>
+                    {% endif %}
                 </li>
             </div>
         {% endif %}
@@ -131,17 +143,29 @@
                 <div class="list-inline mb-3">
                     {% if rub.status == "X" %}
                         <div class="list-inline-item">
-                            <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
-                                <i class="bi bi-cash-coin"></i>
+                            <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
+                                <i class="bi bi-bag-plus"></i>
                                 <span class="ms-1">{% trans "Commander" %}</span>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if rub.order.amount_due_to_pay > 0 %}
+                        <div class="list-inline-item">
+                            <!-- <a href="{% url 'tenancy_order_payments' rub.order.id %}" class="btn btn-primary mt-1">
+                                <i class="bi bi-coin"></i>
+                                <span class="ms-1">{% trans "Payer" %} {{ rub.order.amount_due_to_pay }}</span>
+                            </a> -->
+                            <a href="{% url 'tenancy_add_order_payment' rub.order.id %}" class="btn btn-primary mt-1">
+                                <i class="bi bi-coin"></i>
+                                <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ rub.order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ rub.order.order_currency }}</span></span></span>
                             </a>
                         </div>
                     {% endif %}
                     {% if rub.status == "W" or rub.status == "P" %}
                         <div class="list-inline-item">
                             <a href="{% url 'tenancy_order_payments' rub.order.id %}" class="btn btn-primary mt-1">
-                                <i class="bi bi-coin"></i>
-                                <span class="ms-1">{% trans "Paiement" %}</span>
+                                <i class="bi bi-cash-coin"></i>
+                                <span class="ms-1">{% trans "Paiements" %}</span>
                             </a>
                         </div>
                     {% endif %}

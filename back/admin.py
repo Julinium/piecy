@@ -3,6 +3,8 @@ from django import forms
 from django.db import models
 from django.utils.translation import gettext as _
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+
 from .models import Plan, Tenant, Subscription, Trial, SystemOrder, SystemOrderItem, SystemPayment
 
 User = get_user_model()
@@ -153,23 +155,39 @@ class SystemPaymentAdmin(admin.ModelAdmin):
     
     def set_status_confirmed(self, request, queryset):
         queryset.update(status='C')
+        self.send_update_signal(queryset)
     set_status_confirmed.short_description = _("Confirm Selected")
 
     def set_status_pending(self, request, queryset):
         queryset.update(status='W')
+        self.send_update_signal(queryset)
     set_status_pending.short_description = _("Unconfirm Selected")
 
     def set_active(self, request, queryset):
         queryset.update(active=True)
+        self.send_update_signal(queryset)
     set_active.short_description = _("Activate Selected")
 
     def set_inactive(self, request, queryset):
         queryset.update(active=False)
+        self.send_update_signal(queryset)
     set_inactive .short_description = _("Deactivate Selected")
 
     def set_status_failed(self, request, queryset):
         queryset.update(status='A')
+        self.send_update_signal(queryset)
     set_status_failed.short_description = _("Fail Selected")
+
+    def send_update_signal(self, queryset):
+        for instance in queryset:
+            post_save.send(
+                sender=SystemPayment,
+                instance=instance,
+                created=False,  # Indicate this is an update, not a create
+                # update_fields=['some_field'],  # Specify updated fields
+                # raw=False,
+                # using=queryset.db
+            )
 
 
 

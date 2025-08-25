@@ -44,7 +44,7 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
 def propagate(payment):
     if payment:
         payment.order.update_status()
-        subs = payment.order.subscriptions
+        subs = payment.order.subscriptions.all()
         for sub in subs:
             sub.update_status()
 
