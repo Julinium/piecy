@@ -41,15 +41,27 @@ def utilisateur_created_or_updated(sender, instance, created, **kwargs):
 #     print(f"Object deleted: {instance}")
 
 
+def propagate(payment):
+    if payment:
+        payment.order.update_status()
+        subs = payment.order.subscriptions
+        for sub in subs:
+            sub.update_status()
+
 @receiver(post_save, sender=SystemPayment)
 def s_payment_created_or_updated(sender, instance, created, **kwargs):
-    if instance:
-        instance.order.update_status()
+    propagate(instance)
+    # if instance:
+    #     instance.order.update_status()
+    #     subs = instance.order.subscriptions
+    #     for sub in subs:
+    #         sub.update_status()
 
 @receiver(post_delete, sender=SystemPayment)
 def s_payment_deleted(sender, instance, **kwargs):
-    if instance:
-        instance.order.update_status()
+    propagate(instance)
+    # if instance:
+    #     instance.order.update_status()
 
 
 # @receiver(post_save, sender=SystemOrder)

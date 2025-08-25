@@ -175,7 +175,7 @@ class Subscription(models.Model):
     status  = models.CharField(max_length=20, choices=STATUS_CHOICES, default="X")
     tenant  = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
     plan    = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
-    order   = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True)
+    order   = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True, related_name="subscriptions")
 
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
