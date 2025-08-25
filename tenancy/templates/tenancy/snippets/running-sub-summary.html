@@ -1,6 +1,42 @@
 {% load i18n %}
 
 {% if rub %}
+    <div id="rub-messages">
+        {% if rub.status == "W" %}
+            <div class="list-group mb-3 shadow-sm">
+                <li class="list-group-item text-bg-danger fw-bold">
+                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                    <span>{% trans "Abonnement non payé" %}</span>
+                </li>
+            </div>
+        {% endif %}
+        {% if rub.status == "P" %}
+            <div class="list-group mb-3 shadow-sm">
+                <li class="list-group-item text-bg-danger fw-bold">
+                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                    <span>{% trans "Abonnement non payé ou paiement non confirmé" %}</span>
+                </li>
+            </div>
+        {% endif %}
+        {% if rub.status == "A" %}
+            <div class="list-group mb-3 shadow-sm">
+                <li class="list-group-item text-bg-danger fw-bold">
+                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                    <span>{% trans "Abonnement désactivé" %}</span>
+                </li>
+            </div>
+        {% endif %}
+        {% if not rub.usable %}
+            <div class="list-group mb-3 shadow-sm">
+                <li class="list-group-item text-bg-danger fw-bold">
+                    <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                    <span>{% trans "Abonnement suspendu" %}</span>
+                </li>
+            </div>
+        {% endif %}
+    </div>
+
+
     <div class="card mb-4 shadow shadow bg-{{ rub.teint }}-subtle">
         <div class="card-header text-center text-bg-{{ rub.teint }} py-0">
             <!-- <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
@@ -56,7 +92,7 @@
                 </div>
             </div>
 
-            <div id="rub-messages">
+            <!-- <div id="rub-messages">
                 {% if rub.status == "W" %}
                     <div class="list-group mb-2">
                         <li class="list-group-item text-bg-danger fw-bold">
@@ -89,7 +125,7 @@
                         </li>
                     </div>
                 {% endif %}
-            </div>
+            </div> -->
 
             <div id="rub-actions">
                 <div class="list-inline mb-3">

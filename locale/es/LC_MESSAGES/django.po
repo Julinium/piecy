@@ -16,7 +16,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
 
 #: back/admin.py:35
 msgid "Created by"
@@ -27,10 +28,8 @@ msgid "Edited by"
 msgstr ""
 
 #: back/admin.py:156
-#, fuzzy
-#| msgid "Confirm Access"
 msgid "Confirm Selected"
-msgstr "Confirmer l'Accès"
+msgstr ""
 
 #: back/admin.py:160
 msgid "Unconfirm Selected"
@@ -49,10 +48,8 @@ msgid "Fail Selected"
 msgstr ""
 
 #: back/models.py:34 tenancy/templates/tenancy/add-user.html:70
-#, fuzzy
-#| msgid "Activée"
 msgid "Activé"
-msgstr "Activée"
+msgstr ""
 
 #: back/models.py:35
 msgid "Onboarded"
@@ -103,18 +100,16 @@ msgid "Maroc"
 msgstr ""
 
 #: back/models.py:49 back/templates/back/snipets/plan-card.html:82
-#, fuzzy
-#| msgid "Numéro de commande"
 msgid "Nom de domaine"
-msgstr "Numéro de commande"
+msgstr ""
 
 #: back/models.py:50
 msgid "Logo"
-msgstr "Logo"
+msgstr ""
 
 #: back/models.py:51
 msgid "Bannière"
-msgstr "Bannière"
+msgstr ""
 
 #: back/models.py:52
 msgid "En-tête"
@@ -127,7 +122,7 @@ msgstr ""
 #: back/models.py:54 piecy/models.py:166
 #: tenancy/templates/tenancy/summary.html:217
 msgid "Propriétaire"
-msgstr "Propriétaire"
+msgstr ""
 
 #: back/models.py:55
 msgid "Canal"
@@ -161,7 +156,7 @@ msgstr ""
 #: piecy/models.py:591 piecy/models.py:614 piecy/models.py:673
 #: piecy/models.py:693 piecy/models.py:713 piecy/models.py:732
 msgid "Créé le"
-msgstr "Créé le"
+msgstr ""
 
 #: back/models.py:59 back/models.py:144 back/models.py:182 back/models.py:322
 #: back/models.py:415 back/models.py:572 piecy/models.py:48 piecy/models.py:92
@@ -187,11 +182,11 @@ msgstr ""
 #: piecy/models.py:593 piecy/models.py:616 piecy/models.py:675
 #: piecy/models.py:695 piecy/models.py:715 piecy/models.py:734
 msgid "Modifié le"
-msgstr "Modifié le"
+msgstr ""
 
 #: back/models.py:164 piecy/models.py:128
 msgid "Brouillon"
-msgstr "Brouillon"
+msgstr ""
 
 #: back/models.py:165 back/models.py:393
 msgid "Attente Paiement"
@@ -206,10 +201,8 @@ msgid "Payé"
 msgstr ""
 
 #: back/models.py:168
-#, fuzzy
-#| msgid "Annulée"
 msgid "Annulé"
-msgstr "Annulée"
+msgstr ""
 
 #: back/models.py:395
 msgid "Payée"
@@ -217,7 +210,7 @@ msgstr ""
 
 #: back/models.py:396 piecy/models.py:132
 msgid "Annulée"
-msgstr "Annulée"
+msgstr ""
 
 #: back/models.py:537
 msgid "Cash"
@@ -240,16 +233,12 @@ msgid "Autre"
 msgstr ""
 
 #: back/models.py:548
-#, fuzzy
-#| msgid "Alternative options"
 msgid "Attente Confirmation"
-msgstr "Autres alternatives"
+msgstr ""
 
 #: back/models.py:549
-#, fuzzy
-#| msgid "Confirm"
 msgid "Confirmé"
-msgstr "Confirmer"
+msgstr ""
 
 #: back/models.py:550
 msgid "Echoué"
@@ -282,7 +271,7 @@ msgstr ""
 #: tenancy/templates/tenancy/snippets/payment-line.html:109
 #: tenancy/templates/tenancy/snippets/subscription-line.html:118
 msgid "Status"
-msgstr "Status"
+msgstr ""
 
 #: back/models.py:566 tenancy/templates/tenancy/snippets/payment-line.html:52
 msgid "Référence"
@@ -293,10 +282,8 @@ msgid "Payé le"
 msgstr ""
 
 #: back/models.py:568 tenancy/templates/tenancy/snippets/payment-line.html:64
-#, fuzzy
-#| msgid "Note"
 msgid "Notes"
-msgstr "Note"
+msgstr ""
 
 #: back/signals.py:9
 msgid "Pièces Auto"
@@ -315,10 +302,8 @@ msgid "Coming soon"
 msgstr ""
 
 #: back/templates/back/snipets/order-form.html:8
-#, fuzzy
-#| msgid "Confirm"
 msgid "Confirmer"
-msgstr "Confirmer"
+msgstr ""
 
 #: back/templates/back/snipets/plan-card.html:34
 #: back/templates/back/snipets/plan-card.html:41
@@ -345,10 +330,8 @@ msgstr ""
 #: base/templates/base/includes/menu-dash.html:12
 #: tenancy/templates/tenancy/summary.html:195
 #: tenancy/templates/tenancy/users.html:14
-#, fuzzy
-#| msgid "Utilisé"
 msgid "Utilisateurs"
-msgstr "Utilisé"
+msgstr ""
 
 #: back/templates/back/snipets/plan-card.html:78
 msgid "Magasins"
@@ -380,10 +363,8 @@ msgstr ""
 
 #: back/templates/back/snipets/plan-card.html:118
 #: tenancy/templates/tenancy/users.html:53
-#, fuzzy
-#| msgid "Activée"
 msgid "Désactivé"
-msgstr "Activée"
+msgstr ""
 
 #: back/templates/back/snipets/plan-card.html:119
 msgid "Si vous souhaitez baisser d'un Plan, merci de nous contacter."
@@ -427,11 +408,11 @@ msgstr ""
 
 #: base/templates/base/base.html:16 templates/allauth/layouts/base_auth.html:20
 msgid "Piecy auto spare parts management system"
-msgstr "Système de gestion des pièces de rechanges automobiles Piecy"
+msgstr ""
 
 #: base/templates/base/base.html:17 templates/allauth/layouts/base_auth.html:21
 msgid "Piecy auto car spare parts management system"
-msgstr "Système de gestion des pièces de rechanges automobiles Piecy"
+msgstr ""
 
 #: base/templates/base/coming.html:8
 msgid "Disponible bientôt"
@@ -459,11 +440,11 @@ msgstr ""
 
 #: base/templates/base/home.html:12
 msgid "It's going to work."
-msgstr "Ça va bien marcher."
+msgstr ""
 
 #: base/templates/base/includes/footer.html:3
 msgid "All rights reserved"
-msgstr "Tous droits reservés."
+msgstr ""
 
 #: base/templates/base/includes/menu-buying.html:5
 msgid "Achats"
@@ -526,10 +507,8 @@ msgid "Recherche Article"
 msgstr ""
 
 #: base/templates/base/includes/menu-stock.html:10
-#, fuzzy
-#| msgid "Numéro de commande"
 msgid "Vérifier Commande"
-msgstr "Numéro de commande"
+msgstr ""
 
 #: base/templates/base/includes/menu-stock.html:12
 msgid "Inventaire"
@@ -540,10 +519,8 @@ msgid "Gestion Magasins"
 msgstr ""
 
 #: base/templates/base/includes/menu-user.html:12
-#, fuzzy
-#| msgid "Menu:"
 msgid "Menu"
-msgstr "Menu:"
+msgstr ""
 
 #: base/templates/base/includes/menu-user.html:20
 msgid "Mon Profile"
@@ -619,15 +596,15 @@ msgstr ""
 
 #: piecy/models.py:12 tenancy/templates/tenancy/users.html:31
 msgid "Nouveau"
-msgstr "Nouveau"
+msgstr ""
 
 #: piecy/models.py:13
 msgid "Reconditionné"
-msgstr "Reconditionné"
+msgstr ""
 
 #: piecy/models.py:14
 msgid "Utilisé"
-msgstr "Utilisé"
+msgstr ""
 
 #: piecy/models.py:45 piecy/models.py:89 piecy/models.py:113
 #: piecy/models.py:227 piecy/models.py:247 piecy/models.py:269
@@ -639,140 +616,140 @@ msgstr "Utilisé"
 #: piecy/models.py:671 piecy/models.py:691 piecy/models.py:711
 #: piecy/models.py:730
 msgid "Appartient à"
-msgstr "Appartient à"
+msgstr ""
 
 #: piecy/models.py:62
 msgid "Mr."
-msgstr "Mr."
+msgstr ""
 
 #: piecy/models.py:63
 msgid "Mme."
-msgstr "Mme."
+msgstr ""
 
 #: piecy/models.py:64
 msgid "Mlle."
-msgstr "Mlle."
+msgstr ""
 
 #: piecy/models.py:129
 msgid "Devis"
-msgstr "Devis"
+msgstr ""
 
 #: piecy/models.py:130
 msgid "Acceptée"
-msgstr "Acceptée"
+msgstr ""
 
 #: piecy/models.py:131
 msgid "Livrée"
-msgstr "Livrée"
+msgstr ""
 
 #: piecy/models.py:135
 msgid "À la charge du client"
-msgstr "À la charge du client"
+msgstr ""
 
 #: piecy/models.py:136
 msgid "À la charge du vendeur"
-msgstr "À la charge du vendeur"
+msgstr ""
 
 #: piecy/models.py:137
 msgid "Agent tiers"
-msgstr "Agent tiers"
+msgstr ""
 
 #: piecy/models.py:140
 msgid "Activée"
-msgstr "Activée"
+msgstr ""
 
 #: piecy/models.py:142
 msgid "Client"
-msgstr "Client"
+msgstr ""
 
 #: piecy/models.py:143
 msgid "Numéro de commande"
-msgstr "Numéro de commande"
+msgstr ""
 
 #: piecy/models.py:144
 msgid "Date de commande"
-msgstr "Date de commande"
+msgstr ""
 
 #: piecy/models.py:145
 msgid "Total hors taxes"
-msgstr "Total hors taxes"
+msgstr ""
 
 #: piecy/models.py:146 tenancy/templates/tenancy/order.html:60
 #: tenancy/templates/tenancy/snippets/order-items.html:32
 msgid "Total TTC"
-msgstr "Total TTC"
+msgstr ""
 
 #: piecy/models.py:148
 msgid "Termes de livraison"
-msgstr "Termes de livraison"
+msgstr ""
 
 #: piecy/models.py:149
 msgid "Date de livraison due"
-msgstr "Date de livraison due"
+msgstr ""
 
 #: piecy/models.py:150
 msgid "Responsable emballage"
-msgstr "Responsable emballage"
+msgstr ""
 
 #: piecy/models.py:151
 msgid "Responsable chargement"
-msgstr "Responsable chargement"
+msgstr ""
 
 #: piecy/models.py:152
 msgid "Responsable livraison"
-msgstr "Responsable livraison"
+msgstr ""
 
 #: piecy/models.py:153
 msgid "Moyen livraison"
-msgstr "Moyen livraison"
+msgstr ""
 
 #: piecy/models.py:154
 msgid "Date livraison éffective"
-msgstr "Date livraison éffective"
+msgstr ""
 
 #: piecy/models.py:156
 msgid "Payment effectué"
-msgstr "Payment effectué"
+msgstr ""
 
 #: piecy/models.py:157
 msgid "Date de payment dù"
-msgstr "Date de payment dù"
+msgstr ""
 
 #: piecy/models.py:158
 msgid "Rappel de payment"
-msgstr "Rappel de payment"
+msgstr ""
 
 #: piecy/models.py:159
 msgid "Remise globale"
-msgstr "Remise globale"
+msgstr ""
 
 #: piecy/models.py:161
 msgid "Fichier"
-msgstr "Fichier"
+msgstr ""
 
 #: piecy/models.py:162 templates/account/snippets/already_logged_in.html:7
 msgid "Note"
-msgstr "Note"
+msgstr ""
 
 #: piecy/models.py:163
 msgid "Gage ou Garantie"
-msgstr "Gage ou Garantie"
+msgstr ""
 
 #: piecy/models.py:164
 msgid "Note interne"
-msgstr "Note interne"
+msgstr ""
 
 #: piecy/settings.py:153
 msgid "English"
-msgstr "Anglais"
+msgstr ""
 
 #: piecy/settings.py:154
 msgid "Arabic"
-msgstr "Arabe"
+msgstr ""
 
 #: piecy/settings.py:156
 msgid "French"
-msgstr "Français"
+msgstr ""
 
 #: piecy/settings.py:157
 msgid "Spanish"
@@ -785,11 +762,11 @@ msgstr ""
 #: templates/account/account_inactive.html:5
 #: templates/account/account_inactive.html:9
 msgid "Account Inactive"
-msgstr "Compte inactif"
+msgstr ""
 
 #: templates/account/account_inactive.html:12
 msgid "This account is inactive."
-msgstr "Ce compte est inactif."
+msgstr ""
 
 #: templates/account/base_confirm_code.html:27
 #, python-format
@@ -797,8 +774,6 @@ msgid ""
 "We've sent a code to %(recipient)s. The code expires shortly, so please "
 "enter it soon."
 msgstr ""
-"Nous avons envoyé un code à %(recipient)s. Merci de le saisir le plutôt "
-"possible."
 
 #: templates/account/base_confirm_code.html:39
 #: templates/account/email_confirm.html:24
@@ -806,11 +781,11 @@ msgstr ""
 #: templates/idp/oidc/device_authorization_confirm_form.html:26
 #: templates/mfa/reauthenticate.html:18
 msgid "Confirm"
-msgstr "Confirmer"
+msgstr ""
 
 #: templates/account/base_confirm_code.html:43
 msgid "Request new code"
-msgstr "Demander un nouveau code"
+msgstr ""
 
 #: templates/account/base_confirm_code.html:48
 #: templates/account/base_confirm_code.html:52
@@ -819,33 +794,33 @@ msgstr "Demander un nouveau code"
 #: templates/mfa/authenticate.html:28 templates/mfa/authenticate.html:44
 #: templates/mfa/trust.html:29 templates/mfa/webauthn/signup_form.html:26
 msgid "Cancel"
-msgstr "Annuler"
+msgstr ""
 
 #: templates/account/base_reauthenticate.html:5
 #: templates/account/base_reauthenticate.html:9
 msgid "Confirm Access"
-msgstr "Confirmer l'Accès"
+msgstr ""
 
 #: templates/account/base_reauthenticate.html:12
 msgid "Please reauthenticate to safeguard your account."
-msgstr "Merci de vous ré-authentifier pour sécuriser votre compte."
+msgstr ""
 
 #: templates/account/base_reauthenticate.html:19
 #: templates/mfa/authenticate.html:37
 msgid "Alternative options"
-msgstr "Autres alternatives"
+msgstr ""
 
 #: templates/account/confirm_email_verification_code.html:5
 msgid "Email Verification"
-msgstr "Vérification Email"
+msgstr ""
 
 #: templates/account/confirm_email_verification_code.html:8
 msgid "Enter Email Verification Code"
-msgstr "Entrer le Code de Vérification Email"
+msgstr ""
 
 #: templates/account/confirm_email_verification_code.html:16
 msgid "Use a different email address"
-msgstr "Utiliser une adresse email différente"
+msgstr ""
 
 #: templates/account/confirm_login_code.html:5 templates/account/login.html:7
 #: templates/account/login.html:13 templates/account/login.html:36
@@ -857,11 +832,11 @@ msgstr "Utiliser une adresse email différente"
 #: templates/openid/login.html:20 templates/socialaccount/login.html:5
 #: templates/socialaccount/login_redirect.html:5
 msgid "Sign In"
-msgstr "Connexion"
+msgstr ""
 
 #: templates/account/confirm_login_code.html:8
 msgid "Enter Sign-In Code"
-msgstr "Entrer le code de connexion"
+msgstr ""
 
 #: templates/account/confirm_password_reset_code.html:5
 #: templates/account/email/password_reset_subject.txt:3
@@ -870,7 +845,7 @@ msgstr "Entrer le code de connexion"
 #: templates/account/password_reset_done.html:6
 #: templates/account/password_reset_done.html:10
 msgid "Password Reset"
-msgstr "Réinitialisation mot de passe"
+msgstr ""
 
 #: templates/account/confirm_password_reset_code.html:8
 msgid "Enter Password Reset Code"
@@ -1461,11 +1436,11 @@ msgstr ""
 #: templates/allauth/elements/fields-y.html:38
 #: templates/allauth/elements/fields.html:29
 msgid "Show Password"
-msgstr "Mot de passe visible"
+msgstr ""
 
 #: templates/allauth/elements/user-menu.html:4
 msgid "Menu:"
-msgstr "Menu:"
+msgstr ""
 
 #: templates/idp/oidc/authorization_form.html:5
 #: templates/idp/oidc/authorization_form.html:9
@@ -2037,10 +2012,8 @@ msgstr ""
 
 #: tenancy/templates/tenancy/order.html:7
 #: tenancy/templates/tenancy/order.html:13
-#, fuzzy
-#| msgid "Date de commande"
 msgid "Détails commande"
-msgstr "Date de commande"
+msgstr ""
 
 #: tenancy/templates/tenancy/order.html:36
 #: tenancy/templates/tenancy/trial.html:24
@@ -2061,10 +2034,8 @@ msgid "Date fin"
 msgstr ""
 
 #: tenancy/templates/tenancy/order.html:52
-#, fuzzy
-#| msgid "Total hors taxes"
 msgid "Prix hors taxes"
-msgstr "Total hors taxes"
+msgstr ""
 
 #: tenancy/templates/tenancy/order.html:56
 #: tenancy/templates/tenancy/snippets/order-items.html:20
@@ -2114,10 +2085,8 @@ msgstr ""
 #: tenancy/templates/tenancy/snippets/payment-line.html:93
 #: tenancy/templates/tenancy/snippets/subscription-line.html:102
 #: tenancy/templates/tenancy/users.html:110
-#, fuzzy
-#| msgid "Confirm"
 msgid "Confirmation"
-msgstr "Confirmer"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-actions.html:47
 msgid "Supprimer définitivement cete Commande"
@@ -2127,16 +2096,12 @@ msgstr ""
 #: tenancy/templates/tenancy/snippets/payment-line.html:114
 #: tenancy/templates/tenancy/snippets/subscription-line.html:123
 #: tenancy/templates/tenancy/users.html:121
-#, fuzzy
-#| msgid "Annulée"
 msgid "Annuler"
-msgstr "Annulée"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-items.html:12
-#, fuzzy
-#| msgid "Propriétaire"
 msgid "Prix unitaire"
-msgstr "Propriétaire"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-items.html:16
 msgid "Prix sans taxes"
@@ -2147,26 +2112,20 @@ msgid "Aucun élément trouvé"
 msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-items.html:36
-#, fuzzy
-#| msgid "Total TTC"
 msgid "Total HT"
-msgstr "Total TTC"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-items.html:40
-#, fuzzy
-#| msgid "Total hors taxes"
 msgid "Total taxes"
-msgstr "Total hors taxes"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-line.html:14
 msgid "Surpayé"
 msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-payments-summary.html:6
-#, fuzzy
-#| msgid "Total TTC"
 msgid "Total Commande"
-msgstr "Total TTC"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/order-payments-summary.html:13
 msgid "Montant payé confirmé"
@@ -2189,17 +2148,13 @@ msgid "Dépayer"
 msgstr ""
 
 #: tenancy/templates/tenancy/snippets/payment-line.html:60
-#, fuzzy
-#| msgid "Date de payment dù"
 msgid "Date paiement"
-msgstr "Date de payment dù"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/payment-line.html:79
 #: tenancy/templates/tenancy/summary.html:205
-#, fuzzy
-#| msgid "Modifié le"
 msgid "Modifier"
-msgstr "Modifié le"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/payment-line.html:98
 msgid "Supprimer définitivement ce Paiement"
@@ -2211,10 +2166,8 @@ msgstr ""
 
 #: tenancy/templates/tenancy/snippets/running-sub-summary.html:6
 #: tenancy/templates/tenancy/snippets/subscription-line.html:15
-#, fuzzy
-#| msgid "Activée"
 msgid "Actif"
-msgstr "Activée"
+msgstr ""
 
 #: tenancy/templates/tenancy/snippets/running-sub-summary.html:9
 #: tenancy/templates/tenancy/snippets/running-sub-summary.html:29
@@ -2332,10 +2285,8 @@ msgid "N° Commande"
 msgstr ""
 
 #: tenancy/templates/tenancy/snippets/subscription-line.html:174
-#, fuzzy
-#| msgid "Date de commande"
 msgid "Date Commande"
-msgstr "Date de commande"
+msgstr ""
 
 #: tenancy/templates/tenancy/sub-cancel.html:8
 msgid "Subscription Cancel"
@@ -2354,10 +2305,8 @@ msgid "Séléction Plan"
 msgstr ""
 
 #: tenancy/templates/tenancy/subscribe.html:21
-#, fuzzy
-#| msgid "Alternative options"
 msgid "Autres options"
-msgstr "Autres alternatives"
+msgstr ""
 
 #: tenancy/templates/tenancy/subscribe.html:28
 msgid "Infrastructure privée"
@@ -2403,10 +2352,8 @@ msgid "Offres soumises à conditions.  "
 msgstr ""
 
 #: tenancy/templates/tenancy/subscribe.html:78
-#, fuzzy
-#| msgid "Gage ou Garantie"
 msgid "Garanties."
-msgstr "Gage ou Garantie"
+msgstr ""
 
 #: tenancy/templates/tenancy/subscribe.html:79
 msgid "Contenu détaillé des plans."
@@ -2621,10 +2568,8 @@ msgid "Désactiver"
 msgstr ""
 
 #: tenancy/templates/tenancy/users.html:98
-#, fuzzy
-#| msgid "Activée"
 msgid "Activer"
-msgstr "Activée"
+msgstr ""
 
 #: tenancy/templates/tenancy/users.html:115
 msgid "Supprimer définitivement"
@@ -2643,10 +2588,8 @@ msgid "User not found"
 msgstr ""
 
 #: tenancy/views.py:46
-#, fuzzy
-#| msgid "Account Inactive"
 msgid "User Inactive"
-msgstr "Compte inactif"
+msgstr ""
 
 #: tenancy/views.py:48
 msgid "User not authenticated"
@@ -2661,10 +2604,8 @@ msgid "Tenant not found"
 msgstr ""
 
 #: tenancy/views.py:55
-#, fuzzy
-#| msgid "Account Inactive"
 msgid "Tenant Inactive"
-msgstr "Compte inactif"
+msgstr ""
 
 #: tenancy/views.py:57
 msgid "OK"
@@ -2761,10 +2702,8 @@ msgid "Commande non trouvée."
 msgstr ""
 
 #: tenancy/views.py:508
-#, fuzzy
-#| msgid "Payment effectué"
 msgid "Paiement ajouté"
-msgstr "Payment effectué"
+msgstr ""
 
 #: tenancy/views.py:510
 msgid "Données invalides. Paiement non ajouté."
@@ -2855,6 +2794,3 @@ msgstr ""
 #: tenancy/views.py:908
 msgid "Previous Subscription not found."
 msgstr ""
-
-#~ msgid "It's working."
-#~ msgstr "Ça marche."

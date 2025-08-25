@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-22 11:08+0000\n"
+"POT-Creation-Date: 2025-08-25 08:42+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,100 +19,582 @@ msgstr ""
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
-#: back/models.py:20
+#: back/admin.py:35
+msgid "Created by"
+msgstr ""
+
+#: back/admin.py:39
+msgid "Edited by"
+msgstr ""
+
+#: back/admin.py:156
+msgid "Confirm Selected"
+msgstr ""
+
+#: back/admin.py:160
+msgid "Unconfirm Selected"
+msgstr ""
+
+#: back/admin.py:164
+msgid "Activate Selected"
+msgstr ""
+
+#: back/admin.py:168
+msgid "Deactivate Selected"
+msgstr ""
+
+#: back/admin.py:172
+msgid "Fail Selected"
+msgstr ""
+
+#: back/models.py:34 tenancy/templates/tenancy/add-user.html:70
+msgid "Activé"
+msgstr ""
+
+#: back/models.py:35
+msgid "Onboarded"
+msgstr ""
+
+#: back/models.py:36 tenancy/templates/tenancy/add-user.html:36
+msgid "Nom"
+msgstr ""
+
+#: back/models.py:38 tenancy/templates/tenancy/add-user.html:57
+msgid "Email"
+msgstr ""
+
+#: back/models.py:39
+msgid "Tél."
+msgstr ""
+
+#: back/models.py:40
+msgid "Whatsapp"
+msgstr ""
+
+#: back/models.py:42
+msgid "Adresse ligne 1"
+msgstr ""
+
+#: back/models.py:43
+msgid "Adresse ligne 2"
+msgstr ""
+
+#: back/models.py:44
+msgid "Ville"
+msgstr ""
+
+#: back/models.py:45
+msgid "Code postal"
+msgstr ""
+
+#: back/models.py:46
+msgid "Région ou état"
+msgstr ""
+
+#: back/models.py:47
+msgid "Pays"
+msgstr ""
+
+#: back/models.py:47
+msgid "Maroc"
+msgstr ""
+
+#: back/models.py:49 back/templates/back/snipets/plan-card.html:82
+msgid "Nom de domaine"
+msgstr ""
+
+#: back/models.py:50
 msgid "Logo"
 msgstr ""
 
-#: back/models.py:21 back/models.py:22 back/models.py:23
+#: back/models.py:51
 msgid "Bannière"
 msgstr ""
 
-#: back/models.py:31 back/models.py:54 back/models.py:76 back/models.py:111
-#: back/models.py:134 piecy/models.py:46 piecy/models.py:90 piecy/models.py:114
-#: piecy/models.py:167 piecy/models.py:231 piecy/models.py:251
-#: piecy/models.py:273 piecy/models.py:296 piecy/models.py:318
-#: piecy/models.py:339 piecy/models.py:374 piecy/models.py:395
-#: piecy/models.py:414 piecy/models.py:440 piecy/models.py:458
-#: piecy/models.py:476 piecy/models.py:494 piecy/models.py:512
-#: piecy/models.py:538 piecy/models.py:568 piecy/models.py:593
-#: piecy/models.py:616 piecy/models.py:675 piecy/models.py:695
-#: piecy/models.py:715 piecy/models.py:734
+#: back/models.py:52
+msgid "En-tête"
+msgstr ""
+
+#: back/models.py:53
+msgid "Bas de page"
+msgstr ""
+
+#: back/models.py:54 piecy/models.py:166
+#: tenancy/templates/tenancy/summary.html:217
+msgid "Propriétaire"
+msgstr ""
+
+#: back/models.py:55
+msgid "Canal"
+msgstr ""
+
+#: back/models.py:56
+msgid "Observation"
+msgstr ""
+
+#: back/models.py:57 back/models.py:142 back/models.py:180 back/models.py:320
+#: back/models.py:413 back/models.py:570 piecy/models.py:46 piecy/models.py:90
+#: piecy/models.py:114 piecy/models.py:167 piecy/models.py:228
+#: piecy/models.py:248 piecy/models.py:270 piecy/models.py:293
+#: piecy/models.py:315 piecy/models.py:336 piecy/models.py:371
+#: piecy/models.py:392 piecy/models.py:411 piecy/models.py:437
+#: piecy/models.py:455 piecy/models.py:473 piecy/models.py:491
+#: piecy/models.py:509 piecy/models.py:535 piecy/models.py:565
+#: piecy/models.py:590 piecy/models.py:613 piecy/models.py:672
+#: piecy/models.py:692 piecy/models.py:712 piecy/models.py:731
 msgid "Créé par"
 msgstr ""
 
-#: back/models.py:32 back/models.py:55 back/models.py:77 back/models.py:112
-#: back/models.py:135 piecy/models.py:47 piecy/models.py:91 piecy/models.py:115
-#: piecy/models.py:168 piecy/models.py:232 piecy/models.py:252
-#: piecy/models.py:274 piecy/models.py:297 piecy/models.py:319
-#: piecy/models.py:340 piecy/models.py:375 piecy/models.py:396
-#: piecy/models.py:415 piecy/models.py:441 piecy/models.py:459
-#: piecy/models.py:477 piecy/models.py:495 piecy/models.py:513
-#: piecy/models.py:539 piecy/models.py:569 piecy/models.py:594
-#: piecy/models.py:617 piecy/models.py:676 piecy/models.py:696
-#: piecy/models.py:716 piecy/models.py:735
+#: back/models.py:58 back/models.py:143 back/models.py:181 back/models.py:321
+#: back/models.py:414 back/models.py:571 piecy/models.py:47 piecy/models.py:91
+#: piecy/models.py:115 piecy/models.py:168 piecy/models.py:229
+#: piecy/models.py:249 piecy/models.py:271 piecy/models.py:294
+#: piecy/models.py:316 piecy/models.py:337 piecy/models.py:372
+#: piecy/models.py:393 piecy/models.py:412 piecy/models.py:438
+#: piecy/models.py:456 piecy/models.py:474 piecy/models.py:492
+#: piecy/models.py:510 piecy/models.py:536 piecy/models.py:566
+#: piecy/models.py:591 piecy/models.py:614 piecy/models.py:673
+#: piecy/models.py:693 piecy/models.py:713 piecy/models.py:732
 msgid "Créé le"
 msgstr ""
 
-#: back/models.py:33 back/models.py:56 back/models.py:78 back/models.py:113
-#: back/models.py:136 piecy/models.py:48 piecy/models.py:92 piecy/models.py:116
-#: piecy/models.py:169 piecy/models.py:233 piecy/models.py:253
-#: piecy/models.py:275 piecy/models.py:298 piecy/models.py:320
-#: piecy/models.py:341 piecy/models.py:376 piecy/models.py:397
-#: piecy/models.py:416 piecy/models.py:442 piecy/models.py:460
-#: piecy/models.py:478 piecy/models.py:496 piecy/models.py:514
-#: piecy/models.py:540 piecy/models.py:570 piecy/models.py:595
-#: piecy/models.py:618 piecy/models.py:677 piecy/models.py:697
-#: piecy/models.py:717 piecy/models.py:736
+#: back/models.py:59 back/models.py:144 back/models.py:182 back/models.py:322
+#: back/models.py:415 back/models.py:572 piecy/models.py:48 piecy/models.py:92
+#: piecy/models.py:116 piecy/models.py:169 piecy/models.py:230
+#: piecy/models.py:250 piecy/models.py:272 piecy/models.py:295
+#: piecy/models.py:317 piecy/models.py:338 piecy/models.py:373
+#: piecy/models.py:394 piecy/models.py:413 piecy/models.py:439
+#: piecy/models.py:457 piecy/models.py:475 piecy/models.py:493
+#: piecy/models.py:511 piecy/models.py:537 piecy/models.py:567
+#: piecy/models.py:592 piecy/models.py:615 piecy/models.py:674
+#: piecy/models.py:694 piecy/models.py:714 piecy/models.py:733
 msgid "Modifié par"
 msgstr ""
 
-#: back/models.py:34 back/models.py:57 back/models.py:79 back/models.py:114
-#: back/models.py:137 piecy/models.py:49 piecy/models.py:93 piecy/models.py:117
-#: piecy/models.py:170 piecy/models.py:234 piecy/models.py:254
-#: piecy/models.py:276 piecy/models.py:299 piecy/models.py:321
-#: piecy/models.py:342 piecy/models.py:377 piecy/models.py:398
-#: piecy/models.py:417 piecy/models.py:443 piecy/models.py:461
-#: piecy/models.py:479 piecy/models.py:497 piecy/models.py:515
-#: piecy/models.py:541 piecy/models.py:571 piecy/models.py:596
-#: piecy/models.py:619 piecy/models.py:678 piecy/models.py:698
-#: piecy/models.py:718 piecy/models.py:737
+#: back/models.py:60 back/models.py:145 back/models.py:183 back/models.py:323
+#: back/models.py:416 back/models.py:573 piecy/models.py:49 piecy/models.py:93
+#: piecy/models.py:117 piecy/models.py:170 piecy/models.py:231
+#: piecy/models.py:251 piecy/models.py:273 piecy/models.py:296
+#: piecy/models.py:318 piecy/models.py:339 piecy/models.py:374
+#: piecy/models.py:395 piecy/models.py:414 piecy/models.py:440
+#: piecy/models.py:458 piecy/models.py:476 piecy/models.py:494
+#: piecy/models.py:512 piecy/models.py:538 piecy/models.py:568
+#: piecy/models.py:593 piecy/models.py:616 piecy/models.py:675
+#: piecy/models.py:695 piecy/models.py:715 piecy/models.py:734
 msgid "Modifié le"
 msgstr ""
 
-#: back/models.py:53 back/models.py:75 back/models.py:110 back/models.py:133
-#: piecy/models.py:45 piecy/models.py:89 piecy/models.py:113
-#: piecy/models.py:230 piecy/models.py:250 piecy/models.py:272
-#: piecy/models.py:295 piecy/models.py:317 piecy/models.py:338
-#: piecy/models.py:373 piecy/models.py:394 piecy/models.py:413
-#: piecy/models.py:439 piecy/models.py:457 piecy/models.py:475
-#: piecy/models.py:493 piecy/models.py:511 piecy/models.py:537
-#: piecy/models.py:567 piecy/models.py:592 piecy/models.py:615
-#: piecy/models.py:674 piecy/models.py:694 piecy/models.py:714
-#: piecy/models.py:733
-msgid "Appartient à"
+#: back/models.py:164 piecy/models.py:128
+msgid "Brouillon"
 msgstr ""
 
-#: base/templates/base/base.html:14 templates/allauth/layouts/base_auth.html:20
+#: back/models.py:165 back/models.py:393
+msgid "Attente Paiement"
+msgstr ""
+
+#: back/models.py:166 back/models.py:394
+msgid "Paiement Partiel"
+msgstr ""
+
+#: back/models.py:167
+msgid "Payé"
+msgstr ""
+
+#: back/models.py:168
+msgid "Annulé"
+msgstr ""
+
+#: back/models.py:395
+msgid "Payée"
+msgstr ""
+
+#: back/models.py:396 piecy/models.py:132
+msgid "Annulée"
+msgstr ""
+
+#: back/models.py:537
+msgid "Cash"
+msgstr ""
+
+#: back/models.py:538
+msgid "Transfert bancaire"
+msgstr ""
+
+#: back/models.py:539
+msgid "Eléctronique"
+msgstr ""
+
+#: back/models.py:540
+msgid "Chèque"
+msgstr ""
+
+#: back/models.py:541
+msgid "Autre"
+msgstr ""
+
+#: back/models.py:548
+msgid "Attente Confirmation"
+msgstr ""
+
+#: back/models.py:549
+msgid "Confirmé"
+msgstr ""
+
+#: back/models.py:550
+msgid "Echoué"
+msgstr ""
+
+#: back/models.py:557
+#: tenancy/templates/tenancy/snippets/subscription-line.html:63
+#: tenancy/views.py:516
+msgid "Commande"
+msgstr ""
+
+#: back/models.py:562 tenancy/templates/tenancy/snippets/order-actions.html:50
+#: tenancy/templates/tenancy/snippets/payment-line.html:101
+#: tenancy/templates/tenancy/snippets/subscription-line.html:110
+msgid "Numéro"
+msgstr ""
+
+#: back/models.py:563 tenancy/templates/tenancy/snippets/order-actions.html:54
+#: tenancy/templates/tenancy/snippets/payment-line.html:105
+#: tenancy/templates/tenancy/snippets/subscription-line.html:114
+msgid "Montant"
+msgstr ""
+
+#: back/models.py:564 tenancy/templates/tenancy/snippets/payment-line.html:56
+msgid "Méthode"
+msgstr ""
+
+#: back/models.py:565 piecy/models.py:141
+#: tenancy/templates/tenancy/snippets/order-actions.html:58
+#: tenancy/templates/tenancy/snippets/payment-line.html:109
+#: tenancy/templates/tenancy/snippets/subscription-line.html:118
+msgid "Status"
+msgstr ""
+
+#: back/models.py:566 tenancy/templates/tenancy/snippets/payment-line.html:52
+msgid "Référence"
+msgstr ""
+
+#: back/models.py:567
+msgid "Payé le"
+msgstr ""
+
+#: back/models.py:568 tenancy/templates/tenancy/snippets/payment-line.html:64
+msgid "Notes"
+msgstr ""
+
+#: back/signals.py:9
+msgid "Pièces Auto"
+msgstr ""
+
+#: back/signals.py:10
+msgid "s.a.r.l"
+msgstr ""
+
+#: back/templates/back/profile.html:8
+msgid "Profile Utilisateur"
+msgstr ""
+
+#: back/templates/back/profile.html:9
+msgid "Coming soon"
+msgstr ""
+
+#: back/templates/back/snipets/order-form.html:8
+msgid "Confirmer"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:34
+#: back/templates/back/snipets/plan-card.html:41
+#: back/templates/back/snipets/plan-card.html:50
+msgid "Mois"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:45
+#: back/templates/back/snipets/plan-card.html:54
+msgid "Année"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:61
+#: back/templates/back/snipets/plan-card.html:68
+msgid " Mois"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:64
+#: back/templates/back/snipets/plan-card.html:71
+msgid " Année"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:77
+#: base/templates/base/includes/menu-dash.html:12
+#: tenancy/templates/tenancy/summary.html:195
+#: tenancy/templates/tenancy/users.html:14
+msgid "Utilisateurs"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:78
+msgid "Magasins"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:79
+msgid "Produits"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:80
+msgid "Options"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:81
+msgid "Site Vitrine"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:83
+msgid "Site Ecommerce"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:84
+msgid "Serveur mail privé"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:108
+msgid "Choisir"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:118
+#: tenancy/templates/tenancy/users.html:53
+msgid "Désactivé"
+msgstr ""
+
+#: back/templates/back/snipets/plan-card.html:119
+msgid "Si vous souhaitez baisser d'un Plan, merci de nous contacter."
+msgstr ""
+
+#: back/templates/back/snipets/plan-cards.html:7
+msgid "Paiement à l'Année"
+msgstr ""
+
+#: back/templates/back/snipets/plan-cards.html:12
+msgid "Paiement au Mois"
+msgstr ""
+
+#: base/management/commands/createplans.py:14
+msgid "Basic"
+msgstr ""
+
+#: base/management/commands/createplans.py:15
+msgid "L'essentiel pour bien démarrer votre activité."
+msgstr ""
+
+#: base/management/commands/createplans.py:31
+msgid "Avancé"
+msgstr ""
+
+#: base/management/commands/createplans.py:32
+msgid "Basic + Fonctionnalités plus avnacées."
+msgstr ""
+
+#: base/management/commands/createplans.py:49
+msgid "Pro"
+msgstr ""
+
+#: base/management/commands/createplans.py:50
+msgid "Avancé + Tout ce qu'il faut pour bien grandir."
+msgstr ""
+
+#: base/templates/base/about.html:8
+msgid "À propos de nous"
+msgstr ""
+
+#: base/templates/base/base.html:16 templates/allauth/layouts/base_auth.html:20
 msgid "Piecy auto spare parts management system"
 msgstr ""
 
-#: base/templates/base/base.html:15 templates/allauth/layouts/base_auth.html:21
+#: base/templates/base/base.html:17 templates/allauth/layouts/base_auth.html:21
 msgid "Piecy auto car spare parts management system"
 msgstr ""
 
-#: base/templates/base/home.html:8
-msgid "It's working."
+#: base/templates/base/coming.html:8
+msgid "Disponible bientôt"
 msgstr ""
 
-#: base/templates/base/home.html:9
+#: base/templates/base/contact.html:8
+msgid "Nous contacter"
+msgstr ""
+
+#: base/templates/base/error.html:8
+msgid "C'est une erreur !"
+msgstr ""
+
+#: base/templates/base/error.html:11
+msgid "Code de l"
+msgstr ""
+
+#: base/templates/base/error.html:15
+msgid "Message de l"
+msgstr ""
+
+#: base/templates/base/home.html:6
+msgid "Bienvenue"
+msgstr ""
+
+#: base/templates/base/home.html:12
 msgid "It's going to work."
 msgstr ""
 
-#: base/templates/base/includes/footer.html:2
+#: base/templates/base/includes/footer.html:3
 msgid "All rights reserved"
 msgstr ""
 
-#: piecy/models.py:12
+#: base/templates/base/includes/menu-buying.html:5
+msgid "Achats"
+msgstr ""
+
+#: base/templates/base/includes/menu-buying.html:9
+#: base/templates/base/includes/menu-selling.html:8
+msgid "Expiring"
+msgstr ""
+
+#: base/templates/base/includes/menu-buying.html:11
+#: base/templates/base/includes/menu-selling.html:10
+msgid "Newest"
+msgstr ""
+
+#: base/templates/base/includes/menu-buying.html:13
+#: base/templates/base/includes/menu-selling.html:12
+msgid "My Favourites"
+msgstr ""
+
+#: base/templates/base/includes/menu-buying.html:15
+#: base/templates/base/includes/menu-selling.html:14
+msgid "Insights"
+msgstr ""
+
+#: base/templates/base/includes/menu-buying.html:17
+#: base/templates/base/includes/menu-selling.html:16
+msgid "Purchase Orders"
+msgstr ""
+
+#: base/templates/base/includes/menu-dash.html:8
+#: tenancy/templates/tenancy/dashboard.html:9
+msgid "Dashboard"
+msgstr ""
+
+#: base/templates/base/includes/menu-dash.html:10
+msgid "Abonnement"
+msgstr ""
+
+#: base/templates/base/includes/menu-dash.html:14
+msgid "Réglages"
+msgstr ""
+
+#: base/templates/base/includes/menu-dash.html:16
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:129
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:162
+msgid "Support"
+msgstr ""
+
+#: base/templates/base/includes/menu-selling.html:5
+msgid "Ventes"
+msgstr ""
+
+#: base/templates/base/includes/menu-stock.html:5
+msgid "Stock"
+msgstr ""
+
+#: base/templates/base/includes/menu-stock.html:8
+msgid "Recherche Article"
+msgstr ""
+
+#: base/templates/base/includes/menu-stock.html:10
+msgid "Vérifier Commande"
+msgstr ""
+
+#: base/templates/base/includes/menu-stock.html:12
+msgid "Inventaire"
+msgstr ""
+
+#: base/templates/base/includes/menu-stock.html:14
+msgid "Gestion Magasins"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:12
+msgid "Menu"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:20
+msgid "Mon Profile"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:26
+msgid "Préférences"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:33
+msgid "Adresses Email"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:42
+#: tenancy/templates/tenancy/add-user.html:82
+msgid "Mot de passe"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:50
+msgid "Connexions du compte"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:58
+msgid "Authentication deux facteurs"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:66
+#: templates/allauth/elements/actions.html:28
+#: templates/allauth/elements/user-menu.html:34
+#: templates/usersessions/usersession_list.html:6
+#: templates/usersessions/usersession_list.html:10
+msgid "Sessions"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:74
+msgid "Se Déconnecter"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:82
+#: base/templates/base/includes/navbar.html:23
+msgid "Se Connecter"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:90
+msgid "Créer Compte Gratuit"
+msgstr ""
+
+#: base/templates/base/includes/menu-user.html:95
+#: tenancy/templates/tenancy/subscribe.html:35
+#: tenancy/templates/tenancy/subscribe.html:51
+#: tenancy/templates/tenancy/summary.html:24
+#: tenancy/templates/tenancy/summary.html:54
+#: tenancy/templates/tenancy/summary.html:104
+#: tenancy/templates/tenancy/summary.html:125
+#: tenancy/templates/tenancy/summary.html:155
+#: tenancy/templates/tenancy/summary.html:176
+#: tenancy/templates/tenancy/trial.html:40
+#: tenancy/templates/tenancy/trial.html:50
+msgid "Nous Contacter"
+msgstr ""
+
+#: base/templates/base/includes/messages-modals.html:8
+msgid "Messages"
+msgstr ""
+
+#: base/templates/base/includes/messages-modals.html:22
+msgid "Fermer"
+msgstr ""
+
+#: base/templates/base/legal.html:8 tenancy/templates/tenancy/subscribe.html:75
+msgid "Mentions légales"
+msgstr ""
+
+#: piecy/models.py:12 tenancy/templates/tenancy/users.html:31
 msgid "Nouveau"
 msgstr ""
 
@@ -122,6 +604,18 @@ msgstr ""
 
 #: piecy/models.py:14
 msgid "Utilisé"
+msgstr ""
+
+#: piecy/models.py:45 piecy/models.py:89 piecy/models.py:113
+#: piecy/models.py:227 piecy/models.py:247 piecy/models.py:269
+#: piecy/models.py:292 piecy/models.py:314 piecy/models.py:335
+#: piecy/models.py:370 piecy/models.py:391 piecy/models.py:410
+#: piecy/models.py:436 piecy/models.py:454 piecy/models.py:472
+#: piecy/models.py:490 piecy/models.py:508 piecy/models.py:534
+#: piecy/models.py:564 piecy/models.py:589 piecy/models.py:612
+#: piecy/models.py:671 piecy/models.py:691 piecy/models.py:711
+#: piecy/models.py:730
+msgid "Appartient à"
 msgstr ""
 
 #: piecy/models.py:62
@@ -136,10 +630,6 @@ msgstr ""
 msgid "Mlle."
 msgstr ""
 
-#: piecy/models.py:128
-msgid "Brouillon"
-msgstr ""
-
 #: piecy/models.py:129
 msgid "Devis"
 msgstr ""
@@ -150,10 +640,6 @@ msgstr ""
 
 #: piecy/models.py:131
 msgid "Livrée"
-msgstr ""
-
-#: piecy/models.py:132
-msgid "Annulée"
 msgstr ""
 
 #: piecy/models.py:135
@@ -172,10 +658,6 @@ msgstr ""
 msgid "Activée"
 msgstr ""
 
-#: piecy/models.py:141
-msgid "Status"
-msgstr ""
-
 #: piecy/models.py:142
 msgid "Client"
 msgstr ""
@@ -192,7 +674,8 @@ msgstr ""
 msgid "Total hors taxes"
 msgstr ""
 
-#: piecy/models.py:146
+#: piecy/models.py:146 tenancy/templates/tenancy/order.html:60
+#: tenancy/templates/tenancy/snippets/order-items.html:32
 msgid "Total TTC"
 msgstr ""
 
@@ -256,20 +739,24 @@ msgstr ""
 msgid "Note interne"
 msgstr ""
 
-#: piecy/models.py:166
-msgid "Propriétaire"
-msgstr ""
-
-#: piecy/settings.py:145
+#: piecy/settings.py:153
 msgid "English"
 msgstr ""
 
-#: piecy/settings.py:146
+#: piecy/settings.py:154
 msgid "Arabic"
 msgstr ""
 
-#: piecy/settings.py:147
+#: piecy/settings.py:156
 msgid "French"
+msgstr ""
+
+#: piecy/settings.py:157
+msgid "Spanish"
+msgstr ""
+
+#: piecy/settings.py:158
+msgid "German"
 msgstr ""
 
 #: templates/account/account_inactive.html:5
@@ -839,7 +1326,7 @@ msgstr ""
 msgid "Signup"
 msgstr ""
 
-#: templates/account/signup.html:8 templates/account/signup.html:30
+#: templates/account/signup.html:8 templates/account/signup.html:35
 #: templates/account/signup_by_passkey.html:29
 #: templates/allauth/elements/actions.html:44
 #: templates/allauth/elements/user-menu.html:53
@@ -852,7 +1339,13 @@ msgstr ""
 msgid "Already have an account? Then please %(link)ssign in%(end_link)s."
 msgstr ""
 
-#: templates/account/signup.html:39
+#: templates/account/signup.html:21
+msgid ""
+"Vous travaillez pour une Entreprise déjà enregistrée? Contactez plutôt votre "
+"administrateur."
+msgstr ""
+
+#: templates/account/signup.html:44
 msgid "Sign up using a passkey"
 msgstr ""
 
@@ -938,13 +1431,6 @@ msgstr ""
 #: templates/mfa/authenticate.html:10 templates/mfa/index.html:5
 #: templates/mfa/index.html:9
 msgid "Two-Factor Authentication"
-msgstr ""
-
-#: templates/allauth/elements/actions.html:28
-#: templates/allauth/elements/user-menu.html:34
-#: templates/usersessions/usersession_list.html:6
-#: templates/usersessions/usersession_list.html:10
-msgid "Sessions"
 msgstr ""
 
 #: templates/allauth/elements/fields-y.html:38
@@ -1461,4 +1947,858 @@ msgstr ""
 
 #: templates/usersessions/usersession_list.html:72
 msgid "Sign Out Other Sessions"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:6
+#: tenancy/templates/tenancy/add-user.html:16
+msgid "Créer un Utilisateur"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:27
+msgid "Prénom"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:48
+msgid "Nom Utilisateur"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:76
+msgid "Administrateur de l'Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:84
+msgid ""
+"Une fois créé, le nouvel Utilisateur devra créer un mot de passe en "
+"utilisant le lien"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:85
+msgid "Mot de passe oublié"
+msgstr ""
+
+#: tenancy/templates/tenancy/add-user.html:90
+#: tenancy/templates/tenancy/order-payment-form.html:78
+msgid "Valider"
+msgstr ""
+
+#: tenancy/templates/tenancy/details.html:7
+msgid "Details Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/details.html:13
+msgid "Tenant Details"
+msgstr ""
+
+#: tenancy/templates/tenancy/history.html:8
+msgid "Tenant History"
+msgstr ""
+
+#: tenancy/templates/tenancy/order-details.html:6
+#: tenancy/templates/tenancy/order-details.html:14
+msgid "Commande Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/order-details.html:21
+#: tenancy/templates/tenancy/order-payments.html:21
+#: tenancy/templates/tenancy/snippets/order-actions.html:7
+msgid "Payer"
+msgstr ""
+
+#: tenancy/templates/tenancy/order-payment-form.html:6
+#: tenancy/templates/tenancy/order-payment-form.html:16
+msgid "Créer Paiement Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/order-payments.html:6
+#: tenancy/templates/tenancy/order-payments.html:14
+msgid "Paiements Commande Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/order-payments.html:45
+msgid "Aucun Paiement trouvé"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:7
+#: tenancy/templates/tenancy/order.html:13
+msgid "Détails commande"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:36
+#: tenancy/templates/tenancy/trial.html:24
+msgid "Date début"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:40
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:20
+#: tenancy/templates/tenancy/snippets/subscription-line.html:146
+#: tenancy/templates/tenancy/summary.html:137
+#: tenancy/templates/tenancy/summary.html:167
+msgid "Plan"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:44
+#: tenancy/templates/tenancy/trial.html:28
+msgid "Date fin"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:52
+msgid "Prix hors taxes"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:56
+#: tenancy/templates/tenancy/snippets/order-items.html:20
+msgid "Taxes"
+msgstr ""
+
+#: tenancy/templates/tenancy/order.html:74
+msgid "Erreur lors de la lecture du plan."
+msgstr ""
+
+#: tenancy/templates/tenancy/orders.html:6
+#: tenancy/templates/tenancy/orders.html:14
+msgid "Commandes Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/orders.html:34
+msgid "Aucune Commande trouvée"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:15
+msgid "Détails"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:23
+#: tenancy/templates/tenancy/summary.html:187
+msgid "Paiements"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:29
+#: tenancy/templates/tenancy/snippets/payment-line.html:73
+#: tenancy/templates/tenancy/snippets/subscription-line.html:87
+msgid "Imprimer"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:36
+#: tenancy/templates/tenancy/snippets/order-actions.html:66
+#: tenancy/templates/tenancy/snippets/payment-line.html:87
+#: tenancy/templates/tenancy/snippets/payment-line.html:117
+#: tenancy/templates/tenancy/snippets/subscription-line.html:96
+#: tenancy/templates/tenancy/snippets/subscription-line.html:126
+#: tenancy/templates/tenancy/users.html:103
+#: tenancy/templates/tenancy/users.html:124
+msgid "Supprimer"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:42
+#: tenancy/templates/tenancy/snippets/payment-line.html:93
+#: tenancy/templates/tenancy/snippets/subscription-line.html:102
+#: tenancy/templates/tenancy/users.html:110
+msgid "Confirmation"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:47
+msgid "Supprimer définitivement cete Commande"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-actions.html:63
+#: tenancy/templates/tenancy/snippets/payment-line.html:114
+#: tenancy/templates/tenancy/snippets/subscription-line.html:123
+#: tenancy/templates/tenancy/users.html:121
+msgid "Annuler"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-items.html:12
+msgid "Prix unitaire"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-items.html:16
+msgid "Prix sans taxes"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-items.html:27
+msgid "Aucun élément trouvé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-items.html:36
+msgid "Total HT"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-items.html:40
+msgid "Total taxes"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-line.html:14
+msgid "Surpayé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-payments-summary.html:6
+msgid "Total Commande"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-payments-summary.html:13
+msgid "Montant payé confirmé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-payments-summary.html:21
+msgid "Montant à confirmer"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-payments-summary.html:29
+msgid "Montant à payer"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-payments-summary.html:39
+msgid "Montant sur-payé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/order-payments-summary.html:48
+msgid "Dépayer"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/payment-line.html:60
+msgid "Date paiement"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/payment-line.html:79
+#: tenancy/templates/tenancy/summary.html:205
+msgid "Modifier"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/payment-line.html:98
+msgid "Supprimer définitivement ce Paiement"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/payment-line.html:132
+msgid "Paiement non trouvé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:6
+#: tenancy/templates/tenancy/snippets/subscription-line.html:15
+msgid "Actif"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:9
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:29
+#: tenancy/templates/tenancy/snippets/subscription-line.html:28
+#: tenancy/templates/tenancy/snippets/subscription-line.html:34
+#: tenancy/templates/tenancy/snippets/subscription-line.html:151
+#: tenancy/templates/tenancy/snippets/subscription-line.html:155
+#: tenancy/templates/tenancy/snippets/subscription-line.html:159
+msgid "Jours"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:11
+msgid "Jours Restant"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:26
+#: tenancy/templates/tenancy/snippets/subscription-line.html:158
+msgid "Restant"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:37
+msgid "Date Début"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:43
+msgid "Date Fin"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:64
+msgid "Abonnement non payé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:72
+msgid "Abonnement non payé ou paiement non confirmé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:80
+msgid "Abonnement désactivé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:88
+msgid "Abonnement suspendu"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:100
+#: tenancy/templates/tenancy/snippets/subscription-line.html:72
+msgid "Commander"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:108
+msgid "Paiement"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:116
+#: tenancy/templates/tenancy/snippets/subscription-line.html:80
+#: tenancy/templates/tenancy/summary.html:100
+msgid "Renouveler"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:123
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:156
+#: tenancy/templates/tenancy/summary.html:189
+msgid "Historique"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:140
+msgid "Pas d'Abonnement Actif"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:144
+msgid "Merci de souscrire à un abonnement."
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/running-sub-summary.html:150
+#: tenancy/templates/tenancy/summary.html:123
+#: tenancy/templates/tenancy/summary.html:154
+#: tenancy/templates/tenancy/summary.html:175
+msgid "S'abonner"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:18
+msgid "Expiré"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:21
+msgid "Avenir"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:107
+msgid "Supprimer définitivement cet Abonnement"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:142
+msgid "Etat"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:150
+msgid "Durée"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:154
+msgid "Ecoulé"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:162
+msgid "Début"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:166
+msgid "Fin"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:170
+msgid "N° Commande"
+msgstr ""
+
+#: tenancy/templates/tenancy/snippets/subscription-line.html:174
+msgid "Date Commande"
+msgstr ""
+
+#: tenancy/templates/tenancy/sub-cancel.html:8
+msgid "Subscription Cancel"
+msgstr ""
+
+#: tenancy/templates/tenancy/sub-upgrade.html:8
+msgid "Subscription Upgrade"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:7
+msgid "Abonnement Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:15
+msgid "Séléction Plan"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:21
+msgid "Autres options"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:28
+msgid "Infrastructure privée"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:32
+msgid ""
+"Si vous optez pour une installation privée - réseau local, cloud privé ou "
+"fournisseur IaaS tiers - Nous vous assistons dans l'installation et la "
+"configuration de votre instance."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:44
+msgid "Sur mesure"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:48
+msgid ""
+"Ce n'est pas à vous de vous adapter au logiciel. C'est au logiciel de "
+"s'adapter à vos besoins."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:48
+msgid ""
+"Nous vous livrons des solutions sur mesure taillées aux dimensions de vos "
+"besoins spécifiques."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:63
+msgid "Les prix affichés n'incluent pas de taxes."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:66
+msgid "Les prix affichés n'incluent pas les prix des matériels (côté client)."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:69
+msgid "Les options sont facturées séparément."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:77
+msgid "Offres soumises à conditions.  "
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:78
+msgid "Garanties."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:79
+msgid "Contenu détaillé des plans."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:80
+msgid "Mises à jour."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:81
+msgid "Données de l'entreprise. Divulgation des données sous conditions."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscribe.html:82
+msgid "Conditions de manipulation des données."
+msgstr ""
+
+#: tenancy/templates/tenancy/subscriptions.html:6
+#: tenancy/templates/tenancy/subscriptions.html:16
+msgid "Abonnements Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/subscriptions.html:32
+msgid "Aucun Abonnement trouvée"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:6
+msgid "Sommaire Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:19
+msgid "ENTREPRISE DÉSACTIVÉE"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:22
+msgid ""
+"Cette Entreprise est désactivée. Merci de contacter notre Service Clients "
+"pour résoudre ce problème"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:34
+msgid "ABONNEMENT EXPIRÉ"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:35
+#: tenancy/templates/tenancy/summary.html:64
+msgid "Jours restants"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:40
+#: tenancy/templates/tenancy/summary.html:69
+msgid "Plan de l'abonnement"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:44
+#: tenancy/templates/tenancy/summary.html:73
+msgid "Fin de l'abonnement"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:49
+#: tenancy/templates/tenancy/summary.html:145
+#: tenancy/templates/tenancy/summary.html:172
+msgid ""
+"Attention: sans Abonnement valide, vous risquez de perdre vos données "
+"définitivement"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:52
+msgid "Réactiver"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:53
+#: tenancy/templates/tenancy/summary.html:101
+msgid "Améliorer"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:63
+msgid "ABONNEMENT ACTIF"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:79
+msgid "{{ current_subscription.plan.name }}"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:86
+msgid "Paiement non trouvé !"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:91
+msgid "Paiement non confirmé !"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:97
+msgid "Ajouter Paiement"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:113
+msgid "AUCUN ABONNEMENT ACTIF"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:117
+msgid "Vous n'avez pas d'Abonnement actif."
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:120
+msgid ""
+"Attention: Un Abonnement valide est requis pour utiliser cette application."
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:124
+msgid "Essai Gratuit"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:134
+msgid "ESSAI GRATUIT"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:139
+msgid "Votre Essai gratuit est actif jusqu'au:"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:148
+#: tenancy/templates/tenancy/trial.html:6
+msgid "Essai gratuit"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:164
+msgid "ESSAI GRATUIT EXPIRÉ"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:169
+msgid "Votre Essai gratuit a expiré depuis le:"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:197
+msgid "Gestion"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:203
+msgid "Détails Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:213
+msgid "Nom Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/summary.html:221
+msgid "Addresse"
+msgstr ""
+
+#: tenancy/templates/tenancy/trial.html:13
+msgid "Activation Essai gratuit"
+msgstr ""
+
+#: tenancy/templates/tenancy/trial.html:13
+msgid ""
+"Bénéficiez d'une période d'essai gratuite pour découvrir les fonctionnalités "
+"de notre application"
+msgstr ""
+
+#: tenancy/templates/tenancy/trial.html:47
+msgid ""
+"Vous pouvez à tout moment souscrire un Abonnement pour continuer à utiliser "
+"l'application"
+msgstr ""
+
+#: tenancy/templates/tenancy/trial.html:49
+msgid "Souscrire un Abonnement"
+msgstr ""
+
+#: tenancy/templates/tenancy/trial.html:54
+msgid ""
+"Vous n'avez pas les permissions requises pour effectuer cette opération. "
+"Contactez votre Administrateur."
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:6
+msgid "Utilisateurs Entreprise"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:35
+msgid "Amélioer"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:52
+msgid "Vous"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:54
+#: tenancy/templates/tenancy/users.html:82
+msgid "Admin"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:70
+msgid "Dernière connexion"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:71
+msgid "Date création"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:77
+msgid "Contacter"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:87
+msgid "Non-Admin"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:93
+msgid "Désactiver"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:98
+msgid "Activer"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:115
+msgid "Supprimer définitivement"
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:117
+msgid "Cette opération n'est pas réversible."
+msgstr ""
+
+#: tenancy/templates/tenancy/users.html:135
+msgid "Aucun Utilisateur trouvé"
+msgstr ""
+
+#: tenancy/views.py:44
+msgid "User not found"
+msgstr ""
+
+#: tenancy/views.py:46
+msgid "User Inactive"
+msgstr ""
+
+#: tenancy/views.py:48
+msgid "User not authenticated"
+msgstr ""
+
+#: tenancy/views.py:50
+msgid "User not an Admin"
+msgstr ""
+
+#: tenancy/views.py:53
+msgid "Tenant not found"
+msgstr ""
+
+#: tenancy/views.py:55
+msgid "Tenant Inactive"
+msgstr ""
+
+#: tenancy/views.py:57
+msgid "OK"
+msgstr ""
+
+#: tenancy/views.py:65
+msgid "Intégrité des données"
+msgstr ""
+
+#: tenancy/views.py:73
+msgid "Déjà connecté"
+msgstr ""
+
+#: tenancy/views.py:120
+msgid "Paiement Annuel"
+msgstr ""
+
+#: tenancy/views.py:123
+msgid "Paiement Mensuel"
+msgstr ""
+
+#: tenancy/views.py:255
+msgid "Nombre maximum d'utilisateur atteint pour votre Plan."
+msgstr ""
+
+#: tenancy/views.py:265
+msgid "Utilisateur ajouté"
+msgstr ""
+
+#: tenancy/views.py:267
+msgid "Données invalides. Utilisateur non ajouté."
+msgstr ""
+
+#: tenancy/views.py:275
+msgid "Vous ne pouvez pas ajouter un Utilisateur."
+msgstr ""
+
+#: tenancy/views.py:294
+msgid "Utilisateur activé"
+msgstr ""
+
+#: tenancy/views.py:298 tenancy/views.py:322 tenancy/views.py:353
+#: tenancy/views.py:377 tenancy/views.py:401
+msgid "Utilisateur non trouvé."
+msgstr ""
+
+#: tenancy/views.py:312
+msgid "Vous ne pouvez pas désactiver votre propre compte."
+msgstr ""
+
+#: tenancy/views.py:318
+msgid "Utilisateur désactivé"
+msgstr ""
+
+#: tenancy/views.py:339
+msgid "Vous ne pouvez pas supprimer votre propre compte."
+msgstr ""
+
+#: tenancy/views.py:345
+msgid "Vous ne pouvez pas supprimer cet Utilisateur"
+msgstr ""
+
+#: tenancy/views.py:345
+msgid "Raison"
+msgstr ""
+
+#: tenancy/views.py:349
+msgid "Utilisateur supprimeé"
+msgstr ""
+
+#: tenancy/views.py:367
+msgid "Vous ne pouvez pas rendre votre propre compte Non-Admin."
+msgstr ""
+
+#: tenancy/views.py:373
+msgid "Utilisateur rendu Non-Admin"
+msgstr ""
+
+#: tenancy/views.py:391
+msgid "Vous ne pouvez pas rendre votre propre compte Admin."
+msgstr ""
+
+#: tenancy/views.py:397
+msgid "Utilisateur rendu Admin"
+msgstr ""
+
+#: tenancy/views.py:447 tenancy/views.py:577 tenancy/views.py:606
+msgid "Erreur d'intégrité"
+msgstr ""
+
+#: tenancy/views.py:451 tenancy/views.py:483 tenancy/views.py:524
+#: tenancy/views.py:560 tenancy/views.py:618
+msgid "Commande non trouvée."
+msgstr ""
+
+#: tenancy/views.py:508
+msgid "Paiement ajouté"
+msgstr ""
+
+#: tenancy/views.py:510
+msgid "Données invalides. Paiement non ajouté."
+msgstr ""
+
+#: tenancy/views.py:548
+msgid "Paiement modifié"
+msgstr ""
+
+#: tenancy/views.py:550
+msgid "Données invalides. Paiement non modifié."
+msgstr ""
+
+#: tenancy/views.py:579
+msgid "Paiement confrmé non supprimable"
+msgstr ""
+
+#: tenancy/views.py:585
+msgid "Paiement supprimé"
+msgstr ""
+
+#: tenancy/views.py:587
+msgid "Paiement non supprimé"
+msgstr ""
+
+#: tenancy/views.py:589
+msgid "Paiement non trouvé."
+msgstr ""
+
+#: tenancy/views.py:608
+msgid "Commande avec paiements non supprimable"
+msgstr ""
+
+#: tenancy/views.py:614
+msgid "Commande supprimée"
+msgstr ""
+
+#: tenancy/views.py:616
+msgid "Commande non supprimée"
+msgstr ""
+
+#: tenancy/views.py:665
+msgid "Vous ne pouvez plus activer un Essai gratuit !"
+msgstr ""
+
+#: tenancy/views.py:670
+msgid "Vous avez déjà bénéficié d'un Essai gratuit !"
+msgstr ""
+
+#: tenancy/views.py:691
+msgid "Votre période d'essai a commencé"
+msgstr ""
+
+#: tenancy/views.py:693
+msgid "Quelque chose a mal tourné. Contacter le support."
+msgstr ""
+
+#: tenancy/views.py:751
+msgid ""
+"Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement "
+"précédent."
+msgstr ""
+
+#: tenancy/views.py:776
+msgid "Votre Abonnement précédent n'a pas été trouvé."
+msgstr ""
+
+#: tenancy/views.py:785
+msgid "New Subscription: Coming soon."
+msgstr ""
+
+#: tenancy/views.py:790
+msgid "Votre séléction n'est pas valide."
+msgstr ""
+
+#: tenancy/views.py:845
+msgid "Abonnement Annuel"
+msgstr ""
+
+#: tenancy/views.py:847
+msgid "Abonnement Mensuel"
+msgstr ""
+
+#: tenancy/views.py:885
+msgid "Abonnement activé. Merci de confirmer votre paiement."
+msgstr ""
+
+#: tenancy/views.py:908
+msgid "Previous Subscription not found."
 msgstr ""
