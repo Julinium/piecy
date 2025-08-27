@@ -20,6 +20,8 @@ urlpatterns = [
     path("users/<str:user_id>/disadminize/", views.disadminize_user, name="disadminize_user"),
     path("users/<str:user_id>/delete/", views.delete_user, name="delete_user"),
     # tenancy_orders #
+    path('subscriptions/', views.subscriptions, name='tenancy_subscriptions'),
+    path('plan-select/', views.plan_select, name='tenancy_plan_select'),
     path('orders/', views.orders, name='tenancy_orders'),
     path('orders/<str:order_id>/delete', views.delete_order, name='tenancy_delete_order'),
     path('orders/<str:order_id>/details', views.order_details, name='tenancy_order_details'),
@@ -27,7 +29,6 @@ urlpatterns = [
     path('order-payments/<str:order_id>/add', views.add_order_payment, name='tenancy_add_order_payment'),
     path('order-payment/<str:payment_id>/delete', views.delete_order_payment, name='tenancy_delete_order_payment'),
     path('order-payment/<str:payment_id>/edit', views.edit_order_payment, name='tenancy_edit_order_payment'),
-    path('subscriptions/', views.subscriptions, name='tenancy_subscriptions'),
 
     # path('edit_order_payment/<str:payment_id>', views.order_payment_form, name='tenancy_edit_order_payment'),
 ]

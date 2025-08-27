@@ -22,10 +22,12 @@ SUB_DAYS_DANGER = 30
 SUBS_HISTORY_COUNT = 10
 ITEMS_PER_PAGE = 10
 
+# Trial duration in days.
 TRIAL_DAYS = 30
 
 today = now().date()
 
+# Mapping Models status to bootstrap styling classes.
 strapus = {
     "X": "secondary",
     "W": "warning",
@@ -76,25 +78,30 @@ def is_deletable(request, user=None):
 
 @login_required(login_url="account_login")
 def summary(request):
+
+    """
+    Summary
+    """
+
     code, message = can_admin(request)
     if code == 200:
         tenant = request.user.tenant
         tenant_admins = tenant.workers.filter(is_tenant_admin = True)
         tenant_users = tenant.workers.exclude(is_tenant_admin = True)
-        payments_count = 0
+        # payments_count = 0
 
         context = {
             "tenant" : tenant,
             "admins" : tenant_admins,
             "users"  : tenant_users,
-            "payments_count"  : payments_count,
+            # "payments_count"  : payments_count,
         }
 
         context["users_count"] = len(tenant_users) + len(tenant_admins)
 
-        subscriptions         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
-        running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
-        current_subscription  = running_subscriptions.last()
+        subs         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
+        running_subs = subs.filter(date_fm__lte=today, date_to__gte=today)
+        current_subscription  = running_subs.last()
 
         trials = Trial.objects.filter(active=True, tenant=tenant)
         active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
@@ -109,14 +116,12 @@ def summary(request):
                 max_users = current_trial.plan.max_users
         context["max_users"] = max_users
 
-        payments_count = 0
-        if subscriptions:
-            # payments_count = subscriptions.filter(payment__isnull=False).count()
-            # context ["payments_count"] = payments_count
+        # payments_count = 0
+        if subs:
             context ["box"] = "S1R0"
-            context ["subscriptions"] = subscriptions[:SUBS_HISTORY_COUNT]
+            context ["subs"] = subs[:SUBS_HISTORY_COUNT]
             subscription_remaining_days = 0
-            latest_subscription = subscriptions.latest('date_to')
+            latest_subscription = subs.latest('date_to')
             periodicity = _("Paiement Annuel")
             duracity = latest_subscription.date_to - latest_subscription.date_fm
             if duracity.days < 32:
@@ -630,11 +635,14 @@ def subscriptions(request):
             }
         tenant = request.user.tenant
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
-        for sub in subs:
-            # sub.order.update_status()
-            sub.update_status()
         running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
+        for sub in subs:
+            sub.update_status()
+        trials = Trial.objects.filter(active=True, tenant=tenant)
+        running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
+        current_trial  = running_trials.last()
+        
         
         paginator = Paginator(subs, ITEMS_PER_PAGE)
         page_number = request.GET.get('page')
@@ -646,6 +654,8 @@ def subscriptions(request):
             page_obj = paginator.page(paginator.num_pages)
 
         context['page_obj'] = page_obj
+        context['current_trial'] = current_trial
+        context['trials'] = trials
         context['rub'] = current_subscription
         return render(request, 'tenancy/subscriptions.html', context)
 
@@ -663,12 +673,12 @@ def trial(request):
         subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
         if subscriptions:
             messages.warning(request, _("Vous ne pouvez plus activer un Essai gratuit !"))
-            return redirect('tenancy_summary')
+            return redirect('tenancy_subscriptions')
 
         trials = Trial.objects.filter(active=True, tenant=tenant)
         if trials:
             messages.warning(request, _("Vous avez déjà bénéficié d'un Essai gratuit !"))
-            return redirect('tenancy_summary')
+            return redirect('tenancy_subscriptions')
 
         trial_date_start = today
         trial_date_end = today + timedelta(days=TRIAL_DAYS)
@@ -680,20 +690,20 @@ def trial(request):
             plan_id = request.POST.get('plan_id', '')
             plan = Plan.objects.filter(id=plan_id).first()
 
-            trial = Trial(
+            new_trial = Trial(
                     date_fm = trial_date_start,
                     date_to = trial_date_end,
                     tenant = tenant,
                     plan = plan,
             )
             try: 
-                trial.save()
+                new_trial.save()
                 messages.success(request, _("Votre période d'essai a commencé"))
-            except Exception as xc: 
+            except : 
                 messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))
-                print(str(xc))
+                # print(str(xc))
 
-            return redirect('tenancy_summary')
+            return redirect('tenancy_subscriptions')
         else:
             context = {
                 'trial_date_start' : trial_date_start,
@@ -707,42 +717,46 @@ def trial(request):
 
 
 @login_required(login_url="account_login")
-def subscribe(request):
+def plan_select(request):
     code, message = can_admin(request)
     if code == 200:
         tenant = request.user.tenant
+        repetition = "new"
+        periodicity = "yearly"
+        start_date = today
+        max_ordre = 0
         context = {}
         subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
         latest_subscription = subscriptions.last()
-        if not latest_subscription:
-            context["repetition"] = "new"
+        if latest_subscription:
+            repetition  = "old"
 
         plans = Plan.objects.filter(active=True)
-        context["high_plans"] = plans
+        for plan in plans:
+            plan.created_by = Utilisateur.objects.first()
+            plan.edited_by = Utilisateur.objects.first()
+            plan.save()
+        
+        context["plans"] = plans
 
         if latest_subscription:
-            plan_ordre = latest_subscription.plan.ordre
-            high_plans = plans.filter(ordre__gte=plan_ordre)
-            periodicity = "yearly"
-            start_date = today
-            if latest_subscription.date_to <= latest_subscription.date_fm + timedelta(days=31):
-                periodicity = "monthly"
+            # max_ordre = Plan.objects.aggregate(Max('ordre'))['max__ordre']
+            max_ordre = latest_subscription.ordre
             if latest_subscription.date_to > today :
                 start_date = latest_subscription.date_to + relativedelta(days=1)
-            end_date = start_date + relativedelta(years=1)
-            if periodicity == "monthly":
-                end_date = start_date + relativedelta(months=1)
 
-            context["periodicity"]  = periodicity
-            context["plans"]        = plans
-            context["high_plans"]   = high_plans
-            context["start_date"]   = start_date
-            context["end_date"]     = end_date
+        end_date = start_date + relativedelta(years=1)
+
+        context["repetition"]   = repetition
+        context["periodicity"]  = periodicity
+        context["plans"]        = plans
+        context["start_date"]   = start_date
+        context["end_date"]     = end_date
+        context["max_ordre"]    = max_ordre
 
         if request.method == "POST":
             plan_id = request.POST.get('plan_id', '')
             if plan_id != "":
-                # messages.info(request, f"{plan_id}")
                 plan_uuid = uuid.UUID(plan_id, version=4)
                 selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
                 if latest_subscription:
@@ -753,25 +767,6 @@ def subscribe(request):
                             return redirect("tenancy_summary")
 
                         return redirect("tenancy_order")
-                        # plan_ordre = subscription.plan.ordre
-                        # high_plans = plans.filter(ordre__gte=plan_ordre)
-                        # periodicity = "yearly"
-                        # start_date = today
-                        # if subscription.date_to <= subscription.date_fm + timedelta(days=31):
-                        #     periodicity = "monthly"
-                        # if subscription.date_to > today :
-                        #     start_date = subscription.date_to + relativedelta(days=1)
-                        # end_date = start_date + relativedelta(years=1)
-                        # if periodicity == "monthly":
-                        #     end_date = start_date + relativedelta(months=1)
-
-                        # context["periodicity"]  = periodicity
-                        # context["plans"]        = plans
-                        # context["high_plans"]   = high_plans
-                        # context["start_date"]   = start_date
-                        # context["end_date"]     = end_date
-
-                        # return render(request, 'tenancy/subscribe.html', context)
 
                     sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
                     messages.error(request, f"{sub_message}")
@@ -791,9 +786,99 @@ def subscribe(request):
             messages.error(request, f"{sel_message}")
             return redirect("tenancy_summary")
 
-        plans = Plan.objects.filter(active=True)
-        context["plans"] = plans
-        return render(request, 'tenancy/subscribe.html', context)
+        return render(request, 'tenancy/plan-select.html', context)
+
+    return HttpResponse(message, status=code)
+
+
+@login_required(login_url="account_login")
+def subscribe(request):
+    code, message = can_admin(request)
+    # if code == 200:
+    #     tenant = request.user.tenant
+    #     context = {}
+    #     subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
+    #     latest_subscription = subscriptions.last()
+    #     if not latest_subscription:
+    #         context["repetition"] = "new"
+
+    #     plans = Plan.objects.filter(active=True)
+    #     context["high_plans"] = plans
+
+    #     if latest_subscription:
+    #         plan_ordre = latest_subscription.plan.ordre
+    #         high_plans = plans.filter(ordre__gte=plan_ordre)
+    #         periodicity = "yearly"
+    #         start_date = today
+    #         if latest_subscription.date_to <= latest_subscription.date_fm + timedelta(days=31):
+    #             periodicity = "monthly"
+    #         if latest_subscription.date_to > today :
+    #             start_date = latest_subscription.date_to + relativedelta(days=1)
+    #         end_date = start_date + relativedelta(years=1)
+    #         if periodicity == "monthly":
+    #             end_date = start_date + relativedelta(months=1)
+
+    #         context["periodicity"]  = periodicity
+    #         context["plans"]        = plans
+    #         context["high_plans"]   = high_plans
+    #         context["start_date"]   = start_date
+    #         context["end_date"]     = end_date
+
+    #     if request.method == "POST":
+    #         plan_id = request.POST.get('plan_id', '')
+    #         if plan_id != "":
+    #             # messages.info(request, f"{plan_id}")
+    #             plan_uuid = uuid.UUID(plan_id, version=4)
+    #             selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
+    #             if latest_subscription:
+    #                 if selected_plan:
+    #                     if selected_plan.ordre < latest_subscription.plan.ordre:
+    #                         dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
+    #                         messages.error(request, f"{dgd_message}")
+    #                         return redirect("tenancy_summary")
+
+    #                     return redirect("tenancy_order")
+    #                     # plan_ordre = subscription.plan.ordre
+    #                     # high_plans = plans.filter(ordre__gte=plan_ordre)
+    #                     # periodicity = "yearly"
+    #                     # start_date = today
+    #                     # if subscription.date_to <= subscription.date_fm + timedelta(days=31):
+    #                     #     periodicity = "monthly"
+    #                     # if subscription.date_to > today :
+    #                     #     start_date = subscription.date_to + relativedelta(days=1)
+    #                     # end_date = start_date + relativedelta(years=1)
+    #                     # if periodicity == "monthly":
+    #                     #     end_date = start_date + relativedelta(months=1)
+
+    #                     # context["periodicity"]  = periodicity
+    #                     # context["plans"]        = plans
+    #                     # context["high_plans"]   = high_plans
+    #                     # context["start_date"]   = start_date
+    #                     # context["end_date"]     = end_date
+
+    #                     # return render(request, 'tenancy/subscribe.html', context)
+
+    #                 sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
+    #                 messages.error(request, f"{sub_message}")
+    #                 return redirect("tenancy_summary")
+
+    #             # New subscription
+    #             periodicity = request.POST.get('periodicity', '')
+    #             ###########################
+
+    #             ###########################
+    #             plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
+    #             # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
+    #             messages.error(request, f"{plan_message}")
+    #             return redirect("tenancy_summary")
+
+    #         sel_message = _("Votre séléction n'est pas valide.")
+    #         messages.error(request, f"{sel_message}")
+    #         return redirect("tenancy_summary")
+
+    #     plans = Plan.objects.filter(active=True)
+    #     context["plans"] = plans
+    #     return render(request, 'tenancy/subscribe.html', context)
 
     return HttpResponse(message, status=code)
 

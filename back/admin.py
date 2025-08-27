@@ -59,25 +59,25 @@ class PlanAdmin(admin.ModelAdmin):
 
     list_display = ("name", "active", "monthly_price", 'header')
 
-    readonly_fields = ('created_by', 'get_created_by', 'created_on', 'edited_by', 'get_edited_by', 'edited_on')
+    readonly_fields = ('created_by', 'created_on', 'edited_by', 'edited_on')
 
     formfield_overrides = {
         models.BooleanField: {'widget': forms.CheckboxInput},
     }
     
-    def get_created_by(self, obj):
-        return self._get_username(obj.created_by)
-    get_created_by.short_description = 'Created by'
+    # def get_created_by(self, obj):
+    #     return self._get_username(obj.created_by)
+    # get_created_by.short_description = 'Created by'
 
-    def get_edited_by(self, obj):
-        return self._get_username(obj.edited_by)
-    get_edited_by.short_description = 'Edited by'
+    # def get_edited_by(self, obj):
+    #     return self._get_username(obj.edited_by)
+    # get_edited_by.short_description = 'Edited by'
 
-    def _get_username(self, user_id):
-        try:
-            return User.objects.get(pk=user_id).username
-        except User.DoesNotExist:
-            return f"(Deleted user: {user_id})" if user_id else "-"
+    # def _get_username(self, user_id):
+    #     try:
+    #         return User.objects.get(pk=user_id).username
+    #     except User.DoesNotExist:
+    #         return f"(Deleted user: {user_id})" if user_id else "-"
 
     def save_model(self, request, obj, form, change):
         if not change or not obj.created_by:

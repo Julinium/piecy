@@ -20,9 +20,6 @@
                         {% if sub.window == 1 %}
                             <span class="badge bg-warning py-2">{% trans "Avenir" %}</span>
                         {% endif %}
-                        <!-- {% if sub.window != -1 %}
-                            <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
-                        {% endif %} -->
                         {% if sub.days_to_end > 0 %}
                             {% if sub.window != 1 %}
                                 <span class="badge bg-{{ sub.teint }} py-2"><span class="me-1"><i class="bi bi-hourglass-bottom"></i></span>{{ sub.days_to_end }} {% trans "Jours" %}</span>
@@ -53,23 +50,23 @@
     </a>
 
     <div class="collapse" id="{{ sub.id }}">
-        
+
         <div id="order-actions-top" class="list-inline mb-3 px-3">
 
             {% if sub.order %}
                 <div class="list-inline-item">
                     <a href="{% url 'tenancy_order_details' sub.order.id %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-basket"></i>
-                        <span class="ms-1"> {% trans "Commande" %}</span>
+                        <span class="ms-1"> {% trans "Voir Commande" %}</span>
                     </a>
                 </div>
             {% endif %}
 
-            {% if sub.status == "X" %}
+            {% if sub.status == "X" and sub.window != -1 %}
                 <div class="list-inline-item">
                     <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
                         <i class="bi bi-bag-plus"></i>
-                        <span class="ms-1">{% trans "Commander" %}</span>
+                        <span class="ms-1">{% trans "Passer Commande" %}</span>
                     </a>
                 </div>
             {% endif %}

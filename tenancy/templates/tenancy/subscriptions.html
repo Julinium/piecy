@@ -16,7 +16,7 @@
         <h3 class="p-2 mb-3">{% translate "Abonnements Entreprise" %}</h3>
     </div>
     <div id="sub-status" class="mb-3">
-        {% include "tenancy/snippets/running-sub-summary.html" with rub=rub %}
+        {% include "tenancy/snippets/running-sub-summary.html" with rub=rub rut=current_trial page_obj=page_obj trials=trials %}
     </div>
 
     <br class="mt-3">

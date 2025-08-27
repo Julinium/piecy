@@ -51,49 +51,13 @@
 
     <div class="card mb-4 shadow shadow bg-{{ rub.teint }}-subtle">
         <div class="card-header text-center text-bg-{{ rub.teint }} py-0">
-            <!-- <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
-            <span class="fw-bold ">{{ rub.plan.name }}</span>
-            <span class="fw-bold ">{{ rub.days_span }}</span>
-            <span class="small">{% trans "Jours" %}</span> -->
             <span class="fw-bold fs-4">{{ rub.days_to_end }}</span>
             <span class="small">{% trans "Jours Restant" %}</span>
         </div>
         <div class="card-body small pb-0">
 
             <div id="rub-summary-info">
-                <!-- <div class="d-block mb-2">
-                    <div class="row">
-                        <div class="col-12 col-md-6 mb-2">
-                            <div class="hstack gap-2 border-bottom border-secondary">
-                                <div class="small fw-light">{% trans "Plan" %}</div>
-                                <div class="">{{ rub.plan.name }}</div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-2">
-                            <div class="hstack gap-2 border-bottom border-secondary">
-                                <div class="small fw-light">{% trans "Restant" %}</div>
-                                <div>
-                                    <span class="fw-bold">{{ rub.days_to_end }}</span>
-                                    <span>{% trans "Jours" %}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12 col-md-6 mb-2">
-                            <div class="hstack gap-2 border-bottom border-secondary">
-                                <div class="small fw-light">{% trans "Date Début" %}</div>
-                                <div class="">{{ rub.date_fm }}</div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 mb-2">
-                            <div class="hstack gap-2 border-bottom border-secondary">
-                                <div class="small fw-light">{% trans "Date Fin" %}</div>
-                                <div class="">{{ rub.date_to }}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
+                
             </div>
 
             <div id="rub-progress">
@@ -103,41 +67,6 @@
                     </div>
                 </div>
             </div>
-
-            <!-- <div id="rub-messages">
-                {% if rub.status == "W" %}
-                    <div class="list-group mb-2">
-                        <li class="list-group-item text-bg-danger fw-bold">
-                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                            <span>{% trans "Abonnement non payé" %}</span>
-                        </li>
-                    </div>
-                {% endif %}
-                {% if rub.status == "P" %}
-                    <div class="list-group mb-2">
-                        <li class="list-group-item text-bg-danger fw-bold">
-                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                            <span>{% trans "Abonnement non payé ou paiement non confirmé" %}</span>
-                        </li>
-                    </div>
-                {% endif %}
-                {% if rub.status == "A" %}
-                    <div class="list-group mb-2">
-                        <li class="list-group-item text-bg-danger fw-bold">
-                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                            <span>{% trans "Abonnement désactivé" %}</span>
-                        </li>
-                    </div>
-                {% endif %}
-                {% if not rub.usable %}
-                    <div class="list-group mb-2">
-                        <li class="list-group-item text-bg-danger fw-bold">
-                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                            <span>{% trans "Abonnement suspendu" %}</span>
-                        </li>
-                    </div>
-                {% endif %}
-            </div> -->
 
             <div id="rub-actions">
                 <div class="list-inline mb-3">
@@ -151,10 +80,6 @@
                     {% endif %}
                     {% if rub.order.amount_due_to_pay > 0 %}
                         <div class="list-inline-item">
-                            <!-- <a href="{% url 'tenancy_order_payments' rub.order.id %}" class="btn btn-primary mt-1">
-                                <i class="bi bi-coin"></i>
-                                <span class="ms-1">{% trans "Payer" %} {{ rub.order.amount_due_to_pay }}</span>
-                            </a> -->
                             <a href="{% url 'tenancy_add_order_payment' rub.order.id %}" class="btn btn-primary mt-1">
                                 <i class="bi bi-coin"></i>
                                 <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ rub.order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ rub.order.order_currency }}</span></span></span>
@@ -195,6 +120,35 @@
         </div>
     </div>
 {% else %}
+
+    {% if rut %}
+        <div class="card mb-4 shadow shadow">
+            <div class="card-header fw-bold text-bg-warning text-center">
+                {% trans "Essai en cours" %}
+            </div>
+            <div class="card-body">
+                <div class="">
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-end small text-muted py-1">{% trans "Plan" %}</td>
+                                <td class="text-start small py-1">{{ rut.plan.name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end small text-muted py-1">{% trans "Date début" %}</td>
+                                <td class="text-start small py-1">{{ rut.date_fm }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end small text-muted py-1">{% trans "Date fin" %}</td>
+                                <td class="text-start fw-bold small py-1">{{ rut.date_to }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     <div class="card mb-4 shadow shadow bg-danger-subtle">
         <div class="card-header fw-bold text-bg-danger text-center">
             {% trans "Pas d'Abonnement Actif" %}
@@ -204,25 +158,27 @@
                 {% trans "Merci de souscrire à un abonnement." %}
             </div>
             <div class="list-inline">
+                {% if not trials and not page_obj %}
+                    <div class="list-inline-item">
+                        <a href="{% url 'tenancy_trial' %}" class="btn btn-success mt-1">
+                            <i class="bi bi-heart"></i>
+                            <span class="ms-1">{% trans "Essai gratuit" %}</span>
+                        </a>
+                    </div>
+                {% endif %}
                 <div class="list-inline-item">
-                    <a href="{% url 'base_coming' %}" class="btn btn-primary mt-1">
+                    <a href="{% url 'tenancy_plan_select' %}" class="btn btn-primary mt-1">
                         <i class="bi bi-plus-circle"></i>
                         <span class="ms-1">{% trans "S'abonner" %}</span>
                     </a>
                 </div>
                 <div class="list-inline-item">
-                    <a href="{% url 'tenancy_orders' %}" class="btn btn-outline-primary mt-1">
-                        <i class="bi bi-clock-history"></i>
-                        <span class="ms-1">{% trans "Historique" %}</span>
-                    </a>
-                </div>
-                <div class="list-inline-item">
                     <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-headset"></i>
-                        <span class="ms-1">{% trans "Support" %}</span>
+                        <span class="ms-1">{% trans "Contact" %}</span>
                     </a>
                 </div>
             </div>
         </div>
-     </div>
+    </div>
 {% endif %}

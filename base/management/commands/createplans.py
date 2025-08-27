@@ -2,7 +2,7 @@ from django.core.management.base import BaseCommand
 from django.utils.translation import gettext as _
 from datetime import date, timedelta
 
-from back.models import Plan #, Tenant, Utilisateur, Subscription
+from back.models import Plan, Utilisateur #, Tenant, Subscription
 
 class Command(BaseCommand):
     help = 'Insert basic Plans data into the database'
@@ -25,13 +25,14 @@ class Command(BaseCommand):
                 mailbox = False,
                 ecommerce = False,
                 vitrine = True,
+                # created_by = None
             ),
 
             Plan(
                 name = _("Avancé"),
                 header =  _("Basic + Fonctionnalités plus avnacées."),
                 featured = True,
-                ordre = 50,
+                ordre = 20,
                 monthly_price = 399.00,
                 max_users = 5,
                 max_clients = 50,
@@ -39,7 +40,7 @@ class Command(BaseCommand):
                 max_products = 500,
                 max_pdfs = 500,
                 max_excels = 500,
-                custom_domain = False,
+                custom_domain = True,
                 mailbox = False,
                 ecommerce = False,
                 vitrine = True,
@@ -49,7 +50,7 @@ class Command(BaseCommand):
                 name = _("Pro"),
                 header =  _("Avancé + Tout ce qu'il faut pour bien grandir."),
                 ordre = 30,
-                monthly_price = 499.00,
+                monthly_price = 699.00,
                 max_users = 10,
                 max_clients = 1000,
                 max_magasins = 10,
