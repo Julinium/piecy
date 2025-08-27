@@ -12,7 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from decimal import Decimal, ROUND_HALF_UP
 from django.http import HttpResponse
 
-from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur, Tenant, SystemOrder
+from back.models import SystemPayment, Plan, Subscription, Trial, Utilisateur, Tenant, SystemOrder, SystemOrderItem
 
 from .forms import CustomUserCreationForm, SystemPaymentForm
 
@@ -616,9 +616,16 @@ def delete_order(request, order_id=None):
                         numero = passed_order.numero
                         passed_order.active = False
                         passed_order.save()
-                        messages.success(request, _("Commande supprimée") + f": {passed_order.numero}")
-                    except:
-                        messages.error(request, _("Commande non supprimée"))
+                        for item in passed_order.items.all():
+                            item.active = False
+                            item.save()
+                        for sub in passed_order.subscriptions.all():
+                            sub.active = False
+                            sub.save()
+                        messages.success(request, _("Commande supprimée") + f": {numero}")
+                    except Exception as ex:
+                        print(str(ex))
+                        messages.error(request, _("Erreur survenue lors de la suppression de la commande."))
                 return redirect("tenancy_orders")
         return HttpResponse(_("Commande non trouvée."), status=403)
     return HttpResponse(message, status=code)
@@ -634,11 +641,28 @@ def subscriptions(request):
             "strapus": strapus,
             }
         tenant = request.user.tenant
+
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
         for sub in subs:
             sub.update_status()
+
+        repetition = "new"
+        # periodicity = "yearly"
+        start_date = today
+        max_ordre = 0
+        latest_subscription = subs.last()
+        if latest_subscription:
+            repetition  = "old"
+            max_ordre = latest_subscription.plan.ordre
+            if latest_subscription.date_to > today :
+                start_date = latest_subscription.date_to + relativedelta(days=1)
+
+        plans = Plan.objects.filter(active=True)
+        end_date_yearly = start_date + relativedelta(years=1)
+        end_date_monthly = start_date + relativedelta(months=1)
+        
         trials = Trial.objects.filter(active=True, tenant=tenant)
         running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
         current_trial  = running_trials.last()
@@ -657,6 +681,74 @@ def subscriptions(request):
         context['current_trial'] = current_trial
         context['trials'] = trials
         context['rub'] = current_subscription
+        context["repetition"]   = repetition
+        # context["periodicity"]  = periodicity
+        context["plans"]        = plans
+        context["start_date"]   = start_date
+        context["end_date_yearly"]     = end_date_yearly
+        context["end_date_monthly"]     = end_date_monthly
+        context["max_ordre"]    = max_ordre
+
+        if request.method == "POST":
+            plan_id = request.POST.get("plan_id", '--')
+            stage = request.POST.get("stage", '--')
+            periodicity = request.POST.get("periodicity", '--')
+            tag = request.POST.get("tag", '--')
+
+            selected_plan = None
+            if plan_id != "":
+                plan_uuid = uuid.UUID(plan_id, version=4)
+                selected_plan = Plan.objects.filter(active=True, id=plan_uuid).last()
+            if not selected_plan:
+                messages.error(request, _("Plan non trouvé! Merci de rééssayer plus tard. Si ce proble persiste, merci de nous contacter"))
+            else:
+                try:
+                    created_order = SystemOrder(
+                        customer = tenant,
+                        order_date = today,
+                    )
+                    created_order.save()
+
+                    unit_price_ht = 12 * selected_plan.monthly_price
+
+                    if periodicity == "monthly":
+                        if repetition == "old":
+                            unit_price_ht = selected_plan.monthly_month_tag
+                        else:
+                            unit_price_ht = selected_plan.monthly_tag_month_new
+                        product_name = _("Abonnement Mensuel")
+                        end_date = end_date_monthly
+                    else:
+                        if repetition == "old":
+                            unit_price_ht = selected_plan.yearly_year_tag_new
+                        else:
+                            unit_price_ht = selected_plan.yearly_year_tag_new
+                        product_name = _("Abonnement Annuel")
+                        end_date = end_date_yearly
+
+                    created_item = SystemOrderItem(                        
+                        order = created_order,
+                        product_name = f"{product_name} {selected_plan.name}",
+                        unit_price = unit_price_ht,
+                        quantity = 1,
+                        tax_rate = selected_plan.plan_taxes
+                    )
+                    created_item.save()
+
+                    created_sub = Subscription(
+                        tenant = tenant,
+                        plan = selected_plan,
+                        order = created_order,
+                        date_fm = start_date,
+                        date_to = end_date,
+                    )
+                    created_sub.save()
+                    messages.success(request, _("Commande créée. Merci de la confirmer") + f". Numéro: {created_order.numero}")
+                except Exception as ex:
+                    print(str(ex))
+                    messages.error(request, _("Commande non créée. Rééssayer plus tard"))
+                    
+            return redirect("tenancy_subscriptions")
         return render(request, 'tenancy/subscriptions.html', context)
 
     return HttpResponse(message, status=code)
@@ -789,6 +881,10 @@ def plan_select(request):
         return render(request, 'tenancy/plan-select.html', context)
 
     return HttpResponse(message, status=code)
+
+
+
+
 
 
 @login_required(login_url="account_login")

@@ -3,86 +3,87 @@
 
 
 {% if plan %}
-    <div class="col">
+    <div class="col pb-3">
         {% if plan.ordre >= max_ordre %}
-            <div class="card mb-4 rounded-3 shadow-sm">
-                <div class="card-header py-3{% if plan.featured and form_url != 'tenancy_trial' %} bg-success text-light{% endif %}">
-                    <h4 class="my-0 fw-bold">{{ plan.name }}</h4>
+            <div class="card rounded-3 {% if plan.featured %} shadow bg-success-subtle{% else %} shadow-sm{% endif %}">
+                <div class="card-header py-3">
+                    <h5 class="my-0 fw-bold">{{ plan.name }}</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body ">
                     {% if form_url != 'tenancy_trial' %}
-                        {% if periodicity == "yearly" %}
-                            <div class="">
-                                <span class="small fs-5 fw-light">{{ plan.monthly_month_tag }}</span>                        
-                                <span class="small text-muted fw-light">x12=</span>
-                                <span class="text-decoration-line-through fw-normal fs-4">{{ plan.monthly_year_tag }}</span>
-                            </div>
-                        {% else %}
+                        {% if periodicity == "monthly" %}
                             {% if repetition == "new" %}
                                 <div class="">
-                                    <span class="small fs-5 fw-light">{{ plan.monthly_month_tag }}</span>
+                                    <span class="small fw-light">{{ plan.monthly_month_tag }}</span>
                                     <span class="small text-muted fw-light">x1=</span>
-                                    <span class="text-decoration-line-through fw-normal fs-4">{{ plan.monthly_month_tag }}</span>
+                                    <span class="text-decoration-line-through fw-normal fs-5">{{ plan.monthly_month_tag }}</span>
                                 </div>
                             {% endif %}
+                        {% else %}
+                            <div class="">
+                                <span class="small fw-light">{{ plan.monthly_month_tag }}</span>                        
+                                <span class="small text-muted fw-light">x12=</span>
+                                <span class="text-decoration-line-through fw-normal fs-5">{{ plan.monthly_year_tag }}</span>
+                            </div>
                         {% endif %}
                         
                         {% if repetition == "new" %}
                                 <span class="badge fs-6 px-2 my-1 text-bg-success">-{{ plan.first_time_disc }}%</span>                                               
                         {% endif %}
 
-                        {% if periodicity == "yearly" %}
+                        {% if periodicity != "monthly" %}
                                 <span class="badge fs-6 px-2 my-1 text-bg-success">-{{ plan.year_free_mth }} {% trans "Mois" %}</span>
                         {% endif %}
 
-                        {% if periodicity == "yearly" %}
+                        {% if periodicity == "monthly" %}
                             {% if repetition == "new" %}
-                                <div class="w-100 my-2 fw-bold fs-3 border border-success rounded py-1{% if plan.featured and form_url != 'tenancy_trial' %} bg-success-subtle{% endif %}">
-                                    {{ plan.yearly_month_tag_new }}
-                                    <span class="small fw-light fs-6">/{% trans "Mois" %}</span>
+                                <div class="w-100 my-2 fw-bold fs-3 border border-primary rounded py-1">
+                                    <span>{{ plan.monthly_month_tag_new }}</span>
+                                    <span class="small fw-light fs-6">{% trans "HT" %}/{% trans "Mois" %}</span>
                                 </div>
-                                <div class="">
-                                    {{ plan.yearly_year_tag_new }}
-                                    <span class="small fw-light">/{% trans "Année" %}</span>
-                                </div>
+                                <small>{{ plan.monthly_year_tag_new }}</small>
+                                <span class="small fw-light">{% trans "HT" %}/{% trans "Année" %}</span>
                             {% else %}
-                                <div class="w-100 my-2 fw-bold fs-3 border border-success rounded py-1{% if plan.featured and form_url != 'tenancy_trial' %} bg-success-subtle{% endif %}">
-                                    {{ plan.yearly_month_tag }}
-                                    <span class="small fw-light fs-6">/{% trans "Mois" %}</span>
+                                <div class="w-100 my-2 fw-bold fs-3 border border-primary rounded py-1">
+                                    <span>{{ plan.monthly_month_tag }}</span>
+                                    <span class="small fw-light fs-6">{% trans "HT" %}/{% trans "Mois" %}</span>
                                 </div>
-                                <div class="">
-                                    {{ plan.yearly_year_tag }}
-                                    <span class="small fw-light">/{% trans "Année" %}</span>
-                                </div>
+                                <small>{{ plan.monthly_year_tag }}</small>
+                                <span class="small fw-light">{% trans "HT" %}/{% trans "Année" %}</span>
                             {% endif %}
                         {% else %}
                             {% if repetition == "new" %}
-                                <div class="w-100 my-2 fw-bold fs-3 border border-success rounded py-1{% if plan.featured and form_url != 'tenancy_trial' %} bg-success-subtle{% endif %}">
-                                    <span>{{ plan.monthly_month_tag_new }}</span>
-                                    <span class="small fw-light fs-6">/{% trans " Mois" %}</span>
+                                <div class="w-100 my-2 fw-bold fs-3 border border-primary rounded py-1">
+                                    {{ plan.yearly_month_tag_new }}
+                                    <span class="small fw-light fs-6">{% trans "HT" %}/{% trans "Mois" %}</span>
                                 </div>
-                                <small>{{ plan.monthly_year_tag_new }}</small>
-                                <span class="small fw-light">/{% trans " Année" %}</span>
+                                <div class="">
+                                    {{ plan.yearly_year_tag_new }}
+                                    <span class="small fw-light">{% trans "HT" %}/{% trans "Année" %}</span>
+                                </div>
                             {% else %}
-                                <div class="w-100 my-2 fw-bold fs-3 border border-success rounded py-1{% if plan.featured and form_url != 'tenancy_trial' %} bg-success-subtle{% endif %}">
-                                    <span>{{ plan.monthly_month_tag }}</span>
-                                    <span class="small fw-light fs-6">/{% trans " Mois" %}</span>
+                                <div class="w-100 my-2 fw-bold fs-3 border border-primary rounded py-1">
+                                    {{ plan.yearly_month_tag }}
+                                    <span class="small fw-light fs-6">{% trans "HT" %}/{% trans "Mois" %}</span>
                                 </div>
-                                <small>{{ plan.monthly_year_tag }}</small>
-                                <span class="small fw-light">/{% trans " Année" %}</span>
+                                <div class="">
+                                    {{ plan.yearly_year_tag }}
+                                    <span class="small fw-light">{% trans "HT" %}/{% trans "Année" %}</span>
+                                </div>
                             {% endif %}
                         {% endif %}
                     {% endif %}
 
-                    <ul class="list-unstyled mt-3 mb-4 text-start">
-                        <li>{{ plan.max_users }} {% trans "Utilisateurs" %}</li>
-                        <li>{{ plan.max_magasins }} {% trans "Magasins" %}</li>
-                        <li>{{ plan.max_products }} {% trans "Produits" %}</li>
-                        <div class="mt-2 mb-1 text-muted">+ {% trans "Options" %}:</div>
+                    <ul class="list-unstyled mt-3 mb-4 text-start small">
+                        <li><i class="bi bi-person-workspace "></i><span class="ms-1">{{ plan.max_users }} {% trans "Utilisateurs" %}</span></li>
+                        <li><i class="bi bi-shop-window"></i><span class="ms-1">{{ plan.max_magasins }} {% trans "Magasins" %}</span></li>
+                        <li><i class="bi bi-box-seam"></i><span class="ms-1">{{ plan.max_products }} {% trans "Produits" %}</span></li>
+                        <li><i class="bi bi-person-vcard"></i><span class="ms-1">{{ plan.max_clients }} {% trans "Clients" %}</span></li>
+                        <!-- <div class="mt-2 mb-1 text-muted">+ {% trans "Options" %}:</div>
                         <li class="{% if not plan.vitrine %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Vitrine" %}</li>
                         <li class="{% if not plan.custom_domain %}text-secondary text-decoration-line-through{% endif %}">{% trans "Nom de domaine" %}</li>
                         <li class="{% if not plan.ecommerce %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Ecommerce" %}</li>
-                        <li class="{% if not plan.mailbox %}text-secondary text-decoration-line-through{% endif %}">{% trans "Serveur mail privé" %}</li>
+                        <li class="{% if not plan.mailbox %}text-secondary text-decoration-line-through{% endif %}">{% trans "Serveur mail privé" %}</li> -->
                     </ul>
                     <form method="POST">
                         {% csrf_token %}
@@ -106,7 +107,7 @@
                                     {% endif %}
                                 {% endif %}'>
                         {% endif %}
-                        <button type="submit" class="w-100 btn btn-lg{% if plan.featured and form_url != 'tenancy_trial' %} btn-success{% else %} btn-outline-primary{% endif %}">{% trans "Choisir" %}</button> 
+                        <button type="submit" class="w-100 btn btn-lg py-1{% if plan.featured %} btn-primary{% else %} btn-outline-primary{% endif %}">{% trans "Choisir" %}</button> 
                     </form>
                 </div>
             </div>
