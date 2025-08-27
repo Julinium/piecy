@@ -2,7 +2,6 @@
 
 {% if rub %}
     <div id="rub-messages">
-
         {% if rub.usable %}
             {% if rub.status == "W" %}
                 <div class="list-group mb-3 shadow-sm">
@@ -22,7 +21,6 @@
                         <span>{% trans "Abonnement non payé ou paiement non confirmé" %}.</span>
                         {% if rub.days_grace > 0 %}
                             <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours avant suspension" %}.</span>
-                            <!-- <span class="ms-2 fw-light small">{{ rub.days_run }} {% trans "jours écoulés" %}.</span> -->
                         {% endif %}
                     </li>
                 </div>
@@ -70,14 +68,6 @@
 
             <div id="rub-actions">
                 <div class="list-inline mb-3">
-                    <!-- {% if rub.status == "X" %}
-                        <div class="list-inline-item">
-                            <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
-                                <i class="bi bi-bag-plus"></i>
-                                <span class="ms-1">{% trans "Commander" %}</span>
-                            </a>
-                        </div>
-                    {% endif %} -->
                     {% if rub.order.amount_due_to_pay > 0 %}
                         <div class="list-inline-item">
                             <a href="{% url 'tenancy_add_order_payment' rub.order.id %}" class="btn btn-primary mt-1">
@@ -167,15 +157,27 @@
                     </div>
                 {% endif %}
 
-                <div class="list-inline-item">
-                    <div id="planSelection">
-                        <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
-                            <i class="bi bi-plus-circle"></i>
-                            <span class="ms-1"> {% trans "S'abonner" %}</span>
-                        </button>
-                        {% include 'tenancy/snippets/plan-select-modal.html' %}
+                {% if not page_obj %}
+                    <div class="list-inline-item">
+                        <div id="planSelectionSubscribe">
+                            <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
+                                <i class="bi bi-plus-circle"></i>
+                                <span class="ms-1"> {% trans "S'abonner" %}</span>
+                            </button>
+                            {% include 'tenancy/snippets/plan-select-modal.html' %}
+                        </div>
                     </div>
-                </div>
+                {% else %}
+                    <div class="list-inline-item">
+                        <div id="planSelectionReactivate">
+                            <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
+                                <i class="bi bi-plus-circle"></i>
+                                <span class="ms-1"> {% trans "Réactiver" %}</span>
+                            </button>
+                            {% include 'tenancy/snippets/plan-select-modal.html' %}
+                        </div>
+                    </div>
+                {% endif %}
 
                 <div class="list-inline-item">
                     <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">

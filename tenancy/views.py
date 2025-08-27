@@ -457,9 +457,6 @@ def order_details(request, order_id=None):
     return HttpResponse(message, status=code)
 
 
-
-
-
 @login_required(login_url="account_login")
 def order_payments(request, order_id=None):
 
@@ -649,7 +646,6 @@ def subscriptions(request):
             sub.update_status()
 
         repetition = "new"
-        # periodicity = "yearly"
         start_date = today
         max_ordre = 0
         latest_subscription = subs.last()
@@ -682,7 +678,6 @@ def subscriptions(request):
         context['trials'] = trials
         context['rub'] = current_subscription
         context["repetition"]   = repetition
-        # context["periodicity"]  = periodicity
         context["plans"]        = plans
         context["start_date"]   = start_date
         context["end_date_yearly"]     = end_date_yearly
@@ -720,7 +715,7 @@ def subscriptions(request):
                         end_date = end_date_monthly
                     else:
                         if repetition == "old":
-                            unit_price_ht = selected_plan.yearly_year_tag_new
+                            unit_price_ht = selected_plan.yearly_year_tag
                         else:
                             unit_price_ht = selected_plan.yearly_year_tag_new
                         product_name = _("Abonnement Annuel")
@@ -728,7 +723,7 @@ def subscriptions(request):
 
                     created_item = SystemOrderItem(                        
                         order = created_order,
-                        product_name = f"{product_name} {selected_plan.name}",
+                        product_name = f"{product_name} {selected_plan.name} {start_date}-{end_date}",
                         unit_price = unit_price_ht,
                         quantity = 1,
                         tax_rate = selected_plan.plan_taxes

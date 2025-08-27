@@ -1,0 +1,57 @@
+{% load i18n %}
+
+<div class="modal modal-xl fade" id="orderPaymentModal" tabindex="-1" aria-labelledby="orderPaymentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <form method="post" id="signupForm" class="mt-3 form-floating">
+                {% csrf_token %}
+                <div class="modal-header">
+                    <div class="modal-title" id="orderPaymentModalLabel">
+                        <h5>{% trans "Détails Paiement" %}</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>                
+                </div>
+                <div class="modal-body pb-0">
+                    <div class="mb-3">
+                        <label class="label-control small text-muted" for="{{ form.amount.id_for_label }}">{{ form.amount.label }} ({{ order.order_currency }})</label>
+                        {{ form.amount }}
+                        {% if form.amount.errors %}
+                            <div class="text-danger small">{{ form.amount.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="label-control small text-muted" for="{{ form.paid_at.id_for_label }}">{{ form.paid_at.label }}</label>
+                        {{ form.paid_at }}
+                        {% if form.paid_at.errors %}
+                            <div class="text-danger small">{{ form.paid_at.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="label-control small text-muted" for="{{ form.method.id_for_label }}">{{ form.method.label }}</label>
+                        {{ form.method }}
+                        {% if form.method.errors %}
+                            <div class="text-danger small">{{ form.method.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="label-control small text-muted" for="{{ form.reference.id_for_label }}">{{ form.reference.label }}</label>
+                        {{ form.reference }}
+                        {% if form.reference.errors %}
+                            <div class="text-danger small">{{ form.reference.errors }}</div>
+                        {% endif %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="label-control small text-muted" for="{{ form.notes.id_for_label }}" class="form-label">{{ form.notes.label }}</label>
+                        {{ form.notes }}
+                        {% if form.notes.errors %}
+                            <div class="text-danger small">{{ form.notes.errors }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">{% trans "Valider" %}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

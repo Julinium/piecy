@@ -169,6 +169,7 @@ class Subscription(models.Model):
 
     id  = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     active  = models.BooleanField(blank=True, null=True, default=True)
+    numero  = models.CharField(max_length=20, unique=True, editable=False)
     date_fm = models.DateField(blank=True, null=True)
     date_to = models.DateField(blank=True, null=True)
     status  = models.CharField(max_length=20, choices=STATUS_CHOICES, default="X")
@@ -257,6 +258,23 @@ class Subscription(models.Model):
         if self.date_to < d_date:
             return -1
         return 0
+    
+    def save(self, *args, **kwargs):
+        if not self.numero:
+            today = timezone.now().date()
+            year_str = today.strftime('%y')
+            jan_first = date(today.year, 1, 1)
+            days_elapsed = (today - jan_first).days + 1 
+            date_str = f'{year_str}{days_elapsed:03d}'
+            last_sub = Subscription.objects.filter(created_on__year=today.year).order_by('created_on').last()
+
+            if last_sub:
+                last_seq = int(last_sub.numero[-6:])
+                new_seq = last_seq + 1
+            else:
+                new_seq = 1
+            self.numero = f'SS{date_str}{new_seq:06d}'
+        super().save(*args, **kwargs)
 
     def update_status(self):
         """ Updates the status field."""

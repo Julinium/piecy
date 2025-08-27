@@ -136,6 +136,10 @@
                 <table class="table">
                     <tbody>
                         <tr>
+                            <td class="text-end small text-muted py-1">{% trans "Numéro Abonnement" %}</td>
+                            <td class="text-start small py-1">{{ sub.numero }}</td>
+                        </tr>
+                        <tr>
                             <td class="text-end small text-muted py-1">{% trans "Etat Abonnement" %}</td>
                             <td class="text-start small py-1">{{ sub.get_status_display }}</td>
                         </tr>

@@ -79,11 +79,13 @@
                         <li><i class="bi bi-shop-window"></i><span class="ms-1">{{ plan.max_magasins }} {% trans "Magasins" %}</span></li>
                         <li><i class="bi bi-box-seam"></i><span class="ms-1">{{ plan.max_products }} {% trans "Produits" %}</span></li>
                         <li><i class="bi bi-person-vcard"></i><span class="ms-1">{{ plan.max_clients }} {% trans "Clients" %}</span></li>
-                        <!-- <div class="mt-2 mb-1 text-muted">+ {% trans "Options" %}:</div>
-                        <li class="{% if not plan.vitrine %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Vitrine" %}</li>
-                        <li class="{% if not plan.custom_domain %}text-secondary text-decoration-line-through{% endif %}">{% trans "Nom de domaine" %}</li>
-                        <li class="{% if not plan.ecommerce %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Ecommerce" %}</li>
-                        <li class="{% if not plan.mailbox %}text-secondary text-decoration-line-through{% endif %}">{% trans "Serveur mail privé" %}</li> -->
+                        <div id="plan-options" class="d-none">
+                            <div class="mt-2 mb-1 text-muted">+ {% trans "Options" %}:</div>
+                            <li class="{% if not plan.vitrine %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Vitrine" %}</li>
+                            <li class="{% if not plan.custom_domain %}text-secondary text-decoration-line-through{% endif %}">{% trans "Nom de domaine" %}</li>
+                            <li class="{% if not plan.ecommerce %}text-secondary text-decoration-line-through{% endif %}">{% trans "Site Ecommerce" %}</li>
+                            <li class="{% if not plan.mailbox %}text-secondary text-decoration-line-through{% endif %}">{% trans "Serveur mail privé" %}</li>
+                        </div>
                     </ul>
                     <form method="POST">
                         {% csrf_token %}
@@ -112,7 +114,6 @@
                 </div>
             </div>
         {% else %}
-=== plan-card: {{max_ordre}} ===
             <div class="card mb-4 rounded-3 shadow-sm bg-secondary-subtle">
                 <div class="card-header py-3">
                     <h4 class="my-0 fw-bold">{{ plan.name }}</h4>
