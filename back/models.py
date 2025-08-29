@@ -78,7 +78,7 @@ class Tenant(models.Model):
         db_table = 'tenant'
     
     def __str__(self):
-        return f'{self.name} - {self.owner}'
+        return f'{self.name}'
 
 
 class Utilisateur(AbstractBaseUser, PermissionsMixin):
@@ -127,12 +127,12 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         un = self.username
-        if self.tenant: un += ' - ' + self.tenant.name
+        # if self.tenant: un += ' - ' + self.tenant.name
         return un
 
     class Meta:
         db_table = 'utilisateur'
-        verbose_name = "User"
+        verbose_name = _("Utilisateur")
         ordering = ['-is_active', 'tenant', 'created_on', 'last_login', 'is_tenant_admin']
 
 
@@ -177,9 +177,9 @@ class Subscription(models.Model):
     plan    = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
     order   = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True, related_name="subscriptions")
 
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_subscriptions", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_subscriptions", blank=True, null=True, editable=False)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -262,10 +262,10 @@ class Subscription(models.Model):
     def save(self, *args, **kwargs):
         if not self.numero:
             today = timezone.now().date()
-            year_str = today.strftime('%y')
+            year_str = int(today.year)
             jan_first = date(today.year, 1, 1)
             days_elapsed = (today - jan_first).days + 1 
-            date_str = f'{year_str}{days_elapsed:03d}'
+            date_str = f'{year_str:03X}{days_elapsed:03X}'
             last_sub = Subscription.objects.filter(created_on__year=today.year).order_by('created_on').last()
 
             if last_sub:
@@ -273,7 +273,7 @@ class Subscription(models.Model):
                 new_seq = last_seq + 1
             else:
                 new_seq = 1
-            self.numero = f'SS{date_str}{new_seq:06d}'
+            self.numero = f'SS-{date_str}-{new_seq:06d}'
         super().save(*args, **kwargs)
 
     def update_status(self):
@@ -481,10 +481,10 @@ class SystemOrder(models.Model):
     def save(self, *args, **kwargs):
         if not self.numero:
             today = timezone.now().date()
-            year_str = today.strftime('%y')
+            year_str = int(today.year)
             jan_first = date(today.year, 1, 1)
             days_elapsed = (today - jan_first).days + 1 
-            date_str = f'{year_str}{days_elapsed:03d}'
+            date_str = f'{year_str:03X}{days_elapsed:03X}'
             last_order = SystemOrder.objects.filter(created_on__year=today.year).order_by('created_on').last()
 
             if last_order:
@@ -492,7 +492,7 @@ class SystemOrder(models.Model):
                 new_seq = last_seq + 1
             else:
                 new_seq = 1
-            self.numero = f'SO{date_str}{new_seq:06d}'
+            self.numero = f'SO-{date_str}-{new_seq:06d}'
         super().save(*args, **kwargs)
 
 
@@ -585,18 +585,18 @@ class SystemPayment(models.Model):
     def save(self, *args, **kwargs):
         if not self.numero:
             today = timezone.now().date()   
-            year_str = today.strftime('%y')
+            year_str = int(today.year)
             jan_first = date(today.year, 1, 1)
             days_elapsed = (today - jan_first).days + 1
-            date_str = f'{year_str}{days_elapsed:03d}'
+            date_str = f'{year_str:03X}{days_elapsed:03X}'
             last_payment = SystemPayment.objects.filter(created_on__year=today.year).order_by('created_on').last()
-    
+
             if last_payment:
                 last_seq = int(last_payment.numero[-6:])
                 new_seq = last_seq + 1
             else:
                 new_seq = 1
-            self.numero = f'SP{date_str}{new_seq:06d}'
+            self.numero = f'SP-{date_str}-{new_seq:06d}'
         super().save(*args, **kwargs)
 
 

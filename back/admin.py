@@ -64,20 +64,6 @@ class PlanAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.BooleanField: {'widget': forms.CheckboxInput},
     }
-    
-    # def get_created_by(self, obj):
-    #     return self._get_username(obj.created_by)
-    # get_created_by.short_description = 'Created by'
-
-    # def get_edited_by(self, obj):
-    #     return self._get_username(obj.edited_by)
-    # get_edited_by.short_description = 'Edited by'
-
-    # def _get_username(self, user_id):
-    #     try:
-    #         return User.objects.get(pk=user_id).username
-    #     except User.DoesNotExist:
-    #         return f"(Deleted user: {user_id})" if user_id else "-"
 
     def save_model(self, request, obj, form, change):
         if not change or not obj.created_by:
@@ -124,6 +110,9 @@ class UserAdmin(admin.ModelAdmin):
 
 class SubscriptionAdmin(admin.ModelAdmin):
     model = Subscription
+    list_display = ('numero', 'plan', 'tenant', 'status', 'active', 'days_span', 'date_to')
+    readonly_fields = ('numero', 'tenant', 'status', 'order', 'plan', 'created_by', 'edited_by')
+    list_filter = ('status', 'active', 'date_to')
 
 
 class TrialAdmin(admin.ModelAdmin):
@@ -138,18 +127,20 @@ class SystemOrderItemInline(admin.TabularInline):  # or admin.StackedInline
 class SystemOrderAdmin(admin.ModelAdmin):
     model = SystemOrder
     list_display = ("numero", 'total_amount_with_tax', 'active', "customer", "status")
-    list_filter = ('status',)
+    readonly_fields = ('numero', 'created_by', 'edited_by')
+    list_filter = ('status', 'active',)
     inlines = [SystemOrderItemInline]
 
 
-class SystemOrderItemAdmin(admin.ModelAdmin):
-    model = SystemOrderItem
+# class SystemOrderItemAdmin(admin.ModelAdmin):
+#     model = SystemOrderItem
 
 
 class SystemPaymentAdmin(admin.ModelAdmin):
     model = SystemPayment
     list_display = ('numero', 'amount', 'status', 'active', 'order', 'paid_at')
     list_filter = ('active', 'status', 'paid_at')
+    readonly_fields = ('numero', 'created_by', 'edited_by')
 
     actions = ['set_status_confirmed', 'set_status_pending', 'set_active', 'set_inactive', 'set_status_failed']
     
@@ -183,10 +174,7 @@ class SystemPaymentAdmin(admin.ModelAdmin):
             post_save.send(
                 sender=SystemPayment,
                 instance=instance,
-                created=False,  # Indicate this is an update, not a create
-                # update_fields=['some_field'],  # Specify updated fields
-                # raw=False,
-                # using=queryset.db
+                created=False,
             )
 
 
@@ -197,5 +185,5 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Trial, TrialAdmin)
 admin.site.register(SystemOrder, SystemOrderAdmin)
-admin.site.register(SystemOrderItem, SystemOrderItemAdmin)
+# admin.site.register(SystemOrderItem, SystemOrderItemAdmin)
 admin.site.register(SystemPayment, SystemPaymentAdmin)
