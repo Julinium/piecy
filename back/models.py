@@ -60,9 +60,9 @@ class Tenant(models.Model):
     owner = models.CharField(verbose_name=_("Propriétaire"), max_length=64, blank=True, null=True)
     channel = models.CharField(verbose_name=_("Canal"), max_length=32, blank=True, null=True, default='Website')
     note = models.CharField(verbose_name=_("Observation"), max_length=256, blank=True, null=True, default='Créé automatiquement suite création utilisateur')
-    created_by = models.ForeignKey('Utilisateur', on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_tenants", blank=True, null=True)
+    created_by = models.ForeignKey('Utilisateur', on_delete=models.RESTRICT, verbose_name=_("Créé par"), related_name="created_tenants", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey('Utilisateur', on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_tenants", blank=True, null=True)
+    edited_by = models.ForeignKey('Utilisateur', on_delete=models.RESTRICT, verbose_name=_("Modifié par"), related_name="edited_tenants", blank=True, null=True, editable=False)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     @property
@@ -145,9 +145,9 @@ class Trial(models.Model):
     plan = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True, editable=False)
     date_ended = models.DateField(blank=True, null=True, editable=False)
 
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_trials", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_trials", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_trials", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_trials", blank=True, null=True, editable=False)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -316,9 +316,9 @@ class Plan(models.Model):
 
     note = models.CharField(max_length=256, blank=True, null=True)
 
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_plans", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_plans", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_plans", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_plans", blank=True, null=True, editable=False)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -409,9 +409,9 @@ class SystemOrder(models.Model):
     order_currency = models.CharField(max_length=8, default="MAD")
     notes          = models.TextField(blank=True)
     
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_orders", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_orders", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_orders", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_orders", blank=True, null=True, editable=False)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
@@ -563,9 +563,9 @@ class SystemPayment(models.Model):
     paid_at = models.DateTimeField(verbose_name=_("Payé le"), null=True, blank=True, default=timezone.now)
     notes = models.TextField(verbose_name=_("Notes"), blank=True)
 
-    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_payments", blank=True, null=True)
+    created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_s_payments", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_payments", blank=True, null=True)
+    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_s_payments", blank=True, null=True, editable=False)
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
