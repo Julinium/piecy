@@ -26,7 +26,7 @@
                     <div class="fw-light small">{% trans "Prix Ligne sans taxes" %}</div>
                     <div class="fw-light small">{{ item.total_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
                 </div>
-                <div class="d-flex justify-content-between align-items-center ps-4 text-warning">
+                <div class="d-flex justify-content-between align-items-center ps-4 text-primary">
                     <div class="fw-light small">{% trans "Taxes Ligne" %} {{ item.tax_rate }}%</div>
                     <div class="fw-light small">{{ item.tax_amount }} <span class="fw-light small">{{ order.order_currency }}</span></div>
                 </div>
@@ -46,7 +46,7 @@
                 <div class="fw-light small">{% trans "Total HT" %}</div>
                 <div class="fw-light small">{{ order.total_amount }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
             </div>
-            <div class="d-flex justify-content-between align-items-center ps-4 text-warning">
+            <div class="d-flex justify-content-between align-items-center ps-4 text-primary">
                 <div class="fw-light small">{% trans "Total taxes" %}</div>
                 <div class="fw-light small">{{ order.total_tax_amount }} <span class="fw-light small">{{ order.order_currency }}</span></div>
             </div>

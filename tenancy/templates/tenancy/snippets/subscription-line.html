@@ -54,6 +54,16 @@
         <div id="order-actions-top" class="list-inline mb-3 px-3">
 
             {% if sub.order %}
+
+                {% if sub.order.amount_due_to_pay > 0 %}
+                    <div class="list-inline-item">
+                        <a href="{% url 'tenancy_add_order_payment' sub.order.id %}" class="btn btn-primary mt-1">
+                            <i class="bi bi-coin"></i>
+                            <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ sub.order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ sub.order.order_currency }}</span></span></span>
+                        </a>
+                    </div>
+                {% endif %}
+
                 <div class="list-inline-item">
                     <a href="{% url 'tenancy_order_details' sub.order.id %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-basket"></i>
@@ -70,14 +80,14 @@
                     </a>
                 </div>
             {% endif %}
-            {% if sub.status == "C" %}
+            <!-- {% if sub.status == "C" %}
                 <div class="list-inline-item">
                     <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
                         <i class="bi bi-arrow-repeat"></i>
                         <span class="ms-1">{% trans "Renouveler" %}</span>
                     </a>
                 </div>
-            {% endif %}
+            {% endif %} -->
             <div class="list-inline-item">
                 <a href="#" class="btn btn-outline-primary mt-1 disabled">
                     <i class="bi bi-printer"></i>

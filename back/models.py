@@ -269,7 +269,7 @@ class Subscription(models.Model):
             last_sub = Subscription.objects.filter(created_on__year=today.year).order_by('created_on').last()
 
             if last_sub:
-                last_seq = int(last_sub.numero[-6:])
+                last_seq = int(last_sub.numero[10:])
                 new_seq = last_seq + 1
             else:
                 new_seq = 1
@@ -488,7 +488,7 @@ class SystemOrder(models.Model):
             last_order = SystemOrder.objects.filter(created_on__year=today.year).order_by('created_on').last()
 
             if last_order:
-                last_seq = int(last_order.numero[-6:])
+                last_seq = int(last_order.numero[10:])
                 new_seq = last_seq + 1
             else:
                 new_seq = 1
@@ -505,7 +505,7 @@ class SystemOrderItem(models.Model):
         related_name="items"
     )
     product_name = models.CharField(max_length=255)  # could be linked to a Product model if you have one
-    product_pn = models.CharField(max_length=32, null=True)
+    product_pn = models.CharField(max_length=32, null=True, blank=True)
     rank = models.PositiveIntegerField(default=0)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
@@ -514,6 +514,7 @@ class SystemOrderItem(models.Model):
 
     class Meta:
         db_table = 's_order_item'
+        ordering = ['rank', 'unit_price', 'quantity', ]
 
     @property
     def total_price(self):
@@ -595,7 +596,7 @@ class SystemPayment(models.Model):
             last_payment = SystemPayment.objects.filter(created_on__year=today.year).order_by('created_on').last()
 
             if last_payment:
-                last_seq = int(last_payment.numero[-6:])
+                last_seq = int(last_payment.numero[10:])
                 new_seq = last_seq + 1
             else:
                 new_seq = 1

@@ -54,10 +54,6 @@
         </div>
         <div class="card-body small pb-0">
 
-            <div id="rub-summary-info">
-                
-            </div>
-
             <div id="rub-progress">
                 <div class="mb-3">
                     <div class="progress bg-danger" role="progressbar" aria-valuenow="{{ rub.progress_percent }}" aria-valuemin="0" aria-valuemax="100">
@@ -85,12 +81,18 @@
                         </div>
                     {% endif %}
                     {% if rub.status == "C" %}
-                        <div class="list-inline-item">
-                            <a href="{% url 'base_coming' %}" class="btn btn-outline-primary mt-1">
-                                <i class="bi bi-arrow-repeat"></i>
-                                <span class="ms-1">{% trans "Renouveler" %}</span>
-                            </a>
-                        </div>
+                        {% if ask_renewal %}
+                            <div class="list-inline-item">
+                                <div id="planSelectionReactivate">
+                                    <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
+                                        <i class="bi bi-arrow-repeat"></i>
+                                        <span class="ms-1"> {% trans "Renouveler" %}</span>
+                                    </button>
+                                    {% include 'tenancy/snippets/plan-select-modal.html' %}
+                                </div>
+                            </div>
+                        {% endif %}
+
                     {% endif %}
                     <div class="list-inline-item">
                         <a href="{% url 'tenancy_orders' %}" class="btn btn-outline-primary mt-1">

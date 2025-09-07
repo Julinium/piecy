@@ -19,8 +19,10 @@ from .forms import CustomUserCreationForm, SystemPaymentForm
 
 SUB_DAYS_WARNING = 90
 SUB_DAYS_DANGER = 30
+
 SUBS_HISTORY_COUNT = 10
 ITEMS_PER_PAGE = 10
+ASK_RENEWAL_BELOW = 60
 
 # Trial duration in days.
 TRIAL_DAYS = 30
@@ -74,118 +76,6 @@ def is_deletable(request, user=None):
                 else:
                     reason = _("Déjà connecté")
     return False, reason
-
-
-@login_required(login_url="account_login")
-def summary(request):
-
-    """
-    Summary
-    """
-
-    code, message = can_admin(request)
-    if code == 200:
-        tenant = request.user.tenant
-        tenant_admins = tenant.workers.filter(is_tenant_admin = True)
-        tenant_users = tenant.workers.exclude(is_tenant_admin = True)
-        # payments_count = 0
-
-        context = {
-            "tenant" : tenant,
-            "admins" : tenant_admins,
-            "users"  : tenant_users,
-            # "payments_count"  : payments_count,
-        }
-
-        context["users_count"] = len(tenant_users) + len(tenant_admins)
-
-        subs         = Subscription.objects.filter(tenant=tenant, active=True).order_by('-date_to')
-        running_subs = subs.filter(date_fm__lte=today, date_to__gte=today)
-        current_subscription  = running_subs.last()
-
-        trials = Trial.objects.filter(active=True, tenant=tenant)
-        active_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-        current_trial = active_trials.last()
-
-        max_users = 0
-        if current_subscription:
-            max_users = current_subscription.plan.max_users
-
-        else:
-            if current_trial:
-                max_users = current_trial.plan.max_users
-        context["max_users"] = max_users
-
-        # payments_count = 0
-        if subs:
-            context ["box"] = "S1R0"
-            context ["subs"] = subs[:SUBS_HISTORY_COUNT]
-            subscription_remaining_days = 0
-            latest_subscription = subs.latest('date_to')
-            periodicity = _("Paiement Annuel")
-            duracity = latest_subscription.date_to - latest_subscription.date_fm
-            if duracity.days < 32:
-                periodicity = _("Paiement Mensuel")
-                
-            context ["periodicity"] = periodicity
-            context ["latest_subscription"] = latest_subscription
-
-            if current_subscription:
-                context ["box"] = "S1R1"
-                context ["current_subscription"] = current_subscription
-                delta = current_subscription.date_to - today
-                subscription_remaining_days = delta.days
-
-                subscription_duration = 0 
-                if current_subscription.date_fm and current_subscription.date_to:
-                    subscription_duration = current_subscription.date_to - current_subscription.date_fm
-
-                subscription_percentage = 0
-                if subscription_duration.days != 0: 
-                    subscription_percentage = min(100, int(100 * subscription_remaining_days/subscription_duration.days))
-                context["subscription_percentage"] = subscription_percentage
-
-            context ["subscription_remaining_days"] = subscription_remaining_days
-
-            styling_tint = 'secondary'
-            if subscription_remaining_days >= SUB_DAYS_WARNING:
-                styling_tint = "success"
-            elif SUB_DAYS_DANGER <= subscription_remaining_days < 90: 
-                styling_tint = "warning"
-            elif subscription_remaining_days < SUB_DAYS_DANGER: 
-                styling_tint = "danger"
-            context ["styling_tint"] = styling_tint
-
-            return render(request, 'tenancy/summary.html', context)
-
-        trials = Trial.objects.filter(tenant=tenant, active=True)
-        if not trials:
-            context ["box"] = "S0T0"
-            return render(request, 'tenancy/summary.html', context)
-
-        context["trials"] = trials
-        running_trials = trials.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-        current_trial  = running_trials.last()
-
-        if current_trial:
-            context ["box"] = "S0T1R1"
-            context["current_trial"] = current_trial
-            delta = current_trial.date_to - today
-            trial_remaining_days = delta.days
-            context["trial_remaining_days"] = trial_remaining_days
-            trial_percentage = 0
-            if TRIAL_DAYS != 0: 
-                trial_percentage = min(100, int(100 * trial_remaining_days/TRIAL_DAYS))
-            context["trial_percentage"] = trial_percentage
-
-            return render(request, 'tenancy/summary.html', context)
-
-        latest_trial = trials.latest('date_to')
-        context ["latest_trial"] = latest_trial
-        context ["box"] = "S0T1R0"
-        return render(request, 'tenancy/summary.html', context)
-
-    return HttpResponse(message, status=code)
 
 
 @login_required(login_url="account_login")
@@ -642,14 +532,20 @@ def subscriptions(request):
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
         current_subscription  = running_subscriptions.last()
+        latest_subscription = subs.last()
+
         for sub in subs:
             sub.update_status()
 
         repetition = "new"
         start_date = today
         max_ordre = 0
-        latest_subscription = subs.last()
+        
+        ask_renewal = False
         if latest_subscription:
+            if latest_subscription.days_to_end < ASK_RENEWAL_BELOW:
+                ask_renewal = True
+
             repetition  = "old"
             max_ordre = latest_subscription.plan.ordre
             if latest_subscription.date_to > today :
@@ -683,12 +579,13 @@ def subscriptions(request):
         context["end_date_yearly"]     = end_date_yearly
         context["end_date_monthly"]     = end_date_monthly
         context["max_ordre"]    = max_ordre
+        context["ask_renewal"]    = ask_renewal
+        
+
 
         if request.method == "POST":
             plan_id = request.POST.get("plan_id", '--')
-            stage = request.POST.get("stage", '--')
             periodicity = request.POST.get("periodicity", '--')
-            tag = request.POST.get("tag", '--')
 
             selected_plan = None
             if plan_id != "":
@@ -697,52 +594,12 @@ def subscriptions(request):
             if not selected_plan:
                 messages.error(request, _("Plan non trouvé! Merci de rééssayer plus tard. Si ce proble persiste, merci de nous contacter"))
             else:
-                try:
-                    created_order = SystemOrder(
-                        customer = tenant,
-                        order_date = today,
-                    )
-                    created_order.save()
+                res, msg = create_sub(tenant, selected_plan, periodicity)
+                if res == 200:
+                    messages.success(request, msg)
+                else:
+                    messages.error(request, msg)
 
-                    unit_price_ht = 12 * selected_plan.monthly_price
-
-                    if periodicity == "monthly":
-                        if repetition == "old":
-                            unit_price_ht = selected_plan.monthly_month_tag
-                        else:
-                            unit_price_ht = selected_plan.monthly_tag_month_new
-                        product_name = _("Abonnement Mensuel")
-                        end_date = end_date_monthly
-                    else:
-                        if repetition == "old":
-                            unit_price_ht = selected_plan.yearly_year_tag
-                        else:
-                            unit_price_ht = selected_plan.yearly_year_tag_new
-                        product_name = _("Abonnement Annuel")
-                        end_date = end_date_yearly
-
-                    created_item = SystemOrderItem(                        
-                        order = created_order,
-                        product_name = f"{product_name} {selected_plan.name} {start_date}-{end_date}",
-                        unit_price = unit_price_ht,
-                        quantity = 1,
-                        tax_rate = selected_plan.plan_taxes
-                    )
-                    created_item.save()
-
-                    created_sub = Subscription(
-                        tenant = tenant,
-                        plan = selected_plan,
-                        order = created_order,
-                        date_fm = start_date,
-                        date_to = end_date,
-                    )
-                    created_sub.save()
-                    messages.success(request, _("Commande créée. Merci de la confirmer") + f". Numéro: {created_order.numero}")
-                except Exception as ex:
-                    print(str(ex))
-                    messages.error(request, _("Commande non créée. Rééssayer plus tard"))
-                    
             return redirect("tenancy_subscriptions")
         return render(request, 'tenancy/subscriptions.html', context)
 
@@ -852,7 +709,6 @@ def plan_select(request):
                             dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
                             messages.error(request, f"{dgd_message}")
                             return redirect("tenancy_summary")
-
                         return redirect("tenancy_order")
 
                     sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
@@ -861,9 +717,6 @@ def plan_select(request):
 
                 # New subscription
                 periodicity = request.POST.get('periodicity', '')
-                ###########################
-
-                ###########################
                 plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
                 # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
                 messages.error(request, f"{plan_message}")
@@ -876,9 +729,6 @@ def plan_select(request):
         return render(request, 'tenancy/plan-select.html', context)
 
     return HttpResponse(message, status=code)
-
-
-
 
 
 
@@ -1117,3 +967,74 @@ def sub_cancel(request):
 def sub_upgrade(request):
     context = {}
     return render(request, 'tenancy/sub-upgrade.html', context)
+
+
+
+
+@login_required(login_url="account_login")
+def summary(request):
+    context = {}
+    return render(request, 'tenancy/summary.html', context)
+
+
+
+
+    #################################
+def create_sub(tenant, selected_plan, periodicity, renew_sub=None):
+
+    start_date = today
+    repetition = "new"
+    if renew_sub:
+        start_date = renew_sub.date_to + relativedelta(days=1)
+        repetition = "old"
+
+    try:        
+        created_order = SystemOrder(
+            customer = tenant,
+            order_date = today,
+        )
+        created_order.save()
+
+        unit_price_ht = 12 * selected_plan.monthly_price
+
+        end_date_yearly = start_date + relativedelta(years=1)
+        end_date_monthly = start_date + relativedelta(months=1)
+
+        if periodicity == "monthly":
+            if repetition == "old":
+                unit_price_ht = selected_plan.monthly_month_tag
+            else:
+                unit_price_ht = selected_plan.monthly_tag_month_new
+            product_name = _("Abonnement Mensuel")
+            end_date = end_date_monthly
+        else:
+            if repetition == "old":
+                unit_price_ht = selected_plan.yearly_year_tag
+            else:
+                unit_price_ht = selected_plan.yearly_year_tag_new
+            product_name = _("Abonnement Annuel")
+            end_date = end_date_yearly
+
+        created_item = SystemOrderItem(                        
+            order = created_order,
+            product_name = f"{product_name} {selected_plan.name} {start_date}-{end_date}",
+            unit_price = unit_price_ht,
+            quantity = 1,
+            tax_rate = selected_plan.plan_taxes
+        )
+        created_item.save()
+
+        created_sub = Subscription(
+            tenant = tenant,
+            plan = selected_plan,
+            order = created_order,
+            date_fm = start_date,
+            date_to = end_date,
+        )
+        created_sub.save()
+        return 200 , _("Commande créée. Merci de la confirmer") + f". Numéro: {created_order.numero}"
+
+    except Exception as ex:
+        print(str(ex))
+        return 500, _("Commande non créée. Rééssayer plus tard")
+    #################################
