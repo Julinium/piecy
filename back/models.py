@@ -505,8 +505,11 @@ class SystemOrderItem(models.Model):
         related_name="items"
     )
     product_name = models.CharField(max_length=255)  # could be linked to a Product model if you have one
+    product_pn = models.CharField(max_length=32, null=True)
+    rank = models.PositiveIntegerField(default=0)
     unit_price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=1)
+    uom = models.CharField(verbose_name=_("Unité"), max_length=32, default="U")
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20)  # e.g., 15 for 15%
 
     class Meta:
