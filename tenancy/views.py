@@ -22,7 +22,7 @@ SUB_DAYS_DANGER = 30
 
 SUBS_HISTORY_COUNT = 10
 ITEMS_PER_PAGE = 10
-ASK_RENEWAL_BELOW = 60
+ASK_RENEWAL_BELOW = 30
 
 # Trial duration in days.
 TRIAL_DAYS = 30
@@ -531,8 +531,8 @@ def subscriptions(request):
 
         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
-        current_subscription  = running_subscriptions.last()
-        latest_subscription = subs.last()
+        current_subscription  = running_subscriptions.first()
+        latest_subscription = subs.first()
 
         for sub in subs:
             sub.update_status()
@@ -541,10 +541,11 @@ def subscriptions(request):
         start_date = today
         max_ordre = 0
         
-        ask_renewal = False
+        ask_renewal = "no"
         if latest_subscription:
-            if latest_subscription.days_to_end < ASK_RENEWAL_BELOW:
-                ask_renewal = True
+            delta2end = latest_subscription.date_to - today
+            if delta2end.days < ASK_RENEWAL_BELOW:
+                ask_renewal = "yes"
 
             repetition  = "old"
             max_ordre = latest_subscription.plan.ordre
@@ -552,8 +553,8 @@ def subscriptions(request):
                 start_date = latest_subscription.date_to + relativedelta(days=1)
 
         plans = Plan.objects.filter(active=True)
-        end_date_yearly = start_date + relativedelta(years=1)
-        end_date_monthly = start_date + relativedelta(months=1)
+        end_date_yearly = start_date + relativedelta(years=1) -  relativedelta(days=1)
+        end_date_monthly = start_date + relativedelta(months=1) -  relativedelta(days=1)
         
         trials = Trial.objects.filter(active=True, tenant=tenant)
         running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
@@ -569,17 +570,17 @@ def subscriptions(request):
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
 
-        context['page_obj'] = page_obj
-        context['current_trial'] = current_trial
-        context['trials'] = trials
-        context['rub'] = current_subscription
-        context["repetition"]   = repetition
-        context["plans"]        = plans
-        context["start_date"]   = start_date
-        context["end_date_yearly"]     = end_date_yearly
-        context["end_date_monthly"]     = end_date_monthly
-        context["max_ordre"]    = max_ordre
-        context["ask_renewal"]    = ask_renewal
+        context['page_obj']         = page_obj
+        context['current_trial']    = current_trial
+        context['trials']           = trials
+        context['rub']              = current_subscription
+        context["repetition"]       = repetition
+        context["plans"]            = plans
+        context["start_date"]       = start_date
+        context["end_date_yearly"]  = end_date_yearly
+        context["end_date_monthly"] = end_date_monthly
+        context["max_ordre"]        = max_ordre
+        context["ask_renewal"]      = ask_renewal
         
 
 
@@ -594,7 +595,7 @@ def subscriptions(request):
             if not selected_plan:
                 messages.error(request, _("Plan non trouvé! Merci de rééssayer plus tard. Si ce proble persiste, merci de nous contacter"))
             else:
-                res, msg = create_sub(tenant, selected_plan, periodicity)
+                res, msg = create_sub(tenant, selected_plan, periodicity, latest_subscription)
                 if res == 200:
                     messages.success(request, msg)
                 else:
@@ -988,7 +989,7 @@ def create_sub(tenant, selected_plan, periodicity, renew_sub=None):
         start_date = renew_sub.date_to + relativedelta(days=1)
         repetition = "old"
 
-    try:        
+    try:
         created_order = SystemOrder(
             customer = tenant,
             order_date = today,
@@ -997,8 +998,8 @@ def create_sub(tenant, selected_plan, periodicity, renew_sub=None):
 
         unit_price_ht = 12 * selected_plan.monthly_price
 
-        end_date_yearly = start_date + relativedelta(years=1)
-        end_date_monthly = start_date + relativedelta(months=1)
+        end_date_yearly = start_date + relativedelta(years=1) - relativedelta(days=1)
+        end_date_monthly = start_date + relativedelta(months=1) - relativedelta(days=1)
 
         if periodicity == "monthly":
             if repetition == "old":

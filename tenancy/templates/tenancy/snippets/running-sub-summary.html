@@ -81,7 +81,7 @@
                         </div>
                     {% endif %}
                     {% if rub.status == "C" %}
-                        {% if ask_renewal %}
+                        {% if ask_renewal == 'yes' %}
                             <div class="list-inline-item">
                                 <div id="planSelectionReactivate">
                                     <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
