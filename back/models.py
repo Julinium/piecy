@@ -295,7 +295,7 @@ class Plan(models.Model):
     featured = models.BooleanField(blank=True, null=True, default=False)
     name = models.CharField(max_length=16, blank=True, null=True)
     header = models.CharField(max_length=128, blank=True, null=True)
-    ordre = models.SmallIntegerField(blank=True, null=True)
+    rank = models.SmallIntegerField(blank=True, null=True)
     
     year_free_mth = models.SmallIntegerField(blank=True, null=True, default=2)
     first_time_disc = models.SmallIntegerField(blank=True, null=True, default=50)
@@ -324,7 +324,7 @@ class Plan(models.Model):
 
     class Meta:
         db_table = 'back_plan'
-        ordering = ['ordre']
+        ordering = ['rank']
 
     def __str__(self):
         return f'{self.name}'
