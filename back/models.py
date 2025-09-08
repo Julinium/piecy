@@ -167,20 +167,21 @@ class Subscription(models.Model):
         ("A", _("Annulé")),
     ]
 
-    id  = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    active  = models.BooleanField(blank=True, null=True, default=True)
-    numero  = models.CharField(max_length=20, unique=True, editable=False)
-    date_fm = models.DateField(blank=True, null=True)
-    date_to = models.DateField(blank=True, null=True)
-    status  = models.CharField(max_length=20, choices=STATUS_CHOICES, default="X")
-    tenant  = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
-    plan    = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
-    order   = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True, related_name="subscriptions")
+    id         = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    active     = models.BooleanField(blank=True, null=True, default=True)
+    numero     = models.CharField(max_length=20, unique=True, editable=False)
+    date_fm    = models.DateField(blank=True, null=True)
+    date_to    = models.DateField(blank=True, null=True)
+    status     = models.CharField(max_length=20, choices=STATUS_CHOICES, default="X")
+    tenant     = models.ForeignKey('Tenant', on_delete=models.RESTRICT, blank=True, null=True)
+    plan       = models.ForeignKey('Plan', on_delete=models.RESTRICT, blank=True, null=True)
+    order      = models.ForeignKey('SystemOrder', on_delete=models.RESTRICT, blank=True, null=True, related_name="subscriptions")
+    renew_at   = models.SmallIntegerField(blank=True, null=True, default=30)
 
     created_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Créé par"), related_name="created_subscriptions", blank=True, null=True, editable=False)
     created_on = models.DateTimeField(verbose_name=_("Créé le"), blank=True, null=True, auto_now_add=True)
-    edited_by = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_subscriptions", blank=True, null=True, editable=False)
-    edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
+    edited_by  = models.ForeignKey(Utilisateur, on_delete=models.RESTRICT, default=get_current_user_default, verbose_name=_("Modifié par"), related_name="edited_subscriptions", blank=True, null=True, editable=False)
+    edited_on  = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
         """ Meta class"""
