@@ -6,7 +6,7 @@
             <div class="list-group-item border-start-0 border-end-0">
                 <div class="d-flex justify-content-between align-items-center">
                     <div class="fw-bold">{{ item.product_name }}</div>
-                    <div class="fw-bold">{{ item.total_price_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                    <!-- <div class="fw-bold ms-3">{{ item.total_price_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div> -->
                 </div>
                 {% if item.product_pn %}
                     <div class="d-flex justify-content-between align-items-center ps-4">
@@ -16,19 +16,23 @@
                 {% endif %}
                 <div class="d-flex justify-content-between align-items-center ps-4">
                     <div class="fw-light small">{% trans "Quantité" %}</div>
-                    <div class="fw-light small">x{{ item.quantity }} <span class="fw-light text-muted small">{{ item.uom }}</span></div>
+                    <div class="fw-light small ms-3">x{{ item.quantity }} <span class="fw-light text-muted small">{{ item.uom }}</span></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center ps-4">
                     <div class="fw-light small">{% trans "Prix unitaire" %}</div>
-                    <div class="fw-light small">{{ item.unit_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                    <div class="fw-light small ms-3">{{ item.unit_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center ps-4">
-                    <div class="fw-light small">{% trans "Prix Ligne sans taxes" %}</div>
-                    <div class="fw-light small">{{ item.total_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                    <div class="fw-light small">{% trans "Prix sans taxes" %}</div>
+                    <div class="fw-light small ms-3">{{ item.total_price }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center ps-4 text-primary">
-                    <div class="fw-light small">{% trans "Taxes Ligne" %} {{ item.tax_rate }}%</div>
-                    <div class="fw-light small">{{ item.tax_amount }} <span class="fw-light small">{{ order.order_currency }}</span></div>
+                    <div class="fw-light small">{% trans "Taxes" %} {{ item.tax_rate }}%</div>
+                    <div class="fw-light small ms-3">{{ item.tax_amount }} <span class="fw-light small">{{ order.order_currency }}</span></div>
+                </div>
+                <div class="d-flex justify-content-between align-items-center ps-4">
+                    <div class="fw-light small">{% trans "Prix avec taxes" %}</div>
+                    <div class="fw-bold ms-3">{{ item.total_price_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
                 </div>
             </div>
         {% empty %}
@@ -40,15 +44,15 @@
         <div class="list-group-item {% if order.status == 'W' %} bg-secondary{% elif order.status == 'P' %} bg-warning{% elif order.status == 'C' %} bg-success{% else %} bg-danger{% endif %}-subtle border-start-0 border-end-0">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="fw-bold fs-5">{% trans "Total TTC" %}</div>
-                <div class="fw-bold fs-5">{{ order.total_amount_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                <div class="fw-bold fs-5 ms-3">{{ order.total_amount_with_tax }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
             </div>
             <div class="d-flex justify-content-between align-items-center ps-4">
                 <div class="fw-light small">{% trans "Total HT" %}</div>
-                <div class="fw-light small">{{ order.total_amount }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
+                <div class="fw-light small ms-3">{{ order.total_amount }} <span class="fw-light text-muted small">{{ order.order_currency }}</span></div>
             </div>
             <div class="d-flex justify-content-between align-items-center ps-4 text-primary">
                 <div class="fw-light small">{% trans "Total taxes" %}</div>
-                <div class="fw-light small">{{ order.total_tax_amount }} <span class="fw-light small">{{ order.order_currency }}</span></div>
+                <div class="fw-light small ms-3">{{ order.total_tax_amount }} <span class="fw-light small">{{ order.order_currency }}</span></div>
             </div>
         </div>
     </div>

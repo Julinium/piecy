@@ -10,7 +10,10 @@
             {% endif %}
             <div class="w-100 d-flex justify-content-between ms-3">
                 <div class="text-start">
-                    <div>
+                    <div id="sub-line-1">
+                        {% if sub.order.status != 'C' %}
+                            <span class="badge bg-{{ sub.teint }} py-2">{{ sub.get_status_display }}</span>
+                        {% endif %}
                         {% if sub == rub %}
                             <span class="badge bg-primary py-2">{% trans "Actif" %}</span>
                         {% endif %}
@@ -51,7 +54,7 @@
 
     <div class="collapse" id="{{ sub.id }}">
 
-        <div id="order-actions-top" class="list-inline mb-3 px-3">
+        <div id="order-actions-top" class="list-inline float-end mb-3 px-3">
 
             {% if sub.order %}
 
