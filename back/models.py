@@ -75,7 +75,7 @@ class Tenant(models.Model):
         return pa
 
     class Meta:
-        db_table = 'tenant'
+        db_table = 'back_tenant'
     
     def __str__(self):
         return f'{self.name}'
@@ -131,7 +131,7 @@ class Utilisateur(AbstractBaseUser, PermissionsMixin):
         return un
 
     class Meta:
-        db_table = 'utilisateur'
+        db_table = 'back_utilisateur'
         verbose_name = _("Utilisateur")
         ordering = ['-is_active', 'tenant', 'created_on', 'last_login', 'is_tenant_admin']
 
@@ -151,7 +151,7 @@ class Trial(models.Model):
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'trial'
+        db_table = 'back_trial'
 
     def __str__(self):
         return f'TRIAL-{self.plan.name} - {self.tenant.name} - {self.date_fm}_{self.date_to}'
@@ -184,7 +184,7 @@ class Subscription(models.Model):
 
     class Meta:
         """ Meta class"""
-        db_table = 'subscription'
+        db_table = 'back_subscription'
         ordering = ['-active', 'status', 'date_to']
 
     def __str__(self):
@@ -322,7 +322,7 @@ class Plan(models.Model):
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 'plan'
+        db_table = 'back_plan'
         ordering = ['ordre']
 
     def __str__(self):
@@ -415,7 +415,7 @@ class SystemOrder(models.Model):
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 's_order'
+        db_table = 'back_s_order'
         ordering = ['-status', '-created_on']
 
     def __str__(self):
@@ -513,7 +513,7 @@ class SystemOrderItem(models.Model):
     tax_rate = models.DecimalField(max_digits=5, decimal_places=2, default=20)  # e.g., 15 for 15%
 
     class Meta:
-        db_table = 's_order_item'
+        db_table = 'back_s_order_item'
         ordering = ['rank', 'unit_price', 'quantity', ]
 
     @property
@@ -573,7 +573,7 @@ class SystemPayment(models.Model):
     edited_on = models.DateTimeField(verbose_name=_("Modifié le"), blank=True, null=True, auto_now=True)
 
     class Meta:
-        db_table = 's_payment'
+        db_table = 'back_s_payment'
         ordering = ['-status', 'active', '-paid_at', 'order']
 
     def __str__(self):
@@ -615,4 +615,4 @@ class Registre(models.Model):
     operation = models.CharField(max_length=1, choices=OPERATIONS, default='C')
 
     class Meta:
-        db_table = 'registre'
+        db_table = 'back_registre'
