@@ -1,0 +1,238 @@
+{% extends 'base/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}
+    {% trans "Situation Abonnement" %}
+{% endblock title %}
+
+{% block content %}
+    {% with avatar=tenant.logo %}
+        {% include "base/includes/compo-title.html" with avatar=avatar headline=headline subtitle=subtitle %}
+    {% endwith %}
+    <div class="text-center mb-3">
+        <h3 class="p-2 mb-3">{% translate "Situation Abonnement" %}</h3>
+    </div>
+
+    {% if rub %}
+        <div id="rub-messages">
+            {% if rub.usable %}
+                {% if rub.status == "W" %}
+                    <div class="list-group mb-3 shadow-sm">
+                        <li class="list-group-item text-bg-warning fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement non payé" %}.</span>
+                            {% if rub.days_grace > 0 %}
+                                <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours avant suspension" %}.</span>
+                            {% endif %}
+                        </li>
+                    </div>
+                {% endif %}
+                {% if rub.status == "P" %}
+                    <div class="list-group mb-3 shadow-sm">
+                        <li class="list-group-item text-bg-warning fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement non payé ou paiement non confirmé" %}.</span>
+                            {% if rub.days_grace > 0 %}
+                                <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours avant suspension" %}.</span>
+                            {% endif %}
+                        </li>
+                    </div>
+                {% endif %}
+                {% if rub.status == "A" %}
+                    <div class="list-group mb-3 shadow-sm">
+                        <li class="list-group-item text-bg-danger fw-bold">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Abonnement désactivé" %}.</span>
+                        </li>
+                    </div>
+                {% endif %}
+            {% else %}
+                <div class="list-group mb-3 shadow-sm">
+                    <li class="list-group-item text-bg-danger fw-bold">
+                        <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                        <span>{% trans "Abonnement suspendu" %}.</span>
+                        {% if rub.days_grace > 0 %}
+                            <span class="ms-2 fw-light small">{{ rub.days_run }}/{{ rub.days_grace }} {% trans "jours écoulés sans paiement" %}.</span>
+                        {% endif %}
+                    </li>
+                </div>
+            {% endif %}
+        </div>
+
+
+        <div class="card mb-4 shadow shadow bg-{{ rub.teint }}-subtle">
+            <div class="card-header text-center text-bg-{{ rub.teint }} py-0">
+                <span class="fw-bold">{% trans "Plan" %}: {{ rub.plan.name }}</span>
+                <span class="small ms-2">({{ rub.days_to_end }} {% trans "Jours restant" %})</span>
+            </div>
+            <div class="card-body small pb-0">
+
+                <div id="rub-progress">
+                    <div class="mb-3">
+                        <div class="progress bg-danger" role="progressbar" aria-valuenow="{{ rub.progress_percent }}" aria-valuemin="0" aria-valuemax="100">
+                            <div class="progress-bar bg-success" style="width: {{ rub.progress_percent }}%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="">
+                    <table class="table mb-0">
+                        <tbody>
+                            <tr>
+                                <td class="text-end small text-muted py-1">{% trans "Plan" %}</td>
+                                <td class="text-start small py-1">{{ rub.plan.name }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end small text-muted py-1">{% trans "Date début" %}</td>
+                                <td class="text-start small py-1">{{ rub.date_fm }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end small text-muted py-1">{% trans "Date fin" %}</td>
+                                <td class="text-start fw-bold small py-1">{{ rub.date_to }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="rub-actions">
+                    <div class="list-inline mb-3">
+                        {% if rub.order.amount_due_to_pay > 0 %}
+                            <div class="list-inline-item">
+                                <a href="{% url 'tenancy_add_order_payment' rub.order.id %}" class="btn btn-primary mt-1">
+                                    <i class="bi bi-coin"></i>
+                                    <span class="ms-1"> {% trans "Payer" %} <span class="fw-bold">{{ rub.order.amount_due_to_pay }}<span class="fw-light small ms-1">{{ rub.order.order_currency }}</span></span></span>
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        {% if subs %}
+            <div class="card mb-4 shadow shadow">
+                <div class="card-header fw-bold text-bg-danger-subtle text-center">
+                    {% trans "Abonnement expiré" %}
+                </div>
+                <div class="card-body">
+                    <div class="">
+                        <table class="table mb-0">
+                            <tbody>
+                                <tr>
+                                    <td class="text-end small text-muted py-1">{% trans "Plan" %}</td>
+                                    <td class="text-start small py-1">{{ lub.plan.name }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small text-muted py-1">{% trans "Date début" %}</td>
+                                    <td class="text-start small py-1">{{ lub.date_fm }}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-end small text-muted py-1">{% trans "Date fin" %}</td>
+                                    <td class="text-start fw-bold small py-1">{{ lub.date_to }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            {% if cut %}
+                <div class="card mb-4 shadow shadow">
+                    <div class="card-header fw-bold text-bg-warning text-center">
+                        {% trans "Essai en cours" %}
+                    </div>
+                    <div class="card-body">
+                        <div class="">
+                            <table class="table mb-0">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-end small text-muted py-1">{% trans "Plan" %}</td>
+                                        <td class="text-start small py-1">{{ cut.plan.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-end small text-muted py-1">{% trans "Date début" %}</td>
+                                        <td class="text-start small py-1">{{ cut.date_fm }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-end small text-muted py-1">{% trans "Date fin" %}</td>
+                                        <td class="text-start fw-bold small py-1">{{ cut.date_to }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                {% if trials %}
+                    <div class="list-group mb-3 shadow-sm">
+                        <li class="list-group-item bg-warning-subtle">
+                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
+                            <span>{% trans "Votre période d'éssai gratuit expirée" %}.</span>                        
+                        </li>
+                    </div>
+                {% else %}
+                    <div class="list-inline-item">
+                        <a href="{% url 'base_coming' %}" class="btn btn-success mt-1">
+                            <i class="bi bi-heart"></i>
+                            <span class="ms-1">{% trans "Essai gratuit" %}</span>
+                        </a>
+                    </div>
+                {% endif %}
+            {% endif %}
+            
+        {% endif %}
+
+
+
+
+        <div class="card mb-4 shadow shadow bg-danger-subtle">
+            <div class="card-header fw-bold text-bg-danger text-center">
+                {% trans "Pas d'Abonnement Actif" %}
+            </div>
+            <div class="card-body bg-danger-subtle">
+                <div class="mb-3">
+                    {% trans "Merci de souscrire à un abonnement." %}
+                </div>
+                <div class="list-inline">
+                    {% if not trials and not page_obj %}
+                        <div class="list-inline-item">
+                            <a href="{% url 'tenancy_trial' %}" class="btn btn-success mt-1">
+                                <i class="bi bi-heart"></i>
+                                <span class="ms-1">{% trans "Essai gratuit" %}</span>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    {% if not page_obj %}
+                        <div class="list-inline-item">
+                            <div id="planSelectionSubscribe">
+                                <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
+                                    <i class="bi bi-plus-circle"></i>
+                                    <span class="ms-1"> {% trans "S'abonner" %}</span>
+                                </button>
+                                {% include 'tenancy/snippets/plan-select-modal.html' %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="list-inline-item">
+                            <div id="planSelectionReactivate">
+                                <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
+                                    <i class="bi bi-plus-circle"></i>
+                                    <span class="ms-1"> {% trans "Réactiver" %}</span>
+                                </button>
+                                {% include 'tenancy/snippets/plan-select-modal.html' %}
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="list-inline-item">
+                        <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
+                            <i class="bi bi-headset"></i>
+                            <span class="ms-1">{% trans "Contact" %}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

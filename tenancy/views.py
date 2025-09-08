@@ -533,19 +533,20 @@ def standing(request):
             trials = Trial.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
             running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
             current_trial  = running_trials.first()
+            context["trials"]= trials
             context["cut"]= current_trial
 
         else:
             running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
             current_subscription  = running_subscriptions.first()
             latest_subscription = subscriptions.first()
-            if latest_subscription == current_subscription:
-                latest_subscription = None
-            
+            # if latest_subscription == current_subscription:
+            #     latest_subscription = None
+
             context["subs"]= subscriptions
             context["cub"]= current_subscription
             context["lub"]= latest_subscription
-
+        return render(request, 'tenancy/standing.html', context)
     return HttpResponse(message, status=code)
 
 
