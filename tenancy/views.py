@@ -527,6 +527,7 @@ def standing(request):
     if code == 200:
         tenant = request.user.tenant
         context = {}
+
         subscriptions = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
         if len(subscriptions) == 0:
             trials = Trial.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
@@ -534,7 +535,7 @@ def standing(request):
             current_trial  = running_trials.first()
             context["cut"]= current_trial
 
-        else:        
+        else:
             running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
             current_subscription  = running_subscriptions.first()
             latest_subscription = subscriptions.first()
@@ -544,529 +545,527 @@ def standing(request):
             context["subs"]= subscriptions
             context["cub"]= current_subscription
             context["lub"]= latest_subscription
-            
-
 
     return HttpResponse(message, status=code)
 
 
 
-@login_required(login_url="account_login")
-def subscriptions(request):
+# @login_required(login_url="account_login")
+# def subscriptions(request):
 
-    code, message = can_admin(request)
-    if code == 200:
+#     code, message = can_admin(request)
+#     if code == 200:
 
-        context = {
-            "strapus": strapus,
-            }
-        tenant = request.user.tenant
+#         context = {
+#             "strapus": strapus,
+#             }
+#         tenant = request.user.tenant
 
-        subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
-        running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
-        current_subscription  = running_subscriptions.first()
-        latest_subscription = subs.first()
+#         subs = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
+#         running_subscriptions = subs.filter(date_fm__lte=today, date_to__gte=today)
+#         current_subscription  = running_subscriptions.first()
+#         latest_subscription = subs.first()
 
-        for sub in subs:
-            sub.update_status()
+#         for sub in subs:
+#             sub.update_status()
 
-        repetition = "new"
-        start_date = today
-        max_ordre = 0
+#         repetition = "new"
+#         start_date = today
+#         max_ordre = 0
         
-        ask_renewal = "no"
-        if latest_subscription:
-            delta2end = latest_subscription.date_to - today
-            if delta2end.days < ASK_RENEWAL_BELOW:
-                ask_renewal = "yes"
+#         ask_renewal = "no"
+#         if latest_subscription:
+#             delta2end = latest_subscription.date_to - today
+#             if delta2end.days < ASK_RENEWAL_BELOW:
+#                 ask_renewal = "yes"
 
-            repetition  = "old"
-            max_ordre = latest_subscription.plan.ordre
-            if latest_subscription.date_to > today :
-                start_date = latest_subscription.date_to + relativedelta(days=1)
+#             repetition  = "old"
+#             max_ordre = latest_subscription.plan.ordre
+#             if latest_subscription.date_to > today :
+#                 start_date = latest_subscription.date_to + relativedelta(days=1)
 
-        plans = Plan.objects.filter(active=True)
-        end_date_yearly = start_date + relativedelta(years=1) -  relativedelta(days=1)
-        end_date_monthly = start_date + relativedelta(months=1) -  relativedelta(days=1)
+#         plans = Plan.objects.filter(active=True)
+#         end_date_yearly = start_date + relativedelta(years=1) -  relativedelta(days=1)
+#         end_date_monthly = start_date + relativedelta(months=1) -  relativedelta(days=1)
         
-        trials = Trial.objects.filter(active=True, tenant=tenant)
-        running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
-        current_trial  = running_trials.last()
+#         trials = Trial.objects.filter(active=True, tenant=tenant)
+#         running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
+#         current_trial  = running_trials.last()
         
         
-        paginator = Paginator(subs, ITEMS_PER_PAGE)
-        page_number = request.GET.get('page')
-        try:
-            page_obj = paginator.page(page_number)
-        except PageNotAnInteger:
-            page_obj = paginator.page(1)
-        except EmptyPage:
-            page_obj = paginator.page(paginator.num_pages)
+#         paginator = Paginator(subs, ITEMS_PER_PAGE)
+#         page_number = request.GET.get('page')
+#         try:
+#             page_obj = paginator.page(page_number)
+#         except PageNotAnInteger:
+#             page_obj = paginator.page(1)
+#         except EmptyPage:
+#             page_obj = paginator.page(paginator.num_pages)
 
-        context['page_obj']         = page_obj
-        context['current_trial']    = current_trial
-        context['trials']           = trials
-        context['rub']              = current_subscription
-        context["repetition"]       = repetition
-        context["plans"]            = plans
-        context["start_date"]       = start_date
-        context["end_date_yearly"]  = end_date_yearly
-        context["end_date_monthly"] = end_date_monthly
-        context["max_ordre"]        = max_ordre
-        context["ask_renewal"]      = ask_renewal
+#         context['page_obj']         = page_obj
+#         context['current_trial']    = current_trial
+#         context['trials']           = trials
+#         context['rub']              = current_subscription
+#         context["repetition"]       = repetition
+#         context["plans"]            = plans
+#         context["start_date"]       = start_date
+#         context["end_date_yearly"]  = end_date_yearly
+#         context["end_date_monthly"] = end_date_monthly
+#         context["max_ordre"]        = max_ordre
+#         context["ask_renewal"]      = ask_renewal
         
 
 
-        if request.method == "POST":
-            plan_id = request.POST.get("plan_id", '--')
-            periodicity = request.POST.get("periodicity", '--')
+#         if request.method == "POST":
+#             plan_id = request.POST.get("plan_id", '--')
+#             periodicity = request.POST.get("periodicity", '--')
 
-            selected_plan = None
-            if plan_id != "":
-                plan_uuid = uuid.UUID(plan_id, version=4)
-                selected_plan = Plan.objects.filter(active=True, id=plan_uuid).last()
-            if not selected_plan:
-                messages.error(request, _("Plan non trouvé! Merci de rééssayer plus tard. Si ce proble persiste, merci de nous contacter"))
-            else:
-                res, msg = create_sub(tenant, selected_plan, periodicity, latest_subscription)
-                if res == 200:
-                    messages.success(request, msg)
-                else:
-                    messages.error(request, msg)
+#             selected_plan = None
+#             if plan_id != "":
+#                 plan_uuid = uuid.UUID(plan_id, version=4)
+#                 selected_plan = Plan.objects.filter(active=True, id=plan_uuid).last()
+#             if not selected_plan:
+#                 messages.error(request, _("Plan non trouvé! Merci de rééssayer plus tard. Si ce proble persiste, merci de nous contacter"))
+#             else:
+#                 res, msg = create_sub(tenant, selected_plan, periodicity, latest_subscription)
+#                 if res == 200:
+#                     messages.success(request, msg)
+#                 else:
+#                     messages.error(request, msg)
 
-            return redirect("tenancy_subscriptions")
-        return render(request, 'tenancy/subscriptions.html', context)
+#             return redirect("tenancy_subscriptions")
+#         return render(request, 'tenancy/subscriptions.html', context)
 
-    return HttpResponse(message, status=code)
-
-
-@login_required(login_url="account_login")
-def trial(request):
-    code, message = can_admin(request)
-    if code == 200:
-        tenant = request.user.tenant
-
-        subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
-        if subscriptions:
-            messages.warning(request, _("Vous ne pouvez plus activer un Essai gratuit !"))
-            return redirect('tenancy_subscriptions')
-
-        trials = Trial.objects.filter(active=True, tenant=tenant)
-        if trials:
-            messages.warning(request, _("Vous avez déjà bénéficié d'un Essai gratuit !"))
-            return redirect('tenancy_subscriptions')
-
-        trial_date_start = today
-        trial_date_end = today + timedelta(days=TRIAL_DAYS)
-        plans = Plan.objects.filter(active=True).order_by('ordre')
-        # plan = Plan.objects.filter(active=True).order_by('ordre').first()
+#     return HttpResponse(message, status=code)
 
 
-        if request.method == "POST":
-            plan_id = request.POST.get('plan_id', '')
-            plan = Plan.objects.filter(id=plan_id).first()
+# @login_required(login_url="account_login")
+# def trial(request):
+#     code, message = can_admin(request)
+#     if code == 200:
+#         tenant = request.user.tenant
 
-            new_trial = Trial(
-                    date_fm = trial_date_start,
-                    date_to = trial_date_end,
-                    tenant = tenant,
-                    plan = plan,
-            )
-            try: 
-                new_trial.save()
-                messages.success(request, _("Votre période d'essai a commencé"))
-            except : 
-                messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))
-                # print(str(xc))
+#         subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+#         if subscriptions:
+#             messages.warning(request, _("Vous ne pouvez plus activer un Essai gratuit !"))
+#             return redirect('tenancy_subscriptions')
 
-            return redirect('tenancy_subscriptions')
-        else:
-            context = {
-                'trial_date_start' : trial_date_start,
-                'trial_date_end'   : trial_date_end,
-                'plans'            : plans,
-                # 'plan'             : plan,
-            }
-            return render(request, 'tenancy/trial.html', context)
+#         trials = Trial.objects.filter(active=True, tenant=tenant)
+#         if trials:
+#             messages.warning(request, _("Vous avez déjà bénéficié d'un Essai gratuit !"))
+#             return redirect('tenancy_subscriptions')
 
-    return HttpResponse(message, status=code)
+#         trial_date_start = today
+#         trial_date_end = today + timedelta(days=TRIAL_DAYS)
+#         plans = Plan.objects.filter(active=True).order_by('ordre')
+#         # plan = Plan.objects.filter(active=True).order_by('ordre').first()
 
 
-@login_required(login_url="account_login")
-def plan_select(request):
-    code, message = can_admin(request)
-    if code == 200:
-        tenant = request.user.tenant
-        repetition = "new"
-        periodicity = "yearly"
-        start_date = today
-        max_ordre = 0
-        context = {}
-        subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
-        latest_subscription = subscriptions.last()
-        if latest_subscription:
-            repetition  = "old"
+#         if request.method == "POST":
+#             plan_id = request.POST.get('plan_id', '')
+#             plan = Plan.objects.filter(id=plan_id).first()
 
-        plans = Plan.objects.filter(active=True)
-        for plan in plans:
-            plan.created_by = Utilisateur.objects.first()
-            plan.edited_by = Utilisateur.objects.first()
-            plan.save()
+#             new_trial = Trial(
+#                     date_fm = trial_date_start,
+#                     date_to = trial_date_end,
+#                     tenant = tenant,
+#                     plan = plan,
+#             )
+#             try: 
+#                 new_trial.save()
+#                 messages.success(request, _("Votre période d'essai a commencé"))
+#             except : 
+#                 messages.error(request, _("Quelque chose a mal tourné. Contacter le support."))
+#                 # print(str(xc))
+
+#             return redirect('tenancy_subscriptions')
+#         else:
+#             context = {
+#                 'trial_date_start' : trial_date_start,
+#                 'trial_date_end'   : trial_date_end,
+#                 'plans'            : plans,
+#                 # 'plan'             : plan,
+#             }
+#             return render(request, 'tenancy/trial.html', context)
+
+#     return HttpResponse(message, status=code)
+
+
+# @login_required(login_url="account_login")
+# def plan_select(request):
+#     code, message = can_admin(request)
+#     if code == 200:
+#         tenant = request.user.tenant
+#         repetition = "new"
+#         periodicity = "yearly"
+#         start_date = today
+#         max_ordre = 0
+#         context = {}
+#         subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
+#         latest_subscription = subscriptions.last()
+#         if latest_subscription:
+#             repetition  = "old"
+
+#         plans = Plan.objects.filter(active=True)
+#         for plan in plans:
+#             plan.created_by = Utilisateur.objects.first()
+#             plan.edited_by = Utilisateur.objects.first()
+#             plan.save()
         
-        context["plans"] = plans
-
-        if latest_subscription:
-            # max_ordre = Plan.objects.aggregate(Max('ordre'))['max__ordre']
-            max_ordre = latest_subscription.ordre
-            if latest_subscription.date_to > today :
-                start_date = latest_subscription.date_to + relativedelta(days=1)
-
-        end_date = start_date + relativedelta(years=1)
-
-        context["repetition"]   = repetition
-        context["periodicity"]  = periodicity
-        context["plans"]        = plans
-        context["start_date"]   = start_date
-        context["end_date"]     = end_date
-        context["max_ordre"]    = max_ordre
-
-        if request.method == "POST":
-            plan_id = request.POST.get('plan_id', '')
-            if plan_id != "":
-                plan_uuid = uuid.UUID(plan_id, version=4)
-                selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
-                if latest_subscription:
-                    if selected_plan:
-                        if selected_plan.ordre < latest_subscription.plan.ordre:
-                            dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
-                            messages.error(request, f"{dgd_message}")
-                            return redirect("tenancy_summary")
-                        return redirect("tenancy_order")
-
-                    sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
-                    messages.error(request, f"{sub_message}")
-                    return redirect("tenancy_summary")
-
-                # New subscription
-                periodicity = request.POST.get('periodicity', '')
-                plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
-                # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
-                messages.error(request, f"{plan_message}")
-                return redirect("tenancy_summary")
-
-            sel_message = _("Votre séléction n'est pas valide.")
-            messages.error(request, f"{sel_message}")
-            return redirect("tenancy_summary")
-
-        return render(request, 'tenancy/plan-select.html', context)
-
-    return HttpResponse(message, status=code)
-
-
-
-@login_required(login_url="account_login")
-def subscribe(request):
-    code, message = can_admin(request)
-    # if code == 200:
-    #     tenant = request.user.tenant
-    #     context = {}
-    #     subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
-    #     latest_subscription = subscriptions.last()
-    #     if not latest_subscription:
-    #         context["repetition"] = "new"
-
-    #     plans = Plan.objects.filter(active=True)
-    #     context["high_plans"] = plans
-
-    #     if latest_subscription:
-    #         plan_ordre = latest_subscription.plan.ordre
-    #         high_plans = plans.filter(ordre__gte=plan_ordre)
-    #         periodicity = "yearly"
-    #         start_date = today
-    #         if latest_subscription.date_to <= latest_subscription.date_fm + timedelta(days=31):
-    #             periodicity = "monthly"
-    #         if latest_subscription.date_to > today :
-    #             start_date = latest_subscription.date_to + relativedelta(days=1)
-    #         end_date = start_date + relativedelta(years=1)
-    #         if periodicity == "monthly":
-    #             end_date = start_date + relativedelta(months=1)
-
-    #         context["periodicity"]  = periodicity
-    #         context["plans"]        = plans
-    #         context["high_plans"]   = high_plans
-    #         context["start_date"]   = start_date
-    #         context["end_date"]     = end_date
-
-    #     if request.method == "POST":
-    #         plan_id = request.POST.get('plan_id', '')
-    #         if plan_id != "":
-    #             # messages.info(request, f"{plan_id}")
-    #             plan_uuid = uuid.UUID(plan_id, version=4)
-    #             selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
-    #             if latest_subscription:
-    #                 if selected_plan:
-    #                     if selected_plan.ordre < latest_subscription.plan.ordre:
-    #                         dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
-    #                         messages.error(request, f"{dgd_message}")
-    #                         return redirect("tenancy_summary")
-
-    #                     return redirect("tenancy_order")
-    #                     # plan_ordre = subscription.plan.ordre
-    #                     # high_plans = plans.filter(ordre__gte=plan_ordre)
-    #                     # periodicity = "yearly"
-    #                     # start_date = today
-    #                     # if subscription.date_to <= subscription.date_fm + timedelta(days=31):
-    #                     #     periodicity = "monthly"
-    #                     # if subscription.date_to > today :
-    #                     #     start_date = subscription.date_to + relativedelta(days=1)
-    #                     # end_date = start_date + relativedelta(years=1)
-    #                     # if periodicity == "monthly":
-    #                     #     end_date = start_date + relativedelta(months=1)
-
-    #                     # context["periodicity"]  = periodicity
-    #                     # context["plans"]        = plans
-    #                     # context["high_plans"]   = high_plans
-    #                     # context["start_date"]   = start_date
-    #                     # context["end_date"]     = end_date
-
-    #                     # return render(request, 'tenancy/subscribe.html', context)
-
-    #                 sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
-    #                 messages.error(request, f"{sub_message}")
-    #                 return redirect("tenancy_summary")
-
-    #             # New subscription
-    #             periodicity = request.POST.get('periodicity', '')
-    #             ###########################
-
-    #             ###########################
-    #             plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
-    #             # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
-    #             messages.error(request, f"{plan_message}")
-    #             return redirect("tenancy_summary")
-
-    #         sel_message = _("Votre séléction n'est pas valide.")
-    #         messages.error(request, f"{sel_message}")
-    #         return redirect("tenancy_summary")
-
-    #     plans = Plan.objects.filter(active=True)
-    #     context["plans"] = plans
-    #     return render(request, 'tenancy/subscribe.html', context)
-
-    return HttpResponse(message, status=code)
-
-
-@login_required(login_url="account_login")
-def order_create(request):
-
-    code, message = can_admin(request)
-    if code == 200:
-        context = {}
-        tenant = request.user.tenant
-
-        return render(request, 'tenancy/orders.html', context)
-
-    return HttpResponse(message, status=code)
-
-
-@login_required(login_url="account_login")
-def order(request):
-
-    code, message = can_admin(request)
-    if code == 200:
-        context = {}
-        tenant = request.user.tenant
-
-        subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
-        active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
-        current_subscription = active_subscriptions.last()
-
-        if not current_subscription:
-            current_subscription = subscriptions.last()
-
-        if current_subscription:
-
-            start_date = today
-            periodicity = "yearly"
-            payments = SystemPayment.objects.filter(date_made__year=today.year)
+#         context["plans"] = plans
+
+#         if latest_subscription:
+#             # max_ordre = Plan.objects.aggregate(Max('ordre'))['max__ordre']
+#             max_ordre = latest_subscription.ordre
+#             if latest_subscription.date_to > today :
+#                 start_date = latest_subscription.date_to + relativedelta(days=1)
+
+#         end_date = start_date + relativedelta(years=1)
+
+#         context["repetition"]   = repetition
+#         context["periodicity"]  = periodicity
+#         context["plans"]        = plans
+#         context["start_date"]   = start_date
+#         context["end_date"]     = end_date
+#         context["max_ordre"]    = max_ordre
+
+#         if request.method == "POST":
+#             plan_id = request.POST.get('plan_id', '')
+#             if plan_id != "":
+#                 plan_uuid = uuid.UUID(plan_id, version=4)
+#                 selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
+#                 if latest_subscription:
+#                     if selected_plan:
+#                         if selected_plan.ordre < latest_subscription.plan.ordre:
+#                             dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
+#                             messages.error(request, f"{dgd_message}")
+#                             return redirect("tenancy_summary")
+#                         return redirect("tenancy_order")
+
+#                     sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
+#                     messages.error(request, f"{sub_message}")
+#                     return redirect("tenancy_summary")
+
+#                 # New subscription
+#                 periodicity = request.POST.get('periodicity', '')
+#                 plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
+#                 # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
+#                 messages.error(request, f"{plan_message}")
+#                 return redirect("tenancy_summary")
+
+#             sel_message = _("Votre séléction n'est pas valide.")
+#             messages.error(request, f"{sel_message}")
+#             return redirect("tenancy_summary")
+
+#         return render(request, 'tenancy/plan-select.html', context)
+
+#     return HttpResponse(message, status=code)
+
+
+
+# @login_required(login_url="account_login")
+# def subscribe(request):
+#     code, message = can_admin(request)
+#     # if code == 200:
+#     #     tenant = request.user.tenant
+#     #     context = {}
+#     #     subscriptions = Subscription.objects.filter(active=True, tenant=request.user.tenant).order_by('-date_to')
+#     #     latest_subscription = subscriptions.last()
+#     #     if not latest_subscription:
+#     #         context["repetition"] = "new"
+
+#     #     plans = Plan.objects.filter(active=True)
+#     #     context["high_plans"] = plans
+
+#     #     if latest_subscription:
+#     #         plan_ordre = latest_subscription.plan.ordre
+#     #         high_plans = plans.filter(ordre__gte=plan_ordre)
+#     #         periodicity = "yearly"
+#     #         start_date = today
+#     #         if latest_subscription.date_to <= latest_subscription.date_fm + timedelta(days=31):
+#     #             periodicity = "monthly"
+#     #         if latest_subscription.date_to > today :
+#     #             start_date = latest_subscription.date_to + relativedelta(days=1)
+#     #         end_date = start_date + relativedelta(years=1)
+#     #         if periodicity == "monthly":
+#     #             end_date = start_date + relativedelta(months=1)
+
+#     #         context["periodicity"]  = periodicity
+#     #         context["plans"]        = plans
+#     #         context["high_plans"]   = high_plans
+#     #         context["start_date"]   = start_date
+#     #         context["end_date"]     = end_date
+
+#     #     if request.method == "POST":
+#     #         plan_id = request.POST.get('plan_id', '')
+#     #         if plan_id != "":
+#     #             # messages.info(request, f"{plan_id}")
+#     #             plan_uuid = uuid.UUID(plan_id, version=4)
+#     #             selected_plan = Plan.objects.filter(active=True, id=plan_id).last()
+#     #             if latest_subscription:
+#     #                 if selected_plan:
+#     #                     if selected_plan.ordre < latest_subscription.plan.ordre:
+#     #                         dgd_message = _("Merci de séléctionner un Plan supérieur ou égal à celui de votre Abonnement précédent.")
+#     #                         messages.error(request, f"{dgd_message}")
+#     #                         return redirect("tenancy_summary")
+
+#     #                     return redirect("tenancy_order")
+#     #                     # plan_ordre = subscription.plan.ordre
+#     #                     # high_plans = plans.filter(ordre__gte=plan_ordre)
+#     #                     # periodicity = "yearly"
+#     #                     # start_date = today
+#     #                     # if subscription.date_to <= subscription.date_fm + timedelta(days=31):
+#     #                     #     periodicity = "monthly"
+#     #                     # if subscription.date_to > today :
+#     #                     #     start_date = subscription.date_to + relativedelta(days=1)
+#     #                     # end_date = start_date + relativedelta(years=1)
+#     #                     # if periodicity == "monthly":
+#     #                     #     end_date = start_date + relativedelta(months=1)
+
+#     #                     # context["periodicity"]  = periodicity
+#     #                     # context["plans"]        = plans
+#     #                     # context["high_plans"]   = high_plans
+#     #                     # context["start_date"]   = start_date
+#     #                     # context["end_date"]     = end_date
+
+#     #                     # return render(request, 'tenancy/subscribe.html', context)
+
+#     #                 sub_message = _("Votre Abonnement précédent n'a pas été trouvé.")
+#     #                 messages.error(request, f"{sub_message}")
+#     #                 return redirect("tenancy_summary")
+
+#     #             # New subscription
+#     #             periodicity = request.POST.get('periodicity', '')
+#     #             ###########################
+
+#     #             ###########################
+#     #             plan_message = f"Selected plan = { selected_plan.name } x { periodicity } | " + _("New Subscription: Coming soon.")
+#     #             # plan_message = _("Votre Plan précédent n'a pas été trouvé.")
+#     #             messages.error(request, f"{plan_message}")
+#     #             return redirect("tenancy_summary")
+
+#     #         sel_message = _("Votre séléction n'est pas valide.")
+#     #         messages.error(request, f"{sel_message}")
+#     #         return redirect("tenancy_summary")
+
+#     #     plans = Plan.objects.filter(active=True)
+#     #     context["plans"] = plans
+#     #     return render(request, 'tenancy/subscribe.html', context)
+
+#     return HttpResponse(message, status=code)
+
+
+# @login_required(login_url="account_login")
+# def order_create(request):
+
+#     code, message = can_admin(request)
+#     if code == 200:
+#         context = {}
+#         tenant = request.user.tenant
+
+#         return render(request, 'tenancy/orders.html', context)
+
+#     return HttpResponse(message, status=code)
+
+
+# @login_required(login_url="account_login")
+# def order(request):
+
+#     code, message = can_admin(request)
+#     if code == 200:
+#         context = {}
+#         tenant = request.user.tenant
+
+#         subscriptions = Subscription.objects.filter(active=True, tenant=tenant)
+#         active_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today).order_by('date_to')
+#         current_subscription = active_subscriptions.last()
+
+#         if not current_subscription:
+#             current_subscription = subscriptions.last()
+
+#         if current_subscription:
+
+#             start_date = today
+#             periodicity = "yearly"
+#             payments = SystemPayment.objects.filter(date_made__year=today.year)
 
-            sub_delta = current_subscription.date_to - current_subscription.date_fm
-            if sub_delta.days <= 31 : periodicity = "monthly"
-            if current_subscription.date_to > today: start_date = current_subscription.date_to + relativedelta(days=1)
-            end_date = start_date + relativedelta(months=1) if periodicity == "monthly" else start_date + relativedelta(years=1)
-            plan = current_subscription.plan
+#             sub_delta = current_subscription.date_to - current_subscription.date_fm
+#             if sub_delta.days <= 31 : periodicity = "monthly"
+#             if current_subscription.date_to > today: start_date = current_subscription.date_to + relativedelta(days=1)
+#             end_date = start_date + relativedelta(months=1) if periodicity == "monthly" else start_date + relativedelta(years=1)
+#             plan = current_subscription.plan
 
-            ht_amount    = plan.monthly_month_tag if periodicity == "monthly" else plan.yearly_year_tag
-            taxes_amount = Decimal(ht_amount * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-            total_amount = Decimal(ht_amount + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-
-            objet = _("Abonnement Annuel")
-            if periodicity == "monthly":
-                objet = _("Abonnement Mensuel")
-            objet += f" - {plan.name} - {start_date} - {end_date}"
+#             ht_amount    = plan.monthly_month_tag if periodicity == "monthly" else plan.yearly_year_tag
+#             taxes_amount = Decimal(ht_amount * plan.plan_taxes/100).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+#             total_amount = Decimal(ht_amount + taxes_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+
+#             objet = _("Abonnement Annuel")
+#             if periodicity == "monthly":
+#                 objet = _("Abonnement Mensuel")
+#             objet += f" - {plan.name} - {start_date} - {end_date}"
 
-            if request.method == "POST":
+#             if request.method == "POST":
 
-                order_no = request.POST.get('order_no', '')
-                # objet = request.POST.get('objet', '')
-                # total_amount = request.POST.get('total_amount', '')
+#                 order_no = request.POST.get('order_no', '')
+#                 # objet = request.POST.get('objet', '')
+#                 # total_amount = request.POST.get('total_amount', '')
 
-                paymt_no = order_no.replace("O", "P", 1)
+#                 paymt_no = order_no.replace("O", "P", 1)
 
-                payment = SystemPayment(
-                    order_no  = order_no,
-                    date_made = today,
-                    objet     = objet,
-                    amount    = total_amount,
-                    currency  = plan.currency,
-                    reference = paymt_no,
-                    made_by   = request.user,
-                    note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
-                )
-                try:
-                    payment.save()
-                except Exception as xc:
-                    print(f"Error raised while creating System Payment: {str(xc)}")
+#                 payment = SystemPayment(
+#                     order_no  = order_no,
+#                     date_made = today,
+#                     objet     = objet,
+#                     amount    = total_amount,
+#                     currency  = plan.currency,
+#                     reference = paymt_no,
+#                     made_by   = request.user,
+#                     note      = f"{tenant}-#{total_amount}#-{plan.name}-{today}"
+#                 )
+#                 try:
+#                     payment.save()
+#                 except Exception as xc:
+#                     print(f"Error raised while creating System Payment: {str(xc)}")
 
-                subscription = Subscription(
-                    date_fm = start_date,
-                    date_to = end_date,
-                    tenant  = tenant,
-                    plan    = plan,
-                    payment = payment
-                )
-                try:
-                    subscription.save()
-                except Exception as xc:
-                    print(f"Error raised while creating Subscription: {str(xc)}")
+#                 subscription = Subscription(
+#                     date_fm = start_date,
+#                     date_to = end_date,
+#                     tenant  = tenant,
+#                     plan    = plan,
+#                     payment = payment
+#                 )
+#                 try:
+#                     subscription.save()
+#                 except Exception as xc:
+#                     print(f"Error raised while creating Subscription: {str(xc)}")
 
-                pay_message = _("Abonnement activé. Merci de confirmer votre paiement.")
-                messages.warning(request, f"{pay_message}")
+#                 pay_message = _("Abonnement activé. Merci de confirmer votre paiement.")
+#                 messages.warning(request, f"{pay_message}")
 
-                return redirect("tenancy_summary")
-            else:
-                year = today.year % 100
-                day_of_year = today.timetuple().tm_yday
-                order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
+#                 return redirect("tenancy_summary")
+#             else:
+#                 year = today.year % 100
+#                 day_of_year = today.timetuple().tm_yday
+#                 order_no = f"SO-{year:02d}{day_of_year:03d}{1 + int(1 + len(payments)):05d}"
 
-                context["order_no"]     = order_no
-                context["objet"]        = objet
-                context["periodicity"]  = periodicity
-                context["ht_amount"]    = Decimal(ht_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
-                context["total_amount"] = total_amount
-                context["taxes_amount"] = taxes_amount
-                context["plan"]         = plan
-                context["start_date"]   = start_date
-                context["end_date"]     = end_date
-
-                return render(request, 'tenancy/order.html', context)
-
-        # New Subscription.
-
-        nosub_message = _("Previous Subscription not found.")
-        messages.error(request, f"{nosub_message}")
-
-        return redirect("tenancy_summary")
-
-    return HttpResponse(message, status=code)
-
-
-@login_required(login_url="account_login")
-def details(request):
-    context = {}
-    return render(request, 'tenancy/details.html', context)
-
-
-@login_required(login_url="account_login")
-def dashboard(request):
-    context = {}
-    return render(request, 'tenancy/dashboard.html', context)
-
-
-@login_required(login_url="account_login")
-def history(request):
-    context = {}
-    return render(request, 'tenancy/history.html', context)
-
-
-@login_required(login_url="account_login")
-def sub_cancel(request):
-    context = {}
-    return render(request, 'tenancy/sub-cancel.html', context)
-
-
-@login_required(login_url="account_login")
-def sub_upgrade(request):
-    context = {}
-    return render(request, 'tenancy/sub-upgrade.html', context)
-
-
-
-
-@login_required(login_url="account_login")
-def summary(request):
-    context = {}
-    return render(request, 'tenancy/summary.html', context)
-
-
-
-
-    #################################
-def create_sub(tenant, selected_plan, periodicity, renew_sub=None):
-
-    start_date = today
-    repetition = "new"
-    if renew_sub:
-        start_date = renew_sub.date_to + relativedelta(days=1)
-        repetition = "old"
-
-    try:
-        created_order = SystemOrder(
-            customer = tenant,
-            order_date = today,
-        )
-        created_order.save()
-
-        unit_price_ht = 12 * selected_plan.monthly_price
-
-        end_date_yearly = start_date + relativedelta(years=1) - relativedelta(days=1)
-        end_date_monthly = start_date + relativedelta(months=1) - relativedelta(days=1)
-
-        if periodicity == "monthly":
-            if repetition == "old":
-                unit_price_ht = selected_plan.monthly_month_tag
-            else:
-                unit_price_ht = selected_plan.monthly_tag_month_new
-            product_name = _("Abonnement Mensuel")
-            end_date = end_date_monthly
-        else:
-            if repetition == "old":
-                unit_price_ht = selected_plan.yearly_year_tag
-            else:
-                unit_price_ht = selected_plan.yearly_year_tag_new
-            product_name = _("Abonnement Annuel")
-            end_date = end_date_yearly
-
-        created_item = SystemOrderItem(                        
-            order = created_order,
-            product_name = f"{product_name} {selected_plan.name} {start_date}-{end_date}",
-            unit_price = unit_price_ht,
-            quantity = 1,
-            tax_rate = selected_plan.plan_taxes
-        )
-        created_item.save()
-
-        created_sub = Subscription(
-            tenant = tenant,
-            plan = selected_plan,
-            order = created_order,
-            date_fm = start_date,
-            date_to = end_date,
-        )
-        created_sub.save()
-        return 200 , _("Commande créée. Merci de la confirmer") + f". Numéro: {created_order.numero}"
-
-    except Exception as ex:
-        print(str(ex))
-        return 500, _("Commande non créée. Rééssayer plus tard")
+#                 context["order_no"]     = order_no
+#                 context["objet"]        = objet
+#                 context["periodicity"]  = periodicity
+#                 context["ht_amount"]    = Decimal(ht_amount).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+#                 context["total_amount"] = total_amount
+#                 context["taxes_amount"] = taxes_amount
+#                 context["plan"]         = plan
+#                 context["start_date"]   = start_date
+#                 context["end_date"]     = end_date
+
+#                 return render(request, 'tenancy/order.html', context)
+
+#         # New Subscription.
+
+#         nosub_message = _("Previous Subscription not found.")
+#         messages.error(request, f"{nosub_message}")
+
+#         return redirect("tenancy_summary")
+
+#     return HttpResponse(message, status=code)
+
+
+# @login_required(login_url="account_login")
+# def details(request):
+#     context = {}
+#     return render(request, 'tenancy/details.html', context)
+
+
+# @login_required(login_url="account_login")
+# def dashboard(request):
+#     context = {}
+#     return render(request, 'tenancy/dashboard.html', context)
+
+
+# @login_required(login_url="account_login")
+# def history(request):
+#     context = {}
+#     return render(request, 'tenancy/history.html', context)
+
+
+# @login_required(login_url="account_login")
+# def sub_cancel(request):
+#     context = {}
+#     return render(request, 'tenancy/sub-cancel.html', context)
+
+
+# @login_required(login_url="account_login")
+# def sub_upgrade(request):
+#     context = {}
+#     return render(request, 'tenancy/sub-upgrade.html', context)
+
+
+
+
+# @login_required(login_url="account_login")
+# def summary(request):
+#     context = {}
+#     return render(request, 'tenancy/summary.html', context)
+
+
+
+
+#     #################################
+# def create_sub(tenant, selected_plan, periodicity, renew_sub=None):
+
+#     start_date = today
+#     repetition = "new"
+#     if renew_sub:
+#         start_date = renew_sub.date_to + relativedelta(days=1)
+#         repetition = "old"
+
+#     try:
+#         created_order = SystemOrder(
+#             customer = tenant,
+#             order_date = today,
+#         )
+#         created_order.save()
+
+#         unit_price_ht = 12 * selected_plan.monthly_price
+
+#         end_date_yearly = start_date + relativedelta(years=1) - relativedelta(days=1)
+#         end_date_monthly = start_date + relativedelta(months=1) - relativedelta(days=1)
+
+#         if periodicity == "monthly":
+#             if repetition == "old":
+#                 unit_price_ht = selected_plan.monthly_month_tag
+#             else:
+#                 unit_price_ht = selected_plan.monthly_tag_month_new
+#             product_name = _("Abonnement Mensuel")
+#             end_date = end_date_monthly
+#         else:
+#             if repetition == "old":
+#                 unit_price_ht = selected_plan.yearly_year_tag
+#             else:
+#                 unit_price_ht = selected_plan.yearly_year_tag_new
+#             product_name = _("Abonnement Annuel")
+#             end_date = end_date_yearly
+
+#         created_item = SystemOrderItem(                        
+#             order = created_order,
+#             product_name = f"{product_name} {selected_plan.name} {start_date}-{end_date}",
+#             unit_price = unit_price_ht,
+#             quantity = 1,
+#             tax_rate = selected_plan.plan_taxes
+#         )
+#         created_item.save()
+
+#         created_sub = Subscription(
+#             tenant = tenant,
+#             plan = selected_plan,
+#             order = created_order,
+#             date_fm = start_date,
+#             date_to = end_date,
+#         )
+#         created_sub.save()
+#         return 200 , _("Commande créée. Merci de la confirmer") + f". Numéro: {created_order.numero}"
+
+#     except Exception as ex:
+#         print(str(ex))
+#         return 500, _("Commande non créée. Rééssayer plus tard")
     #################################
