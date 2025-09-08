@@ -20,7 +20,9 @@ from .forms import CustomUserCreationForm, SystemPaymentForm
 SUB_DAYS_WARNING = 90
 SUB_DAYS_DANGER = 30
 
+SUBS_HISTORY_COUNT = 10
 ITEMS_PER_PAGE = 10
+ASK_RENEWAL_BELOW = 30
 
 # Trial duration in days.
 TRIAL_DAYS = 30
@@ -295,10 +297,6 @@ def adminize_user(request, user_id=None):
     return HttpResponse(message, status=code)
 
 
-
-
-
-
 @login_required(login_url="account_login")
 def orders(request):
 
@@ -521,37 +519,6 @@ def delete_order(request, order_id=None):
 
 
 @login_required(login_url="account_login")
-def standing(request):
-    
-    code, message = can_admin(request)
-    if code == 200:
-        tenant = request.user.tenant
-        context = {}
-        subscriptions = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
-        if len(subscriptions) == 0:
-            trials = Trial.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
-            running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
-            current_trial  = running_trials.first()
-            context["cut"]= current_trial
-
-        else:        
-            running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
-            current_subscription  = running_subscriptions.first()
-            latest_subscription = subscriptions.first()
-            if latest_subscription == current_subscription:
-                latest_subscription = None
-            
-            context["subs"]= subscriptions
-            context["cub"]= current_subscription
-            context["lub"]= latest_subscription
-            
-
-
-    return HttpResponse(message, status=code)
-
-
-
-@login_required(login_url="account_login")
 def subscriptions(request):
 
     code, message = can_admin(request)
@@ -638,6 +605,8 @@ def subscriptions(request):
         return render(request, 'tenancy/subscriptions.html', context)
 
     return HttpResponse(message, status=code)
+
+
 
 
 @login_required(login_url="account_login")
