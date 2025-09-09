@@ -76,6 +76,47 @@ def is_deletable(request, user=None):
     return False, reason
 
 
+# Subscription
+
+@login_required(login_url="account_login")
+def standing(request):
+    
+    code, message = can_admin(request)
+    if code == 200:
+        tenant = request.user.tenant
+        context = {}
+
+        subscriptions = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
+        if len(subscriptions) == 0:
+            trials = Trial.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
+            running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
+            current_trial  = running_trials.first()
+            context["trials"]= trials
+            context["cut"]= current_trial
+
+        else:
+            running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
+            current_subscription  = running_subscriptions.first()
+            latest_subscription = subscriptions.first()
+            # if latest_subscription == current_subscription:
+            #     latest_subscription = None
+
+            context["subs"]= subscriptions
+            context["cub"]= current_subscription
+            context["lub"]= latest_subscription
+        return render(request, 'tenancy/standing.html', context)
+    return HttpResponse(message, status=code)
+
+
+# path('trial/', views.trial, name='tenancy_trial'),
+# path('subscriptions/', views.subscriptions, name='tenancy_subscriptions'),
+# path('subscribe/', views.subscribe, name='tenancy_subscribe'),
+# path('sub-cancel/', views.sub_cancel, name='tenancy_sub_cancel'),
+# path('plan-select/', views.plan_select, name='tenancy_plan_select'),
+# path('sub-upgrade/', views.sub_upgrade, name='tenancy_sub_upgrade'),
+
+
+# Users
 @login_required(login_url="account_login")
 def users(request):
     code, message = can_admin(request)
@@ -297,7 +338,7 @@ def adminize_user(request, user_id=None):
 
 
 
-
+# Orders and payments
 
 @login_required(login_url="account_login")
 def orders(request):
@@ -519,35 +560,6 @@ def delete_order(request, order_id=None):
         return HttpResponse(_("Commande non trouvée."), status=403)
     return HttpResponse(message, status=code)
 
-
-@login_required(login_url="account_login")
-def standing(request):
-    
-    code, message = can_admin(request)
-    if code == 200:
-        tenant = request.user.tenant
-        context = {}
-
-        subscriptions = Subscription.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
-        if len(subscriptions) == 0:
-            trials = Trial.objects.filter(active=True, tenant=tenant).order_by('-date_to', '-edited_on')
-            running_trials = trials.filter(date_fm__lte=today, date_to__gte=today)
-            current_trial  = running_trials.first()
-            context["trials"]= trials
-            context["cut"]= current_trial
-
-        else:
-            running_subscriptions = subscriptions.filter(date_fm__lte=today, date_to__gte=today)
-            current_subscription  = running_subscriptions.first()
-            latest_subscription = subscriptions.first()
-            # if latest_subscription == current_subscription:
-            #     latest_subscription = None
-
-            context["subs"]= subscriptions
-            context["cub"]= current_subscription
-            context["lub"]= latest_subscription
-        return render(request, 'tenancy/standing.html', context)
-    return HttpResponse(message, status=code)
 
 
 

@@ -136,50 +136,7 @@
                 </div>
             </div>
         {% else %}
-            {% if cut %}
-                <div class="card mb-4 shadow shadow">
-                    <div class="card-header fw-bold text-bg-warning text-center">
-                        {% trans "Essai en cours" %}
-                    </div>
-                    <div class="card-body">
-                        <div class="">
-                            <table class="table mb-0">
-                                <tbody>
-                                    <tr>
-                                        <td class="text-end small text-muted py-1">{% trans "Plan" %}</td>
-                                        <td class="text-start small py-1">{{ cut.plan.name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-end small text-muted py-1">{% trans "Date début" %}</td>
-                                        <td class="text-start small py-1">{{ cut.date_fm }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="text-end small text-muted py-1">{% trans "Date fin" %}</td>
-                                        <td class="text-start fw-bold small py-1">{{ cut.date_to }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            {% else %}
-                {% if trials %}
-                    <div class="list-group mb-3 shadow-sm">
-                        <li class="list-group-item bg-warning-subtle">
-                            <span class=""><i class="bi bi-exclamation-octagon-fill"></i></span>
-                            <span>{% trans "Votre période d'éssai gratuit expirée" %}.</span>                        
-                        </li>
-                    </div>
-                {% else %}
-                    <div class="list-inline-item">
-                        <a href="{% url 'base_coming' %}" class="btn btn-success mt-1">
-                            <i class="bi bi-heart"></i>
-                            <span class="ms-1">{% trans "Essai gratuit" %}</span>
-                        </a>
-                    </div>
-                {% endif %}
-            {% endif %}
-            
+            {% include 'tenancy/snippets/trial-summary.html' %}            
         {% endif %}
 
 
@@ -194,7 +151,7 @@
                     {% trans "Merci de souscrire à un abonnement." %}
                 </div>
                 <div class="list-inline">
-                    {% if not trials and not page_obj %}
+                    {% if not trials and not subs %}
                         <div class="list-inline-item">
                             <a href="{% url 'tenancy_trial' %}" class="btn btn-success mt-1">
                                 <i class="bi bi-heart"></i>
@@ -203,27 +160,18 @@
                         </div>
                     {% endif %}
 
-                    {% if not page_obj %}
-                        <div class="list-inline-item">
-                            <div id="planSelectionSubscribe">
-                                <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
-                                    <i class="bi bi-plus-circle"></i>
-                                    <span class="ms-1"> {% trans "S'abonner" %}</span>
-                                </button>
-                                {% include 'tenancy/snippets/plan-select-modal.html' %}
-                            </div>
-                        </div>
-                    {% else %}
-                        <div class="list-inline-item">
-                            <div id="planSelectionReactivate">
-                                <button type="button" class="btn btn-primary mt-1"  data-bs-toggle="modal" data-bs-target="#planSelectModal">
-                                    <i class="bi bi-plus-circle"></i>
-                                    <span class="ms-1"> {% trans "Réactiver" %}</span>
-                                </button>
-                                {% include 'tenancy/snippets/plan-select-modal.html' %}
-                            </div>
-                        </div>
-                    {% endif %}
+                    <div class="list-inline-item">
+                        <a href="{% url 'tenancy_subscribe' %}" class="btn btn-success mt-1">
+                            <i class="bi bi-plus-circle"></i>
+                            <span class="ms-1">
+                                {% if not subs %}
+                                    {% trans "S'abonner" %}
+                                {% else %}
+                                    {% trans "Renouveler" %}
+                                {% endif %}
+                            </span>
+                        </a>
+                    </div>
 
                     <div class="list-inline-item">
                         <a href="{% url 'base_contact' %}" class="btn btn-outline-primary mt-1">
